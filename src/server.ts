@@ -2,7 +2,6 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-// import apicache from "apicache";
 import path from 'path';
 
 // import api from './services/v1Api';
