@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 // version 1 api
-app.use('/api/v1', api);
+app.use('/api/v1/admin', );
 // app.use(pageNotFound);
 
 app.get('/', function (req, res) {
