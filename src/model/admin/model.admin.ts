@@ -9,6 +9,11 @@ interface adminModel extends Document {
 
 const adminSchema = new Schema<adminModel>({
     email: {
-        type : String,
+        type: String,
+        required : true
+    },
+
+    username: {
+        
     }
 })
