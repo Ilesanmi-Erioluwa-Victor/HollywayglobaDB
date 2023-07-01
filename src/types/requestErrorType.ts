@@ -1,33 +1,11 @@
-interface DocumentResult<T> {
-    _doc? : T
-}
-
-export interface cartItemTypes extends DocumentResult<cartItemTypes> {
-    productId: object;
-    userId : object;
-    productCount: number;
-    totalAmount : number
-}
-
-export interface productTypes extends DocumentResult<productTypes> {
-  _id?: string;
+export interface requestErrorTypes {
   name: string;
-  price: number;
-  description: string;
-  type: string;
-  image: string;
-  adminId: string;
-  status: boolean;
-  item_in_cart: boolean;
-  currency: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  errors: { message: string }[];
+  message: string;
+  statusCode: number;
 }
 
-interface userModelTypes extends DocumentResult<userModelTypes> {
-  _id?: string;
-  first_name: string;
-  email: string;
-  password: string;
-  last_name: string;
+export interface Error {
+  message?: string;
+  statusCode?: number;
 }
