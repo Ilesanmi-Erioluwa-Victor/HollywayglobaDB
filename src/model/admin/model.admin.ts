@@ -38,4 +38,9 @@ const adminSchema = new Schema<adminModel, adminModelemailTaken>(
   }
 );
 
-export const AdminModel = mongoose.model<adminModel>("adminModel", adminSchema);
+adminSchema.statics.emailTaken = async function (email: string) {
+  const admin = await this.findOne({ email });
+  return !!admin;
+};
+
+export const AdminModel: adminModelemailTaken = mongoose.model<adminModel, adminModelemailTaken>("adminModel", adminSchema);
