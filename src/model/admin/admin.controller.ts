@@ -3,6 +3,7 @@ import { RequestHandler, Response, Request, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Jwt } from "jsonwebtoken";
 import { catchAsync } from '../../utils/catchAsync'
+import { throwError } from "../../middlewares/cacheError";
 
 export const signUp : RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
 
