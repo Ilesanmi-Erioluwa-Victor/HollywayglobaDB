@@ -40,7 +40,7 @@ app.use((req, res, next) => {
     next();
 });
 // version 1 api
-app.use('/api/v1', api);
+app.use('/api/v1/admin');
 // app.use(pageNotFound);
 app.get('/', function (req, res) {
     res.sendFile(path_1.default.join(__dirname, '/public'));
