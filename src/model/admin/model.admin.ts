@@ -14,6 +14,16 @@ const adminSchema = new Schema<adminModel>({
     },
 
     username: {
-        
+        type : String,
+        required : true
+    },
+
+    password : {
+        type : String,
+        required : true
     }
+}, {
+    timestamps : true
 })
+
+
