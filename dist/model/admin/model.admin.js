@@ -31,9 +31,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const adminSchema = new mongoose_1.Schema({
     email: {
         type: String,
@@ -55,6 +59,18 @@ const adminSchema = new mongoose_1.Schema({
         virtuals: true,
     },
     timestamps: true,
+});
+adminSchema.pre("save", function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!this.isModified("password")) {
+            next();
+            return;
+        }
+        const salt = yield bcryptjs_1.default.genSalt(10);
+        const hashedPassword = yield bcryptjs_1.default.hash(this.password, salt);
+        this.password = hashedPassword;
+        next();
+    });
 });
 adminSchema.statics.emailTaken = function (email) {
     return __awaiter(this, void 0, void 0, function* () {

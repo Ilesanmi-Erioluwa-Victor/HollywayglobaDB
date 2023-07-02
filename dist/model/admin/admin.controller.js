@@ -9,14 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signUp = void 0;
+exports.login = exports.signUp = void 0;
 const model_admin_1 = require("./model.admin");
 const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = require("../../utils/catchAsync");
 const cacheError_1 = require("../../middlewares/cacheError");
 exports.signUp = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.body;
-    let salt = `${process.env.CRYPTO}`;
     try {
         if (yield (model_admin_1.AdminModel === null || model_admin_1.AdminModel === void 0 ? void 0 : model_admin_1.AdminModel.emailTaken(email)))
             (0, cacheError_1.throwError)("You are already an admin, please,kindly log into your account", http_status_codes_1.StatusCodes.CONFLICT);
@@ -32,5 +31,27 @@ exports.signUp = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void
     }
     catch (error) {
         next(error);
+    }
+}));
+exports.login = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    try {
+        const userFound = yield model_admin_1.AdminModel.findOne({ email: email });
+        //  if (userFound && (await userFound.isPasswordMatched(password))) {
+        //    res.json({
+        //     //  _id: userFound?._id,
+        //     //  firstName: userFound?.firstName,
+        //     //  lastName: userFound?.lastName,
+        //     //  email: userFound?.email,
+        //     //  profilePhoto: userFound?.profilePhoto,
+        //     //  isAdmin: userFound?.isAdmin,
+        //     //  token: generateToken(userFound?._id),
+        //    });
+        //  } else {
+        //    res.status(401);
+        //    throw new Error(`Login Failed, invalid credentials..`);
+        //  }
+    }
+    catch (error) {
     }
 }));
