@@ -12,18 +12,18 @@ export const signUp : RequestHandler = catchAsync(async (req : Request, res : Re
        let salt = `${process.env.CRYPTO}`;
 
     try {
-        if(await AdminModel?.emailTaken(email)) {
-            throwError("You are already an admin, please,kindly log into your account", StatusCodes.CONFLICT)
-        }
+        if(await AdminModel?.emailTaken(email)) throwError("You are already an admin, please,kindly log into your account", StatusCodes.CONFLICT)
+        
           const admin = AdminModel.create({
-            name: req.body.name,
+            email: req.body.email,
             password: req.body.password,
             username: req.body.username,
           });
 
 
           res.status(201).json({
-            message : "admin account created successfully"
+            message : "admin account created successfully",
+            status :"Success"
           })
     } catch (error : any) {
         next(error)
