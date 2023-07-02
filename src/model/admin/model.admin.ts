@@ -55,6 +55,10 @@ adminSchema.statics.emailTaken = async function (email: string) {
   return !!admin;
 };
 
+adminSchema.methods.isPasswordMatched = async function (userPassword: string) {
+  return await bcrypt.compare(userPassword, this.password);
+};
+
 export const AdminModel: adminModelemailTaken = mongoose.model<
   adminModel,
   adminModelemailTaken

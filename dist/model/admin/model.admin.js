@@ -78,4 +78,9 @@ adminSchema.statics.emailTaken = function (email) {
         return !!admin;
     });
 };
+adminSchema.methods.isPasswordMatched = function (userPassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield bcryptjs_1.default.compare(userPassword, this.password);
+    });
+};
 exports.AdminModel = mongoose_1.default.model("adminModel", adminSchema);

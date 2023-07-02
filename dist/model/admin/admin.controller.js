@@ -36,22 +36,20 @@ exports.signUp = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void
 exports.login = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
-        const userFound = yield model_admin_1.AdminModel.findOne({ email: email });
-        //  if (userFound && (await userFound.isPasswordMatched(password))) {
-        //    res.json({
-        //     //  _id: userFound?._id,
-        //     //  firstName: userFound?.firstName,
-        //     //  lastName: userFound?.lastName,
-        //     //  email: userFound?.email,
-        //     //  profilePhoto: userFound?.profilePhoto,
-        //     //  isAdmin: userFound?.isAdmin,
-        //     //  token: generateToken(userFound?._id),
-        //    });
-        //  } else {
-        //    res.status(401);
-        //    throw new Error(`Login Failed, invalid credentials..`);
-        //  }
+        const admin = yield model_admin_1.AdminModel.findOne({ email: email });
+        if (admin && (yield admin.isPasswordMatched(password))) {
+            res.json({
+                _id: admin === null || admin === void 0 ? void 0 : admin._id,
+                token: generateToken(admin === null || admin === void 0 ? void 0 : admin._id),
+            });
+        }
+        else {
+            res.status(401);
+            (0, cacheError_1.throwError)(`Login Failed, invalid credentials..`, http_status_codes_1.StatusCodes.BAD_REQUEST);
+        }
+        try { }
+        catch (error) {
+        }
     }
-    catch (error) {
-    }
+    finally { }
 }));
