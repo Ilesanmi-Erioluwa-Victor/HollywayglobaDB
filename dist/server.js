@@ -18,6 +18,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const adminRoute_1 = __importDefault(require("./routes/admin/adminRoute"));
+const userRoute_1 = __importDefault(require("./routes/user/userRoute"));
 // import api from './services/v1Api';
 // import uploadFile from './uploads/uploadFile';
 // import { requestErrorTypings } from './typings/requestErrorTypings';
@@ -41,7 +42,8 @@ app.use((req, res, next) => {
     next();
 });
 // version 1 api
-app.use('/api/v1/admin', adminRoute_1.default);
+app.use('/api/v1/admin/', adminRoute_1.default);
+app.use('/api/v1/user/', userRoute_1.default);
 // app.use(pageNotFound);
 app.get('/', function (req, res) {
     res.sendFile(path_1.default.join(__dirname, '/public'));

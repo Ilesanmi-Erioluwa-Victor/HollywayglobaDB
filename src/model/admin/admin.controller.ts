@@ -33,17 +33,19 @@ export const login : RequestHandler = catchAsync( async (req : Request, res : Re
   const { email, password } = req.body;
   try {
 
-     const admin = await AdminModel.findOne({ email: email });
+    const admin = await AdminModel.findOne({ email: email });
 
-     if (admin && (await admin.isPasswordMatched(password))) {
-       res.json({
-         _id: admin?._id,
-         token: generateToken(admin?._id),
-       });
-     } else {
-       res.status(401); throwError(`Login Failed, invalid credentials..`, StatusCodes.BAD_REQUEST);
+    // if (admin && (await admin.isPasswordMatched(password))) {
+    //   res.json({
+    //     _id: admin?._id,
+    //     token: generateToken(admin?._id),
+    //   });
+    // } else {
+    //   res.status(401); throwError(`Login Failed, invalid credentials..`, StatusCodes.BAD_REQUEST);
     
+    // }
   } catch (error) {
     
-  }
+    }
+  
 })

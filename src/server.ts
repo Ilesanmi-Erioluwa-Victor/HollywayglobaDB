@@ -33,8 +33,8 @@ app.use((req, res, next) => {
 });
 
 // version 1 api
-app.use('/api/v1/admin', adminRouter);
-app.use('/api/v1/admin', userRouter);
+app.use('/api/v1/admin/', adminRouter);
+app.use('/api/v1/user/', userRouter);
 // app.use(pageNotFound);
 
 app.get('/', function (req, res) {
