@@ -1,5 +1,6 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-
+import bcrypt from "bcryptjs";
+import { NextFunction } from "express";
 interface adminModel extends Document {
   email: string;
   username: string;
@@ -38,9 +39,27 @@ const adminSchema = new Schema<adminModel, adminModelemailTaken>(
   }
 );
 
+adminSchema.pre<adminModel>("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+    return;
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(this.password, salt);
+  this.password = hashedPassword;
+  next();
+});
+
 adminSchema.statics.emailTaken = async function (email: string) {
   const admin = await this.findOne({ email });
   return !!admin;
 };
 
-export const AdminModel: adminModelemailTaken = mongoose.model<adminModel, adminModelemailTaken>("adminModel", adminSchema);
+adminSchema.methods.isPasswordMatched = async function (userPassword: string) {
+  return await bcrypt.compare(userPassword, this.password);
+};
+
+export const AdminModel: adminModelemailTaken = mongoose.model<
+  adminModel,
+  adminModelemailTaken
+>("adminModel", adminSchema);
