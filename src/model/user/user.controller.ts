@@ -18,4 +18,7 @@ export const create_user: RequestHandler = catchAsync(async (req: Request, res: 
         password: req.body.password,
         email : req.body.email
     })
+
+    const exist_user = await userModel.findOne({ email: req.body.email })
+    if (exist_user) throwError("You are already a member, kindly login to your account", StatusCodes.CONFLICT);
 })
