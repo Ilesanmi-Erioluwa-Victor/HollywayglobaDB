@@ -9,30 +9,24 @@ interface userModel extends Document {
 
 const userSchema = new Schema<userModel>(
   {
+    first_name: {
+      type: String,
+      require: true,
+    },
     email: {
       type: String,
-      required: true,
+      require: true,
     },
-
-    username: {
-      type: String,
-      required: true,
-    },
-
     password: {
       type: String,
-      required: true,
+      require: true,
+    },
+    last_name: {
+      type: String,
+      require: true,
     },
   },
-  {
-    toJSON: {
-      virtuals: true,
-    },
-    toObject: {
-      virtuals: true,
-    },
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 
