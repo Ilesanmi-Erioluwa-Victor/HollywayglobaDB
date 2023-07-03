@@ -12,13 +12,14 @@ import { catchAsync } from "../../utils/catchAsync";
 dotenv.config();
 
 export const create_user: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { first_name, last_name, password, email } = req.body;
     const user = await userModel.create({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        password: req.body.password,
-        email : req.body.email
+        first_name,
+        last_name,
+        password,
+        email
     })
 
-    const exist_user = await userModel.findOne({ email: req.body.email })
+    const exist_user = await userModel.findOne({ email })
     if (exist_user) throwError("You are already a member, kindly login to your account", StatusCodes.CONFLICT);
 })
