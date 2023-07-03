@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import path from 'path';
 
+import adminRouter  from "./routes/admin/adminRoute"
 // import api from './services/v1Api';
 // import uploadFile from './uploads/uploadFile';
 // import { requestErrorTypings } from './typings/requestErrorTypings';
@@ -31,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 // version 1 api
-app.use('/api/v1/admin', );
+app.use('/api/v1/admin', adminRouter);
 // app.use(pageNotFound);
 
 app.get('/', function (req, res) {
