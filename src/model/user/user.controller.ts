@@ -14,6 +14,8 @@ dotenv.config();
 export const create_user: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = await userModel.create({
         first_name: req.body.first_name,
-        last_name : req.body.last_name
+        last_name: req.body.last_name,
+        password: req.body.password,
+        email : req.body.email
     })
 })
