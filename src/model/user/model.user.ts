@@ -1,9 +1,11 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
 interface userModel extends Document {
+  _id?: string;
+  first_name: string;
   email: string;
-  username: string;
   password: string;
+  last_name: string;
 }
 
 
