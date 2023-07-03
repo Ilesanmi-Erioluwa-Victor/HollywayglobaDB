@@ -8,4 +8,4 @@ import { StatusCodes } from 'http-status-codes';
 
 import { userModel } from "./model.user";
 
-
+dotenv.config();
