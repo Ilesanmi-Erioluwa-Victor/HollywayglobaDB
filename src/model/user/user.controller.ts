@@ -6,4 +6,6 @@ import dotenv from 'dotenv';
 import { throwError } from "../../middlewares/cacheError";
 import { StatusCodes } from 'http-status-codes';
 
+import { userModel } from "./model.user";
+
 

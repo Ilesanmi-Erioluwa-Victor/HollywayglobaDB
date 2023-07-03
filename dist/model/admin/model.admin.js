@@ -31,9 +31,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+<<<<<<< HEAD
+=======
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+>>>>>>> 57a6439ccd20847f0c6349072b4cae5b501c700f
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const adminSchema = new mongoose_1.Schema({
     email: {
         type: String,
@@ -56,10 +63,33 @@ const adminSchema = new mongoose_1.Schema({
     },
     timestamps: true,
 });
+<<<<<<< HEAD
+=======
+adminSchema.pre("save", function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!this.isModified("password")) {
+            next();
+            return;
+        }
+        const salt = yield bcryptjs_1.default.genSalt(10);
+        const hashedPassword = yield bcryptjs_1.default.hash(this.password, salt);
+        this.password = hashedPassword;
+        next();
+    });
+});
+>>>>>>> 57a6439ccd20847f0c6349072b4cae5b501c700f
 adminSchema.statics.emailTaken = function (email) {
     return __awaiter(this, void 0, void 0, function* () {
         const admin = yield this.findOne({ email });
         return !!admin;
     });
 };
+<<<<<<< HEAD
+=======
+adminSchema.methods.isPasswordMatched = function (userPassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield bcryptjs_1.default.compare(userPassword, this.password);
+    });
+};
+>>>>>>> 57a6439ccd20847f0c6349072b4cae5b501c700f
 exports.AdminModel = mongoose_1.default.model("adminModel", adminSchema);
