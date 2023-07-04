@@ -34,7 +34,15 @@ const userSchema = new Schema<userModel>(
     password_reset_token: String,
     password_reset_expires: Date,
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
+  }
 );
 
 
