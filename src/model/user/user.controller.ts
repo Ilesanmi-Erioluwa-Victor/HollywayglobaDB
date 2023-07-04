@@ -90,3 +90,7 @@ export const login_user: RequestHandler = catchAsync(
     }
   }
 );
+
+export const protect: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  
+})
