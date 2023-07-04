@@ -120,7 +120,7 @@ export const protect: RequestHandler = catchAsync(
       }
 
       //  Verification token
-      const decoded : any = jwt.verify(
+      const decoded: any = jwt.verify(
         token,
         `${process.env.JWT_SERCRET_KEY}`,
         (err, decoded) => {
@@ -130,7 +130,29 @@ export const protect: RequestHandler = catchAsync(
       );
 
       const current_user = await userModel.findById(decoded?.id);
-      
+
+      if (!current_user) {
+        return next(
+          throwError(
+            'The user belonging to this token does no longer exist.',
+            StatusCodes.BAD_REQUEST
+          )
+        );
+      }
+
+      // 4) Check if user changed password after the token was issued
+      // if (currentUser.changePasswordAfter(decoded.iat)) {
+      //   return next(
+      //     new AppError(
+      //       'User recently changed password! Please log in again.',
+      //       401
+      //     )
+      //   );
+      // }
+
+      // GRANT ACCESS TO PROTECTED ROUTE
+      // req.user = currentUser;
+      // next();
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

@@ -54,4 +54,13 @@ const userSchema = new mongoose_1.Schema({
         virtuals: true,
     },
 });
-exports.userModel = mongoose_1.default.model("userModel", userSchema);
+userSchema.methods.changePasswordAfter = function (JWTTimeStamps) {
+    if (this.password_change_at) {
+        const changeTime_milliseconds = String(this.password_change_at.getTime() / 1000);
+        const changeTimeStamp = parseInt(changeTime_milliseconds, 10);
+        return JWTTimeStamps < changeTimeStamp;
+    }
+    // false means not change
+    return false;
+};
+exports.userModel = mongoose_1.default.model('userModel', userSchema);

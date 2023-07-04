@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
 interface userModel extends Document {
   _id?: string;
@@ -10,7 +10,6 @@ interface userModel extends Document {
   password_reset_token: string;
   password_reset_expires: Date;
 }
-
 
 const userSchema = new Schema<userModel>(
   {
@@ -45,5 +44,16 @@ const userSchema = new Schema<userModel>(
   }
 );
 
+userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
+  if (this.password_change_at) {
+    const changeTime_milliseconds = String(this.password_change_at.getTime() / 1000);
+    const changeTimeStamp: any = parseInt(changeTime_milliseconds, 10);
 
-export const userModel  = mongoose.model<userModel>("userModel", userSchema);
+    return JWTTimeStamps < changeTimeStamp;
+  }
+
+  // false means not change
+  return false;
+};
+
+export const userModel = mongoose.model<userModel>('userModel', userSchema);
