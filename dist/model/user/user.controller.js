@@ -95,6 +95,21 @@ exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
             return decoded;
         });
         const current_user = yield model_user_1.userModel.findById(decoded === null || decoded === void 0 ? void 0 : decoded.id);
+        if (!current_user) {
+            return next((0, cacheError_1.throwError)('The user belonging to this token does no longer exist.', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        }
+        // 4) Check if user changed password after the token was issued
+        // if (currentUser.changePasswordAfter(decoded.iat)) {
+        //   return next(
+        //     new AppError(
+        //       'User recently changed password! Please log in again.',
+        //       401
+        //     )
+        //   );
+        // }
+        // GRANT ACCESS TO PROTECTED ROUTE
+        // req.user = currentUser;
+        // next();
     }
     catch (error) {
         if (!error.statusCode) {
