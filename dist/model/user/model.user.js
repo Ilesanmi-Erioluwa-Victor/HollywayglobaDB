@@ -45,5 +45,13 @@ const userSchema = new mongoose_1.Schema({
     password_change_at: Date,
     password_reset_token: String,
     password_reset_expires: Date,
-}, { timestamps: true });
+}, {
+    timestamps: true,
+    toJSON: {
+        virtuals: true,
+    },
+    toObject: {
+        virtuals: true,
+    },
+});
 exports.userModel = mongoose_1.default.model("userModel", userSchema);
