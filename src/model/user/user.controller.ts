@@ -52,32 +52,41 @@ export const create_user: RequestHandler = catchAsync(
 );
 
 export const login_user: RequestHandler = catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { email, password } = req.body;
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
 
-            const exist_user: any = await userModel.findOne({ email });
-            const userCorrectPassword = bcrypt.compare(
-              password,
-              exist_user?.password
-            );
-            if (!exist_user || !userCorrectPassword)
-              throwError(
-                'Sorry, Invalid credentials..., Check your credentials',
-                StatusCodes.BAD_REQUEST
-                );
-            
-            const token = jwt.sign(
-              {
-                email: exist_user?.email,
-                id: exist_user?._id,
-              },
-              `${process.env.JWT_SERCRET_KEY}`,
-              { expiresIn: `${process.env.JWT_EXPIRES_IN}` }
-            );
-        } catch (error) {
-            
-        }
-   
+      const exist_user: any = await userModel.findOne({ email });
+      const userCorrectPassword = bcrypt.compare(
+        password,
+        exist_user?.password
+      );
+      if (!exist_user || !(await userCorrectPassword))
+        throwError(
+          'Sorry, Invalid credentials..., Check your credentials',
+          StatusCodes.BAD_REQUEST
+        );
+
+      const token = jwt.sign(
+        {
+          email: exist_user?.email,
+          id: exist_user?._id,
+        },
+        `${process.env.JWT_SERCRET_KEY}`,
+        { expiresIn: `${process.env.JWT_EXPIRES_IN}` }
+      );
+
+      res.status(200).json({
+        status : "Success",
+        message: 'user logged in successfully',
+        token,
+        userId: exist_user?._id,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
 );

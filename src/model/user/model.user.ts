@@ -6,6 +6,9 @@ interface userModel extends Document {
   email: string;
   password: string;
   last_name: string;
+  password_change_at: Date;
+  password_reset_token: string;
+  password_reset_expires: Date;
 }
 
 
@@ -27,6 +30,9 @@ const userSchema = new Schema<userModel>(
       type: String,
       require: true,
     },
+    password_change_at: Date,
+    password_reset_token: String,
+    password_reset_expires: Date,
   },
   { timestamps: true }
 );

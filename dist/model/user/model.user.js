@@ -42,5 +42,8 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         require: true,
     },
+    password_change_at: Date,
+    password_reset_token: String,
+    password_reset_expires: Date,
 }, { timestamps: true });
 exports.userModel = mongoose_1.default.model("userModel", userSchema);
