@@ -41,3 +41,7 @@ export const create_user: RequestHandler = catchAsync(async (req: Request, res: 
     }
     
 })
+
+export const login_user: RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
+    
+})
