@@ -52,15 +52,32 @@ export const create_user: RequestHandler = catchAsync(
 );
 
 export const login_user: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { email, password } = req.body;
 
-    const exist_user: any = await userModel.findOne({ email });
-    const userCorrectPassword = bcrypt.compare(password, exist_user?.password);
-    if (!exist_user || !userCorrectPassword)
-      throwError(
-        "Sorry, Invalid credentials..., Check your credentials",
-        StatusCodes.BAD_REQUEST
-      );
+            const exist_user: any = await userModel.findOne({ email });
+            const userCorrectPassword = bcrypt.compare(
+              password,
+              exist_user?.password
+            );
+            if (!exist_user || !userCorrectPassword)
+              throwError(
+                'Sorry, Invalid credentials..., Check your credentials',
+                StatusCodes.BAD_REQUEST
+                );
+            
+            const token = jwt.sign(
+              {
+                email: exist_user?.email,
+                id: exist_user?._id,
+              },
+              `${process.env.JWT_SERCRET_KEY}`,
+              { expiresIn: `${process.env.JWT_EXPIRES_IN}` }
+            );
+        } catch (error) {
+            
+        }
+   
   }
 );
