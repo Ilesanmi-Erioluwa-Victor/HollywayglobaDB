@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.protect = exports.login_user = exports.create_user = void 0;
+exports.forgot_password = exports.protect = exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -113,3 +113,4 @@ exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
         next(error);
     }
 }));
+exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () { }));
