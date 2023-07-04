@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create_user = void 0;
+exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cacheError_1 = require("../../middlewares/cacheError");
 const http_status_codes_1 = require("http-status-codes");
@@ -21,21 +22,56 @@ const model_user_1 = require("./model.user");
 const catchAsync_1 = require("../../utils/catchAsync");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { first_name, last_name, password, email } = req.body;
-    const exist_user = yield model_user_1.userModel.findOne({ email });
-    const hashedPassword = yield bcryptjs_1.default.hash(password, 12);
-    if (exist_user)
-        (0, cacheError_1.throwError)("You are already a member, kindly login to your account", http_status_codes_1.StatusCodes.CONFLICT);
-    const user = yield model_user_1.userModel.create({
-        first_name,
-        last_name,
-        email,
-        password: hashedPassword,
-    });
-    yield user.save();
-    res.status(http_status_codes_1.StatusCodes.CREATED).json({
-        message: "You have successfully created your account, log in now",
-        status: "success",
-        userId: user === null || user === void 0 ? void 0 : user._id
-    });
+    try {
+        const { first_name, last_name, password, email } = req.body;
+        if (!first_name || !last_name || !password || !email)
+            (0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        const exist_user = yield model_user_1.userModel.findOne({ email });
+        const hashedPassword = yield bcryptjs_1.default.hash(password, 12);
+        if (exist_user)
+            (0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT);
+        const user = yield model_user_1.userModel.create({
+            first_name,
+            last_name,
+            email,
+            password: hashedPassword,
+        });
+        yield user.save();
+        res.status(http_status_codes_1.StatusCodes.CREATED).json({
+            message: 'You have successfully created your account, log in now',
+            status: 'success',
+            userId: user === null || user === void 0 ? void 0 : user._id,
+        });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body;
+        const exist_user = yield model_user_1.userModel.findOne({ email });
+        const userCorrectPassword = bcryptjs_1.default.compare(password, exist_user === null || exist_user === void 0 ? void 0 : exist_user.password);
+        if (!exist_user || !(yield userCorrectPassword))
+            (0, cacheError_1.throwError)('Sorry, Invalid credentials..., Check your credentials', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        const token = jsonwebtoken_1.default.sign({
+            email: exist_user === null || exist_user === void 0 ? void 0 : exist_user.email,
+            id: exist_user === null || exist_user === void 0 ? void 0 : exist_user._id,
+        }, `${process.env.JWT_SERCRET_KEY}`, { expiresIn: `${process.env.JWT_EXPIRES_IN}` });
+        res.status(200).json({
+            status: "Success",
+            message: 'user logged in successfully',
+            token,
+            userId: exist_user === null || exist_user === void 0 ? void 0 : exist_user._id,
+        });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
 }));
