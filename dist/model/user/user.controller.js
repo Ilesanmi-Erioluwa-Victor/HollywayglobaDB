@@ -88,6 +88,13 @@ exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
         if (!token) {
             return next((0, cacheError_1.throwError)('You are not logged in! Please log in to get access.', 401));
         }
+        //  Verification token
+        const decoded = jsonwebtoken_1.default.verify(token, `${process.env.JWT_SERCRET_KEY}`, (err, decoded) => {
+            if (err)
+                return next((0, cacheError_1.throwError)(`${err}`, http_status_codes_1.StatusCodes.BAD_REQUEST));
+            return decoded;
+        });
+        const current_user = yield model_user_1.userModel.findById(decoded === null || decoded === void 0 ? void 0 : decoded.id);
     }
     catch (error) {
         if (!error.statusCode) {
