@@ -92,5 +92,19 @@ export const login_user: RequestHandler = catchAsync(
 );
 
 export const protect: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  
+  try {
+     let token;
+     if (
+       req.headers.authorization &&
+       req.headers.authorization.startsWith('Bearer')
+     ) {
+       token = req.headers.authorization.split(' ')[1];
+     }
+
+  } catch (error: any) {
+     if (!error.statusCode) {
+       error.statusCode = 500;
+     }
+     next(error);
+  }
 })

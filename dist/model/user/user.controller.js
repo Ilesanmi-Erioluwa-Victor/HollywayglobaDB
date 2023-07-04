@@ -76,4 +76,17 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
     }
 }));
 exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let token;
+        if (req.headers.authorization &&
+            req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
 }));
