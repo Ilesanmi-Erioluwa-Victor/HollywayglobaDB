@@ -7,10 +7,14 @@ import dotenv from 'dotenv';
 import { throwError } from '../../middlewares/cacheError';
 import { StatusCodes } from 'http-status-codes';
 
-import { userModel } from './model.user';
+import { UserModel } from './model.user';
 import { catchAsync } from '../../utils/catchAsync';
 
 dotenv.config();
+
+interface AuthenticatedRequest extends Request {
+  user: any; // Replace 'any' with the appropriate type for the user object
+}
 
 export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -25,7 +29,7 @@ export const create_user: RequestHandler = catchAsync(
         );
       }
 
-      const exist_user = await userModel.findOne({ email });
+      const exist_user = await UserModel.findOne({ email });
       const hashedPassword = await bcrypt.hash(password, 12);
 
       if (exist_user) {
@@ -37,7 +41,7 @@ export const create_user: RequestHandler = catchAsync(
         );
       }
 
-      const user = await userModel.create({
+      const user = await UserModel.create({
         first_name,
         last_name,
         email,
@@ -64,7 +68,7 @@ export const login_user: RequestHandler = catchAsync(
     try {
       const { email, password } = req.body;
 
-      const exist_user: any = await userModel.findOne({ email });
+      const exist_user: any = await UserModel.findOne({ email });
       const userCorrectPassword = bcrypt.compare(
         password,
         exist_user?.password
@@ -103,7 +107,7 @@ export const login_user: RequestHandler = catchAsync(
 );
 
 export const protect: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
       let token;
       if (
@@ -129,7 +133,7 @@ export const protect: RequestHandler = catchAsync(
         }
       );
 
-      const current_user = await userModel.findById(decoded?.id);
+      const current_user = await UserModel.findById(decoded?.id);
 
       if (!current_user) {
         return next(
@@ -140,19 +144,19 @@ export const protect: RequestHandler = catchAsync(
         );
       }
 
-      // 4) Check if user changed password after the token was issued
-      // if (currentUser.changePasswordAfter(decoded.iat)) {
-      //   return next(
-      //     new AppError(
-      //       'User recently changed password! Please log in again.',
-      //       401
-      //     )
-      //   );
-      // }
+      // ) Check if user changed password after the token was issued
+      if (current_user.changePasswordAfter(decoded.iat)) {
+        return next(
+          throwError(
+            'User recently changed password! Please log in again.',
+            StatusCodes.BAD_REQUEST
+          )
+        );
+      }
 
       // GRANT ACCESS TO PROTECTED ROUTE
-      // req.user = currentUser;
-      // next();
+      req.user = current_user;
+      next();
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-interface userModel extends Document {
+interface UserModel extends Document {
   _id?: string;
   first_name: string;
   email: string;
@@ -9,25 +9,30 @@ interface userModel extends Document {
   password_change_at: Date;
   password_reset_token: string;
   password_reset_expires: Date;
+  changePasswordAfter: (JWTTimeStamps: any) => boolean;
 }
 
-const userSchema = new Schema<userModel>(
+interface UserModelStatic extends Model<UserModel> {
+  // Add any static methods here if needed
+}
+
+const userSchema = new Schema<UserModel>(
   {
     first_name: {
       type: String,
-      require: true,
+      required: true,
     },
     email: {
       type: String,
-      require: true,
+      required: true,
     },
     password: {
       type: String,
-      require: true,
+      required: true,
     },
     last_name: {
       type: String,
-      require: true,
+      required: true,
     },
     password_change_at: Date,
     password_reset_token: String,
@@ -46,8 +51,8 @@ const userSchema = new Schema<userModel>(
 
 userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
   if (this.password_change_at) {
-    const changeTime_milliseconds = String(this.password_change_at.getTime() / 1000);
-    const changeTimeStamp: any = parseInt(changeTime_milliseconds, 10);
+    const changeTimeMilliseconds = this.password_change_at.getTime() / 1000;
+    const changeTimeStamp = parseInt(String(changeTimeMilliseconds), 10);
 
     return JWTTimeStamps < changeTimeStamp;
   }
@@ -56,4 +61,7 @@ userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
   return false;
 };
 
-export const userModel = mongoose.model<userModel>('userModel', userSchema);
+export const UserModel: UserModelStatic = mongoose.model<
+  UserModel,
+  UserModelStatic
+>('User', userSchema);

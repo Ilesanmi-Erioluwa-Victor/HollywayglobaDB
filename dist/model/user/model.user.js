@@ -23,24 +23,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userModel = void 0;
+exports.UserModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const userSchema = new mongoose_1.Schema({
     first_name: {
         type: String,
-        require: true,
+        required: true,
     },
     email: {
         type: String,
-        require: true,
+        required: true,
     },
     password: {
         type: String,
-        require: true,
+        required: true,
     },
     last_name: {
         type: String,
-        require: true,
+        required: true,
     },
     password_change_at: Date,
     password_reset_token: String,
@@ -56,11 +56,11 @@ const userSchema = new mongoose_1.Schema({
 });
 userSchema.methods.changePasswordAfter = function (JWTTimeStamps) {
     if (this.password_change_at) {
-        const changeTime_milliseconds = String(this.password_change_at.getTime() / 1000);
-        const changeTimeStamp = parseInt(changeTime_milliseconds, 10);
+        const changeTimeMilliseconds = this.password_change_at.getTime() / 1000;
+        const changeTimeStamp = parseInt(String(changeTimeMilliseconds), 10);
         return JWTTimeStamps < changeTimeStamp;
     }
     // false means not change
     return false;
 };
-exports.userModel = mongoose_1.default.model('userModel', userSchema);
+exports.UserModel = mongoose_1.default.model('User', userSchema);

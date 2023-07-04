@@ -27,12 +27,12 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
         if (!first_name || !last_name || !password || !email) {
             return next((0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST));
         }
-        const exist_user = yield model_user_1.userModel.findOne({ email });
+        const exist_user = yield model_user_1.UserModel.findOne({ email });
         const hashedPassword = yield bcryptjs_1.default.hash(password, 12);
         if (exist_user) {
             return next((0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
         }
-        const user = yield model_user_1.userModel.create({
+        const user = yield model_user_1.UserModel.create({
             first_name,
             last_name,
             email,
@@ -55,7 +55,7 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
 exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
-        const exist_user = yield model_user_1.userModel.findOne({ email });
+        const exist_user = yield model_user_1.UserModel.findOne({ email });
         const userCorrectPassword = bcryptjs_1.default.compare(password, exist_user === null || exist_user === void 0 ? void 0 : exist_user.password);
         if (!exist_user || !(yield userCorrectPassword)) {
             return next((0, cacheError_1.throwError)('Sorry, Invalid credentials..., Check your credentials', http_status_codes_1.StatusCodes.BAD_REQUEST));
@@ -94,22 +94,17 @@ exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
                 return next((0, cacheError_1.throwError)(`${err}`, http_status_codes_1.StatusCodes.BAD_REQUEST));
             return decoded;
         });
-        const current_user = yield model_user_1.userModel.findById(decoded === null || decoded === void 0 ? void 0 : decoded.id);
+        const current_user = yield model_user_1.UserModel.findById(decoded === null || decoded === void 0 ? void 0 : decoded.id);
         if (!current_user) {
             return next((0, cacheError_1.throwError)('The user belonging to this token does no longer exist.', http_status_codes_1.StatusCodes.BAD_REQUEST));
         }
-        // 4) Check if user changed password after the token was issued
-        // if (currentUser.changePasswordAfter(decoded.iat)) {
-        //   return next(
-        //     new AppError(
-        //       'User recently changed password! Please log in again.',
-        //       401
-        //     )
-        //   );
-        // }
+        // ) Check if user changed password after the token was issued
+        if (current_user.changePasswordAfter(decoded.iat)) {
+            return next((0, cacheError_1.throwError)('User recently changed password! Please log in again.', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        }
         // GRANT ACCESS TO PROTECTED ROUTE
-        // req.user = currentUser;
-        // next();
+        req.user = current_user;
+        next();
     }
     catch (error) {
         if (!error.statusCode) {
