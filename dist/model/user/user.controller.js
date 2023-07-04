@@ -24,12 +24,14 @@ dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { first_name, last_name, password, email } = req.body;
-        if (!first_name || !last_name || !password || !email)
-            (0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        if (!first_name || !last_name || !password || !email) {
+            return next((0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        }
         const exist_user = yield model_user_1.userModel.findOne({ email });
         const hashedPassword = yield bcryptjs_1.default.hash(password, 12);
-        if (exist_user)
-            (0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT);
+        if (exist_user) {
+            return next((0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
+        }
         const user = yield model_user_1.userModel.create({
             first_name,
             last_name,
@@ -55,14 +57,15 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
         const { email, password } = req.body;
         const exist_user = yield model_user_1.userModel.findOne({ email });
         const userCorrectPassword = bcryptjs_1.default.compare(password, exist_user === null || exist_user === void 0 ? void 0 : exist_user.password);
-        if (!exist_user || !(yield userCorrectPassword))
-            (0, cacheError_1.throwError)('Sorry, Invalid credentials..., Check your credentials', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        if (!exist_user || !(yield userCorrectPassword)) {
+            return next((0, cacheError_1.throwError)('Sorry, Invalid credentials..., Check your credentials', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        }
         const token = jsonwebtoken_1.default.sign({
             email: exist_user === null || exist_user === void 0 ? void 0 : exist_user.email,
             id: exist_user === null || exist_user === void 0 ? void 0 : exist_user._id,
         }, `${process.env.JWT_SERCRET_KEY}`, { expiresIn: `${process.env.JWT_EXPIRES_IN}` });
         res.status(200).json({
-            status: "Success",
+            status: 'Success',
             message: 'user logged in successfully',
             token,
             userId: exist_user === null || exist_user === void 0 ? void 0 : exist_user._id,
@@ -81,6 +84,9 @@ exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
         if (req.headers.authorization &&
             req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
+        }
+        if (!token) {
+            return next((0, cacheError_1.throwError)('You are not logged in! Please log in to get access.', 401));
         }
     }
     catch (error) {

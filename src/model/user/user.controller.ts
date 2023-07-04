@@ -15,20 +15,27 @@ export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { first_name, last_name, password, email } = req.body;
-      if (!first_name || !last_name || !password || !email)
-        throwError(
-          'Missing credentials, please provide all required information',
-          StatusCodes.BAD_REQUEST
+      if (!first_name || !last_name || !password || !email) {
+        return next(
+          throwError(
+            'Missing credentials, please provide all required information',
+            StatusCodes.BAD_REQUEST
+          )
         );
+      }
 
       const exist_user = await userModel.findOne({ email });
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      if (exist_user)
-        throwError(
-          'You are already a member, kindly login to your account',
-          StatusCodes.CONFLICT
+      if (exist_user) {
+        return next(
+          throwError(
+            'You are already a member, kindly login to your account',
+            StatusCodes.CONFLICT
+          )
         );
+      }
+
       const user = await userModel.create({
         first_name,
         last_name,
@@ -61,11 +68,14 @@ export const login_user: RequestHandler = catchAsync(
         password,
         exist_user?.password
       );
-      if (!exist_user || !(await userCorrectPassword))
-        throwError(
-          'Sorry, Invalid credentials..., Check your credentials',
-          StatusCodes.BAD_REQUEST
+      if (!exist_user || !(await userCorrectPassword)) {
+        return next(
+          throwError(
+            'Sorry, Invalid credentials..., Check your credentials',
+            StatusCodes.BAD_REQUEST
+          )
         );
+      }
 
       const token = jwt.sign(
         {
@@ -77,7 +87,7 @@ export const login_user: RequestHandler = catchAsync(
       );
 
       res.status(200).json({
-        status : "Success",
+        status: 'Success',
         message: 'user logged in successfully',
         token,
         userId: exist_user?._id,
@@ -91,20 +101,27 @@ export const login_user: RequestHandler = catchAsync(
   }
 );
 
-export const protect: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  try {
-     let token;
-     if (
-       req.headers.authorization &&
-       req.headers.authorization.startsWith('Bearer')
-     ) {
-       token = req.headers.authorization.split(' ')[1];
-     }
+export const protect: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      let token;
+      if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith('Bearer')
+      ) {
+        token = req.headers.authorization.split(' ')[1];
+      }
 
-  } catch (error: any) {
-     if (!error.statusCode) {
-       error.statusCode = 500;
-     }
-     next(error);
+      if (!token) {
+        return next(
+          throwError('You are not logged in! Please log in to get access.', 401)
+        );
+      }
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
-})
+);
