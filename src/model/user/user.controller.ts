@@ -55,10 +55,11 @@ export const login_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
-    const exist_user = await userModel.findOne({ email });
-    if (!exist_user)
+    const exist_user: any = await userModel.findOne({ email });
+    const userCorrectPassword = bcrypt.compare(password, exist_user?.password);
+    if (!exist_user || !userCorrectPassword)
       throwError(
-        "Sorry, your account can't be found, kindly register or enter your registered email",
+        "Sorry, Invalid credentials..., Check your credentials",
         StatusCodes.BAD_REQUEST
       );
   }
