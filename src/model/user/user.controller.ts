@@ -12,7 +12,9 @@ import { catchAsync } from "../../utils/catchAsync";
 dotenv.config();
 
 export const create_user: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const { first_name, last_name, password, email } = req.body;
+    try {
+    
+        const { first_name, last_name, password, email } = req.body;
     const exist_user = await userModel.findOne({ email });
     const hashedPassword = await bcrypt.hash(password, 12);
     
@@ -31,4 +33,11 @@ export const create_user: RequestHandler = catchAsync(async (req: Request, res: 
         userId : user?._id
     })
 
+    } catch (error : any) {
+         if (!error.statusCode) {
+           error.statusCode = 500;
+         }
+         next(error);
+    }
+    
 })
