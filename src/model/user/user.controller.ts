@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { promisify } from 'util';
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
@@ -117,6 +118,19 @@ export const protect: RequestHandler = catchAsync(
           throwError('You are not logged in! Please log in to get access.', 401)
         );
       }
+
+      //  Verification token
+      const decoded : any = jwt.verify(
+        token,
+        `${process.env.JWT_SERCRET_KEY}`,
+        (err, decoded) => {
+          if (err) return next(throwError(`${err}`, StatusCodes.BAD_REQUEST));
+          return decoded;
+        }
+      );
+
+      const current_user = await userModel.findById(decoded?.id);
+      
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
