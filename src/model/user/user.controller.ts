@@ -52,7 +52,14 @@ export const create_user: RequestHandler = catchAsync(
 );
 
 export const login_user: RequestHandler = catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
-        
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+
+    const exist_user = await userModel.findOne({ email });
+    if (!exist_user)
+      throwError(
+        "Sorry, your account can't be found, kindly register or enter your registered email",
+        StatusCodes.BAD_REQUEST
+      );
   }
 );
