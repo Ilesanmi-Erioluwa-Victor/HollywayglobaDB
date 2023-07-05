@@ -124,9 +124,9 @@ exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
         const emailjsTemplate = {
             service_id: 'default_service',
-            template_id: 'template_qi9yulh',
-            user_id: 'Z2XzZJxf4GtQFcG0g',
-            accessToken: 'lrOEQZ4i6ByW4ZvLRV8jL',
+            template_id: `${process.env.EMAILJS_TEMPLATE_ID}`,
+            user_id: `${process.env.EMAILJS_PUBLIC_KEY}`,
+            accessToken: `${process.env.EMAILJS_PRIVATE_KEY}`,
             template_params: {
                 name: user === null || user === void 0 ? void 0 : user.first_name,
                 message: `Forgot your  password ? make a
