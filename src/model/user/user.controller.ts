@@ -202,34 +202,6 @@ export const forgot_password: RequestHandler = catchAsync(
           subject: 'Password reset Token',
         },
       };
-      // emailjs
-      //   .send(
-      //     'default_service',
-      //     `${process.env.EMAILJS_TEMPLATE_ID}`,
-      //     emailjsTemplate,
-      //     `${process.env.EMAILJS_PUBLIC_KEY}`
-      //   )
-      //   .then(
-      //     (response) => {
-      //       console.log('Successfully reset your password', response.text);
-      //     },
-      //     (err) => {
-      //       console.log(err);
-      //     }
-      //   );
-
-      // await axios
-      //     .post('https://api.emailjs.com/api/v1.0/email/send', {
-      //       type: 'POST',
-      //       data: JSON.stringify(emailjsTemplate),
-      //       contentType: 'application/json',
-      //     })
-      //     .then(function () {
-      //       console.log('Your mail is sent!');
-      //     })
-      //     .catch(function (error) {
-      //       console.log('Oops... ' + JSON.stringify(error));
-      //     });
       await axios
         .post('https://api.emailjs.com/api/v1.0/email/send', {
           data: JSON.stringify(emailjsTemplate),
