@@ -9,4 +9,4 @@ const signToken = (id) => {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
 };
-module.exports = signToken;
+exports.default = signToken;
