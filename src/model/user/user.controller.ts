@@ -167,5 +167,7 @@ export const protect: RequestHandler = catchAsync(
 );
 
 export const forgot_password: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    const 
+  }
 );
