@@ -191,9 +191,9 @@ export const forgot_password: RequestHandler = catchAsync(
 
       const emailjsTemplate = {
         service_id: 'default_service',
-        template_id: 'template_qi9yulh',
-        user_id: 'Z2XzZJxf4GtQFcG0g',
-        accessToken: 'lrOEQZ4i6ByW4ZvLRV8jL',
+        template_id: `${process.env.EMAILJS_TEMPLATE_ID}`,
+        user_id: `${process.env.EMAILJS_PUBLIC_KEY}`,
+        accessToken: `${process.env.EMAILJS_PRIVATE_KEY}`,
         template_params: {
           name: user?.first_name,
           message: `Forgot your  password ? make a
