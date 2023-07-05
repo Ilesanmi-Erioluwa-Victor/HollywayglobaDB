@@ -113,4 +113,6 @@ exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
         next(error);
     }
 }));
-exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () { }));
+exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const ;
+}));

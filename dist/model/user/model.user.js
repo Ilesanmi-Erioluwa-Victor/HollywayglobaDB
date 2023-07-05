@@ -22,9 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const crypto_1 = __importDefault(require("crypto"));
 const userSchema = new mongoose_1.Schema({
     first_name: {
         type: String,
@@ -62,5 +66,15 @@ userSchema.methods.changePasswordAfter = function (JWTTimeStamps) {
     }
     // false means not change
     return false;
+};
+userSchema.methods.createPasswordResetToken = function () {
+    const resetToken = crypto_1.default.randomBytes(32).toString('hex');
+    this.passwordResetToken = crypto_1.default
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+    console.log({ resetToken }, this.passwordResetToken);
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    return resetToken;
 };
 exports.UserModel = mongoose_1.default.model('User', userSchema);
