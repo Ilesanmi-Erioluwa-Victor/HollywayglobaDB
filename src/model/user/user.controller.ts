@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import emailjs from '@emailjs/browser';
+import axios from 'axios';
 import { throwError } from '../../middlewares/cacheError';
 import { StatusCodes } from 'http-status-codes';
 
@@ -20,14 +22,13 @@ export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { first_name, last_name, password, email } = req.body;
-      if (!first_name || !last_name || !password || !email) {
+      if (!first_name || !last_name || !password || !email)
         return next(
           throwError(
             'Missing credentials, please provide all required information',
             StatusCodes.BAD_REQUEST
           )
         );
-      }
 
       const exist_user = await UserModel.findOne({ email });
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -168,40 +169,89 @@ export const protect: RequestHandler = catchAsync(
 
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const user: any = await UserModel.findOne({ email: req.body.email });
+    console.log(user)
+
+        if (!user)
+          return next(
+            throwError(
+              'Sorry, No user found with this email',
+              StatusCodes.BAD_REQUEST
+            )
+          );
+
     try {
-      const user = await UserModel.findOne({ email: req.body.email });
-      if (!user) {
-        return next(
-          throwError(
-            'Sorry, No user found with this email',
-            StatusCodes.BAD_REQUEST
-          )
-        );
-      }
+  
+      const resetToken = user.createPasswordResetToken();
+      await user.save({ validateBeforeSave: false });
 
-      // if (!user) {
-      //   return next(
-      //     new AppError("Sorry, there is no user with that email address", 404)
+      const resetURL = `${req.protocol}://${req.get(
+        'host'
+      )}/api/v1/users/resetPassword/${resetToken}`;
+
+      const emailjsTemplate = {
+        service_id: 'default_service',
+        template_id: 'template_qi9yulh',
+        user_id: 'Z2XzZJxf4GtQFcG0g',
+        accessToken: 'lrOEQZ4i6ByW4ZvLRV8jL',
+        template_params: {
+          name: user?.first_name,
+          message: `Forgot your  password ? make a
+      request with your new password and passwordConfirm to
+       ${resetURL}.\nif you didn't forget your password, please ignore this email`,
+          subject: 'Password reset Token',
+        },
+      };
+      // emailjs
+      //   .send(
+      //     'default_service',
+      //     `${process.env.EMAILJS_TEMPLATE_ID}`,
+      //     emailjsTemplate,
+      //     `${process.env.EMAILJS_PUBLIC_KEY}`
+      //   )
+      //   .then(
+      //     (response) => {
+      //       console.log('Successfully reset your password', response.text);
+      //     },
+      //     (err) => {
+      //       console.log(err);
+      //     }
       //   );
-      // }
-      // // 2)Get the random reset token
-      // const resetToken = user.createPasswordResetToken();
-      // await user.save({ validateBeforeSave: false });
-      // // 3)send it's to user email
-      // const resetURL = `${req.protocol}://${req.get(
-      //   "host"
-      // )}/api/v1/users/resetPassword/${resetToken}`;
 
-      // const message = `Forgot your  password ? make a
-      // request with your new password and passwordConfirm to
-      //  ${resetURL}.\nif you didn't forget your password, please ignore this email`;
+      // await axios
+      //     .post('https://api.emailjs.com/api/v1.0/email/send', {
+      //       type: 'POST',
+      //       data: JSON.stringify(emailjsTemplate),
+      //       contentType: 'application/json',
+      //     })
+      //     .then(function () {
+      //       console.log('Your mail is sent!');
+      //     })
+      //     .catch(function (error) {
+      //       console.log('Oops... ' + JSON.stringify(error));
+      //     });
+      await axios
+        .post('https://api.emailjs.com/api/v1.0/email/send', {
+          data: JSON.stringify(emailjsTemplate),
+          contentType: 'application/json',
+        })
+        .then((response) => console.log(response));
 
-      // try {
-      //   await sendEmail({
-      //     email: user.email,
-      //     subject: "Your password rest token (valid for 10 min)",
-      //     message: message
-      //   });
-    } catch (error) {}
+      res.status(StatusCodes.OK).json({
+        status: 'success',
+        message: 'Token sent to your email',
+      });
+    } catch (error: any) {
+      user.password_reset_token = undefined;
+      user.password_reset_expires = undefined;
+      await user.save({ validateBeforeSave: false });
+      console.log(error);
+      return next(
+        throwError(
+          'There was an error sending Email, try again',
+          StatusCodes.BAD_GATEWAY
+        )
+      );
+    }
   }
 );

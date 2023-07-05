@@ -6,6 +6,6 @@ const userRouter = express.Router();
 userRouter.post("/signup", create_user);
 userRouter.post("/login", login_user)
 
-userRouter.post("/forgetPassword",forgot_password);
+userRouter.post("/forget_password",forgot_password);
 
 export default userRouter;
