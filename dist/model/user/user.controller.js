@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.forgot_password = exports.protect = exports.login_user = exports.create_user = void 0;
+exports.reset_password = exports.forgot_password = exports.protect = exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -155,10 +155,11 @@ exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         return next((0, cacheError_1.throwError)('There was an error sending Email, try again', http_status_codes_1.StatusCodes.BAD_GATEWAY));
     }
 }));
-exports.resetPassword = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { token, password } = req.body;
     const hashedToken = crypto_1.default
         .createHash("sha256")
-        .update(req.params.token)
+        .update(token)
         .digest("hex");
     const user = yield model_user_1.UserModel.findOne({
         password_reset_token: hashedToken,
@@ -169,9 +170,13 @@ exports.resetPassword = (0, catchAsync_1.catchAsync)((req, res, next) => __await
     if (!user) {
         return next((0, cacheError_1.throwError)("Token is invalid or has expired", http_status_codes_1.StatusCodes.BAD_REQUEST));
     }
-    user.password = req.body.password;
-    user.password_reset_token = undefined;
-    user.password_reset_expires = undefined;
-    yield user.save();
-    createSendToken(user, 200, res);
+    yield model_user_1.UserModel.updateOne({
+        _id: user._id
+    }, {
+        $set: {
+            password,
+            password_reset_token: "",
+            password_reset_expires: ""
+        }
+    });
 }));
