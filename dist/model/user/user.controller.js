@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgot_password = exports.protect = exports.login_user = exports.create_user = void 0;
+exports.resetPassword = exports.forgot_password = exports.protect = exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -153,4 +153,29 @@ exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         console.log(error);
         return next((0, cacheError_1.throwError)('There was an error sending Email, try again', http_status_codes_1.StatusCodes.BAD_GATEWAY));
     }
+}));
+exports.resetPassword = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // 1) Get user based on the token
+    const hashedToken = crypto
+        .createHash("sha256")
+        .update(req.params.token)
+        .digest("hex");
+    const user = yield User.findOne({
+        passwordResetToken: hashedToken,
+        passwordResetExpires: {
+            $gt: Date.now()
+        }
+    });
+    // 2) If token has not expired, and there is user, set the new password
+    if (!user) {
+        return next(new AppError("Token is invalid or has expired", 400));
+    }
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    yield user.save();
+    // 3) Update changedPasswordAt property for the user
+    // 4) Log the user in, send JWT
+    createSendToken(user, 200, res);
 }));
