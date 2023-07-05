@@ -9,7 +9,7 @@ interface UserModel extends Document {
   last_name: string;
   password_change_at: Date;
   password_reset_token: any;
-  password_reset_expires: Date;
+  password_reset_expires: any;
   active: boolean;
   changePasswordAfter: (JWTTimeStamps: any) => boolean;
   createPasswordResetToken: () => string;

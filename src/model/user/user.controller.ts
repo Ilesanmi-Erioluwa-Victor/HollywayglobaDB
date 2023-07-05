@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 import emailjs from '@emailjs/browser';
 import axios from 'axios';
 import { throwError } from '../../middlewares/cacheError';
@@ -229,30 +230,25 @@ export const forgot_password: RequestHandler = catchAsync(
 );
 
 export const resetPassword = catchAsync(async (req: Request, res: Response, next : NextFunction) => {
-  // 1) Get user based on the token
   const hashedToken = crypto
     .createHash("sha256")
     .update(req.params.token)
     .digest("hex");
 
-  const user = await User.findOne({
-    passwordResetToken: hashedToken,
-    passwordResetExpires: {
+  const user = await UserModel.findOne({
+    password_reset_token: hashedToken,
+    password_reset_expires: {
       $gt: Date.now()
     }
   });
 
-  // 2) If token has not expired, and there is user, set the new password
   if (!user) {
-    return next(new AppError("Token is invalid or has expired", 400));
+    return next(throwError("Token is invalid or has expired", StatusCodes.BAD_REQUEST));
   }
   user.password = req.body.password;
-  user.passwordConfirm = req.body.passwordConfirm;
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
+  user.password_reset_token = undefined;
+  user.password_reset_expires = undefined;
   await user.save();
 
-  // 3) Update changedPasswordAt property for the user
-  // 4) Log the user in, send JWT
   createSendToken(user, 200, res);
 });

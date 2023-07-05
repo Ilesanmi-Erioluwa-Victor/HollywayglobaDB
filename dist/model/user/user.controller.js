@@ -16,6 +16,7 @@ exports.resetPassword = exports.forgot_password = exports.protect = exports.logi
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const crypto_1 = __importDefault(require("crypto"));
 const axios_1 = __importDefault(require("axios"));
 const cacheError_1 = require("../../middlewares/cacheError");
 const http_status_codes_1 = require("http-status-codes");
@@ -155,27 +156,22 @@ exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
     }
 }));
 exports.resetPassword = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // 1) Get user based on the token
-    const hashedToken = crypto
+    const hashedToken = crypto_1.default
         .createHash("sha256")
         .update(req.params.token)
         .digest("hex");
-    const user = yield User.findOne({
-        passwordResetToken: hashedToken,
-        passwordResetExpires: {
+    const user = yield model_user_1.UserModel.findOne({
+        password_reset_token: hashedToken,
+        password_reset_expires: {
             $gt: Date.now()
         }
     });
-    // 2) If token has not expired, and there is user, set the new password
     if (!user) {
-        return next(new AppError("Token is invalid or has expired", 400));
+        return next((0, cacheError_1.throwError)("Token is invalid or has expired", http_status_codes_1.StatusCodes.BAD_REQUEST));
     }
     user.password = req.body.password;
-    user.passwordConfirm = req.body.passwordConfirm;
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
+    user.password_reset_token = undefined;
+    user.password_reset_expires = undefined;
     yield user.save();
-    // 3) Update changedPasswordAt property for the user
-    // 4) Log the user in, send JWT
     createSendToken(user, 200, res);
 }));
