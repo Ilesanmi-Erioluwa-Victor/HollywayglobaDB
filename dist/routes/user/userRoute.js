@@ -8,5 +8,5 @@ const user_controller_1 = require("../../model/user/user.controller");
 const userRouter = express_1.default.Router();
 userRouter.post("/signup", user_controller_1.create_user);
 userRouter.post("/login", user_controller_1.login_user);
-userRouter.post("/forgetPassword", user_controller_1.forgot_password);
+userRouter.post("/forget_password", user_controller_1.forgot_password);
 exports.default = userRouter;

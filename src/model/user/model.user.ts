@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import crypto from "crypto";
+import crypto from 'crypto';
 
 interface UserModel extends Document {
   _id?: string;
@@ -8,10 +8,11 @@ interface UserModel extends Document {
   password: string;
   last_name: string;
   password_change_at: Date;
-  password_reset_token: string;
+  password_reset_token: any;
   password_reset_expires: Date;
+  active: boolean;
   changePasswordAfter: (JWTTimeStamps: any) => boolean;
-  createPasswordResetToken: () => string; 
+  createPasswordResetToken: () => string;
 }
 
 interface UserModelStatic extends Model<UserModel> {
@@ -39,6 +40,10 @@ const userSchema = new Schema<UserModel>(
     password_change_at: Date,
     password_reset_token: String,
     password_reset_expires: Date,
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
@@ -66,14 +71,14 @@ userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
-  this.passwordResetToken = crypto
+  this.password_reset_token = crypto
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
 
-  console.log({ resetToken }, this.passwordResetToken);
+  console.log({ resetToken }, this.password_reset_token);
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  this.password_reset_expires = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
 };

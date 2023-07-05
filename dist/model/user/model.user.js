@@ -49,6 +49,10 @@ const userSchema = new mongoose_1.Schema({
     password_change_at: Date,
     password_reset_token: String,
     password_reset_expires: Date,
+    active: {
+        type: Boolean,
+        default: true,
+    },
 }, {
     timestamps: true,
     toJSON: {
@@ -69,12 +73,12 @@ userSchema.methods.changePasswordAfter = function (JWTTimeStamps) {
 };
 userSchema.methods.createPasswordResetToken = function () {
     const resetToken = crypto_1.default.randomBytes(32).toString('hex');
-    this.passwordResetToken = crypto_1.default
+    this.password_reset_token = crypto_1.default
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-    console.log({ resetToken }, this.passwordResetToken);
-    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    console.log({ resetToken }, this.password_reset_token);
+    this.password_reset_expires = Date.now() + 10 * 60 * 1000;
     return resetToken;
 };
 exports.UserModel = mongoose_1.default.model('User', userSchema);

@@ -16,6 +16,7 @@ exports.forgot_password = exports.protect = exports.login_user = exports.create_
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const axios_1 = __importDefault(require("axios"));
 const cacheError_1 = require("../../middlewares/cacheError");
 const http_status_codes_1 = require("http-status-codes");
 const model_user_1 = require("./model.user");
@@ -24,9 +25,8 @@ dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { first_name, last_name, password, email } = req.body;
-        if (!first_name || !last_name || !password || !email) {
+        if (!first_name || !last_name || !password || !email)
             return next((0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        }
         const exist_user = yield model_user_1.UserModel.findOne({ email });
         const hashedPassword = yield bcryptjs_1.default.hash(password, 12);
         if (exist_user) {
@@ -114,32 +114,70 @@ exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
     }
 }));
 exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield model_user_1.UserModel.findOne({ email: req.body.email });
+    console.log(user);
+    if (!user)
+        return next((0, cacheError_1.throwError)('Sorry, No user found with this email', http_status_codes_1.StatusCodes.BAD_REQUEST));
     try {
-        const user = yield model_user_1.UserModel.findOne({ email: req.body.email });
-        if (!user) {
-            return next((0, cacheError_1.throwError)('Sorry, No user found with this email', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        }
-        // if (!user) {
-        //   return next(
-        //     new AppError("Sorry, there is no user with that email address", 404)
+        const resetToken = user.createPasswordResetToken();
+        yield user.save({ validateBeforeSave: false });
+        const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+        const emailjsTemplate = {
+            service_id: 'default_service',
+            template_id: 'template_qi9yulh',
+            user_id: 'Z2XzZJxf4GtQFcG0g',
+            accessToken: 'lrOEQZ4i6ByW4ZvLRV8jL',
+            template_params: {
+                name: user === null || user === void 0 ? void 0 : user.first_name,
+                message: `Forgot your  password ? make a
+      request with your new password and passwordConfirm to
+       ${resetURL}.\nif you didn't forget your password, please ignore this email`,
+                subject: 'Password reset Token',
+            },
+        };
+        // emailjs
+        //   .send(
+        //     'default_service',
+        //     `${process.env.EMAILJS_TEMPLATE_ID}`,
+        //     emailjsTemplate,
+        //     `${process.env.EMAILJS_PUBLIC_KEY}`
+        //   )
+        //   .then(
+        //     (response) => {
+        //       console.log('Successfully reset your password', response.text);
+        //     },
+        //     (err) => {
+        //       console.log(err);
+        //     }
         //   );
-        // }
-        // // 2)Get the random reset token
-        // const resetToken = user.createPasswordResetToken();
-        // await user.save({ validateBeforeSave: false });
-        // // 3)send it's to user email
-        // const resetURL = `${req.protocol}://${req.get(
-        //   "host"
-        // )}/api/v1/users/resetPassword/${resetToken}`;
-        // const message = `Forgot your  password ? make a
-        // request with your new password and passwordConfirm to
-        //  ${resetURL}.\nif you didn't forget your password, please ignore this email`;
-        // try {
-        //   await sendEmail({
-        //     email: user.email,
-        //     subject: "Your password rest token (valid for 10 min)",
-        //     message: message
-        //   });
+        // await axios
+        //     .post('https://api.emailjs.com/api/v1.0/email/send', {
+        //       type: 'POST',
+        //       data: JSON.stringify(emailjsTemplate),
+        //       contentType: 'application/json',
+        //     })
+        //     .then(function () {
+        //       console.log('Your mail is sent!');
+        //     })
+        //     .catch(function (error) {
+        //       console.log('Oops... ' + JSON.stringify(error));
+        //     });
+        yield axios_1.default
+            .post('https://api.emailjs.com/api/v1.0/email/send', {
+            data: JSON.stringify(emailjsTemplate),
+            contentType: 'application/json',
+        })
+            .then((response) => console.log(response));
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            status: 'success',
+            message: 'Token sent to your email',
+        });
     }
-    catch (error) { }
+    catch (error) {
+        user.password_reset_token = undefined;
+        user.password_reset_expires = undefined;
+        yield user.save({ validateBeforeSave: false });
+        console.log(error);
+        return next((0, cacheError_1.throwError)('There was an error sending Email, try again', http_status_codes_1.StatusCodes.BAD_GATEWAY));
+    }
 }));
