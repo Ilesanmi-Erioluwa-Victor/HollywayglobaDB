@@ -114,5 +114,32 @@ exports.protect = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(voi
     }
 }));
 exports.forgot_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const ;
+    try {
+        const user = yield model_user_1.UserModel.findOne({ email: req.body.email });
+        if (!user) {
+            return next((0, cacheError_1.throwError)('Sorry, No user found with this email', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        }
+        // if (!user) {
+        //   return next(
+        //     new AppError("Sorry, there is no user with that email address", 404)
+        //   );
+        // }
+        // // 2)Get the random reset token
+        // const resetToken = user.createPasswordResetToken();
+        // await user.save({ validateBeforeSave: false });
+        // // 3)send it's to user email
+        // const resetURL = `${req.protocol}://${req.get(
+        //   "host"
+        // )}/api/v1/users/resetPassword/${resetToken}`;
+        // const message = `Forgot your  password ? make a
+        // request with your new password and passwordConfirm to
+        //  ${resetURL}.\nif you didn't forget your password, please ignore this email`;
+        // try {
+        //   await sendEmail({
+        //     email: user.email,
+        //     subject: "Your password rest token (valid for 10 min)",
+        //     message: message
+        //   });
+    }
+    catch (error) { }
 }));
