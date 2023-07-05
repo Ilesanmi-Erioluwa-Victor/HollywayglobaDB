@@ -229,10 +229,11 @@ export const forgot_password: RequestHandler = catchAsync(
   }
 );
 
-export const resetPassword = catchAsync(async (req: Request, res: Response, next : NextFunction) => {
+export const reset_password = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+   const { token, password } = req.body;
   const hashedToken = crypto
     .createHash("sha256")
-    .update(req.params.token)
+    .update(token)
     .digest("hex");
 
   const user = await UserModel.findOne({
@@ -245,10 +246,15 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
   if (!user) {
     return next(throwError("Token is invalid or has expired", StatusCodes.BAD_REQUEST));
   }
-  user.password = req.body.password;
-  user.password_reset_token = undefined;
-  user.password_reset_expires = undefined;
-  await user.save();
-
-  createSendToken(user, 200, res);
+  await UserModel.updateOne({
+     _id:user._id
+  }, {
+    $set: {
+      password,
+      password_reset_token : "",
+      password_reset_expires : ""
+      
+       
+     }
+  })
 });
