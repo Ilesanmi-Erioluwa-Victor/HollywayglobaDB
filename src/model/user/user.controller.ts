@@ -270,11 +270,11 @@ export const update_password = catchAsync(
 
 export const generate_verification = catchAsync(
   async (req: AuthenticatedRequest, res : Response, next : NextFunction) => {
-    const loginUserId = req.AuthId;
+    const login_user_id: string = req?.user;
 
-    const user = await User.findById(loginUserId);
+    const user : string | any = await UserModel.findById(login_user_id);
     try {
-      const verificationToken = await user?.createAccountVerificationToken();
+      const verificationToken: string | any = await user?.createAccountVerificationToken();
       await user?.save();
       console.log(verificationToken);
       const resetUrl = `If you were requested to verify your account, verify now, otherwise ignore this message
