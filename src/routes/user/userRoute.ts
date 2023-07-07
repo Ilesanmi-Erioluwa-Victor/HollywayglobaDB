@@ -20,6 +20,7 @@ userRouter.post('/login', login_user);
 userRouter.post('/sendMail', generate_verification);
 // Password rest
 userRouter.post('/forget_password_token', forget_password_token);
+userRouter.put('/reset_password', reset_password);
 
 userRouter.put('/verifyAccount', account_verification);
 userRouter.get('/', get_users);
@@ -27,6 +28,5 @@ userRouter.get('/:id', get_user);
 userRouter.delete('/:id', delete_user);
 userRouter.put('/password', update_password);
 userRouter.put('update-profile/:id', update_user);
-userRouter.put('/reset_password', reset_password);
 
 export default userRouter;
