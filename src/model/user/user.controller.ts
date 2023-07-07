@@ -46,7 +46,7 @@ export const create_user: RequestHandler = catchAsync(
         firstName,
         lastName,
         email,
-        password
+        password,
       });
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
@@ -66,8 +66,7 @@ export const login_user: RequestHandler = catchAsync(
     const { email, password } = req.body;
 
     try {
-
-      const exist_user : any = await UserModel.findOne({ email });
+      const exist_user: any = await UserModel.findOne({ email });
       if (exist_user && (await exist_user.isPasswordMatched(password))) {
         res.json({
           _id: exist_user?._id,
@@ -79,7 +78,12 @@ export const login_user: RequestHandler = catchAsync(
         });
       } else {
         res.status(401);
-        throwError(`Login Failed, invalid credentials..`, StatusCodes.NOT_FOUND);
+        next(
+          throwError(
+            `Login Failed, invalid credentials..`,
+            StatusCodes.NOT_FOUND
+          )
+        );
       }
     } catch (error: any) {
       if (!error.statusCode) {
@@ -167,33 +171,37 @@ export const get_users: RequestHandler = catchAsync(
   }
 );
 
-export const delete_user: RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
-  const { id } = req?.params;
-  ValidateMongoDbId(id);
-  try {
-    const deleted_user = await UserModel.findByIdAndDelete(id);
-    res.json(deleted_user);
-  } catch (error: any) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
+export const delete_user: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req?.params;
+    ValidateMongoDbId(id);
+    try {
+      const deleted_user = await UserModel.findByIdAndDelete(id);
+      res.json(deleted_user);
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
-    next(error);
   }
-});
+);
 
-export const get_user : RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
-  const { id } = req?.params;
-  ValidateMongoDbId(id);
-  try {
-    const user = await UserModel.findById(id);
-    res.json(user);
-  } catch (error: any) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
+export const get_user: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req?.params;
+    ValidateMongoDbId(id);
+    try {
+      const user = await UserModel.findById(id);
+      res.json(user);
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
-    next(error);
   }
-});
+);
 
 // export const User_profile = expressAsyncHandler(async (req, res) => {
 //   const { id } = req?.params;
