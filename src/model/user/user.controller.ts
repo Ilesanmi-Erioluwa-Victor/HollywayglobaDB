@@ -351,7 +351,7 @@ export const forget_password_token: RequestHandler = catchAsync(async (req : Req
     // };
     // const sendMsg = await sgMail.send(msg);
     res.json({
-      message: `A successful message has been sent to ${user?.email},${resetUrl}`,
+      message: `A successful message has been sent to `,
     });
   } catch (error: any) {
      if (!error.statusCode) {
