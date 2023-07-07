@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
+import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
 interface UserModel extends Document {
@@ -66,9 +67,18 @@ const userSchema = new Schema<UserModel>(
       type: Date,
     },
 
-    password_change_at: Date,
-    password_reset_token: String,
-    password_reset_expires: Date,
+    passwordChangeAt: {
+      type: Date,
+    },
+
+    passwordResetToken: {
+      type: String,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+    },
+
     active: {
       type: Boolean,
       default: true,
@@ -84,6 +94,17 @@ const userSchema = new Schema<UserModel>(
     },
   }
 );
+
+userSchema.pre<UserModel>('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
+    return;
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(this.password, salt);
+  this.password = hashedPassword;
+  next();
+});
 
 userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
   if (this.password_change_at) {
