@@ -157,7 +157,7 @@ export const login_user: RequestHandler = catchAsync(
 export const get_users: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const users = await UserModel.find({});
+      const users: string | any = await UserModel.find({});
       res.json({
         length: users.length,
         users,
@@ -176,8 +176,11 @@ export const delete_user: RequestHandler = catchAsync(
     const { id } : any = req?.params;
     ValidateMongoDbId(id);
     try {
-      const deleted_user: any = await UserModel.findByIdAndDelete(id);
-      res.json(deleted_user);
+      const deleted_user: string | any = await UserModel.findByIdAndDelete(id);
+      res.json({
+        message: "You have successfully deleted this user",
+        user : deleted_user
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -189,7 +192,7 @@ export const delete_user: RequestHandler = catchAsync(
 
 export const get_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req?.params;
+    const { id }: string | any = req?.params;
     ValidateMongoDbId(id);
     try {
       const user = await UserModel.findById(id);
