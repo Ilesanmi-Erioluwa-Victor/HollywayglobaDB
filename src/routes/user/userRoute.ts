@@ -7,7 +7,8 @@ import {
   get_users,
   get_user,
     delete_user,
-  update_user
+    update_user,
+  update_password
 } from '../../model/user/user.controller';
 
 const userRouter = express.Router();
@@ -18,7 +19,8 @@ userRouter.post('/login', login_user);
 userRouter.get('/', get_users);
 userRouter.get('/:id', get_user);
 userRouter.delete('/:id', delete_user);
-userRouter.put('profile/:id', update_user);
+userRouter.put('/password', update_password);
+userRouter.put('update-profile/:id', update_user);
 userRouter.post('/forget_password', forgot_password);
 userRouter.patch('/reset_password/:token', reset_password);
 
