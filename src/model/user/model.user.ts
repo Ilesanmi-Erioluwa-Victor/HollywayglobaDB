@@ -33,9 +33,10 @@ interface UserModelStatic extends Model<UserModel> {
 const userSchema = new Schema<UserModel>(
   {
     first_name: {
+      required: [true, 'First name is required'],
       type: String,
-      required: true,
     },
+
     email: {
       type: String,
       required: true,
@@ -45,8 +46,8 @@ const userSchema = new Schema<UserModel>(
       required: true,
     },
     last_name: {
+      required: [true, 'Last name is required'],
       type: String,
-      required: true,
     },
     password_change_at: Date,
     password_reset_token: String,
