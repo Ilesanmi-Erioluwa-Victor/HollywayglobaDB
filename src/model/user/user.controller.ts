@@ -168,6 +168,15 @@ export const protect: RequestHandler = catchAsync(
   }
 );
 
+export const get_users: RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
+  try {
+    const users = await UserModel.find({});
+    res.json(users);
+  } catch (error: any) {
+    res.json(error.message);
+  }
+});
+
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user: any = await UserModel.findOne({ email: req.body.email });
