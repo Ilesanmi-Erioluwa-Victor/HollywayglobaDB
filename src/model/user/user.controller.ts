@@ -340,21 +340,24 @@ export const forget_password_token: RequestHandler = catchAsync(async (req : Req
     const token = await user.createPasswordResetToken();
     await user.save();
 
-    const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-     <a href="http://localhost:3000/verify-account/${token}">Click to verify..</a>
-    `;
-    const msg = {
-      to: email,
-      from: 'ericjay1452@gmail.com',
-      subject: 'Verify your email',
-      html: resetUrl,
-    };
-    const sendMsg = await sgMail.send(msg);
+    // const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+    //  <a href="http://localhost:3000/verify-account/${token}">Click to verify..</a>
+    // `;
+    // const msg = {
+    //   to: email,
+    //   from: 'ericjay1452@gmail.com',
+    //   subject: 'Verify your email',
+    //   html: resetUrl,
+    // };
+    // const sendMsg = await sgMail.send(msg);
     res.json({
       message: `A successful message has been sent to ${user?.email},${resetUrl}`,
     });
   } catch (error: any) {
-    res.json(error.message);
+     if (!error.statusCode) {
+       error.statusCode = 500;
+     }
+     next(error);
   }
 });
 
