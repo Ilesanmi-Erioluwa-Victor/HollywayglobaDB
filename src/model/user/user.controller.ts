@@ -303,20 +303,32 @@ export const generate_verification = catchAsync(
 
 export const account_verification: RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
   const { token } = req.body;
-  const hashToken = crypto.createHash('sha256').update(token).digest('hex');
+  try {
+      const hashToken: string = crypto
+        .createHash('sha256')
+        .update(token)
+        .digest('hex');
 
-  const userFound = await UserModel.findOne({
-    accountVerificationToken: hashToken,
-    accountVerificationTokenExpires: { $gt: new Date() },
-  });
+      const found_user: string | any = await UserModel.findOne({
+        accountVerificationToken: hashToken,
+        accountVerificationTokenExpires: { $gt: new Date() },
+      });
 
-  if (!userFound) throw new Error('Token expired, try agin...');
-  userFound.isAccountVerified = true;
-  userFound.accountVerificationToken = undefined;
-  userFound.accountVerificationTokenExpires = undefined;
+      if (!found_user)
+        throwError('Token expired, try agin...', StatusCodes.BAD_REQUEST);
+      found_user.isAccountVerified = true;
+      found_user.accountVerificationToken = '';
+      found_user.accountVerificationTokenExpires = '';
 
-  await userFound.save();
-  res.json(userFound);
+      await found_user.save();
+      res.json(found_user);
+  } catch (error : any) {
+     if (!error.statusCode) {
+       error.statusCode = 500;
+     }
+     next(error);
+  }
+
 });
 
 export const forgot_password: RequestHandler = catchAsync(
