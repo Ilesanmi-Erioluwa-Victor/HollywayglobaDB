@@ -173,13 +173,13 @@ export const get_users: RequestHandler = catchAsync(
 
 export const delete_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } : any = req?.params;
+    const { id }: any = req?.params;
     ValidateMongoDbId(id);
     try {
       const deleted_user: string | any = await UserModel.findByIdAndDelete(id);
       res.json({
-        message: "You have successfully deleted this user",
-        user : deleted_user
+        message: 'You have successfully deleted this user',
+        user: deleted_user,
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -218,11 +218,11 @@ export const get_user: RequestHandler = catchAsync(
 // });
 
 export const update_user = catchAsync(
-  async (req: AuthenticatedRequest, res : Response, next : NextFunction) => {
-    const _id = req?.user?.AuthenticatedRequest as string;
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const _id = req?.user as string;
     ValidateMongoDbId(_id);
     try {
-      const userprofile : string | any = await UserModel.findByIdAndUpdate(
+      const userprofile: string | any = await UserModel.findByIdAndUpdate(
         _id,
         {
           firstName: req.body.firstName,
@@ -234,10 +234,36 @@ export const update_user = catchAsync(
 
       res.json({
         message: 'You have successfully updated your profile',
-        user: userprofile
+        user: userprofile,
       });
     } catch (error: any) {
-      res.json(error.message);
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
+export const update_password = catchAsync(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const _id = req?.user as string;
+      const { password } = req.body;
+      ValidateMongoDbId(_id);
+      const user = await UserModel.findById(_id);
+
+      if (password) {
+        const updatedUser = await user?.save();
+        res.json(updatedUser);
+      } else {
+        res.json(user);
+      }
+    } catch (error : any) {
+       if (!error.statusCode) {
+         error.statusCode = 500;
+       }
+       next(error);
     }
   }
 );
