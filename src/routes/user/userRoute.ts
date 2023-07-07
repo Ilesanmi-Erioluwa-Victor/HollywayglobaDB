@@ -11,6 +11,7 @@ import {
   update_password,
   generate_verification,
   account_verification,
+  forget_password_token,
 } from '../../model/user/user.controller';
 
 const userRouter = express.Router();
@@ -18,6 +19,8 @@ const userRouter = express.Router();
 userRouter.post('/signup', create_user);
 userRouter.post('/login', login_user);
 userRouter.post('/sendMail', generate_verification);
+// Password rest
+userRouter.post('/forget_password_token', forget_password_token);
 
 userRouter.put('/verifyAccount', account_verification);
 userRouter.get('/', get_users);
