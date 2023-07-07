@@ -343,11 +343,11 @@ export const forget_password_token: RequestHandler = catchAsync(
       const token = await user.createPasswordResetToken();
       await user.save();
 
-    //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-    //   <a href= ${req.protocol}://${req.get(
-    //     'host'
-    //   )}/api/v1/users/verifyAccount/${token}>Click to verify..</a>
-    //  `;
+      //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+      //   <a href= ${req.protocol}://${req.get(
+      //     'host'
+      //   )}/api/v1/users/verifyAccount/${token}>Click to verify..</a>
+      //  `;
       // const msg = {
       //   to: email,
       //   from: 'ericjay1452@gmail.com',
@@ -429,34 +429,45 @@ export const forget_password_token: RequestHandler = catchAsync(
 //   }
 // );
 
-export const reset_password = catchAsync(
+export const reset_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, password } = req.body;
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-    const user = await UserModel.findOne({
-      password_reset_token: hashedToken,
-      password_reset_expires: {
-        $gt: Date.now(),
-      },
-    });
+    try {
+      const hashedToken = crypto
+        .createHash('sha256')
+        .update(token)
+        .digest('hex');
 
-    if (!user) {
-      return next(
-        throwError('Token is invalid or has expired', StatusCodes.BAD_REQUEST)
-      );
-    }
-    await UserModel.updateOne(
-      {
-        _id: user._id,
-      },
-      {
-        $set: {
-          password,
-          password_reset_token: '',
-          password_reset_expires: '',
+      const user = await UserModel.findOne({
+        password_reset_token: hashedToken,
+        password_reset_expires: {
+          $gt: Date.now(),
         },
+      });
+
+      if (!user) {
+        return next(
+          throwError('Token is invalid or has expired', StatusCodes.BAD_REQUEST)
+        );
       }
-    );
+      await UserModel.updateOne(
+        {
+          _id: user._id,
+        },
+        {
+          $set: {
+            password,
+            password_reset_token: '',
+            password_reset_expires: '',
+          },
+        }
+      );
+    } catch (error : any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
 );

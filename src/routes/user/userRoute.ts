@@ -27,6 +27,6 @@ userRouter.get('/:id', get_user);
 userRouter.delete('/:id', delete_user);
 userRouter.put('/password', update_password);
 userRouter.put('update-profile/:id', update_user);
-userRouter.patch('/reset_password/:token', reset_password);
+userRouter.put('/reset_password', reset_password);
 
 export default userRouter;
