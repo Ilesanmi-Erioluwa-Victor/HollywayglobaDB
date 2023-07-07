@@ -50,7 +50,12 @@ const userSchema = new Schema<UserModel>(
 
     password: {
       type: String,
-      required: true,
+      required: [true, 'Password is required'],
+    },
+
+    isAccountVerified: {
+      type: Boolean,
+      default: false,
     },
 
     password_change_at: Date,
