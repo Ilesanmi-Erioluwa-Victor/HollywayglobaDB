@@ -8,6 +8,7 @@ interface UserModel extends Document {
   email: string;
   password: string;
   lastName: string;
+  profilePhoto: string;
   active: boolean;
   isAccountVerified: boolean;
   accountVerificationToken?: string;
@@ -44,6 +45,12 @@ const userSchema = new Schema<UserModel>(
     password: {
       type: String,
       required: [true, 'Password is required'],
+    },
+
+    profilePhoto: {
+      type: String,
+      default:
+        'https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png',
     },
 
     isAccountVerified: {
