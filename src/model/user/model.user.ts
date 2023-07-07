@@ -126,6 +126,10 @@ userSchema.methods.createAccountVerificationToken =
     return verificationToken;
   };
 
+  userSchema.methods.isPasswordMatched = async function (userPassword: string): Promise<boolean> {
+    return await bcrypt.compare(userPassword, this.password);
+  };
+
 userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
   if (this.password_change_at) {
     const changeTimeMilliseconds = this.password_change_at.getTime() / 1000;
