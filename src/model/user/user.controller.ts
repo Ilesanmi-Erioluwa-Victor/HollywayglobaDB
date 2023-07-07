@@ -217,6 +217,31 @@ export const get_user: RequestHandler = catchAsync(
 //   }
 // });
 
+export const update_user = catchAsync(
+  async (req: AuthenticatedRequest, res : Response, next : NextFunction) => {
+    const _id = req?.user?.AuthenticatedRequest as string;
+    ValidateMongoDbId(_id);
+    try {
+      const userprofile : string | any = await UserModel.findByIdAndUpdate(
+        _id,
+        {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+        },
+        { new: true, runValidators: true }
+      );
+
+      res.json({
+        message: 'You have successfully updated your profile',
+        user: userprofile
+      });
+    } catch (error: any) {
+      res.json(error.message);
+    }
+  }
+);
+
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user: any = await UserModel.findOne({ email: req.body.email });
