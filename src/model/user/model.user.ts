@@ -58,6 +58,14 @@ const userSchema = new Schema<UserModel>(
       default: false,
     },
 
+    accountVerificationToken: {
+      type: String,
+    },
+
+    accountVerificationTokenExpires: {
+      type: Date,
+    },
+
     password_change_at: Date,
     password_reset_token: String,
     password_reset_expires: Date,
