@@ -301,6 +301,24 @@ export const generate_verification = catchAsync(
   }
 );
 
+export const account_verification: RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
+  const { token } = req.body;
+  const hashToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const userFound = await UserModel.findOne({
+    accountVerificationToken: hashToken,
+    accountVerificationTokenExpires: { $gt: new Date() },
+  });
+
+  if (!userFound) throw new Error('Token expired, try agin...');
+  userFound.isAccountVerified = true;
+  userFound.accountVerificationToken = undefined;
+  userFound.accountVerificationTokenExpires = undefined;
+
+  await userFound.save();
+  res.json(userFound);
+});
+
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user: any = await UserModel.findOne({ email: req.body.email });
