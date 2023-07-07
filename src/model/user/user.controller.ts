@@ -277,22 +277,26 @@ export const generate_verification = catchAsync(
       const verificationToken: string | any = await user?.createAccountVerificationToken();
       await user?.save();
       console.log(verificationToken);
-      const resetUrl = `If you were requested to verify your account, verify now, otherwise ignore this message
-     <a href="http://localhost:3000/verify-account/${verificationToken}">Click to verify..</a>
-    `;
-      const msg = {
-        to: 'ifedayo1452@gmail.com', // Change to your recipient
-        from: 'ericjay1452@gmail.com', // Change to your verified sender
-        subject: 'Sending with SendGrid is Fun',
-        text: 'and easy to do anywhere, even with Node.js',
-        html: resetUrl,
-      };
 
-      await sgMail.send(msg).then(() => {
-        res.json(resetUrl);
-      });
+    //   const resetUrl = `If you were requested to verify your account, verify now, otherwise ignore this message
+    //  <a href="http://localhost:3000/verify-account/${verificationToken}">Click to verify..</a>
+    // `;
+    //   const msg = {
+    //     to: 'ifedayo1452@gmail.com', // Change to your recipient
+    //     from: 'ericjay1452@gmail.com', // Change to your verified sender
+    //     subject: 'Sending with SendGrid is Fun',
+    //     text: 'and easy to do anywhere, even with Node.js',
+    //     html: resetUrl,
+    //   };
+
+      // await sgMail.send(msg).then(() => {
+      //   res.json(resetUrl);
+      // });
     } catch (error: any) {
-      res.json(error.message);
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
   }
 );
