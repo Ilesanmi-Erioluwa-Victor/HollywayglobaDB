@@ -130,32 +130,19 @@ userSchema.methods.createAccountVerificationToken =
     return await bcrypt.compare(userPassword, this.password);
   };
 
-userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
-  if (this.password_change_at) {
-    const changeTimeMilliseconds = this.password_change_at.getTime() / 1000;
-    const changeTimeStamp = parseInt(String(changeTimeMilliseconds), 10);
+  userSchema.methods.createPasswordResetToken = async function (): Promise<string> {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    this.passwordResetToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
 
-    return JWTTimeStamps < changeTimeStamp;
-  }
+    this.passwordResetExpires = Date.now() + 30 * 60 * 1000;
 
-  // false means not change
-  return false;
-};
+    return resetToken;
+  };
 
-userSchema.methods.createPasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(32).toString('hex');
 
-  this.password_reset_token = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-
-  console.log({ resetToken }, this.password_reset_token);
-
-  this.password_reset_expires = Date.now() + 10 * 60 * 1000;
-
-  return resetToken;
-};
 
 export const UserModel: UserModelStatic = mongoose.model<
   UserModel,
