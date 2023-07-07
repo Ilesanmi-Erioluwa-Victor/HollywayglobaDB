@@ -168,30 +168,37 @@ export const protect: RequestHandler = catchAsync(
   }
 );
 
-export const get_users: RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
-  try {
-    const users = await UserModel.find({});
-    res.json(users);
-  } catch (error: any) {
-    res.json(error.message);
+export const get_users: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const users = await UserModel.find({});
+      res.json({
+        length: users.length,
+        users,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
-});
+);
 
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user: any = await UserModel.findOne({ email: req.body.email });
-    console.log(user)
+    console.log(user);
 
-        if (!user)
-          return next(
-            throwError(
-              'Sorry, No user found with this email',
-              StatusCodes.BAD_REQUEST
-            )
-          );
+    if (!user)
+      return next(
+        throwError(
+          'Sorry, No user found with this email',
+          StatusCodes.BAD_REQUEST
+        )
+      );
 
     try {
-  
       const resetToken = user.createPasswordResetToken();
       await user.save({ validateBeforeSave: false });
 
@@ -238,32 +245,34 @@ export const forgot_password: RequestHandler = catchAsync(
   }
 );
 
-export const reset_password = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-   const { token, password } = req.body;
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(token)
-    .digest("hex");
+export const reset_password = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token, password } = req.body;
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-  const user = await UserModel.findOne({
-    password_reset_token: hashedToken,
-    password_reset_expires: {
-      $gt: Date.now()
+    const user = await UserModel.findOne({
+      password_reset_token: hashedToken,
+      password_reset_expires: {
+        $gt: Date.now(),
+      },
+    });
+
+    if (!user) {
+      return next(
+        throwError('Token is invalid or has expired', StatusCodes.BAD_REQUEST)
+      );
     }
-  });
-
-  if (!user) {
-    return next(throwError("Token is invalid or has expired", StatusCodes.BAD_REQUEST));
+    await UserModel.updateOne(
+      {
+        _id: user._id,
+      },
+      {
+        $set: {
+          password,
+          password_reset_token: '',
+          password_reset_expires: '',
+        },
+      }
+    );
   }
-  await UserModel.updateOne({
-     _id:user._id
-  }, {
-    $set: {
-      password,
-      password_reset_token : "",
-      password_reset_expires : ""
-      
-       
-     }
-  })
-});
+);
