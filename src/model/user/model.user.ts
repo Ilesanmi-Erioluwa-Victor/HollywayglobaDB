@@ -106,6 +106,13 @@ userSchema.pre<UserModel>('save', async function (next) {
   next();
 });
 
+userSchema.statics.emailTaken = async function (
+  email: string
+): Promise<boolean> {
+  const user = await this.findOne({ email });
+  return !!user;
+};
+
 userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
   if (this.password_change_at) {
     const changeTimeMilliseconds = this.password_change_at.getTime() / 1000;
