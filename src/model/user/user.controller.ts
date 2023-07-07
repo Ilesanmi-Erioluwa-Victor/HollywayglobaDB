@@ -200,6 +200,31 @@ export const delete_user: RequestHandler = catchAsync(async (req : Request, res 
   }
 });
 
+export const get_user : RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
+  const { id } = req?.params;
+  ValidateMongoDbId(id);
+  try {
+    const user = await UserModel.findById(id);
+    res.json(user);
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+});
+
+// export const User_profile = expressAsyncHandler(async (req, res) => {
+//   const { id } = req?.params;
+//   ValidateMongoDbId(id);
+//   try {
+//     const userProfile = await User.findById(id).populate('posts');
+//     res.json(userProfile);
+//   } catch (error: any) {
+//     res.json(error.message);
+//   }
+// });
+
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user: any = await UserModel.findOne({ email: req.body.email });
