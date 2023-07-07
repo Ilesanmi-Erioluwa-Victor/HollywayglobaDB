@@ -331,6 +331,33 @@ export const account_verification: RequestHandler = catchAsync(async (req : Requ
 
 });
 
+export const forget_password_token: RequestHandler = catchAsync(async (req : Request, res: Response, next : NextFunction) => {
+  const { email } = req.body;
+  const user : string | any = await UserModel.findOne({ email });
+  if (!user) throwError('No user found.., try again', StatusCodes.NOT_FOUND);
+
+  try {
+    const token = await user.createPasswordResetToken();
+    await user.save();
+
+    const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+     <a href="http://localhost:3000/verify-account/${token}">Click to verify..</a>
+    `;
+    const msg = {
+      to: email,
+      from: 'ericjay1452@gmail.com',
+      subject: 'Verify your email',
+      html: resetUrl,
+    };
+    const sendMsg = await sgMail.send(msg);
+    res.json({
+      message: `A successful message has been sent to ${user?.email},${resetUrl}`,
+    });
+  } catch (error: any) {
+    res.json(error.message);
+  }
+});
+
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user: any = await UserModel.findOne({ email: req.body.email });
