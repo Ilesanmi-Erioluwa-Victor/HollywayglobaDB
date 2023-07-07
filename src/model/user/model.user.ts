@@ -113,6 +113,19 @@ userSchema.statics.emailTaken = async function (
   return !!user;
 };
 
+userSchema.methods.createAccountVerificationToken =
+  async function (): Promise<string> {
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    this.accountVerificationToken = crypto
+      .createHash('sha256')
+      .update(verificationToken)
+      .digest('hex');
+
+    this.accountVerificationTokenExpires = Date.now() + 30 * 60 * 1000;
+
+    return verificationToken;
+  };
+
 userSchema.methods.changePasswordAfter = function (JWTTimeStamps: any) {
   if (this.password_change_at) {
     const changeTimeMilliseconds = this.password_change_at.getTime() / 1000;
