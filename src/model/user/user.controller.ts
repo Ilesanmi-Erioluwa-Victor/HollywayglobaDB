@@ -12,6 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { UserModel } from './model.user';
 import { catchAsync } from '../../utils/catchAsync';
+import ValidateMongoDbId from '../../utils/ValidateMongoId';
 
 dotenv.config();
 
@@ -184,6 +185,20 @@ export const get_users: RequestHandler = catchAsync(
     }
   }
 );
+
+export const delete_user: RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
+  const { id } = req?.params;
+  ValidateMongoDbId(id);
+  try {
+    const deleted_user = await UserModel.findByIdAndDelete(id);
+    res.json(deleted_user);
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+});
 
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
