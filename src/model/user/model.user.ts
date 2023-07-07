@@ -37,18 +37,22 @@ const userSchema = new Schema<UserModel>(
       type: String,
     },
 
-    email: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
     last_name: {
       required: [true, 'Last name is required'],
       type: String,
     },
+
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+
     password_change_at: Date,
     password_reset_token: String,
     password_reset_expires: Date,
