@@ -268,6 +268,35 @@ export const update_password = catchAsync(
   }
 );
 
+export const generate_verification = catchAsync(
+  async (req: AuthenticatedRequest, res : Response, next : NextFunction) => {
+    const loginUserId = req.AuthId;
+
+    const user = await User.findById(loginUserId);
+    try {
+      const verificationToken = await user?.createAccountVerificationToken();
+      await user?.save();
+      console.log(verificationToken);
+      const resetUrl = `If you were requested to verify your account, verify now, otherwise ignore this message
+     <a href="http://localhost:3000/verify-account/${verificationToken}">Click to verify..</a>
+    `;
+      const msg = {
+        to: 'ifedayo1452@gmail.com', // Change to your recipient
+        from: 'ericjay1452@gmail.com', // Change to your verified sender
+        subject: 'Sending with SendGrid is Fun',
+        text: 'and easy to do anywhere, even with Node.js',
+        html: resetUrl,
+      };
+
+      await sgMail.send(msg).then(() => {
+        res.json(resetUrl);
+      });
+    } catch (error: any) {
+      res.json(error.message);
+    }
+  }
+);
+
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user: any = await UserModel.findOne({ email: req.body.email });
