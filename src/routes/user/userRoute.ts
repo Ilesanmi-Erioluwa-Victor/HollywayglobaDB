@@ -6,9 +6,9 @@ import {
   reset_password,
   get_users,
   get_user,
-    delete_user,
-    update_user,
-  update_password
+  delete_user,
+  update_user,
+  update_password,
 } from '../../model/user/user.controller';
 
 const userRouter = express.Router();
