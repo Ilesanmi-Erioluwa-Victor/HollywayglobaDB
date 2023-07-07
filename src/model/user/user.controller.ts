@@ -259,35 +259,36 @@ export const update_password = catchAsync(
       } else {
         res.json(user);
       }
-    } catch (error : any) {
-       if (!error.statusCode) {
-         error.statusCode = 500;
-       }
-       next(error);
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
   }
 );
 
 export const generate_verification = catchAsync(
-  async (req: AuthenticatedRequest, res : Response, next : NextFunction) => {
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const login_user_id: string = req?.user;
 
-    const user : string | any = await UserModel.findById(login_user_id);
+    const user: string | any = await UserModel.findById(login_user_id);
     try {
-      const verificationToken: string | any = await user?.createAccountVerificationToken();
+      const verificationToken: string | any =
+        await user?.createAccountVerificationToken();
       await user?.save();
       console.log(verificationToken);
 
-    //   const resetUrl = `If you were requested to verify your account, verify now, otherwise ignore this message
-    //  <a href="http://localhost:3000/verify-account/${verificationToken}">Click to verify..</a>
-    // `;
-    //   const msg = {
-    //     to: 'ifedayo1452@gmail.com', // Change to your recipient
-    //     from: 'ericjay1452@gmail.com', // Change to your verified sender
-    //     subject: 'Sending with SendGrid is Fun',
-    //     text: 'and easy to do anywhere, even with Node.js',
-    //     html: resetUrl,
-    //   };
+      //   const resetUrl = `If you were requested to verify your account, verify now, otherwise ignore this message
+      //  <a href="http://localhost:3000/verify-account/${verificationToken}">Click to verify..</a>
+      // `;
+      //   const msg = {
+      //     to: 'ifedayo1452@gmail.com', // Change to your recipient
+      //     from: 'ericjay1452@gmail.com', // Change to your verified sender
+      //     subject: 'Sending with SendGrid is Fun',
+      //     text: 'and easy to do anywhere, even with Node.js',
+      //     html: resetUrl,
+      //   };
 
       // await sgMail.send(msg).then(() => {
       //   res.json(resetUrl);
@@ -301,9 +302,10 @@ export const generate_verification = catchAsync(
   }
 );
 
-export const account_verification: RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
-  const { token } = req.body;
-  try {
+export const account_verification: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.body;
+    try {
       const hashToken: string = crypto
         .createHash('sha256')
         .update(token)
@@ -322,48 +324,54 @@ export const account_verification: RequestHandler = catchAsync(async (req : Requ
 
       await found_user.save();
       res.json(found_user);
-  } catch (error : any) {
-     if (!error.statusCode) {
-       error.statusCode = 500;
-     }
-     next(error);
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
+);
 
-});
+export const forget_password_token: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+    const user: string | any = await UserModel.findOne({ email });
+    if (!user) throwError('No user found.., try again', StatusCodes.NOT_FOUND);
 
-export const forget_password_token: RequestHandler = catchAsync(async (req : Request, res: Response, next : NextFunction) => {
-  const { email } = req.body;
-  const user : string | any = await UserModel.findOne({ email });
-  if (!user) throwError('No user found.., try again', StatusCodes.NOT_FOUND);
+    try {
+      const token = await user.createPasswordResetToken();
+      await user.save();
 
-  try {
-    const token = await user.createPasswordResetToken();
-    await user.save();
-
-    // const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-    //  <a href="http://localhost:3000/verify-account/${token}">Click to verify..</a>
-    // `;
-    // const msg = {
-    //   to: email,
-    //   from: 'ericjay1452@gmail.com',
-    //   subject: 'Verify your email',
-    //   html: resetUrl,
-    // };
-    // const sendMsg = await sgMail.send(msg);
-    res.json({
-      message: `A successful message has been sent to `,
-    });
-  } catch (error: any) {
-     if (!error.statusCode) {
-       error.statusCode = 500;
-     }
-     next(error);
+    //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+    //   <a href= ${req.protocol}://${req.get(
+    //     'host'
+    //   )}/api/v1/users/verifyAccount/${token}>Click to verify..</a>
+    //  `;
+      // const msg = {
+      //   to: email,
+      //   from: 'ericjay1452@gmail.com',
+      //   subject: 'Verify your email',
+      //   html: resetUrl,
+      // };
+      // const sendMsg = await sgMail.send(msg);
+      res.json({
+        message: `A successful message has been sent to your gmail`,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
-});
+);
 
 export const forgot_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user: any = await UserModel.findOne({ email: req.body.email });
+    const user: string | any = await UserModel.findOne({
+      email: req.body.email,
+    });
     console.log(user);
 
     if (!user)
