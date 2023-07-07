@@ -8,16 +8,18 @@ import {
   get_user,
   delete_user,
   update_user,
-    update_password,
-  generate_verification
+  update_password,
+  generate_verification,
+  account_verification,
 } from '../../model/user/user.controller';
 
 const userRouter = express.Router();
 
 userRouter.post('/signup', create_user);
 userRouter.post('/login', login_user);
+userRouter.post('/sendMail', generate_verification);
 
-userRouter.post('/sendMail',generate_verification);
+userRouter.put('/verifyAccount', account_verification);
 userRouter.get('/', get_users);
 userRouter.get('/:id', get_user);
 userRouter.delete('/:id', delete_user);
