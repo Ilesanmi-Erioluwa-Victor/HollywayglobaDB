@@ -11,8 +11,19 @@ interface UserModel extends Document {
   password_reset_token: any;
   password_reset_expires: any;
   active: boolean;
+  isAccountVerified: boolean;
+  accountVerificationToken?: string;
+  accountVerificationTokenExpires?: Date;
+  passwordChangeAt?: Date;
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
+
+  // Custom methods
+  createAccountVerificationToken: () => Promise<string>;
+  isPasswordMatched: (userPassword: string) => Promise<boolean>;
+  createPasswordResetToken: () => Promise<string>;
   changePasswordAfter: (JWTTimeStamps: any) => boolean;
-  createPasswordResetToken: () => string;
+  // createPasswordResetToken: () => string;
 }
 
 interface UserModelStatic extends Model<UserModel> {
