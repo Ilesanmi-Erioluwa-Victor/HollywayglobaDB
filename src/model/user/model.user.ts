@@ -4,13 +4,10 @@ import crypto from 'crypto';
 
 interface UserModel extends Document {
   _id?: string;
-  first_name: string;
+  firstName: string;
   email: string;
   password: string;
-  last_name: string;
-  password_change_at: Date;
-  password_reset_token: any;
-  password_reset_expires: any;
+  lastName: string;
   active: boolean;
   isAccountVerified: boolean;
   accountVerificationToken?: string;
@@ -23,22 +20,17 @@ interface UserModel extends Document {
   createAccountVerificationToken: () => Promise<string>;
   isPasswordMatched: (userPassword: string) => Promise<boolean>;
   createPasswordResetToken: () => Promise<string>;
-  changePasswordAfter: (JWTTimeStamps: any) => boolean;
-  // createPasswordResetToken: () => string;
-}
-
-interface UserModelStatic extends Model<UserModel> {
-  // Add any static methods here if needed
+  emailTaken : () => Promise<boolean>;
 }
 
 const userSchema = new Schema<UserModel>(
   {
-    first_name: {
+    firstName: {
       required: [true, 'First name is required'],
       type: String,
     },
 
-    last_name: {
+    lastName: {
       required: [true, 'Last name is required'],
       type: String,
     },
@@ -144,7 +136,6 @@ userSchema.methods.createAccountVerificationToken =
 
 
 
-export const UserModel: UserModelStatic = mongoose.model<
-  UserModel,
-  UserModelStatic
+export const UserModel = mongoose.model<
+  UserModel
 >('User', userSchema);
