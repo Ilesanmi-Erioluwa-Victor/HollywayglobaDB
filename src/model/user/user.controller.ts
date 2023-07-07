@@ -5,14 +5,13 @@ import { RequestHandler, NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import crypto from 'crypto';
-import emailjs from '@emailjs/browser';
-import axios from 'axios';
 import { throwError } from '../../middlewares/cacheError';
 import { StatusCodes } from 'http-status-codes';
 
 import { UserModel } from './model.user';
 import { catchAsync } from '../../utils/catchAsync';
 import ValidateMongoDbId from '../../utils/ValidateMongoId';
+import generateToken from '../../config/generateToken/token';
 
 dotenv.config();
 
@@ -23,8 +22,8 @@ interface AuthenticatedRequest extends Request {
 export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { first_name, last_name, password, email } = req.body;
-      if (!first_name || !last_name || !password || !email)
+      const { firstName, lastName, password, email } = req.body;
+      if (!firstName || !lastName || !password || !email)
         return next(
           throwError(
             'Missing credentials, please provide all required information',
@@ -33,7 +32,6 @@ export const create_user: RequestHandler = catchAsync(
         );
 
       const exist_user = await UserModel.findOne({ email });
-      const hashedPassword = await bcrypt.hash(password, 12);
 
       if (exist_user) {
         return next(
@@ -45,17 +43,14 @@ export const create_user: RequestHandler = catchAsync(
       }
 
       const user = await UserModel.create({
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email,
-        password: hashedPassword,
+        password
       });
-
-      await user.save();
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
-        userId: user?._id,
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -68,38 +63,24 @@ export const create_user: RequestHandler = catchAsync(
 
 export const login_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+
     try {
-      const { email, password } = req.body;
 
-      const exist_user: any = await UserModel.findOne({ email });
-      const userCorrectPassword = bcrypt.compare(
-        password,
-        exist_user?.password
-      );
-      if (!exist_user || !(await userCorrectPassword)) {
-        return next(
-          throwError(
-            'Sorry, Invalid credentials..., Check your credentials',
-            StatusCodes.BAD_REQUEST
-          )
-        );
-      }
-
-      const token = jwt.sign(
-        {
+      const exist_user : any = await UserModel.findOne({ email });
+      if (exist_user && (await exist_user.isPasswordMatched(password))) {
+        res.json({
+          _id: exist_user?._id,
+          firstName: exist_user?.firstName,
+          lastName: exist_user?.lastName,
           email: exist_user?.email,
-          id: exist_user?._id,
-        },
-        `${process.env.JWT_SERCRET_KEY}`,
-        { expiresIn: `${process.env.JWT_EXPIRES_IN}` }
-      );
-
-      res.status(200).json({
-        status: 'Success',
-        message: 'user logged in successfully',
-        token,
-        userId: exist_user?._id,
-      });
+          profilePhoto: exist_user?.profilePhoto,
+          token: generateToken(exist_user?._id),
+        });
+      } else {
+        res.status(401);
+        throwError(`Login Failed, invalid credentials..`, StatusCodes.NOT_FOUND);
+      }
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
