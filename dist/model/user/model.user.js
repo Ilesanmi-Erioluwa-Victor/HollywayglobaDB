@@ -120,6 +120,7 @@ userSchema.methods.createAccountVerificationToken =
                 .update(verificationToken)
                 .digest('hex');
             this.accountVerificationTokenExpires = Date.now() + 30 * 60 * 1000;
+            console.log(verificationToken);
             return verificationToken;
         });
     };

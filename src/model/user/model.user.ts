@@ -115,6 +115,7 @@ userSchema.statics.emailTaken = async function (
 userSchema.methods.createAccountVerificationToken =
   async function (): Promise<string> {
     const verificationToken = crypto.randomBytes(32).toString('hex');
+
     this.accountVerificationToken = crypto
       .createHash('sha256')
       .update(verificationToken)
@@ -122,8 +123,10 @@ userSchema.methods.createAccountVerificationToken =
 
     this.accountVerificationTokenExpires = Date.now() + 30 * 60 * 1000;
 
+    console.log(verificationToken);
     return verificationToken;
   };
+
 
   userSchema.methods.isPasswordMatched = async function (userPassword: string): Promise<boolean> {
     return await bcrypt.compare(userPassword, this.password);
