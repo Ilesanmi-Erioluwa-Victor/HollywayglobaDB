@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { promisify } from 'util';
+import nodemailer from "nodemailer";
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
