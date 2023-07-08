@@ -270,7 +270,7 @@ export const update_password = catchAsync(
 
 export const generate_verification = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const login_user_id: string = req?.user;
+    const login_user_id: string | any = req?.user;
 
     const user: string | any = await UserModel.findById(login_user_id);
     try {
@@ -279,20 +279,37 @@ export const generate_verification = catchAsync(
       await user?.save();
       console.log(verificationToken);
 
-      //   const resetUrl = `If you were requested to verify your account, verify now, otherwise ignore this message
-      //  <a href="http://localhost:3000/verify-account/${verificationToken}">Click to verify..</a>
-      // `;
-      //   const msg = {
-      //     to: 'ifedayo1452@gmail.com', // Change to your recipient
-      //     from: 'ericjay1452@gmail.com', // Change to your verified sender
-      //     subject: 'Sending with SendGrid is Fun',
-      //     text: 'and easy to do anywhere, even with Node.js',
-      //     html: resetUrl,
-      //   };
+      var transport = nodemailer.createTransport({
+        host: 'sandbox.smtp.mailtrap.io',
+        port: 2525,
+        auth: {
+          user: `${process.env.NODEMAILER_USERNAME}`,
+          pass: `${process.env.NODEMAILER_PASS}`,
+        },
+      });
 
-      // await sgMail.send(msg).then(() => {
-      //   res.json(resetUrl);
-      // });
+        const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+        <a href= ${req.protocol}://${req.get(
+          'host'
+        )}/api/v1/users/verifyAccount/${verificationToken}>Click to verify..</a>
+       `;
+
+      const mailOptions = {
+        from: 'ifedayo1452@gmail.com',
+        to: 'ericjay1452@gmail.com',
+        subject: 'Account Verification ',
+        text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
+        html: resetUrl,
+      };
+
+
+
+     await transport.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    return console.log(error);
+  }
+  console.log('Message sent: %s', info.messageId);
+});
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reset_password = exports.forget_password_token = exports.account_verification = exports.generate_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const crypto_1 = __importDefault(require("crypto"));
 const cacheError_1 = require("../../middlewares/cacheError");
@@ -233,19 +234,30 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
         const verificationToken = yield (user === null || user === void 0 ? void 0 : user.createAccountVerificationToken());
         yield (user === null || user === void 0 ? void 0 : user.save());
         console.log(verificationToken);
-        //   const resetUrl = `If you were requested to verify your account, verify now, otherwise ignore this message
-        //  <a href="http://localhost:3000/verify-account/${verificationToken}">Click to verify..</a>
-        // `;
-        //   const msg = {
-        //     to: 'ifedayo1452@gmail.com', // Change to your recipient
-        //     from: 'ericjay1452@gmail.com', // Change to your verified sender
-        //     subject: 'Sending with SendGrid is Fun',
-        //     text: 'and easy to do anywhere, even with Node.js',
-        //     html: resetUrl,
-        //   };
-        // await sgMail.send(msg).then(() => {
-        //   res.json(resetUrl);
-        // });
+        var transport = nodemailer_1.default.createTransport({
+            host: 'sandbox.smtp.mailtrap.io',
+            port: 2525,
+            auth: {
+                user: `${process.env.NODEMAILER_USERNAME}`,
+                pass: `${process.env.NODEMAILER_PASS}`,
+            },
+        });
+        const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verifyAccount/${verificationToken}>Click to verify..</a>
+       `;
+        const mailOptions = {
+            from: 'ifedayo1452@gmail.com',
+            to: 'ericjay1452@gmail.com',
+            subject: 'Account Verification ',
+            text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
+            html: resetUrl,
+        };
+        yield transport.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+        });
     }
     catch (error) {
         if (!error.statusCode) {
