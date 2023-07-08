@@ -27,6 +27,6 @@ userRouter.get('/', get_users);
 userRouter.get('/:id', get_user);
 userRouter.delete('/:id', delete_user);
 userRouter.put('/password', update_password);
-userRouter.put('update-profile/:id', update_user);
+userRouter.put('/update-profile/:id', update_user);
 
 export default userRouter;
