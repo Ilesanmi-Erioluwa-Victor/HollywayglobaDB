@@ -21,7 +21,7 @@ interface UserModel extends Document {
   createAccountVerificationToken: () => Promise<string>;
   isPasswordMatched: (userPassword: string) => Promise<boolean>;
   createPasswordResetToken: () => Promise<string>;
-  emailTaken : () => Promise<boolean>;
+  emailTaken: () => Promise<boolean>;
 }
 
 const userSchema = new Schema<UserModel>(
@@ -115,24 +115,25 @@ userSchema.statics.emailTaken = async function (
 userSchema.methods.createAccountVerificationToken =
   async function (): Promise<string> {
     const verificationToken = crypto.randomBytes(32).toString('hex');
-
     this.accountVerificationToken = crypto
-      .createHash('sha256')
-      .update(verificationToken)
-      .digest('hex');
-
+    .createHash('sha256')
+    .update(verificationToken)
+    .digest('hex');
+    
     this.accountVerificationTokenExpires = Date.now() + 30 * 60 * 1000;
-
-    console.log(verificationToken);
+    
+    console.log(verificationToken)
     return verificationToken;
   };
 
+userSchema.methods.isPasswordMatched = async function (
+  userPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(userPassword, this.password);
+};
 
-  userSchema.methods.isPasswordMatched = async function (userPassword: string): Promise<boolean> {
-    return await bcrypt.compare(userPassword, this.password);
-  };
-
-  userSchema.methods.createPasswordResetToken = async function (): Promise<string> {
+userSchema.methods.createPasswordResetToken =
+  async function (): Promise<string> {
     const resetToken = crypto.randomBytes(32).toString('hex');
     this.passwordResetToken = crypto
       .createHash('sha256')
@@ -144,8 +145,4 @@ userSchema.methods.createAccountVerificationToken =
     return resetToken;
   };
 
-
-
-export const UserModel = mongoose.model<
-  UserModel
->('User', userSchema);
+export const UserModel = mongoose.model<UserModel>('User', userSchema);

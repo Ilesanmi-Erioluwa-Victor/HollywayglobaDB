@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
@@ -15,8 +15,8 @@ import generateToken from '../../config/generateToken/token';
 
 dotenv.config();
 
-interface AuthenticatedRequest extends Request {
-  user: any; // Replace 'any' with the appropriate type for the user object
+interface CustomRequest extends Request {
+  authId?: string; // Replace 'any' with the appropriate type for the user object
 }
 
 export const create_user: RequestHandler = catchAsync(
@@ -51,6 +51,7 @@ export const create_user: RequestHandler = catchAsync(
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
+        user
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -69,11 +70,12 @@ export const login_user: RequestHandler = catchAsync(
       const exist_user: any = await UserModel.findOne({ email });
       if (exist_user && (await exist_user.isPasswordMatched(password))) {
         res.json({
-          _id: exist_user?._id,
-          firstName: exist_user?.firstName,
-          lastName: exist_user?.lastName,
-          email: exist_user?.email,
-          profilePhoto: exist_user?.profilePhoto,
+          // _id: exist_user?._id,
+          // firstName: exist_user?.firstName,
+          // lastName: exist_user?.lastName,
+          // email: exist_user?.email,
+          // profilePhoto: exist_user?.profilePhoto,
+          exist_user,
           token: generateToken(exist_user?._id),
         });
       } else {
@@ -218,8 +220,8 @@ export const get_user: RequestHandler = catchAsync(
 // });
 
 export const update_user = catchAsync(
-  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const _id = req?.user as string;
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const _id = req?.authId as string;
     ValidateMongoDbId(_id);
     try {
       const userprofile: string | any = await UserModel.findByIdAndUpdate(
@@ -246,9 +248,9 @@ export const update_user = catchAsync(
 );
 
 export const update_password = catchAsync(
-  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
-      const _id = req?.user as string;
+      const _id = req?.authId as string;
       const { password } = req.body;
       ValidateMongoDbId(_id);
       const user = await UserModel.findById(_id);
@@ -269,15 +271,17 @@ export const update_password = catchAsync(
 );
 
 export const generate_verification = catchAsync(
-  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const login_user_id: string | any = req?.user;
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    console.log(req?.params);
+    const login_user_id: string | any = req?.authId;
 
     const user: string | any = await UserModel.findById(login_user_id);
     try {
       const verificationToken: string | any =
         await user?.createAccountVerificationToken();
       await user?.save();
-      console.log(verificationToken);
+
+      console.log(user, verificationToken);
 
       var transport = nodemailer.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
@@ -288,10 +292,10 @@ export const generate_verification = catchAsync(
         },
       });
 
-        const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+      const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
         <a href= ${req.protocol}://${req.get(
-          'host'
-        )}/api/v1/users/verifyAccount/${verificationToken}>Click to verify..</a>
+        'host'
+      )}/api/v1/users/verifyAccount/${verificationToken}>Click to verify..</a>
        `;
 
       const mailOptions = {
@@ -302,14 +306,12 @@ export const generate_verification = catchAsync(
         html: resetUrl,
       };
 
-
-
-     await transport.sendMail(mailOptions, (error, info) => {
-  if (error) {
-    return console.log(error);
-  }
-  console.log('Message sent: %s', info.messageId);
-});
+      transport.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -480,7 +482,7 @@ export const reset_password: RequestHandler = catchAsync(
           },
         }
       );
-    } catch (error : any) {
+    } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
