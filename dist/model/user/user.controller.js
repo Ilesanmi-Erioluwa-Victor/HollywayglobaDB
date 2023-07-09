@@ -242,7 +242,7 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
             },
         });
         const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verifyAccount/${verificationToken}>Click to verify..</a>
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${verificationToken}>Click to verify..</a>
        `;
         const mailOptions = {
             from: 'ifedayo1452@gmail.com',

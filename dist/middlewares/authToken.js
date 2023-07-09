@@ -32,11 +32,6 @@ exports.AuthMiddleWare = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
             if (token) {
                 const decoded = jsonwebtoken_1.default.verify(token, `${process.env.JWT_SERCRET_KEY}`);
                 req.authId = decoded.id;
-                console.log(req === null || req === void 0 ? void 0 : req.authId);
-                next();
-            }
-            else {
-                (0, cacheError_1.throwError)('Error verifying JWT', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
         }
         else {
@@ -45,6 +40,9 @@ exports.AuthMiddleWare = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
         next();
     }
     catch (error) {
-        (0, cacheError_1.throwError)('Sorry No token attached', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
     }
 }));

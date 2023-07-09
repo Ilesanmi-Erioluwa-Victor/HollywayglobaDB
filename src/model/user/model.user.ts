@@ -116,13 +116,11 @@ userSchema.methods.createAccountVerificationToken =
   async function (): Promise<string> {
     const verificationToken = crypto.randomBytes(32).toString('hex');
     this.accountVerificationToken = crypto
-    .createHash('sha256')
-    .update(verificationToken)
-    .digest('hex');
-    
+      .createHash('sha256')
+      .update(verificationToken)
+      .digest('hex');
+
     this.accountVerificationTokenExpires = Date.now() + 30 * 60 * 1000;
-    
-    console.log(verificationToken)
     return verificationToken;
   };
 

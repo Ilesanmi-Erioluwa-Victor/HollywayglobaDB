@@ -29,11 +29,7 @@ export const AuthMiddleWare = catchAsync(async (req: CustomRequest, res: Respons
           id: string;
         };
         req.authId = decoded.id;
-        console.log(req?.authId);
-        next();
-      } else {
-        throwError('Error verifying JWT', StatusCodes.BAD_REQUEST);
-      }
+      } 
     } else {
       throwError(
         `Sorry, there is no token attached to your Header, try again by attaching Token..`, StatusCodes.NOT_FOUND
@@ -41,6 +37,9 @@ export const AuthMiddleWare = catchAsync(async (req: CustomRequest, res: Respons
     }
     next();
   } catch (error: any) {
-    throwError('Sorry No token attached', StatusCodes.BAD_REQUEST);
+   if (!error.statusCode) {
+     error.statusCode = 500;
+   }
+   next(error);
   }
 });
