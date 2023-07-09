@@ -290,7 +290,7 @@ export const generate_verification = catchAsync(
       const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
         <a href= ${req.protocol}://${req.get(
         'host'
-      )}/api/v1/users/verifyAccount/${verificationToken}>Click to verify..</a>
+      )}/api/v1/users/verify_account/${verificationToken}>Click to verify..</a>
        `;
 
       const mailOptions = {

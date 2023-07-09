@@ -9,8 +9,8 @@ import userRouter from './routes/user/userRoute';
 // import api from './services/v1Api';
 // import uploadFile from './uploads/uploadFile';
 // import { requestErrorTypings } from './typings/requestErrorTypings';
-// import { pageNotFound } from './middleware/404';
 import { connectFunction } from './database/Database';
+import { pageNotFound } from './middlewares/_404';
 
 dotenv.config();
 const app: Application = express();
@@ -34,8 +34,8 @@ app.use((req, res, next) => {
 
 // version 1 api
 app.use('/api/v1/admin/', adminRouter);
-app.use('/api/v1/user/', userRouter);
-// app.use(pageNotFound);
+app.use('/api/v1/user', userRouter);
+app.use(pageNotFound);
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public'));

@@ -22,8 +22,8 @@ const userRoute_1 = __importDefault(require("./routes/user/userRoute"));
 // import api from './services/v1Api';
 // import uploadFile from './uploads/uploadFile';
 // import { requestErrorTypings } from './typings/requestErrorTypings';
-// import { pageNotFound } from './middleware/404';
 const Database_1 = require("./database/Database");
+const _404_1 = require("./middlewares/_404");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
@@ -43,8 +43,8 @@ app.use((req, res, next) => {
 });
 // version 1 api
 app.use('/api/v1/admin/', adminRoute_1.default);
-app.use('/api/v1/user/', userRoute_1.default);
-// app.use(pageNotFound);
+app.use('/api/v1/user', userRoute_1.default);
+app.use(_404_1.pageNotFound);
 app.get('/', function (req, res) {
     res.sendFile(path_1.default.join(__dirname, '/public'));
 });

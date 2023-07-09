@@ -22,9 +22,9 @@ userRouter.post('/login', login_user);
 userRouter.post('/forget_password_token', forget_password_token);
 userRouter.put('/reset_password', reset_password);
 
-userRouter.post('/sendMail', AuthMiddleWare, generate_verification);
-userRouter.put('/verifyAccount', account_verification);
-userRouter.get('/', get_users);
+userRouter.post('/sendmail', AuthMiddleWare, generate_verification);
+userRouter.put('/verify_account',AuthMiddleWare, account_verification);
+userRouter.get('/',AuthMiddleWare, get_users);
 userRouter.get('/:id', get_user);
 userRouter.delete('/:id', delete_user);
 userRouter.put('/password', update_password);
