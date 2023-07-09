@@ -50,8 +50,7 @@ export const create_user: RequestHandler = catchAsync(
       });
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
-        status: 'success',
-        user
+        status: 'success'
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -70,12 +69,11 @@ export const login_user: RequestHandler = catchAsync(
       const exist_user: any = await UserModel.findOne({ email });
       if (exist_user && (await exist_user.isPasswordMatched(password))) {
         res.json({
-          // _id: exist_user?._id,
-          // firstName: exist_user?.firstName,
-          // lastName: exist_user?.lastName,
-          // email: exist_user?.email,
-          // profilePhoto: exist_user?.profilePhoto,
-          exist_user,
+          _id: exist_user?._id,
+          firstName: exist_user?.firstName,
+          lastName: exist_user?.lastName,
+          email: exist_user?.email,
+          profilePhoto: exist_user?.profilePhoto,
           token: generateToken(exist_user?._id),
         });
       } else {
@@ -272,7 +270,6 @@ export const update_password = catchAsync(
 
 export const generate_verification = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    console.log(req?.params);
     const login_user_id: string | any = req?.authId;
 
     const user: string | any = await UserModel.findById(login_user_id);
@@ -280,8 +277,6 @@ export const generate_verification = catchAsync(
       const verificationToken: string | any =
         await user?.createAccountVerificationToken();
       await user?.save();
-
-      console.log(user, verificationToken);
 
       var transport = nodemailer.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
@@ -310,7 +305,7 @@ export const generate_verification = catchAsync(
         if (error) {
           return console.log(error);
         }
-        console.log('Message sent: %s', info.messageId);
+        res.json(resetUrl)
       });
     } catch (error: any) {
       if (!error.statusCode) {
