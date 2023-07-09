@@ -1,26 +1,46 @@
 import { NextFunction, Request, Response } from 'express';
-import Jwt from 'jsonwebtoken';
-import { Error } from '../types/requestErrorType';
 import { throwError } from './cacheError';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import { catchAsync } from '../utils/catchAsync';
+import { StatusCodes } from 'http-status-codes';
 
-export default (req: Request | any, res: Response, next: NextFunction) => {
+
+dotenv.config();
+
+interface CustomRequest extends Request {
+  authId?: string;
+}
+
+export const AuthMiddleWare = catchAsync(async (req: CustomRequest, res: Response, next : NextFunction) => {
+  let token;
+
   try {
-    const authHeader = req.get('Authorization');
-    if (!authHeader) {
-      throwError('No token provided', 401);
+    if (
+      req.headers.authorization &&
+      req?.headers?.authorization.startsWith('Bearer')
+    ) {
+      token = req?.headers?.authorization.split(' ')[1];
+      if (!`${process.env.JWT_SERCRET_KEY}`) {
+        throwError('SERVER JWT PASSWORD NOT SET', StatusCodes.BAD_REQUEST);
+      }
+      if (token) {
+        const decoded = jwt.verify(token, `${process.env.JWT_SERCRET_KEY}`) as {
+          id: string;
+        };
+        req.authId = decoded.id;
+        console.log(req?.authId);
+        next();
+      } else {
+        throwError('Error verifying JWT', StatusCodes.BAD_REQUEST);
+      }
+    } else {
+      throwError(
+        `Sorry, there is no token attached to your Header, try again by attaching Token..`, StatusCodes.NOT_FOUND
+      );
     }
-    let decode: any;
-    const token = authHeader?.split(' ')[1];
-    decode = Jwt.verify(token, `${process.env.JWT_SECRET}`);
-
-    if (!token || !decode) {
-      throwError('Invalid token', 401);
-    }
-    req.id = decode?.id;
     next();
-  } catch (error) {
-    const errorResponse: Error = new Error('Not authorized');
-    errorResponse.statusCode = 401;
-    next(errorResponse);
+  } catch (error: any) {
+    throwError('Sorry No token attached', StatusCodes.BAD_REQUEST);
   }
-};
+});

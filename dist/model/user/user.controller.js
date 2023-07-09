@@ -41,6 +41,7 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: 'You have successfully created your account, log in now',
             status: 'success',
+            user
         });
     }
     catch (error) {
@@ -56,11 +57,12 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
         const exist_user = yield model_user_1.UserModel.findOne({ email });
         if (exist_user && (yield exist_user.isPasswordMatched(password))) {
             res.json({
-                _id: exist_user === null || exist_user === void 0 ? void 0 : exist_user._id,
-                firstName: exist_user === null || exist_user === void 0 ? void 0 : exist_user.firstName,
-                lastName: exist_user === null || exist_user === void 0 ? void 0 : exist_user.lastName,
-                email: exist_user === null || exist_user === void 0 ? void 0 : exist_user.email,
-                profilePhoto: exist_user === null || exist_user === void 0 ? void 0 : exist_user.profilePhoto,
+                // _id: exist_user?._id,
+                // firstName: exist_user?.firstName,
+                // lastName: exist_user?.lastName,
+                // email: exist_user?.email,
+                // profilePhoto: exist_user?.profilePhoto,
+                exist_user,
                 token: (0, token_1.default)(exist_user === null || exist_user === void 0 ? void 0 : exist_user._id),
             });
         }
@@ -186,7 +188,7 @@ exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
 //   }
 // });
 exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const _id = req === null || req === void 0 ? void 0 : req.user;
+    const _id = req === null || req === void 0 ? void 0 : req.authId;
     (0, ValidateMongoId_1.default)(_id);
     try {
         const userprofile = yield model_user_1.UserModel.findByIdAndUpdate(_id, {
@@ -208,7 +210,7 @@ exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
 }));
 exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const _id = req === null || req === void 0 ? void 0 : req.user;
+        const _id = req === null || req === void 0 ? void 0 : req.authId;
         const { password } = req.body;
         (0, ValidateMongoId_1.default)(_id);
         const user = yield model_user_1.UserModel.findById(_id);
@@ -228,12 +230,13 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
     }
 }));
 exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const login_user_id = req === null || req === void 0 ? void 0 : req.user;
+    console.log(req === null || req === void 0 ? void 0 : req.params);
+    const login_user_id = req === null || req === void 0 ? void 0 : req.authId;
     const user = yield model_user_1.UserModel.findById(login_user_id);
     try {
         const verificationToken = yield (user === null || user === void 0 ? void 0 : user.createAccountVerificationToken());
         yield (user === null || user === void 0 ? void 0 : user.save());
-        console.log(verificationToken);
+        console.log(user, verificationToken);
         var transport = nodemailer_1.default.createTransport({
             host: 'sandbox.smtp.mailtrap.io',
             port: 2525,
@@ -252,7 +255,7 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
             text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
             html: resetUrl,
         };
-        yield transport.sendMail(mailOptions, (error, info) => {
+        transport.sendMail(mailOptions, (error, info) => {
             if (error) {
                 return console.log(error);
             }

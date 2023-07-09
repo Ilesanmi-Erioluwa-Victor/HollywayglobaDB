@@ -129,15 +129,16 @@ userSchema.methods.isPasswordMatched = function (userPassword) {
         return yield bcryptjs_1.default.compare(userPassword, this.password);
     });
 };
-userSchema.methods.createPasswordResetToken = function () {
-    return __awaiter(this, void 0, void 0, function* () {
-        const resetToken = crypto_1.default.randomBytes(32).toString('hex');
-        this.passwordResetToken = crypto_1.default
-            .createHash('sha256')
-            .update(resetToken)
-            .digest('hex');
-        this.passwordResetExpires = Date.now() + 30 * 60 * 1000;
-        return resetToken;
-    });
-};
+userSchema.methods.createPasswordResetToken =
+    function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const resetToken = crypto_1.default.randomBytes(32).toString('hex');
+            this.passwordResetToken = crypto_1.default
+                .createHash('sha256')
+                .update(resetToken)
+                .digest('hex');
+            this.passwordResetExpires = Date.now() + 30 * 60 * 1000;
+            return resetToken;
+        });
+    };
 exports.UserModel = mongoose_1.default.model('User', userSchema);
