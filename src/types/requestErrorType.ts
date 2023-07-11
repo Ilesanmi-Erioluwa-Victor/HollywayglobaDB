@@ -8,4 +8,5 @@ export interface requestErrorTypes {
 export interface Error {
   message?: string;
   statusCode?: number;
+  captureStackTrace? : any;
 }

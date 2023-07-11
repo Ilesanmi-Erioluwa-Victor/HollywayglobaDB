@@ -50,7 +50,7 @@ export const create_user: RequestHandler = catchAsync(
       });
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
-        status: 'success'
+        status: 'success',
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -67,6 +67,12 @@ export const login_user: RequestHandler = catchAsync(
 
     try {
       const exist_user: any = await UserModel.findOne({ email });
+
+      if (exist_user?.isAccountVerified === false)
+        throwError(
+          'Verify your account in your gmail, before you can log in',
+          StatusCodes.BAD_REQUEST
+        );
       if (exist_user && (await exist_user.isPasswordMatched(password))) {
         res.json({
           _id: exist_user?._id,
@@ -305,7 +311,7 @@ export const generate_verification = catchAsync(
         if (error) {
           return console.log(error);
         }
-        res.json(resetUrl)
+        res.json(resetUrl);
       });
     } catch (error: any) {
       if (!error.statusCode) {
