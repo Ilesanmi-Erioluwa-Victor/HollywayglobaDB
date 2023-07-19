@@ -17,16 +17,13 @@ const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
+dotenv_1.default.config();
 const adminRoute_1 = __importDefault(require("./routes/admin/adminRoute"));
 const userRoute_1 = __importDefault(require("./routes/user/userRoute"));
-// import api from './services/v1Api';
-// import uploadFile from './uploads/uploadFile';
 const _404_1 = require("./middlewares/_404");
-dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
-// app.use(uploadFile);
 app.use('/images', express_1.default.static('images'));
 app.use(express_1.default.static('public'));
 app.use(express_1.default.json());
@@ -38,17 +35,16 @@ app.use((req, res, next) => {
     res.set('content-type', 'application/json');
     next();
 });
-// version 1 api
 app.use('/api/v1/admin/', adminRoute_1.default);
 app.use('/api/v1/user', userRoute_1.default);
 app.use(_404_1.pageNotFound);
 app.get('/', function (req, res) {
     res.sendFile(path_1.default.join(__dirname, '/public'));
 });
-// error handling
+// TODO still have ab ug to fix here
 // app.use(
 //   (
-//     // error: requestErrorTypings,
+//     error: requestErrorInterface,
 //     req: Request,
 //     res: Response,
 //     next: NextFunction
@@ -59,7 +55,6 @@ app.get('/', function (req, res) {
 //     res.status(status).json({ message });
 //   }
 // );
-// connecting server
 const startConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         app.listen(process.env.PORT || 5000, () => {
