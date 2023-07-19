@@ -50,6 +50,7 @@
     "@types/nodemailer": "^6.4.8",
     "concurrently": "^8.2.0",
     "nodemon": "^2.0.22",
+    "prisma": "^5.0.0",
     "typescript": "^5.1.6"
   }
 }
