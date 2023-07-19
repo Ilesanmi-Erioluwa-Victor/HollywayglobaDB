@@ -1,4 +1,4 @@
-import { Error } from '../types/requestErrorType';
+import { Error } from '../interface/requestErrorInterface';
 
 export const throwError = (errorMsg: string, statusCode: number) => {
   const error: any = new Error(errorMsg);
