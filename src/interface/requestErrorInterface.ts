@@ -1,4 +1,4 @@
-export interface requestErrorTypes {
+export interface requestErrorInterface {
   name: string;
   errors: { message: string }[];
   message: string;

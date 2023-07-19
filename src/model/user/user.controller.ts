@@ -8,10 +8,12 @@ import crypto from 'crypto';
 import { throwError } from '../../middlewares/cacheError';
 import { StatusCodes } from 'http-status-codes';
 
-import { UserModel } from './model.user';
+// import { UserModel } from './model.user';
 import { catchAsync } from '../../utils/catchAsync';
 import ValidateMongoDbId from '../../utils/ValidateMongoId';
 import generateToken from '../../config/generateToken/token';
+import prisma from '../../prisma/index';
+import { UserModel } from './model.user';
 
 dotenv.config();
 
@@ -31,7 +33,7 @@ export const create_user: RequestHandler = catchAsync(
           )
         );
 
-      const exist_user = await UserModel.findOne({ email });
+      const exist_user = await prisma.users.findUnique({ where: { email } });
 
       if (exist_user) {
         return next(
@@ -42,11 +44,13 @@ export const create_user: RequestHandler = catchAsync(
         );
       }
 
-      const user = await UserModel.create({
-        firstName,
-        lastName,
-        email,
-        password,
+      const user = await prisma.users.create({
+        data: {
+          firstName: firstName as string,
+          lastName: lastName as string,
+          email: email as string,
+          password: password as string,
+        },
       });
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',

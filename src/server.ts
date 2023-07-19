@@ -8,8 +8,6 @@ import adminRouter from "./routes/admin/adminRoute"
 import userRouter from './routes/user/userRoute';
 // import api from './services/v1Api';
 // import uploadFile from './uploads/uploadFile';
-// import { requestErrorTypings } from './typings/requestErrorTypings';
-import { connectFunction } from './database/Database';
 import { pageNotFound } from './middlewares/_404';
 
 dotenv.config();
@@ -22,7 +20,6 @@ app.use('/images', express.static('images'));
 app.use(express.static('public'));
 app.use(express.json());
 
-// set headers for all requests
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -59,7 +56,6 @@ app.get('/', function (req, res) {
 // connecting server
 const startConnection = async () => {
   try {
-    await connectFunction();
     app.listen(process.env.PORT || 5000, () => {
       console.log(`App running on port ${process.env.PORT || 8080}`);
     });
