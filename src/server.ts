@@ -3,19 +3,17 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import path from 'path';
+dotenv.config();
 
-import adminRouter from "./routes/admin/adminRoute"
+import adminRouter from './routes/admin/adminRoute';
 import userRouter from './routes/user/userRoute';
-// import api from './services/v1Api';
-// import uploadFile from './uploads/uploadFile';
+import { requestErrorInterface } from './interface/requestErrorInterface';
 import { pageNotFound } from './middlewares/_404';
 
-dotenv.config();
 const app: Application = express();
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(uploadFile);
 app.use('/images', express.static('images'));
 app.use(express.static('public'));
 app.use(express.json());
@@ -29,19 +27,16 @@ app.use((req, res, next) => {
   next();
 });
 
-// version 1 api
 app.use('/api/v1/admin/', adminRouter);
 app.use('/api/v1/user', userRouter);
 app.use(pageNotFound);
-
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public'));
 });
-
-// error handling
+// TODO still have ab ug to fix here
 // app.use(
 //   (
-//     // error: requestErrorTypings,
+//     error: requestErrorInterface,
 //     req: Request,
 //     res: Response,
 //     next: NextFunction
@@ -53,7 +48,6 @@ app.get('/', function (req, res) {
 //   }
 // );
 
-// connecting server
 const startConnection = async () => {
   try {
     app.listen(process.env.PORT || 5000, () => {
