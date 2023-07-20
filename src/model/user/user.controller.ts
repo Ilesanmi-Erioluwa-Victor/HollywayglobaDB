@@ -71,7 +71,9 @@ export const login_user: RequestHandler = catchAsync(
     const { email, password } = req.body;
 
     try {
-      const exist_user: any = await UserModel.findOne({ email });
+      const exist_user: any = await prisma.user.findUnique({
+        where : email
+      });
 
       if (exist_user?.isAccountVerified === false)
         throwError(

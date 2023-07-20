@@ -58,7 +58,9 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
 exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
-        const exist_user = yield model_user_1.UserModel.findOne({ email });
+        const exist_user = yield prisma_1.prisma.user.findUnique({
+            where: email
+        });
         if ((exist_user === null || exist_user === void 0 ? void 0 : exist_user.isAccountVerified) === false)
             (0, cacheError_1.throwError)('Verify your account in your gmail, before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
         if (exist_user && (yield exist_user.isPasswordMatched(password))) {
