@@ -12,7 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../utils/catchAsync';
 import ValidateMongoDbId from '../../utils/ValidateMongoId';
 import generateToken from '../../config/generateToken/token';
-import prisma from '../../../prisma/index';
+import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
 
 dotenv.config();
@@ -24,8 +24,8 @@ interface CustomRequest extends Request {
 export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { firstName, lastName, password, email } = req.body;
-      if (!firstName || !lastName || !password || !email)
+      const { firstName, lastName, password, email, mobile } = req.body;
+      if (!firstName || !lastName || !password || !email || !mobile)
         return next(
           throwError(
             'Missing credentials, please provide all required information',
@@ -33,7 +33,7 @@ export const create_user: RequestHandler = catchAsync(
           )
         );
 
-      const exist_user = await prisma.users.findUnique({ where: { email } });
+      const exist_user = await prisma.user.findUnique({ where: { email } });
 
       if (exist_user) {
         return next(
@@ -44,12 +44,13 @@ export const create_user: RequestHandler = catchAsync(
         );
       }
 
-      const user = await prisma.users.create({
+      const user = await prisma.user.create({
         data: {
           firstName: firstName as string,
           lastName: lastName as string,
           email: email as string,
           password: password as string,
+          mobile: mobile as string,
         },
       });
       res.status(StatusCodes.CREATED).json({
