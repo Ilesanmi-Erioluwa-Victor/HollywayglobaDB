@@ -22,24 +22,25 @@ const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = require("../../utils/catchAsync");
 const ValidateMongoId_1 = __importDefault(require("../../utils/ValidateMongoId"));
 const token_1 = __importDefault(require("../../config/generateToken/token"));
-const index_1 = __importDefault(require("../../../prisma/index"));
+const prisma_1 = require("../../prisma");
 const model_user_1 = require("./model.user");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { firstName, lastName, password, email } = req.body;
-        if (!firstName || !lastName || !password || !email)
+        const { firstName, lastName, password, email, mobile } = req.body;
+        if (!firstName || !lastName || !password || !email || !mobile)
             return next((0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        const exist_user = yield index_1.default.users.findUnique({ where: { email } });
+        const exist_user = yield prisma_1.prisma.user.findUnique({ where: { email } });
         if (exist_user) {
             return next((0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
         }
-        const user = yield index_1.default.users.create({
+        const user = yield prisma_1.prisma.user.create({
             data: {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
                 password: password,
+                mobile: mobile,
             },
         });
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
