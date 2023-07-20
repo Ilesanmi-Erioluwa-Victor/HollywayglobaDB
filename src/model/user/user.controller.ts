@@ -185,12 +185,14 @@ export const get_user: RequestHandler = catchAsync(
 
 export const update_user = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const _id = req?.authId as string;
-    ValidateMongoDbId(_id);
+    const {id } = req?.params;
+    console.log(id);
+    
+    ValidateMongoDbId(id);
     try {
       const userprofile: string | any = await prisma.user.update({
         where: {
-          id: _id
+          id
         },
         data: {
           firstName: req.body.firstName,
