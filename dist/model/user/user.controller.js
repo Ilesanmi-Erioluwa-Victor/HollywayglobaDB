@@ -159,11 +159,16 @@ exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
     const _id = req === null || req === void 0 ? void 0 : req.authId;
     (0, ValidateMongoId_1.default)(_id);
     try {
-        const userprofile = yield model_user_1.UserModel.findByIdAndUpdate(_id, {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-        }, { new: true, runValidators: true });
+        const userprofile = yield prisma_1.prisma.user.update({
+            where: {
+                id: _id
+            },
+            data: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+            }
+        });
         res.json({
             message: 'You have successfully updated your profile',
             user: userprofile,
