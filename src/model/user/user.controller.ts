@@ -188,14 +188,16 @@ export const update_user = catchAsync(
     const _id = req?.authId as string;
     ValidateMongoDbId(_id);
     try {
-      const userprofile: string | any = await UserModel.findByIdAndUpdate(
-        _id,
-        {
+      const userprofile: string | any = await prisma.user.update({
+        where: {
+          id: _id
+        },
+        data: {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           email: req.body.email,
-        },
-        { new: true, runValidators: true }
+        }
+      }
       );
 
       res.json({
