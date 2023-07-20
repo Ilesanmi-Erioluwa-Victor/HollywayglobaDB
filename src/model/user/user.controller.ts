@@ -12,7 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../utils/catchAsync';
 import ValidateMongoDbId from '../../utils/ValidateMongoId';
 import generateToken from '../../config/generateToken/token';
-import prisma from '../../prisma/index';
+import prisma from '../../../prisma/index';
 import { UserModel } from './model.user';
 
 dotenv.config();

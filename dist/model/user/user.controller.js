@@ -22,7 +22,7 @@ const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = require("../../utils/catchAsync");
 const ValidateMongoId_1 = __importDefault(require("../../utils/ValidateMongoId"));
 const token_1 = __importDefault(require("../../config/generateToken/token"));
-const index_1 = __importDefault(require("../../prisma/index"));
+const index_1 = __importDefault(require("../../../prisma/index"));
 const model_user_1 = require("./model.user");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

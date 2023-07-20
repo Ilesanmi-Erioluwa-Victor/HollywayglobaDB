@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import { catchAsync } from '../utils/catchAsync';
 import { StatusCodes } from 'http-status-codes';
 
-
 dotenv.config();
 
 interface CustomRequest extends Request {
@@ -43,3 +42,7 @@ export const AuthMiddleWare = catchAsync(async (req: CustomRequest, res: Respons
    next(error);
   }
 });
+
+export const isAdmin = () => {
+  
+}
