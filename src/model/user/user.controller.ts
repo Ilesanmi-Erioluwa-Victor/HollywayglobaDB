@@ -112,66 +112,6 @@ export const login_user: RequestHandler = catchAsync(
   }
 );
 
-// export const protect: RequestHandler = catchAsync(
-//   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-//     try {
-//       let token;
-//       if (
-//         req.headers.authorization &&
-//         req.headers.authorization.startsWith('Bearer')
-//       ) {
-//         token = req.headers.authorization.split(' ')[1];
-//       }
-
-//       if (!token) {
-//         return next(
-//           throwError('You are not logged in! Please log in to get access.', 401)
-//         );
-//       }
-
-//       //  Verification token
-//       const decoded: any = jwt.verify(
-//         token,
-//         `${process.env.JWT_SERCRET_KEY}`,
-//         (err, decoded) => {
-//           if (err) return next(throwError(`${err}`, StatusCodes.BAD_REQUEST));
-//           return decoded;
-//         }
-//       );
-
-//       const current_user = await UserModel.findById(decoded?.id);
-
-//       if (!current_user) {
-//         return next(
-//           throwError(
-//             'The user belonging to this token does no longer exist.',
-//             StatusCodes.BAD_REQUEST
-//           )
-//         );
-//       }
-
-//       // ) Check if user changed password after the token was issued
-//       if (current_user.changePasswordAfter(decoded.iat)) {
-//         return next(
-//           throwError(
-//             'User recently changed password! Please log in again.',
-//             StatusCodes.BAD_REQUEST
-//           )
-//         );
-//       }
-
-//       // GRANT ACCESS TO PROTECTED ROUTE
-//       req.user = current_user;
-//       next();
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
-
 export const get_users: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -194,7 +134,11 @@ export const delete_user: RequestHandler = catchAsync(
     const { id }: any = req?.params;
     ValidateMongoDbId(id);
     try {
-      const deleted_user: string | any = await UserModel.findByIdAndDelete(id);
+      const deleted_user: string | any = await prisma.user.delete({
+        where : {
+          id : id
+        }
+      });
       res.json({
         message: 'You have successfully deleted this user',
         user: deleted_user,
