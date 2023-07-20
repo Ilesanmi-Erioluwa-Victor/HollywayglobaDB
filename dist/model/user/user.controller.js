@@ -112,12 +112,12 @@ exports.delete_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
     try {
         const deleted_user = yield prisma_1.prisma.user.delete({
             where: {
-                id: id
-            }
+                id: id,
+            },
         });
+        deleted_user.active = false;
         res.json({
-            message: 'You have successfully deleted this user',
-            user: deleted_user,
+            message: 'You have successfully deleted your account',
         });
     }
     catch (error) {

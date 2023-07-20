@@ -135,13 +135,13 @@ export const delete_user: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     try {
       const deleted_user: string | any = await prisma.user.delete({
-        where : {
-          id : id
-        }
+        where: {
+          id: id,
+        },
       });
+      deleted_user.active = false;
       res.json({
-        message: 'You have successfully deleted this user',
-        user: deleted_user,
+        message: 'You have successfully deleted your account',
       });
     } catch (error: any) {
       if (!error.statusCode) {
