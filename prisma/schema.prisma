@@ -59,15 +59,15 @@ model Product {
   brand       String
   sold        Int      @default(0)
   color       String
-  // ratings     Rating   @relation(fields: [ratingId], references: [id])
-  // ratingId    String   @db.ObjectId
+  ratings     Rating?
 }
 
-// model Rating {
-//   id      String    @id @default(auto()) @map("_id") @db.ObjectId
-//   adminId String    @db.ObjectId
-//   Product Product[]
-// }
+model Rating {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  star      Int     @default(0)
+  productId String  @unique @db.ObjectId
+}
 
 model WishList {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
