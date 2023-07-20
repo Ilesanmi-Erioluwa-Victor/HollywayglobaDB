@@ -175,7 +175,7 @@ export const login_user: RequestHandler = catchAsync(
 export const get_users: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const users: string | any = await UserModel.find({});
+      const users: string | any = await prisma.user.findMany();
       res.json({
         length: users.length,
         users,

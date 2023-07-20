@@ -146,7 +146,7 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
 // );
 exports.get_users = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield model_user_1.UserModel.find({});
+        const users = yield prisma_1.prisma.user.findMany();
         res.json({
             length: users.length,
             users,
