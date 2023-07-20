@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reset_password = exports.forget_password_token = exports.account_verification = exports.generate_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const crypto_1 = __importDefault(require("crypto"));
 const cacheError_1 = require("../../middlewares/cacheError");
@@ -59,11 +60,11 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
     const { email, password } = req.body;
     try {
         const exist_user = yield prisma_1.prisma.user.findUnique({
-            where: email
+            where: email,
         });
         if ((exist_user === null || exist_user === void 0 ? void 0 : exist_user.isAccountVerified) === false)
             (0, cacheError_1.throwError)('Verify your account in your gmail, before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
-        if (exist_user && (yield exist_user.isPasswordMatched(password))) {
+        if (exist_user && (yield bcryptjs_1.default.compare(password, exist_user.password))) {
             res.json({
                 _id: exist_user === null || exist_user === void 0 ? void 0 : exist_user._id,
                 firstName: exist_user === null || exist_user === void 0 ? void 0 : exist_user.firstName,

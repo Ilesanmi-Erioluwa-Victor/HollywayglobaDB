@@ -72,7 +72,7 @@ export const login_user: RequestHandler = catchAsync(
 
     try {
       const exist_user: any = await prisma.user.findUnique({
-        where : email
+        where: email,
       });
 
       if (exist_user?.isAccountVerified === false)
@@ -80,7 +80,7 @@ export const login_user: RequestHandler = catchAsync(
           'Verify your account in your gmail, before you can log in',
           StatusCodes.BAD_REQUEST
         );
-      if (exist_user && (await exist_user.isPasswordMatched(password))) {
+      if (exist_user && (await bcrypt.compare(password, exist_user.password))) {
         res.json({
           _id: exist_user?._id,
           firstName: exist_user?.firstName,
