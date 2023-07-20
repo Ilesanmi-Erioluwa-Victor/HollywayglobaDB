@@ -139,7 +139,7 @@ export const delete_user: RequestHandler = catchAsync(
           id: id,
         },
       });
-      deleted_user.active = false;
+      // deleted_user.active = false;
       res.json({
         message: 'You have successfully deleted your account',
       });
@@ -157,7 +157,11 @@ export const get_user: RequestHandler = catchAsync(
     const { id }: string | any = req?.params;
     ValidateMongoDbId(id);
     try {
-      const user = await UserModel.findById(id);
+      const user = await prisma.user.findUnique({
+        where: {
+          id
+        }
+      });
       res.json(user);
     } catch (error: any) {
       if (!error.statusCode) {

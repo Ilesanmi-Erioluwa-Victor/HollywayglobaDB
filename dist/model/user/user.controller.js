@@ -115,7 +115,7 @@ exports.delete_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 id: id,
             },
         });
-        deleted_user.active = false;
+        // deleted_user.active = false;
         res.json({
             message: 'You have successfully deleted your account',
         });
@@ -131,7 +131,11 @@ exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
     const { id } = req === null || req === void 0 ? void 0 : req.params;
     (0, ValidateMongoId_1.default)(id);
     try {
-        const user = yield model_user_1.UserModel.findById(id);
+        const user = yield prisma_1.prisma.user.findUnique({
+            where: {
+                id
+            }
+        });
         res.json(user);
     }
     catch (error) {
