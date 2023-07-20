@@ -43,13 +43,16 @@ export const create_user: RequestHandler = catchAsync(
           )
         );
       }
+      // TODO  i will write it to it logic util later
+      const salt: string = await bcrypt.genSalt(10);
+      const hashedPassword: string = await bcrypt.hash(password, salt);
 
       const user = await prisma.user.create({
         data: {
           firstName: firstName as string,
           lastName: lastName as string,
           email: email as string,
-          password: password as string,
+          password: hashedPassword,
           mobile: mobile as string,
         },
       });
@@ -72,7 +75,9 @@ export const login_user: RequestHandler = catchAsync(
 
     try {
       const exist_user: any = await prisma.user.findUnique({
-        where: email,
+        where: {
+          email: email,
+        },
       });
 
       if (exist_user?.isAccountVerified === false)
