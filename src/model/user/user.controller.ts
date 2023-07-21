@@ -222,7 +222,7 @@ export const update_password = catchAsync(
       const { password } = req.body;
       ValidateMongoDbId(id);
 
-       // TODO  i will write it to it logic util later
+      // TODO  i will write it to it logic util later
       const salt: string = await bcrypt.genSalt(10);
       const hashedPassword: string = await bcrypt.hash(password, salt);
 
@@ -238,9 +238,9 @@ export const update_password = catchAsync(
       if (password) {
         res.json({
           message: "You have successfully update your password",
-          user
         })
       }
+      // TODO still have a bug to fix, which, when user don't provide password, use the initial one  
 
     } catch (error: any) {
       if (!error.statusCode) {

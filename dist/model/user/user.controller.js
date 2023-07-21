@@ -201,9 +201,9 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         if (password) {
             res.json({
                 message: "You have successfully update your password",
-                user
             });
         }
+        // TODO still have a bug to fix, which, when user don't provide password, use the initial one  
     }
     catch (error) {
         if (!error.statusCode) {
