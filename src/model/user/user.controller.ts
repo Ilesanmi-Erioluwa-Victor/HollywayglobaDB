@@ -222,12 +222,16 @@ export const update_password = catchAsync(
       const { password } = req.body;
       ValidateMongoDbId(id);
 
+       // TODO  i will write it to it logic util later
+      const salt: string = await bcrypt.genSalt(10);
+      const hashedPassword: string = await bcrypt.hash(password, salt);
+
       const user = await prisma.user.update({
         where: {
           id
         },
         data: {
-          password: req.body.password
+          password: hashedPassword
         }
 
       });
