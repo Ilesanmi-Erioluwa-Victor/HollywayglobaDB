@@ -25,6 +25,7 @@ const ValidateMongoId_1 = __importDefault(require("../../utils/ValidateMongoId")
 const token_1 = __importDefault(require("../../config/generateToken/token"));
 const prisma_1 = require("../../prisma");
 const model_user_1 = require("./model.user");
+const createAccountverification_1 = require("../../helper/createAccountverification");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -216,18 +217,18 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
     const { id } = req === null || req === void 0 ? void 0 : req.params;
     console.log(id);
     (0, ValidateMongoId_1.default)(id);
-    const user = yield prisma_1.prisma.user.findUnique({
-        where: {
-            id
-        }
-    });
-    console.log(user);
+    // const user: string | any = await prisma.user.findUnique({
+    //   where: {
+    //     id
+    //   }
+    // });
     try {
-        const verificationToken = crypto_1.default.randomBytes(32).toString("hex");
-        let verified = yield user.accountVerificationToken;
-        verified = crypto_1.default.createHash("sha256").update(verificationToken).digest("hex");
-        let tick = yield user.accountVerificationTokenExpires;
-        tick = Date.now() + 30 * 60 * 1000;
+        // const verificationToken: string | any = crypto.randomBytes(32).toString("hex");
+        // let verified = await user.accountVerificationToken ;
+        // verified = crypto.createHash("sha256").update(verificationToken).digest("hex");
+        // let tick = await user.accountVerificationTokenExpires;
+        // tick = Date.now() + 30 * 60 * 1000;
+        (0, createAccountverification_1.createAccountVerificationToken)(id);
         var transport = nodemailer_1.default.createTransport({
             host: 'sandbox.smtp.mailtrap.io',
             port: 2525,
