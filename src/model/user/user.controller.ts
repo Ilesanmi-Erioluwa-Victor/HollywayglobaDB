@@ -185,9 +185,9 @@ export const get_user: RequestHandler = catchAsync(
 
 export const update_user = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const {id } = req?.params;
+    const { id } = req?.params;
     console.log(id);
-    
+
     ValidateMongoDbId(id);
     try {
       const userprofile: string | any = await prisma.user.update({
@@ -218,17 +218,26 @@ export const update_user = catchAsync(
 export const update_password = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
-      const _id = req?.authId as string;
+      const { id } = req?.params;
       const { password } = req.body;
-      ValidateMongoDbId(_id);
-      const user = await UserModel.findById(_id);
+      ValidateMongoDbId(id);
 
+      const user = await prisma.user.update({
+        where: {
+          id
+        },
+        data: {
+          password: req.body.password
+        }
+
+      });
       if (password) {
-        const updatedUser = await user?.save();
-        res.json(updatedUser);
-      } else {
-        res.json(user);
+        res.json({
+          message: "You have successfully update your password",
+          user
+        })
       }
+
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

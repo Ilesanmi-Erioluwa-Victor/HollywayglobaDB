@@ -17,6 +17,6 @@ userRouter.put('/verify_account', authToken_1.AuthMiddleWare, user_controller_1.
 userRouter.get('/', authToken_1.AuthMiddleWare, user_controller_1.get_users);
 userRouter.get('/:id', authToken_1.AuthMiddleWare, user_controller_1.get_user);
 userRouter.delete('/:id', authToken_1.AuthMiddleWare, user_controller_1.delete_user);
-userRouter.put('/password', authToken_1.AuthMiddleWare, user_controller_1.update_password);
+userRouter.put('/password/:id', authToken_1.AuthMiddleWare, user_controller_1.update_password);
 userRouter.put('/update-profile/:id', authToken_1.AuthMiddleWare, user_controller_1.update_user);
 exports.default = userRouter;

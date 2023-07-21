@@ -184,16 +184,22 @@ exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
 }));
 exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const _id = req === null || req === void 0 ? void 0 : req.authId;
+        const { id } = req === null || req === void 0 ? void 0 : req.params;
         const { password } = req.body;
-        (0, ValidateMongoId_1.default)(_id);
-        const user = yield model_user_1.UserModel.findById(_id);
+        (0, ValidateMongoId_1.default)(id);
+        const user = yield prisma_1.prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                password: req.body.password
+            }
+        });
         if (password) {
-            const updatedUser = yield (user === null || user === void 0 ? void 0 : user.save());
-            res.json(updatedUser);
-        }
-        else {
-            res.json(user);
+            res.json({
+                message: "You have successfully update your password",
+                user
+            });
         }
     }
     catch (error) {
