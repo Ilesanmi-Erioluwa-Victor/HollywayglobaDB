@@ -214,15 +214,20 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
 }));
 exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
+    console.log(id);
     (0, ValidateMongoId_1.default)(id);
     const user = yield prisma_1.prisma.user.findUnique({
         where: {
             id
         }
     });
+    console.log(user);
     try {
-        const verificationToken = yield (user === null || user === void 0 ? void 0 : user.createAccountVerificationToken());
-        yield (user === null || user === void 0 ? void 0 : user.save());
+        const verificationToken = crypto_1.default.randomBytes(32).toString("hex");
+        let verified = yield user.accountVerificationToken;
+        verified = crypto_1.default.createHash("sha256").update(verificationToken).digest("hex");
+        let tick = yield user.accountVerificationTokenExpires;
+        tick = Date.now() + 30 * 60 * 1000;
         var transport = nodemailer_1.default.createTransport({
             host: 'sandbox.smtp.mailtrap.io',
             port: 2525,

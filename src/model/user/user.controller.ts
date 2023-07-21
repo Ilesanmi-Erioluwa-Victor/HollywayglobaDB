@@ -254,17 +254,21 @@ export const update_password = catchAsync(
 export const generate_verification = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id }: string | any = req?.params;
-
+console.log(id)
     ValidateMongoDbId(id)
     const user: string | any = await prisma.user.findUnique({
       where: {
         id
       }
     });
+    console.log(user)
     try {
-      const verificationToken: string | any =
-        await user?.createAccountVerificationToken();
-      await user?.save();
+      const verificationToken: string | any = crypto.randomBytes(32).toString("hex");
+      let verified = await user.accountVerificationToken ;
+      verified = crypto.createHash("sha256").update(verificationToken).digest("hex");
+
+      let tick = await user.accountVerificationTokenExpires;
+      tick = Date.now() + 30 * 60 * 1000;
 
       var transport = nodemailer.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
