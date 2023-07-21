@@ -14,6 +14,7 @@ import ValidateMongoDbId from '../../utils/ValidateMongoId';
 import generateToken from '../../config/generateToken/token';
 import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
+import { createAccountVerificationToken } from '../../helper/createAccountverification';
 
 dotenv.config();
 
@@ -139,7 +140,7 @@ export const delete_user: RequestHandler = catchAsync(
           id: id,
         },
       });
-      deleted_user.active = false;
+      // deleted_user.active = false;
       res.json({
         message: 'You have successfully deleted your account',
       });
@@ -157,7 +158,11 @@ export const get_user: RequestHandler = catchAsync(
     const { id }: string | any = req?.params;
     ValidateMongoDbId(id);
     try {
-      const user = await UserModel.findById(id);
+      const user = await prisma.user.findUnique({
+        where: {
+          id
+        }
+      });
       res.json(user);
     } catch (error: any) {
       if (!error.statusCode) {
@@ -181,17 +186,21 @@ export const get_user: RequestHandler = catchAsync(
 
 export const update_user = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const _id = req?.authId as string;
-    ValidateMongoDbId(_id);
+    const { id } = req?.params;
+    console.log(id);
+
+    ValidateMongoDbId(id);
     try {
-      const userprofile: string | any = await UserModel.findByIdAndUpdate(
-        _id,
-        {
+      const userprofile: string | any = await prisma.user.update({
+        where: {
+          id
+        },
+        data: {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           email: req.body.email,
-        },
-        { new: true, runValidators: true }
+        }
+      }
       );
 
       res.json({
@@ -210,17 +219,30 @@ export const update_user = catchAsync(
 export const update_password = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
-      const _id = req?.authId as string;
+      const { id } = req?.params;
       const { password } = req.body;
-      ValidateMongoDbId(_id);
-      const user = await UserModel.findById(_id);
+      ValidateMongoDbId(id);
 
+      // TODO  i will write it to it logic util later
+      const salt: string = await bcrypt.genSalt(10);
+      const hashedPassword: string = await bcrypt.hash(password, salt);
+
+      const user = await prisma.user.update({
+        where: {
+          id
+        },
+        data: {
+          password: hashedPassword
+        }
+
+      });
       if (password) {
-        const updatedUser = await user?.save();
-        res.json(updatedUser);
-      } else {
-        res.json(user);
+        res.json({
+          message: "You have successfully update your password",
+        })
       }
+      // TODO still have a bug to fix, which, when user don't provide password, use the initial one  
+
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -232,13 +254,22 @@ export const update_password = catchAsync(
 
 export const generate_verification = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const login_user_id: string | any = req?.authId;
-
-    const user: string | any = await UserModel.findById(login_user_id);
+    const { id }: string | any = req?.params;
+console.log(id)
+    ValidateMongoDbId(id)
+    // const user: string | any = await prisma.user.findUnique({
+    //   where: {
+    //     id
+    //   }
+    // });
     try {
-      const verificationToken: string | any =
-        await user?.createAccountVerificationToken();
-      await user?.save();
+      // const verificationToken: string | any = crypto.randomBytes(32).toString("hex");
+      // let verified = await user.accountVerificationToken ;
+      // verified = crypto.createHash("sha256").update(verificationToken).digest("hex");
+
+      // let tick = await user.accountVerificationTokenExpires;
+      // tick = Date.now() + 30 * 60 * 1000;
+      createAccountVerificationToken(id)
 
       var transport = nodemailer.createTransport({
         host: 'sandbox.smtp.mailtrap.io',

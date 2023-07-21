@@ -25,6 +25,7 @@ const ValidateMongoId_1 = __importDefault(require("../../utils/ValidateMongoId")
 const token_1 = __importDefault(require("../../config/generateToken/token"));
 const prisma_1 = require("../../prisma");
 const model_user_1 = require("./model.user");
+const createAccountverification_1 = require("../../helper/createAccountverification");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -115,7 +116,7 @@ exports.delete_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 id: id,
             },
         });
-        deleted_user.active = false;
+        // deleted_user.active = false;
         res.json({
             message: 'You have successfully deleted your account',
         });
@@ -131,7 +132,11 @@ exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
     const { id } = req === null || req === void 0 ? void 0 : req.params;
     (0, ValidateMongoId_1.default)(id);
     try {
-        const user = yield model_user_1.UserModel.findById(id);
+        const user = yield prisma_1.prisma.user.findUnique({
+            where: {
+                id
+            }
+        });
         res.json(user);
     }
     catch (error) {
@@ -152,14 +157,20 @@ exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
 //   }
 // });
 exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const _id = req === null || req === void 0 ? void 0 : req.authId;
-    (0, ValidateMongoId_1.default)(_id);
+    const { id } = req === null || req === void 0 ? void 0 : req.params;
+    console.log(id);
+    (0, ValidateMongoId_1.default)(id);
     try {
-        const userprofile = yield model_user_1.UserModel.findByIdAndUpdate(_id, {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-        }, { new: true, runValidators: true });
+        const userprofile = yield prisma_1.prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+            }
+        });
         res.json({
             message: 'You have successfully updated your profile',
             user: userprofile,
@@ -174,17 +185,26 @@ exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
 }));
 exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const _id = req === null || req === void 0 ? void 0 : req.authId;
+        const { id } = req === null || req === void 0 ? void 0 : req.params;
         const { password } = req.body;
-        (0, ValidateMongoId_1.default)(_id);
-        const user = yield model_user_1.UserModel.findById(_id);
+        (0, ValidateMongoId_1.default)(id);
+        // TODO  i will write it to it logic util later
+        const salt = yield bcryptjs_1.default.genSalt(10);
+        const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
+        const user = yield prisma_1.prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                password: hashedPassword
+            }
+        });
         if (password) {
-            const updatedUser = yield (user === null || user === void 0 ? void 0 : user.save());
-            res.json(updatedUser);
+            res.json({
+                message: "You have successfully update your password",
+            });
         }
-        else {
-            res.json(user);
-        }
+        // TODO still have a bug to fix, which, when user don't provide password, use the initial one  
     }
     catch (error) {
         if (!error.statusCode) {
@@ -194,11 +214,21 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
     }
 }));
 exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const login_user_id = req === null || req === void 0 ? void 0 : req.authId;
-    const user = yield model_user_1.UserModel.findById(login_user_id);
+    const { id } = req === null || req === void 0 ? void 0 : req.params;
+    console.log(id);
+    (0, ValidateMongoId_1.default)(id);
+    // const user: string | any = await prisma.user.findUnique({
+    //   where: {
+    //     id
+    //   }
+    // });
     try {
-        const verificationToken = yield (user === null || user === void 0 ? void 0 : user.createAccountVerificationToken());
-        yield (user === null || user === void 0 ? void 0 : user.save());
+        // const verificationToken: string | any = crypto.randomBytes(32).toString("hex");
+        // let verified = await user.accountVerificationToken ;
+        // verified = crypto.createHash("sha256").update(verificationToken).digest("hex");
+        // let tick = await user.accountVerificationTokenExpires;
+        // tick = Date.now() + 30 * 60 * 1000;
+        (0, createAccountverification_1.createAccountVerificationToken)(id);
         var transport = nodemailer_1.default.createTransport({
             host: 'sandbox.smtp.mailtrap.io',
             port: 2525,
