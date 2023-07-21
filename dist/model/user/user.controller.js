@@ -187,12 +187,15 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         const { id } = req === null || req === void 0 ? void 0 : req.params;
         const { password } = req.body;
         (0, ValidateMongoId_1.default)(id);
+        // TODO  i will write it to it logic util later
+        const salt = yield bcryptjs_1.default.genSalt(10);
+        const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
         const user = yield prisma_1.prisma.user.update({
             where: {
                 id
             },
             data: {
-                password: req.body.password
+                password: hashedPassword
             }
         });
         if (password) {
