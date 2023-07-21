@@ -253,9 +253,14 @@ export const update_password = catchAsync(
 
 export const generate_verification = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const login_user_id: string | any = req?.authId;
+    const { id }: string | any = req?.params;
 
-    const user: string | any = await UserModel.findById(login_user_id);
+    ValidateMongoDbId(id)
+    const user: string | any = await prisma.user.findUnique({
+      where: {
+        id
+      }
+    });
     try {
       const verificationToken: string | any =
         await user?.createAccountVerificationToken();
