@@ -14,6 +14,7 @@ import ValidateMongoDbId from '../../utils/ValidateMongoId';
 import generateToken from '../../config/generateToken/token';
 import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
+import { createAccountVerificationToken } from '../../helper/createAccountverification';
 
 dotenv.config();
 
@@ -256,19 +257,19 @@ export const generate_verification = catchAsync(
     const { id }: string | any = req?.params;
 console.log(id)
     ValidateMongoDbId(id)
-    const user: string | any = await prisma.user.findUnique({
-      where: {
-        id
-      }
-    });
-    console.log(user)
+    // const user: string | any = await prisma.user.findUnique({
+    //   where: {
+    //     id
+    //   }
+    // });
     try {
-      const verificationToken: string | any = crypto.randomBytes(32).toString("hex");
-      let verified = await user.accountVerificationToken ;
-      verified = crypto.createHash("sha256").update(verificationToken).digest("hex");
+      // const verificationToken: string | any = crypto.randomBytes(32).toString("hex");
+      // let verified = await user.accountVerificationToken ;
+      // verified = crypto.createHash("sha256").update(verificationToken).digest("hex");
 
-      let tick = await user.accountVerificationTokenExpires;
-      tick = Date.now() + 30 * 60 * 1000;
+      // let tick = await user.accountVerificationTokenExpires;
+      // tick = Date.now() + 30 * 60 * 1000;
+      createAccountVerificationToken(id)
 
       var transport = nodemailer.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
