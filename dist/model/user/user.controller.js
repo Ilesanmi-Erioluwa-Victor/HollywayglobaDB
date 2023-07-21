@@ -213,8 +213,13 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
     }
 }));
 exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const login_user_id = req === null || req === void 0 ? void 0 : req.authId;
-    const user = yield model_user_1.UserModel.findById(login_user_id);
+    const { id } = req === null || req === void 0 ? void 0 : req.params;
+    (0, ValidateMongoId_1.default)(id);
+    const user = yield prisma_1.prisma.user.findUnique({
+        where: {
+            id
+        }
+    });
     try {
         const verificationToken = yield (user === null || user === void 0 ? void 0 : user.createAccountVerificationToken());
         yield (user === null || user === void 0 ? void 0 : user.save());
