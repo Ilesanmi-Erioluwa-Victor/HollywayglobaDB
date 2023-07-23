@@ -237,22 +237,25 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
                 pass: `${process.env.NODEMAILER_PASS}`,
             },
         });
-        const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${verificationToken}>Click to verify..</a>
-       `;
-        const mailOptions = {
-            from: 'ifedayo1452@gmail.com',
-            to: 'ericjay1452@gmail.com',
-            subject: 'Account Verification ',
-            text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
-            html: resetUrl,
-        };
-        transport.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                return console.log(error);
-            }
-            res.json(resetUrl);
-        });
+        // TODO coming back to this.
+        // const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+        //   <a href= ${req.protocol}://${req.get(
+        //   'host'
+        // )}/api/v1/users/verify_account/${verificationToken}>Click to verify..</a>
+        //  `;
+        // const mailOptions = {
+        //   from: 'ifedayo1452@gmail.com',
+        //   to: 'ericjay1452@gmail.com',
+        //   subject: 'Account Verification ',
+        //   text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
+        //   // html: resetUrl,
+        // };
+        // transport.sendMail(mailOptions, (error, info) => {
+        //   if (error) {
+        //     return console.log(error);
+        //   }
+        //   res.json(resetUrl);
+        // });
     }
     catch (error) {
         if (!error.statusCode) {
