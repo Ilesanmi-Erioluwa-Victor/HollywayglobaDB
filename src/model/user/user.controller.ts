@@ -15,6 +15,7 @@ import generateToken from '../../config/generateToken/token';
 import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
 import { createAccountVerificationToken } from '../../helper/createAccountverification';
+import { sendMail } from '../../helper/sendMail';
 
 dotenv.config();
 
@@ -262,28 +263,8 @@ export const generate_verification = catchAsync(
       console.log(user);
       createAccountVerificationToken(id);
 
-    
       // TODO coming back to this.
-      const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-        <a href= ${req.protocol}://${req.get(
-        'host'
-      )}/api/v1/users/verify_account/${createAccountVerificationToken}>Click to verify..</a>
-       `;
-
-      const mailOptions = {
-        from: 'HollwayGlobalIncLimited@gmail.com',
-        to: user?.firstName,
-        subject: 'Account Verification ',
-        text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
-        html: resetUrl,
-      };
-
-      // transport.sendMail(mailOptions, (error, info) => {
-      //   if (error) {
-      //     return console.log(error);
-      //   }
-      //   res.json(resetUrl);
-      // });
+      sendMail(user, req, res, next);
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

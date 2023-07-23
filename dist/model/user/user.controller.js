@@ -25,6 +25,7 @@ const token_1 = __importDefault(require("../../config/generateToken/token"));
 const prisma_1 = require("../../prisma");
 const model_user_1 = require("./model.user");
 const createAccountverification_1 = require("../../helper/createAccountverification");
+const sendMail_1 = require("../../helper/sendMail");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -224,22 +225,7 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
         console.log(user);
         (0, createAccountverification_1.createAccountVerificationToken)(id);
         // TODO coming back to this.
-        const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${createAccountverification_1.createAccountVerificationToken}>Click to verify..</a>
-       `;
-        const mailOptions = {
-            from: 'HollwayGlobalIncLimited@gmail.com',
-            to: user === null || user === void 0 ? void 0 : user.firstName,
-            subject: 'Account Verification ',
-            text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
-            html: resetUrl,
-        };
-        // transport.sendMail(mailOptions, (error, info) => {
-        //   if (error) {
-        //     return console.log(error);
-        //   }
-        //   res.json(resetUrl);
-        // });
+        (0, sendMail_1.sendMail)(user, req, res, next);
     }
     catch (error) {
         if (!error.statusCode) {
