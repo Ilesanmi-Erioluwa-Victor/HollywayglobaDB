@@ -260,10 +260,7 @@ export const generate_verification = catchAsync(
           id,
         },
       });
-      console.log(user);
       createAccountVerificationToken(id);
-
-      // TODO coming back to this.
       sendMail(user, req, res, next);
     } catch (error: any) {
       if (!error.statusCode) {

@@ -222,9 +222,7 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
                 id,
             },
         });
-        console.log(user);
         (0, createAccountverification_1.createAccountVerificationToken)(id);
-        // TODO coming back to this.
         (0, sendMail_1.sendMail)(user, req, res, next);
     }
     catch (error) {
