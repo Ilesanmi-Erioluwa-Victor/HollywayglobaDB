@@ -31,7 +31,6 @@ function createAccountVerificationToken(userId) {
                 accountVerificationTokenExpires: tokenExpiration,
             },
         });
-        console.log(verificationToken);
         return verificationToken;
     });
 }

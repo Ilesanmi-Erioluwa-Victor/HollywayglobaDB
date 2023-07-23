@@ -134,8 +134,8 @@ exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
     try {
         const user = yield prisma_1.prisma.user.findUnique({
             where: {
-                id
-            }
+                id,
+            },
         });
         res.json(user);
     }
@@ -163,13 +163,13 @@ exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
     try {
         const userprofile = yield prisma_1.prisma.user.update({
             where: {
-                id
+                id,
             },
             data: {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
-            }
+            },
         });
         res.json({
             message: 'You have successfully updated your profile',
@@ -193,18 +193,18 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
         const user = yield prisma_1.prisma.user.update({
             where: {
-                id
+                id,
             },
             data: {
-                password: hashedPassword
-            }
+                password: hashedPassword,
+            },
         });
         if (password) {
             res.json({
-                message: "You have successfully update your password",
+                message: 'You have successfully update your password',
             });
         }
-        // TODO still have a bug to fix, which, when user don't provide password, use the initial one  
+        // TODO still have a bug to fix, which, when user don't provide password, use the initial one
     }
     catch (error) {
         if (!error.statusCode) {
@@ -215,19 +215,14 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
 }));
 exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
-    console.log(id);
     (0, ValidateMongoId_1.default)(id);
-    // const user: string | any = await prisma.user.findUnique({
-    //   where: {
-    //     id
-    //   }
-    // });
     try {
-        // const verificationToken: string | any = crypto.randomBytes(32).toString("hex");
-        // let verified = await user.accountVerificationToken ;
-        // verified = crypto.createHash("sha256").update(verificationToken).digest("hex");
-        // let tick = await user.accountVerificationTokenExpires;
-        // tick = Date.now() + 30 * 60 * 1000;
+        const user = yield prisma_1.prisma.user.findUnique({
+            where: {
+                id,
+            },
+        });
+        console.log(user);
         (0, createAccountverification_1.createAccountVerificationToken)(id);
         var transport = nodemailer_1.default.createTransport({
             host: 'sandbox.smtp.mailtrap.io',
@@ -238,18 +233,16 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
             },
         });
         // TODO coming back to this.
-        // const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-        //   <a href= ${req.protocol}://${req.get(
-        //   'host'
-        // )}/api/v1/users/verify_account/${verificationToken}>Click to verify..</a>
-        //  `;
-        // const mailOptions = {
-        //   from: 'ifedayo1452@gmail.com',
-        //   to: 'ericjay1452@gmail.com',
-        //   subject: 'Account Verification ',
-        //   text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
-        //   // html: resetUrl,
-        // };
+        const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${createAccountverification_1.createAccountVerificationToken}>Click to verify..</a>
+       `;
+        const mailOptions = {
+            from: 'HollwayGlobalIncLimited@gmail.com',
+            to: user === null || user === void 0 ? void 0 : user.firstName,
+            subject: 'Account Verification ',
+            text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
+            // html: resetUrl,
+        };
         // transport.sendMail(mailOptions, (error, info) => {
         //   if (error) {
         //     return console.log(error);

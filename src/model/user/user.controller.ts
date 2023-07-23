@@ -160,8 +160,8 @@ export const get_user: RequestHandler = catchAsync(
     try {
       const user = await prisma.user.findUnique({
         where: {
-          id
-        }
+          id,
+        },
       });
       res.json(user);
     } catch (error: any) {
@@ -193,15 +193,14 @@ export const update_user = catchAsync(
     try {
       const userprofile: string | any = await prisma.user.update({
         where: {
-          id
+          id,
         },
         data: {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           email: req.body.email,
-        }
-      }
-      );
+        },
+      });
 
       res.json({
         message: 'You have successfully updated your profile',
@@ -229,20 +228,18 @@ export const update_password = catchAsync(
 
       const user = await prisma.user.update({
         where: {
-          id
+          id,
         },
         data: {
-          password: hashedPassword
-        }
-
+          password: hashedPassword,
+        },
       });
       if (password) {
         res.json({
-          message: "You have successfully update your password",
-        })
+          message: 'You have successfully update your password',
+        });
       }
-      // TODO still have a bug to fix, which, when user don't provide password, use the initial one  
-
+      // TODO still have a bug to fix, which, when user don't provide password, use the initial one
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -255,21 +252,15 @@ export const update_password = catchAsync(
 export const generate_verification = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id }: string | any = req?.params;
-console.log(id)
-    ValidateMongoDbId(id)
-    // const user: string | any = await prisma.user.findUnique({
-    //   where: {
-    //     id
-    //   }
-    // });
+    ValidateMongoDbId(id);
     try {
-      // const verificationToken: string | any = crypto.randomBytes(32).toString("hex");
-      // let verified = await user.accountVerificationToken ;
-      // verified = crypto.createHash("sha256").update(verificationToken).digest("hex");
-
-      // let tick = await user.accountVerificationTokenExpires;
-      // tick = Date.now() + 30 * 60 * 1000;
-      createAccountVerificationToken(id)
+      const user: string | any = await prisma.user.findUnique({
+        where: {
+          id,
+        },
+      });
+      console.log(user);
+      createAccountVerificationToken(id);
 
       var transport = nodemailer.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
@@ -279,20 +270,20 @@ console.log(id)
           pass: `${process.env.NODEMAILER_PASS}`,
         },
       });
-// TODO coming back to this.
-      // const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-      //   <a href= ${req.protocol}://${req.get(
-      //   'host'
-      // )}/api/v1/users/verify_account/${verificationToken}>Click to verify..</a>
-      //  `;
+      // TODO coming back to this.
+      const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
+        <a href= ${req.protocol}://${req.get(
+        'host'
+      )}/api/v1/users/verify_account/${createAccountVerificationToken}>Click to verify..</a>
+       `;
 
-      // const mailOptions = {
-      //   from: 'ifedayo1452@gmail.com',
-      //   to: 'ericjay1452@gmail.com',
-      //   subject: 'Account Verification ',
-      //   text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
-      //   // html: resetUrl,
-      // };
+      const mailOptions = {
+        from: 'HollwayGlobalIncLimited@gmail.com',
+        to: user?.firstName,
+        subject: 'Account Verification ',
+        text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
+        // html: resetUrl,
+      };
 
       // transport.sendMail(mailOptions, (error, info) => {
       //   if (error) {

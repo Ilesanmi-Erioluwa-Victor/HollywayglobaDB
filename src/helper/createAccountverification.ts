@@ -18,7 +18,6 @@ async function createAccountVerificationToken(userId: any): Promise<string> {
       accountVerificationTokenExpires: tokenExpiration,
     },
   });
-  console.log(verificationToken);
   return verificationToken;
 }
 
