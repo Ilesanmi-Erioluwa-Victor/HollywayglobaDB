@@ -280,19 +280,34 @@ export const account_verification: RequestHandler = catchAsync(
         .update(token)
         .digest('hex');
 
-      const found_user: string | any = await UserModel.findOne({
-        accountVerificationToken: hashToken,
-        accountVerificationTokenExpires: { $gt: new Date() },
+      const user = await prisma.user.findFirst({
+        where: {
+          accountVerificationToken: hashToken,
+          accountVerificationTokenExpires: {
+            gt: new Date(),
+          },
+        },
       });
 
-      if (!found_user)
-        throwError('Token expired, try agin...', StatusCodes.BAD_REQUEST);
-      found_user.isAccountVerified = true;
-      found_user.accountVerificationToken = '';
-      found_user.accountVerificationTokenExpires = '';
+      if (!user) {
+        throwError(
+          'Token expired or something went wrong, try again',
+          StatusCodes.BAD_REQUEST
+        );
+      }
 
-      await found_user.save();
-      res.json(found_user);
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          isAccountVerified: true,
+          accountVerificationToken: '',
+          accountVerificationTokenExpires: null,
+        },
+      });
+
+      res.json(updatedUser);
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

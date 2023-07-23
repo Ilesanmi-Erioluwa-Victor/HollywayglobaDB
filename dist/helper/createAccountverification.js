@@ -23,7 +23,6 @@ function createAccountVerificationToken(userId) {
             .update(verificationToken)
             .digest('hex');
         const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
-        // Assuming you have a model named 'User' with 'accountVerificationToken' and 'accountVerificationTokenExpires' fields
         yield prisma_1.prisma.user.update({
             where: { id: userId },
             data: {

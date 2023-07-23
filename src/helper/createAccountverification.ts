@@ -10,7 +10,6 @@ async function createAccountVerificationToken(userId: any): Promise<string> {
 
   const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
 
-  // Assuming you have a model named 'User' with 'accountVerificationToken' and 'accountVerificationTokenExpires' fields
   await prisma.user.update({
     where: { id: userId },
     data: {

@@ -239,17 +239,28 @@ exports.account_verification = (0, catchAsync_1.catchAsync)((req, res, next) => 
             .createHash('sha256')
             .update(token)
             .digest('hex');
-        const found_user = yield model_user_1.UserModel.findOne({
-            accountVerificationToken: hashToken,
-            accountVerificationTokenExpires: { $gt: new Date() },
+        const user = yield prisma_1.prisma.user.findFirst({
+            where: {
+                accountVerificationToken: hashToken,
+                accountVerificationTokenExpires: {
+                    gt: new Date(),
+                },
+            },
         });
-        if (!found_user)
-            (0, cacheError_1.throwError)('Token expired, try agin...', http_status_codes_1.StatusCodes.BAD_REQUEST);
-        found_user.isAccountVerified = true;
-        found_user.accountVerificationToken = '';
-        found_user.accountVerificationTokenExpires = '';
-        yield found_user.save();
-        res.json(found_user);
+        if (!user) {
+            (0, cacheError_1.throwError)('Token expired or something went wrong, try again', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        }
+        const updatedUser = yield prisma_1.prisma.user.update({
+            where: {
+                id: user === null || user === void 0 ? void 0 : user.id,
+            },
+            data: {
+                isAccountVerified: true,
+                accountVerificationToken: '',
+                accountVerificationTokenExpires: null,
+            },
+        });
+        res.json(updatedUser);
     }
     catch (error) {
         if (!error.statusCode) {
