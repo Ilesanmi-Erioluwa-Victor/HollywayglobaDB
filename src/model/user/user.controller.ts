@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import nodemailer from 'nodemailer';
+
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
@@ -262,14 +262,7 @@ export const generate_verification = catchAsync(
       console.log(user);
       createAccountVerificationToken(id);
 
-      var transport = nodemailer.createTransport({
-        host: 'sandbox.smtp.mailtrap.io',
-        port: 2525,
-        auth: {
-          user: `${process.env.NODEMAILER_USERNAME}`,
-          pass: `${process.env.NODEMAILER_PASS}`,
-        },
-      });
+    
       // TODO coming back to this.
       const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
         <a href= ${req.protocol}://${req.get(
@@ -282,7 +275,7 @@ export const generate_verification = catchAsync(
         to: user?.firstName,
         subject: 'Account Verification ',
         text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
-        // html: resetUrl,
+        html: resetUrl,
       };
 
       // transport.sendMail(mailOptions, (error, info) => {

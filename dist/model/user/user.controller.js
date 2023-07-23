@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reset_password = exports.forget_password_token = exports.account_verification = exports.generate_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
-const nodemailer_1 = __importDefault(require("nodemailer"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const crypto_1 = __importDefault(require("crypto"));
@@ -224,14 +223,6 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
         });
         console.log(user);
         (0, createAccountverification_1.createAccountVerificationToken)(id);
-        var transport = nodemailer_1.default.createTransport({
-            host: 'sandbox.smtp.mailtrap.io',
-            port: 2525,
-            auth: {
-                user: `${process.env.NODEMAILER_USERNAME}`,
-                pass: `${process.env.NODEMAILER_PASS}`,
-            },
-        });
         // TODO coming back to this.
         const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
         <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${createAccountverification_1.createAccountVerificationToken}>Click to verify..</a>
@@ -241,7 +232,7 @@ exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) =>
             to: user === null || user === void 0 ? void 0 : user.firstName,
             subject: 'Account Verification ',
             text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
-            // html: resetUrl,
+            html: resetUrl,
         };
         // transport.sendMail(mailOptions, (error, info) => {
         //   if (error) {
