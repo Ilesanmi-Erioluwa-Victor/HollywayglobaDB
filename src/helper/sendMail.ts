@@ -8,13 +8,9 @@ interface User {
   firstName: string;
   lastName: string;
   email: string;
-  accountVerificationToken: string;
+  accountVerificationToken: any;
 }
 
-interface VerifyUser {
-  email: string;
-  verificationToken: string;
-}
 
 export const sendMail = async (
   data: User,
@@ -42,33 +38,9 @@ export const sendMail = async (
     from: 'HollwayGlobalIncLimited@gmail.com',
     to: `${email}`,
     subject: 'Account Verification ',
-    text: `Hey ${lastName} - ${firstName}, it’s our first message sent with Nodemailer 😉 `,
+    text: `Hey ${lastName} - ${firstName}, Please verify your account by clicking the link below: 😉 `,
     html: resetUrl,
   };
 
  await transport.sendMail(mailOptions);
-};
-
-export const sendVerificationEmail = async (data: VerifyUser, req: Request, res : Response, next : NextFunction) => {
-  const transport = nodemailer.createTransport({
-    host: 'sandbox.smtp.mailtrap.io',
-    port: 2525,
-    auth: {
-      user: `${process.env.NODEMAILER_USERNAME}`,
-      pass: `${process.env.NODEMAILER_PASS}`,
-    },
-  });
-
-  const verificationLink = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/verify_account/${data?.verificationToken}`;
-  const mailOptions = {
-    from: 'HollwayGlobalIncLimited@gmail.com',
-    to: data?.email,
-    subject: 'Account Verification',
-    text: 'Please verify your account by clicking the link below:',
-    html: `<a href="${verificationLink}">Click to verify your account</a>`,
-  };
-
-  await transport.sendMail(mailOptions);
 };

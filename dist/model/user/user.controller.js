@@ -49,7 +49,12 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
             },
         });
         yield (0, createAccountverification_1.createAccountVerificationToken)(user === null || user === void 0 ? void 0 : user.id);
-        yield (0, sendMail_1.sendVerificationEmail)(user, req, res, next);
+        yield (0, sendMail_1.sendMail)({
+            email: user === null || user === void 0 ? void 0 : user.email,
+            accountVerificationToken: user === null || user === void 0 ? void 0 : user.accountVerificationToken,
+            firstName: user === null || user === void 0 ? void 0 : user.firstName,
+            lastName: user === null || user === void 0 ? void 0 : user.lastName,
+        }, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: 'You have successfully created your account, log in now',
             status: 'success',

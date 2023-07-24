@@ -62,7 +62,17 @@ export const create_user: RequestHandler = catchAsync(
       });
 
       await createAccountVerificationToken(user?.id);
-      await sendVerificationEmail(user, req, res, next);
+      await sendMail(
+        {
+          email: user?.email,
+          accountVerificationToken: user?.accountVerificationToken,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+        },
+        req,
+        res,
+        next
+      );
 
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
