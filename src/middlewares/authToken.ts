@@ -67,6 +67,9 @@ export const isUserVerified = catchAsync(
            id: id,
          },
        });
+      if (!user?.isAccountVerified) {
+        throwError("Sorry, your account is not verified, please check your email and verify your email", StatusCodes.BAD_REQUEST)
+      }
           next();
     } catch (error : any) {
        if (!error.statusCode) {
