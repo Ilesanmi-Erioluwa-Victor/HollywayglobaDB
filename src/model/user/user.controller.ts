@@ -207,7 +207,9 @@ export const update_user = catchAsync(
     );
     if (unexpectedFields.length > 0) {
       throwError(
-        `Unexpected fields: ${unexpectedFields.join(', ')}, Sorry it's not part of the parameter`,
+        `Unexpected fields: ${unexpectedFields.join(
+          ', '
+        )}, Sorry it's not part of the parameter`,
         StatusCodes.BAD_REQUEST
       );
     }
@@ -242,7 +244,11 @@ export const update_password = catchAsync(
       const { id } = req?.params;
       const { password } = req.body;
       ValidateMongoDbId(id);
-
+      if (!password)
+        throwError(
+          'Please, provide password before you can change your current password',
+          StatusCodes.BAD_REQUEST
+        );
       // TODO  i will write it to it logic util later
       const salt: string = await bcrypt.genSalt(10);
       const hashedPassword: string = await bcrypt.hash(password, salt);
