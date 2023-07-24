@@ -148,6 +148,7 @@ export const delete_user: RequestHandler = catchAsync(
         },
         data: {
           active: false,
+          isAccountVerified : false
         },
       });
 

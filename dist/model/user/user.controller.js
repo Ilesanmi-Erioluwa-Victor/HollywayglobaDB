@@ -124,6 +124,7 @@ exports.delete_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
             },
             data: {
                 active: false,
+                isAccountVerified: false
             },
         });
         res.json({

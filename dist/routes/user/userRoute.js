@@ -15,7 +15,7 @@ userRouter.put('/reset_password', user_controller_1.reset_password);
 // userRouter.post('/sendmail/:id', AuthMiddleWare, generate_verification);
 userRouter.put('/verify_account/:token', user_controller_1.account_verification);
 userRouter.get('/', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_controller_1.get_users);
-userRouter.get('/:id', authToken_1.AuthMiddleWare, user_controller_1.get_user);
+userRouter.get('/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_controller_1.get_user);
 userRouter.delete('/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_controller_1.delete_user);
 userRouter.put('/password/:id', authToken_1.AuthMiddleWare, user_controller_1.update_password);
 userRouter.put('/update-profile/:id', authToken_1.AuthMiddleWare, user_controller_1.update_user);
