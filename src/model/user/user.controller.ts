@@ -14,7 +14,7 @@ import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
 import { createAccountVerificationToken } from '../../helper/createAccountverification';
 import { sendMail } from '../../helper/sendMail';
-import { generateVerificationToken } from '../../helper/generateToken';
+// import { hashedPassword } from '../../helper/hashedPassword';
 
 dotenv.config();
 

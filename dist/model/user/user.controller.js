@@ -25,6 +25,7 @@ const prisma_1 = require("../../prisma");
 const model_user_1 = require("./model.user");
 const createAccountverification_1 = require("../../helper/createAccountverification");
 const sendMail_1 = require("../../helper/sendMail");
+// import { hashedPassword } from '../../helper/hashedPassword';
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
