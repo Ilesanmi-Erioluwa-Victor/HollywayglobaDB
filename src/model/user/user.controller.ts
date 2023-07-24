@@ -148,7 +148,7 @@ export const delete_user: RequestHandler = catchAsync(
         },
         data: {
           active: false,
-          isAccountVerified : false
+          isAccountVerified: false,
         },
       });
 
@@ -199,8 +199,18 @@ export const get_user: RequestHandler = catchAsync(
 export const update_user = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
-
     ValidateMongoDbId(id);
+
+    const allowedFields = ['firstName', 'lastName', 'email'];
+    const unexpectedFields = Object.keys(req.body).filter(
+      (field) => !allowedFields.includes(field)
+    );
+    if (unexpectedFields.length > 0) {
+      throwError(
+        `Unexpected fields: ${unexpectedFields.join(', ')}, Sorry it's not part of the parameter`,
+        StatusCodes.BAD_REQUEST
+      );
+    }
     try {
       const userprofile: string | any = await prisma.user.update({
         where: {

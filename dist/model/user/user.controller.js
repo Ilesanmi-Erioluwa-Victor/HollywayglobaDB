@@ -124,7 +124,7 @@ exports.delete_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
             },
             data: {
                 active: false,
-                isAccountVerified: false
+                isAccountVerified: false,
             },
         });
         res.json({
@@ -169,6 +169,11 @@ exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
 exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
     (0, ValidateMongoId_1.default)(id);
+    const allowedFields = ['firstName', 'lastName', 'email'];
+    const unexpectedFields = Object.keys(req.body).filter((field) => !allowedFields.includes(field));
+    if (unexpectedFields.length > 0) {
+        (0, cacheError_1.throwError)(`Unexpected fields: ${unexpectedFields.join(', ')}, Sorry it's not part of the parameter`, http_status_codes_1.StatusCodes.BAD_REQUEST);
+    }
     try {
         const userprofile = yield prisma_1.prisma.user.update({
             where: {
