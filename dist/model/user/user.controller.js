@@ -303,6 +303,7 @@ exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
     const { password } = req.body;
     try {
         if (!token) {
+            (0, cacheError_1.throwError)("Sorry, invalid token or something went wrong", http_status_codes_1.StatusCodes.BAD_GATEWAY);
         }
         const resetTokenData = yield prisma_1.prisma.passwordResetToken.findUnique({
             where: { token },

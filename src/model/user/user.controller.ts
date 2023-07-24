@@ -374,6 +374,7 @@ export const reset_password: RequestHandler = catchAsync(
     try {
       if (!token) {
         
+        throwError("Sorry, invalid token or something went wrong", StatusCodes.BAD_GATEWAY)
       }
       const resetTokenData: any = await prisma.passwordResetToken.findUnique({
         where: { token },
