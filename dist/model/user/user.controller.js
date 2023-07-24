@@ -48,6 +48,9 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 },
             });
         });
+        const verificationToken = generateVerificationToken();
+        const verificationTokenExpiry = new Date();
+        verificationTokenExpiry.setHours(verificationTokenExpiry.getHours() + 1); // Token expires in 1 hour
         // TODO  i will write it to it logic util later
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);

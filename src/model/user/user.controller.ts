@@ -64,6 +64,12 @@ export const create_user: RequestHandler = catchAsync(
           },
         });
       };
+
+      const verificationToken = generateVerificationToken();
+  const verificationTokenExpiry = new Date();
+  verificationTokenExpiry.setHours(verificationTokenExpiry.getHours() + 1); // Token expires in 1 hour
+
+      
       // TODO  i will write it to it logic util later
       const salt: string = await bcrypt.genSalt(10);
       const hashedPassword: string = await bcrypt.hash(password, salt);
