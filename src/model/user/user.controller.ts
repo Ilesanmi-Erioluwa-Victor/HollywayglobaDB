@@ -27,6 +27,11 @@ export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
+
+      const generateVerificationToken = (): string => {
+        return crypto.randomBytes(32).toString('hex');
+      };
+
       if (!firstName || !lastName || !password || !email || !mobile)
         return next(
           throwError(
