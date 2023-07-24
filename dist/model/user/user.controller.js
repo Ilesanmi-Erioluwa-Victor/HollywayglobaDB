@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reset_password = exports.forget_password_token = exports.account_verification = exports.generate_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
+exports.reset_password = exports.forget_password_token = exports.account_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const crypto_1 = __importDefault(require("crypto"));
@@ -28,6 +28,9 @@ const createAccountverification_1 = require("../../helper/createAccountverificat
 const sendMail_1 = require("../../helper/sendMail");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const generateVerificationToken = () => {
+        return crypto_1.default.randomBytes(32).toString('hex');
+    };
     try {
         const { firstName, lastName, password, email, mobile } = req.body;
         if (!firstName || !lastName || !password || !email || !mobile)
@@ -48,13 +51,11 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 mobile: mobile,
             },
         });
-        yield (0, createAccountverification_1.createAccountVerificationToken)(user === null || user === void 0 ? void 0 : user.id);
-        yield (0, sendMail_1.sendMail)({
-            email: user === null || user === void 0 ? void 0 : user.email,
-            accountVerificationToken: user === null || user === void 0 ? void 0 : user.accountVerificationToken,
-            firstName: user === null || user === void 0 ? void 0 : user.firstName,
-            lastName: user === null || user === void 0 ? void 0 : user.lastName,
-        }, req, res, next);
+        const token = generateVerificationToken();
+        const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
+        console.log(user === null || user === void 0 ? void 0 : user.accountVerificationToken, user === null || user === void 0 ? void 0 : user.id);
+        yield (0, createAccountverification_1.createAccountVerificationToken)(user === null || user === void 0 ? void 0 : user.id, token, tokenExpiration);
+        yield (0, sendMail_1.sendMail)(user, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: 'You have successfully created your account, Please verify your gmail before you log in',
             status: 'success',
@@ -220,35 +221,32 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         next(error);
     }
 }));
-exports.generate_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req === null || req === void 0 ? void 0 : req.params;
-    (0, ValidateMongoId_1.default)(id);
-    try {
-        const user = yield prisma_1.prisma.user.findUnique({
-            where: {
-                id,
-            },
-        });
-        (0, createAccountverification_1.createAccountVerificationToken)(id);
-        (0, sendMail_1.sendMail)(user, req, res, next);
-    }
-    catch (error) {
-        if (!error.statusCode) {
-            error.statusCode = 500;
-        }
-        next(error);
-    }
-}));
+// export const generate_verification = catchAsync(
+//   async (req: CustomRequest, res: Response, next: NextFunction) => {
+//     const { id }: string | any = req?.params;
+//     ValidateMongoDbId(id);
+//     try {
+//       const user: string | any = await prisma.user.findUnique({
+//         where: {
+//           id,
+//         },
+//       });
+//       createAccountVerificationToken(id);
+//       sendMail(user, req, res, next);
+//     } catch (error: any) {
+//       if (!error.statusCode) {
+//         error.statusCode = 500;
+//       }
+//       next(error);
+//     }
+//   }
+// );
 exports.account_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { token } = req.body;
+    const { token } = req.params;
     try {
-        const hashToken = crypto_1.default
-            .createHash('sha256')
-            .update(token)
-            .digest('hex');
         const user = yield prisma_1.prisma.user.findFirst({
             where: {
-                accountVerificationToken: hashToken,
+                accountVerificationToken: token,
                 accountVerificationTokenExpires: {
                     gt: new Date(),
                 },

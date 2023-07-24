@@ -18,6 +18,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const sendMail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { accountVerificationToken, firstName, lastName, email } = data;
+    console.log(accountVerificationToken);
     const transport = nodemailer_1.default.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
         port: 2525,

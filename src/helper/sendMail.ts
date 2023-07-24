@@ -19,6 +19,7 @@ export const sendMail = async (
   next: NextFunction
 ) => {
   const { accountVerificationToken, firstName, lastName, email } = data;
+  console.log(accountVerificationToken)
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,

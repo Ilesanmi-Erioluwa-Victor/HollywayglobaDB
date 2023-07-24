@@ -12,8 +12,8 @@ userRouter.post('/login', user_controller_1.login_user);
 // Password rest
 userRouter.post('/forget_password_token', user_controller_1.forget_password_token);
 userRouter.put('/reset_password', user_controller_1.reset_password);
-userRouter.post('/sendmail/:id', authToken_1.AuthMiddleWare, user_controller_1.generate_verification);
-userRouter.put('/verify_account', authToken_1.AuthMiddleWare, user_controller_1.account_verification);
+// userRouter.post('/sendmail/:id', AuthMiddleWare, generate_verification);
+userRouter.put('/verify_account/:token', authToken_1.AuthMiddleWare, user_controller_1.account_verification);
 userRouter.get('/', authToken_1.AuthMiddleWare, user_controller_1.get_users);
 userRouter.get('/:id', authToken_1.AuthMiddleWare, user_controller_1.get_user);
 userRouter.delete('/:id', authToken_1.AuthMiddleWare, user_controller_1.delete_user);

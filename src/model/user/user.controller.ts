@@ -25,6 +25,9 @@ interface CustomRequest extends Request {
 
 export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const generateVerificationToken = (): string => {
+      return crypto.randomBytes(32).toString('hex');
+    };
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
 
@@ -61,14 +64,16 @@ export const create_user: RequestHandler = catchAsync(
         },
       });
 
-      await createAccountVerificationToken(user?.id);
+      const token = generateVerificationToken();
+      const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
+
+      console.log(user?.accountVerificationToken, user?.id)
+      await createAccountVerificationToken(
+        user?.id,
+        token,tokenExpiration
+      );
       await sendMail(
-        {
-          email: user?.email,
-          accountVerificationToken: user?.accountVerificationToken,
-          firstName: user?.firstName,
-          lastName: user?.lastName,
-        },
+        user,
         req,
         res,
         next
@@ -266,39 +271,34 @@ export const update_password = catchAsync(
   }
 );
 
-export const generate_verification = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id }: string | any = req?.params;
-    ValidateMongoDbId(id);
-    try {
-      const user: string | any = await prisma.user.findUnique({
-        where: {
-          id,
-        },
-      });
-      createAccountVerificationToken(id);
-      sendMail(user, req, res, next);
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
+// export const generate_verification = catchAsync(
+//   async (req: CustomRequest, res: Response, next: NextFunction) => {
+//     const { id }: string | any = req?.params;
+//     ValidateMongoDbId(id);
+//     try {
+//       const user: string | any = await prisma.user.findUnique({
+//         where: {
+//           id,
+//         },
+//       });
+//       createAccountVerificationToken(id);
+//       sendMail(user, req, res, next);
+//     } catch (error: any) {
+//       if (!error.statusCode) {
+//         error.statusCode = 500;
+//       }
+//       next(error);
+//     }
+//   }
+// );
 
 export const account_verification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = req.body;
+    const { token } = req.params;
     try {
-      const hashToken: string = crypto
-        .createHash('sha256')
-        .update(token)
-        .digest('hex');
-
       const user = await prisma.user.findFirst({
         where: {
-          accountVerificationToken: hashToken,
+          accountVerificationToken: token,
           accountVerificationTokenExpires: {
             gt: new Date(),
           },
