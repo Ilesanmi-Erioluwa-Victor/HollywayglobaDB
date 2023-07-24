@@ -300,7 +300,6 @@ exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) =>
 }));
 exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req === null || req === void 0 ? void 0 : req.params;
-    console.log(token);
     const { password } = req.body;
     try {
         const resetTokenData = yield prisma_1.prisma.passwordResetToken.findUnique({

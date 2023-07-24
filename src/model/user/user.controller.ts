@@ -369,9 +369,9 @@ export const forget_password_token: RequestHandler = catchAsync(
 export const reset_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req?.params;
-    console.log(token);
     const { password } = req.body;
 
+    
     try {
       const resetTokenData: any = await prisma.passwordResetToken.findUnique({
         where: { token },
