@@ -322,6 +322,12 @@ export const account_verification: RequestHandler = catchAsync(
 export const forget_password_token: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
+
+    if (!email)
+      throwError(
+        'Please, provide email for you to rest your password',
+        StatusCodes.BAD_REQUEST
+      );
     const user: string | any = await prisma.user.findUnique({
       where: {
         email,
@@ -337,7 +343,7 @@ export const forget_password_token: RequestHandler = catchAsync(
       const resetToken = generatePasswordResetToken();
       const expirationTime = new Date();
       expirationTime.setHours(expirationTime.getHours() + 1);
-      
+
       await prisma.passwordResetToken.create({
         data: {
           token: resetToken,
@@ -345,7 +351,7 @@ export const forget_password_token: RequestHandler = catchAsync(
           userId: user.id,
         },
       });
-      
+
       //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
       //   <a href= ${req.protocol}://${req.get(
       //     'host'
