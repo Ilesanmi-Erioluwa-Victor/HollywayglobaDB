@@ -302,6 +302,8 @@ exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
     const { token } = req === null || req === void 0 ? void 0 : req.params;
     const { password } = req.body;
     try {
+        if (!token) {
+        }
         const resetTokenData = yield prisma_1.prisma.passwordResetToken.findUnique({
             where: { token },
             include: { user: true },
