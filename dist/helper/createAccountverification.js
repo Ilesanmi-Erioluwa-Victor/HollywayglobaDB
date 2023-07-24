@@ -18,10 +18,6 @@ const prisma_1 = require("../prisma");
 function createAccountVerificationToken(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const verificationToken = crypto_1.default.randomBytes(32).toString('hex');
-        // const hashedToken = crypto
-        //   .createHash('sha256')
-        //   .update(verificationToken)
-        //   .digest('hex');
         const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
         const user = yield prisma_1.prisma.user.update({
             where: { id: userId },

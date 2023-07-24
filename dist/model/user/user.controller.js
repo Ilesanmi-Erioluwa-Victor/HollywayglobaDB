@@ -47,6 +47,7 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 mobile: mobile,
             },
         });
+        (0, token_1.default)(user === null || user === void 0 ? void 0 : user.id);
         const tokenUser = yield (0, createAccountverification_1.createAccountVerificationToken)(user === null || user === void 0 ? void 0 : user.id);
         yield (0, sendMail_1.sendMail)(tokenUser, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
@@ -77,12 +78,12 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
                 (0, cacheError_1.throwError)('Verify your account in your gmail before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
             res.json({
-                _id: exist_user._id,
+                id: exist_user === null || exist_user === void 0 ? void 0 : exist_user.id,
                 firstName: exist_user.firstName,
                 lastName: exist_user.lastName,
                 email: exist_user.email,
                 profilePhoto: exist_user.profilePhoto,
-                token: (0, token_1.default)(exist_user._id),
+                token: (0, token_1.default)(exist_user === null || exist_user === void 0 ? void 0 : exist_user.id),
             });
         }
         else {

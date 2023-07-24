@@ -56,7 +56,7 @@ export const create_user: RequestHandler = catchAsync(
           mobile: mobile as string,
         },
       });
-
+     generateToken(user?.id)
       const tokenUser: any = await createAccountVerificationToken(user?.id);
       await sendMail(tokenUser, req, res, next);
 
@@ -96,12 +96,12 @@ export const login_user: RequestHandler = catchAsync(
         }
 
         res.json({
-          _id: exist_user._id,
+          id: exist_user?.id,
           firstName: exist_user.firstName,
           lastName: exist_user.lastName,
           email: exist_user.email,
           profilePhoto: exist_user.profilePhoto,
-          token: generateToken(exist_user._id),
+          token: generateToken(exist_user?.id),
         });
       } else {
         throwError(

@@ -8,9 +8,11 @@ dotenv.config();
 const generateToken = (id: string) => {
   if (!process.env.JWT_SERCRET_KEY)
     throwError('JWT_KEY is required in environment', StatusCodes.BAD_REQUEST);
-  return jwt.sign({ id }, `${process.env.JWT_SERCRET_KEY}`, {
+
+  const token = jwt.sign({ id }, `${process.env.JWT_SERCRET_KEY}`, {
     expiresIn: `${process.env.JWT_EXPIRES_IN}`,
   });
+  return token;
 };
 
 export default generateToken;

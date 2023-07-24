@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isAdmin = exports.AuthMiddleWare = void 0;
+exports.isUserVerified = exports.AuthMiddleWare = void 0;
 const cacheError_1 = require("./cacheError");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const catchAsync_1 = require("../utils/catchAsync");
 const http_status_codes_1 = require("http-status-codes");
+const prisma_1 = require("../prisma");
 dotenv_1.default.config();
 exports.AuthMiddleWare = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -46,6 +47,16 @@ exports.AuthMiddleWare = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
         next(error);
     }
 }));
-const isAdmin = () => {
-};
-exports.isAdmin = isAdmin;
+exports.isUserVerified = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req === null || req === void 0 ? void 0 : req.authId;
+    console.log("This is user " + id);
+    if (!id)
+        throw new Error("No user with this ID");
+    const user = yield prisma_1.prisma.user.findUnique({
+        where: {
+            id: id
+        }
+    });
+    console.log(user);
+    next();
+}));
