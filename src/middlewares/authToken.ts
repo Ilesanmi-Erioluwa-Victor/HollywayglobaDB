@@ -62,24 +62,23 @@ export const isUserVerified = catchAsync(
       const id: string | any = req?.authId;
       ValidateMongoDbId(id);
 
-       const user = await prisma.user.findUnique({
-         where: {
-           id: id,
-         },
-       });
+      const user = await prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
       if (!user?.isAccountVerified) {
-        throwError("Sorry, your account is not verified, please check your email and verify your email", StatusCodes.BAD_REQUEST)
+        throwError(
+          'Sorry, your account is not verified, please check your email and verify your email',
+          StatusCodes.BAD_REQUEST
+        );
       }
-          next();
-    } catch (error : any) {
-       if (!error.statusCode) {
-         error.statusCode = 500;
-       }
-       next(error);
+      next();
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
-
-    
-   
-
   }
 );

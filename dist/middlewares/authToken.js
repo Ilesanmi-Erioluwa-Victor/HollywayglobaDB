@@ -58,7 +58,7 @@ exports.isUserVerified = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
             },
         });
         if (!(user === null || user === void 0 ? void 0 : user.isAccountVerified)) {
-            (0, cacheError_1.throwError)("Sorry, your account is not verified, please check your email and verify your email", http_status_codes_1.StatusCodes.BAD_REQUEST);
+            (0, cacheError_1.throwError)('Sorry, your account is not verified, please check your email and verify your email', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
         next();
     }
