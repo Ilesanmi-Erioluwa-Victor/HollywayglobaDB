@@ -15,7 +15,7 @@ import generateToken from '../../config/generateToken/token';
 import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
 import { createAccountVerificationToken } from '../../helper/createAccountverification';
-import { sendMail } from '../../helper/sendMail';
+import { sendMail, sendVerificationEmail } from '../../helper/sendMail';
 
 dotenv.config();
 
@@ -61,8 +61,8 @@ export const create_user: RequestHandler = catchAsync(
         },
       });
 
-      await createAccountVerificationToken();
-      await
+      await createAccountVerificationToken(user?.id);
+      await sendVerificationEmail(user);
 
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
