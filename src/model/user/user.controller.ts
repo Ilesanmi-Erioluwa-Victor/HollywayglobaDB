@@ -47,7 +47,6 @@ export const create_user: RequestHandler = catchAsync(
         );
       }
 
-      
       // TODO  i will write it to it logic util later
       const salt: string = await bcrypt.genSalt(10);
       const hashedPassword: string = await bcrypt.hash(password, salt);
@@ -61,6 +60,7 @@ export const create_user: RequestHandler = catchAsync(
           mobile: mobile as string,
         },
       });
+      
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
