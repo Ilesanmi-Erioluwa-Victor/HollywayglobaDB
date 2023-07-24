@@ -391,6 +391,7 @@ export const reset_password: RequestHandler = catchAsync(
         include: { user: true },
       });
 
+      console.log(resetTokenData)
       if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
         throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
       }

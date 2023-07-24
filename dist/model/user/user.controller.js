@@ -312,6 +312,7 @@ exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
             where: { token },
             include: { user: true },
         });
+        console.log(resetTokenData);
         if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
             (0, cacheError_1.throwError)('Invalid or expired token', http_status_codes_1.StatusCodes.NOT_FOUND);
         }
