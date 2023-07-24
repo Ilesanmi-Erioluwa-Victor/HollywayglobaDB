@@ -69,7 +69,7 @@ export const sendUserToken = async (
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/reset_password/${data?.resetToken}>Click to verify..</a>
+  )}/api/v1/users/reset_password/${data?.resetToken}>Click here to reset your password..</a>
        `;
 
   const mailOptions = {

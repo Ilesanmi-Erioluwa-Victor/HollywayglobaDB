@@ -51,7 +51,7 @@ const sendUserToken = (data, req, res, next) => __awaiter(void 0, void 0, void 0
         },
     });
     const resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/reset_password/${data === null || data === void 0 ? void 0 : data.resetToken}>Click to verify..</a>
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/reset_password/${data === null || data === void 0 ? void 0 : data.resetToken}>Click here to reset your password..</a>
        `;
     const mailOptions = {
         from: 'HollwayGlobalIncLimited@gmail.com',
