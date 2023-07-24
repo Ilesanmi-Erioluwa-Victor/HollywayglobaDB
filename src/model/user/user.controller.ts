@@ -28,10 +28,6 @@ export const create_user: RequestHandler = catchAsync(
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
 
-      const generateVerificationToken = (): string => {
-        return crypto.randomBytes(32).toString('hex');
-      };
-
       if (!firstName || !lastName || !password || !email || !mobile)
         return next(
           throwError(
@@ -50,24 +46,6 @@ export const create_user: RequestHandler = catchAsync(
           )
         );
       }
-
-      const saveVerificationToken = async (
-        userId: string,
-        token: string,
-        expiresIn: Date
-      ) => {
-        await prisma.user.update({
-          where: { id: userId },
-          data: {
-            accountVerificationToken: token,
-            accountVerificationTokenExpires: expiresIn,
-          },
-        });
-      };
-
-      const verificationToken = generateVerificationToken();
-  const verificationTokenExpiry = new Date();
-  verificationTokenExpiry.setHours(verificationTokenExpiry.getHours() + 1); // Token expires in 1 hour
 
       
       // TODO  i will write it to it logic util later
