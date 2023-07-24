@@ -326,7 +326,7 @@ export const forget_password_token: RequestHandler = catchAsync(
         email,
       },
     });
-    if (!user) throwError('No user found.., try again', StatusCodes.NOT_FOUND);
+    if (!user) throwError('No user found with provided email.., try again', StatusCodes.NOT_FOUND);
 
     try {
       const token = await user.createPasswordResetToken();

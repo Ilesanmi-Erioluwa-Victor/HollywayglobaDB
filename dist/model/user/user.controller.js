@@ -272,7 +272,7 @@ exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) =>
         },
     });
     if (!user)
-        (0, cacheError_1.throwError)('No user found.., try again', http_status_codes_1.StatusCodes.NOT_FOUND);
+        (0, cacheError_1.throwError)('No user found with provided email.., try again', http_status_codes_1.StatusCodes.NOT_FOUND);
     try {
         const token = yield user.createPasswordResetToken();
         yield user.save();
