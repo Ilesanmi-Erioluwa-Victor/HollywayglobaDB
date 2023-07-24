@@ -19,7 +19,7 @@ const userRouter = express.Router();
 userRouter.post('/signup', create_user);
 userRouter.post('/login', login_user);
 // Password rest
-userRouter.post('/forget_password_token', forget_password_token);
+userRouter.post('/forget_password', forget_password_token);
 userRouter.put('/reset_password', reset_password);
 
 // userRouter.post('/sendmail/:id', AuthMiddleWare, generate_verification);
