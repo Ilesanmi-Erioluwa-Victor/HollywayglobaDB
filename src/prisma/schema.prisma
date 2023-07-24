@@ -23,9 +23,6 @@ model User {
   mobile                          String               @unique
   password                        String
   isBlocked                       Boolean              @default(false)
-  // passwordChangeAt                DateTime             @default(now())
-  // passwordResetToken              String               @default("")
-  // passwordResetExpires            DateTime             @default(now())
   address                         Address[]
   wishlist                        WishList[]
   refreshToken                    String?              @default("")
@@ -78,7 +75,7 @@ model WishList {
 
 model PasswordResetToken {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  token          String   @unique
+  token          String   @unique @default("")
   expirationTime DateTime
   userId         String   @db.ObjectId
   user           User     @relation(fields: [userId], references: [id])
