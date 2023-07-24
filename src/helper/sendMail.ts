@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-  import { prisma } from '../prisma';
+import { prisma } from '../prisma';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 
@@ -12,7 +12,6 @@ interface User {
   accountVerificationToken: any;
 }
 
-
 export const sendMail = async (
   data: User,
   req: Request,
@@ -21,7 +20,6 @@ export const sendMail = async (
 ) => {
   // const user = await prisma.user.findUnique({})
   const { accountVerificationToken, firstName, lastName, email } = data;
-  console.log(data.email)
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
@@ -45,15 +43,20 @@ export const sendMail = async (
     html: resetUrl,
   };
 
- await transport.sendMail(mailOptions);
+  await transport.sendMail(mailOptions);
 };
 
+interface userInfo {
+  email: string;
+  resetToken: string;
+}
 export const sendUserToken = async (
-  data: User,
+  data: userInfo,
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
-  // const user = await prisma.user.findUnique({})
-  const { accountVerificationToken, firstName, lastName, email } = data;
-  console.log(data.email);
+  console.log(data);
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
@@ -66,14 +69,14 @@ export const sendUserToken = async (
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/verify_account/${accountVerificationToken}>Click to verify..</a>
+  )}/api/v1/users/reset_password/${data?.resetToken}>Click to verify..</a>
        `;
 
   const mailOptions = {
     from: 'HollwayGlobalIncLimited@gmail.com',
-    to: `${email}`,
-    subject: 'Account Verification ',
-    text: `Hey ${lastName} - ${firstName}, Please verify your account by clicking the link below: 😉 `,
+    to: `${data?.email}`,
+    subject: 'Password Reset Token',
+    text: `Your password reset token 😉 `,
     html: resetUrl,
   };
 

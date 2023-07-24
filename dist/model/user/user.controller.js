@@ -285,20 +285,10 @@ exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) =>
                 userId: user.id,
             },
         });
-        //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-        //   <a href= ${req.protocol}://${req.get(
-        //     'host'
-        //   )}/api/v1/users/verifyAccount/${token}>Click to verify..</a>
-        //  `;
-        // const msg = {
-        //   to: email,
-        //   from: 'ericjay1452@gmail.com',
-        //   subject: 'Verify your email',
-        //   html: resetUrl,
-        // };
+        yield (0, sendMail_1.sendUserToken)(user, req, res, next);
         // const sendMsg = await sgMail.send(msg);
         res.json({
-            message: `A reset token has been created for you`,
+            message: `A reset token has been sented to your gmail`,
             status: 'success',
         });
     }
@@ -325,9 +315,6 @@ exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) =>
 //     try {
 //       const resetToken = user.createPasswordResetToken();
 //       await user.save({ validateBeforeSave: false });
-//       const resetURL = `${req.protocol}://${req.get(
-//         'host'
-//       )}/api/v1/users/resetPassword/${resetToken}`;
 //       const emailjsTemplate = {
 //         service_id: 'default_service',
 //         template_id: `${process.env.EMAILJS_TEMPLATE_ID}`,

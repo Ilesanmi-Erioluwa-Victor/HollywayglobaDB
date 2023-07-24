@@ -20,7 +20,7 @@ userRouter.post('/signup', create_user);
 userRouter.post('/login', login_user);
 // Password rest
 userRouter.post('/forget_password', forget_password_token);
-userRouter.put('/reset_password', reset_password);
+userRouter.put('/reset_password/:token', reset_password);
 
 // userRouter.post('/sendmail/:id', AuthMiddleWare, generate_verification);
 userRouter.put('/verify_account/:token', account_verification);

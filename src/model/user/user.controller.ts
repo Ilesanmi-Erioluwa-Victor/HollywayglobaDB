@@ -13,7 +13,7 @@ import generateToken from '../../config/generateToken/token';
 import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
 import { createAccountVerificationToken } from '../../helper/createAccountverification';
-import { sendMail } from '../../helper/sendMail';
+import { sendMail, sendUserToken } from '../../helper/sendMail';
 import generatePasswordResetToken from '../../helper/generatePasswordResetToken';
 // import { hashedPassword } from '../../helper/hashedPassword';
 
@@ -352,20 +352,10 @@ export const forget_password_token: RequestHandler = catchAsync(
         },
       });
 
-      //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
-      //   <a href= ${req.protocol}://${req.get(
-      //     'host'
-      //   )}/api/v1/users/verifyAccount/${token}>Click to verify..</a>
-      //  `;
-      // const msg = {
-      //   to: email,
-      //   from: 'ericjay1452@gmail.com',
-      //   subject: 'Verify your email',
-      //   html: resetUrl,
-      // };
+      await sendUserToken(user, req, res, next)
       // const sendMsg = await sgMail.send(msg);
       res.json({
-        message: `A reset token has been created for you`,
+        message: `A reset token has been sented to your gmail`,
         status: 'success',
       });
     } catch (error: any) {
@@ -396,9 +386,6 @@ export const forget_password_token: RequestHandler = catchAsync(
 //       const resetToken = user.createPasswordResetToken();
 //       await user.save({ validateBeforeSave: false });
 
-//       const resetURL = `${req.protocol}://${req.get(
-//         'host'
-//       )}/api/v1/users/resetPassword/${resetToken}`;
 
 //       const emailjsTemplate = {
 //         service_id: 'default_service',

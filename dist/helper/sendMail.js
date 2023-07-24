@@ -19,7 +19,6 @@ dotenv_1.default.config();
 const sendMail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // const user = await prisma.user.findUnique({})
     const { accountVerificationToken, firstName, lastName, email } = data;
-    console.log(data.email);
     const transport = nodemailer_1.default.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
         port: 2525,
@@ -41,10 +40,8 @@ const sendMail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, fun
     yield transport.sendMail(mailOptions);
 });
 exports.sendMail = sendMail;
-const sendUserToken = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    // const user = await prisma.user.findUnique({})
-    const { accountVerificationToken, firstName, lastName, email } = data;
-    console.log(data.email);
+const sendUserToken = (data, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(data);
     const transport = nodemailer_1.default.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
         port: 2525,
@@ -54,13 +51,13 @@ const sendUserToken = (data) => __awaiter(void 0, void 0, void 0, function* () {
         },
     });
     const resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${accountVerificationToken}>Click to verify..</a>
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/reset_password/${data === null || data === void 0 ? void 0 : data.resetToken}>Click to verify..</a>
        `;
     const mailOptions = {
         from: 'HollwayGlobalIncLimited@gmail.com',
-        to: `${email}`,
-        subject: 'Account Verification ',
-        text: `Hey ${lastName} - ${firstName}, Please verify your account by clicking the link below: 😉 `,
+        to: `${data === null || data === void 0 ? void 0 : data.email}`,
+        subject: 'Password Reset Token',
+        text: `Your password reset token 😉 `,
         html: resetUrl,
     };
     yield transport.sendMail(mailOptions);
