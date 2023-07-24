@@ -168,7 +168,6 @@ exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
 // });
 exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
-    console.log(id);
     (0, ValidateMongoId_1.default)(id);
     try {
         const userprofile = yield prisma_1.prisma.user.update({

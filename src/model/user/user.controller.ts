@@ -199,7 +199,6 @@ export const get_user: RequestHandler = catchAsync(
 export const update_user = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
-    console.log(id);
 
     ValidateMongoDbId(id);
     try {
