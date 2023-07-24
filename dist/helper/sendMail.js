@@ -12,10 +12,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendVerificationEmail = void 0;
+exports.sendVerificationEmail = exports.sendMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+const sendMail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { accountVerificationToken, firstName, lastName, email } = data;
+    const transport = nodemailer_1.default.createTransport({
+        host: 'sandbox.smtp.mailtrap.io',
+        port: 2525,
+        auth: {
+            user: `${process.env.NODEMAILER_USERNAME}`,
+            pass: `${process.env.NODEMAILER_PASS}`,
+        },
+    });
+    const resetUrl = `Kindly use this link to verify your account...
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${accountVerificationToken}>Click to verify..</a>
+       `;
+    const mailOptions = {
+        from: 'HollwayGlobalIncLimited@gmail.com',
+        to: `${email}`,
+        subject: 'Account Verification ',
+        text: `Hey ${lastName} - ${firstName}, it’s our first message sent with Nodemailer 😉 `,
+        html: resetUrl,
+    };
+    yield transport.sendMail(mailOptions);
+});
+exports.sendMail = sendMail;
 const sendVerificationEmail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const transport = nodemailer_1.default.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
