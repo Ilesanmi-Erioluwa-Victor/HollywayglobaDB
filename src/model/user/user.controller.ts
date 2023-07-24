@@ -365,7 +365,8 @@ export const forget_password_token: RequestHandler = catchAsync(
       // };
       // const sendMsg = await sgMail.send(msg);
       res.json({
-        message: `A successful message has been sent to your gmail`,
+        message: `A reset token has been created for you`,
+        status: 'success',
       });
     } catch (error: any) {
       if (!error.statusCode) {
