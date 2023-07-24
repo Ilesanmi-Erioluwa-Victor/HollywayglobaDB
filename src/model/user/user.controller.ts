@@ -444,6 +444,7 @@ export const reset_password: RequestHandler = catchAsync(
     const { token, password } = req.body;
 
     try {
+    
       const hashedToken = crypto
         .createHash('sha256')
         .update(token)
