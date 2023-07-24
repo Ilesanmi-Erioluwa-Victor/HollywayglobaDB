@@ -337,6 +337,15 @@ export const forget_password_token: RequestHandler = catchAsync(
       const resetToken = generatePasswordResetToken();
       const expirationTime = new Date();
       expirationTime.setHours(expirationTime.getHours() + 1);
+      
+      await prisma.passwordResetToken.create({
+        data: {
+          token: resetToken,
+          expirationTime,
+          userId: user.id,
+        },
+      });
+      
       //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
       //   <a href= ${req.protocol}://${req.get(
       //     'host'
