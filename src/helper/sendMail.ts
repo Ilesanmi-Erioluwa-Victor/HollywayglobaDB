@@ -54,7 +54,7 @@ export const sendMail = (
   });
 };
 
-export const sendVerificationEmail = async (data, req, res, next) => {
+export const sendVerificationEmail = async (data: VerifyUser, req: Request, res : Response, next : NextFunction) => {
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
@@ -66,10 +66,10 @@ export const sendVerificationEmail = async (data, req, res, next) => {
 
   const verificationLink = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/verify_account/${verificationToken}`;
+  )}/api/v1/users/verify_account/${data?.verificationToken}`;
   const mailOptions = {
     from: 'HollwayGlobalIncLimited@gmail.com',
-    to: email,
+    to: data?.email,
     subject: 'Account Verification',
     text: 'Please verify your account by clicking the link below:',
     html: `<a href="${verificationLink}">Click to verify your account</a>`,

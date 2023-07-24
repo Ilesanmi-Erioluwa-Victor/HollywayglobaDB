@@ -53,10 +53,10 @@ const sendVerificationEmail = (data, req, res, next) => __awaiter(void 0, void 0
             pass: `${process.env.NODEMAILER_PASS}`,
         },
     });
-    const verificationLink = `${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${verificationToken}`;
+    const verificationLink = `${req.protocol}://${req.get('host')}/api/v1/users/verify_account/${data === null || data === void 0 ? void 0 : data.verificationToken}`;
     const mailOptions = {
         from: 'HollwayGlobalIncLimited@gmail.com',
-        to: email,
+        to: data === null || data === void 0 ? void 0 : data.email,
         subject: 'Account Verification',
         text: 'Please verify your account by clicking the link below:',
         html: `<a href="${verificationLink}">Click to verify your account</a>`,
