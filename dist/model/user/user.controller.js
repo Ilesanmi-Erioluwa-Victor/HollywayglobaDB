@@ -24,13 +24,8 @@ const ValidateMongoId_1 = __importDefault(require("../../utils/ValidateMongoId")
 const token_1 = __importDefault(require("../../config/generateToken/token"));
 const prisma_1 = require("../../prisma");
 const model_user_1 = require("./model.user");
-const createAccountverification_1 = require("../../helper/createAccountverification");
-const sendMail_1 = require("../../helper/sendMail");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const generateVerificationToken = () => {
-        return crypto_1.default.randomBytes(32).toString('hex');
-    };
     try {
         const { firstName, lastName, password, email, mobile } = req.body;
         if (!firstName || !lastName || !password || !email || !mobile)
@@ -51,13 +46,8 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 mobile: mobile,
             },
         });
-        const token = generateVerificationToken();
-        const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
-        console.log(user === null || user === void 0 ? void 0 : user.accountVerificationToken, user === null || user === void 0 ? void 0 : user.id);
-        yield (0, createAccountverification_1.createAccountVerificationToken)(user === null || user === void 0 ? void 0 : user.id, token, tokenExpiration);
-        yield (0, sendMail_1.sendMail)(user, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
-            message: 'You have successfully created your account, Please verify your gmail before you log in',
+            message: 'You have successfully created your account, log in now',
             status: 'success',
         });
     }
@@ -243,6 +233,7 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
 // );
 exports.account_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.params;
+    console.log(token);
     try {
         const user = yield prisma_1.prisma.user.findFirst({
             where: {

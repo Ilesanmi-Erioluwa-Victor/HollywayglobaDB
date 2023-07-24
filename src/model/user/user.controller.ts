@@ -25,12 +25,8 @@ interface CustomRequest extends Request {
 
 export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const generateVerificationToken = (): string => {
-      return crypto.randomBytes(32).toString('hex');
-    };
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
-
       if (!firstName || !lastName || !password || !email || !mobile)
         return next(
           throwError(
@@ -49,7 +45,6 @@ export const create_user: RequestHandler = catchAsync(
           )
         );
       }
-
       // TODO  i will write it to it logic util later
       const salt: string = await bcrypt.genSalt(10);
       const hashedPassword: string = await bcrypt.hash(password, salt);
@@ -63,24 +58,8 @@ export const create_user: RequestHandler = catchAsync(
           mobile: mobile as string,
         },
       });
-
-      const token = generateVerificationToken();
-      const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
-
-      console.log(user?.accountVerificationToken, user?.id)
-      await createAccountVerificationToken(
-        user?.id,
-        token,tokenExpiration
-      );
-      await sendMail(
-        user,
-        req,
-        res,
-        next
-      );
-
       res.status(StatusCodes.CREATED).json({
-        message: 'You have successfully created your account, Please verify your gmail before you log in',
+        message: 'You have successfully created your account, log in now',
         status: 'success',
       });
     } catch (error: any) {
@@ -91,7 +70,6 @@ export const create_user: RequestHandler = catchAsync(
     }
   }
 );
-
 export const login_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
@@ -295,6 +273,7 @@ export const update_password = catchAsync(
 export const account_verification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.params;
+    console.log(token);
     try {
       const user = await prisma.user.findFirst({
         where: {
