@@ -11,8 +11,8 @@
     "build": "rimraf ./dist && tsc"
   },
   "prisma": {
-  "schema": "src/prisma/schema.prisma"
-},
+    "schema": "src/prisma/schema.prisma"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ilesanmi-Erioluwa-Victor/HollywayglobaDB.git"
@@ -42,7 +42,6 @@
     "mysql": "^2.18.1",
     "nodemailer": "^6.9.3",
     "paystack": "^2.0.1",
-    "prisma": "^5.0.0",
     "rimraf": "^5.0.1",
     "sequelize": "^6.32.1"
   },
