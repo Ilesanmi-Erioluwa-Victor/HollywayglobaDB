@@ -276,31 +276,10 @@ export const update_password = catchAsync(
   }
 );
 
-// export const generate_verification = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id }: string | any = req?.params;
-//     ValidateMongoDbId(id);
-//     try {
-//       const user: string | any = await prisma.user.findUnique({
-//         where: {
-//           id,
-//         },
-//       });
-//       createAccountVerificationToken(id);
-//       sendMail(user, req, res, next);
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
-
 export const account_verification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.params;
-    console.log(token);
+    // console.log(token);
     try {
       const user = await prisma.user.findFirst({
         where: {

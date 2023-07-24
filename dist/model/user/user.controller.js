@@ -230,29 +230,9 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         next(error);
     }
 }));
-// export const generate_verification = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id }: string | any = req?.params;
-//     ValidateMongoDbId(id);
-//     try {
-//       const user: string | any = await prisma.user.findUnique({
-//         where: {
-//           id,
-//         },
-//       });
-//       createAccountVerificationToken(id);
-//       sendMail(user, req, res, next);
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
 exports.account_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.params;
-    console.log(token);
+    // console.log(token);
     try {
         const user = yield prisma_1.prisma.user.findFirst({
             where: {
