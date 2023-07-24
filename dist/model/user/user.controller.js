@@ -39,6 +39,15 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
         if (exist_user) {
             return next((0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
         }
+        const saveVerificationToken = (userId, token, expiresIn) => __awaiter(void 0, void 0, void 0, function* () {
+            yield prisma_1.prisma.user.update({
+                where: { id: userId },
+                data: {
+                    accountVerificationToken: token,
+                    accountVerificationTokenExpires: expiresIn,
+                },
+            });
+        });
         // TODO  i will write it to it logic util later
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
