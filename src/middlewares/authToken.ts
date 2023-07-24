@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { catchAsync } from '../utils/catchAsync';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../prisma';
+import ValidateMongoDbId from '../utils/ValidateMongoId';
 
 dotenv.config();
 
@@ -57,16 +58,20 @@ interface CustomUser extends Request {
 
 export const isUserVerified = catchAsync(
   async (req: CustomUser, res: Response, next: NextFunction) => {
-    const id =  req?.authId
-    console.log("This is user " + id)
+    try {
+      const id: string | any = req?.authId;
+      ValidateMongoDbId(id);
+    } catch (error) {}
 
-    if(!id) throw new Error("No user with this ID")
+    console.log('This is user ' + id);
+
+    if (!id) throw new Error('No user with this ID');
     const user = await prisma.user.findUnique({
       where: {
-       id : id
-     }
-    })
-    console.log(user)
+        id: id,
+      },
+    });
+    c;
     next();
   }
 );

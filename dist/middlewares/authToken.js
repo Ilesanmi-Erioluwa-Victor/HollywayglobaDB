@@ -19,6 +19,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const catchAsync_1 = require("../utils/catchAsync");
 const http_status_codes_1 = require("http-status-codes");
 const prisma_1 = require("../prisma");
+const ValidateMongoId_1 = __importDefault(require("../utils/ValidateMongoId"));
 dotenv_1.default.config();
 exports.AuthMiddleWare = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -48,15 +49,19 @@ exports.AuthMiddleWare = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
     }
 }));
 exports.isUserVerified = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req === null || req === void 0 ? void 0 : req.authId;
-    console.log("This is user " + id);
+    try {
+        const id = req === null || req === void 0 ? void 0 : req.authId;
+        (0, ValidateMongoId_1.default)(id);
+    }
+    catch (error) { }
+    console.log('This is user ' + id);
     if (!id)
-        throw new Error("No user with this ID");
+        throw new Error('No user with this ID');
     const user = yield prisma_1.prisma.user.findUnique({
         where: {
-            id: id
-        }
+            id: id,
+        },
     });
-    console.log(user);
+    c;
     next();
 }));
