@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendUserToken = exports.sendMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const prisma_1 = require("../prisma");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const sendMail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -42,6 +43,12 @@ const sendMail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, fun
 exports.sendMail = sendMail;
 const sendUserToken = (data, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(data);
+    const user = yield prisma_1.prisma.user.findUnique({
+        where: {
+            id: data === null || data === void 0 ? void 0 : data.userId,
+        },
+    });
+    console.log(user);
     const transport = nodemailer_1.default.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
         port: 2525,
@@ -51,11 +58,11 @@ const sendUserToken = (data, req, res, next) => __awaiter(void 0, void 0, void 0
         },
     });
     const resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/reset_password/${data === null || data === void 0 ? void 0 : data.resetToken}>Click here to reset your password..</a>
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/users/reset_password/${data === null || data === void 0 ? void 0 : data.token}>Click here to reset your password..</a>
        `;
     const mailOptions = {
         from: 'HollwayGlobalIncLimited@gmail.com',
-        to: `${data === null || data === void 0 ? void 0 : data.email}`,
+        to: `${user === null || user === void 0 ? void 0 : user.email}`,
         subject: 'Password Reset Token',
         text: `Your password reset token 😉 `,
         html: resetUrl,

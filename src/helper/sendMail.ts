@@ -47,8 +47,9 @@ export const sendMail = async (
 };
 
 interface userInfo {
-  email: string;
-  resetToken: string;
+  email?: string;
+  token: string;
+  userId?: string;
 }
 export const sendUserToken = async (
   data: userInfo,
@@ -57,6 +58,13 @@ export const sendUserToken = async (
   next: NextFunction
 ) => {
   console.log(data);
+  const user = await prisma.user.findUnique({
+    where: {
+      id: data?.userId,
+    },
+  });
+
+  console.log(user);
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
@@ -69,12 +77,14 @@ export const sendUserToken = async (
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/reset_password/${data?.resetToken}>Click here to reset your password..</a>
+  )}/api/v1/users/reset_password/${
+    data?.token
+  }>Click here to reset your password..</a>
        `;
 
   const mailOptions = {
     from: 'HollwayGlobalIncLimited@gmail.com',
-    to: `${data?.email}`,
+    to: `${user?.email}`,
     subject: 'Password Reset Token',
     text: `Your password reset token 😉 `,
     html: resetUrl,

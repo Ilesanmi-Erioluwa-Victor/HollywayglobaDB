@@ -344,7 +344,7 @@ export const forget_password_token: RequestHandler = catchAsync(
       const expirationTime = new Date();
       expirationTime.setHours(expirationTime.getHours() + 1);
 
-      await prisma.passwordResetToken.create({
+      const password_reset = await prisma.passwordResetToken.create({
         data: {
           token: resetToken,
           expirationTime,
@@ -352,7 +352,7 @@ export const forget_password_token: RequestHandler = catchAsync(
         },
       });
 
-      await sendUserToken(user, req, res, next)
+      await sendUserToken(password_reset, req, res, next);
       res.json({
         message: `A reset token has been sent to your gmail`,
         status: 'success',
@@ -384,7 +384,6 @@ export const forget_password_token: RequestHandler = catchAsync(
 //     try {
 //       const resetToken = user.createPasswordResetToken();
 //       await user.save({ validateBeforeSave: false });
-
 
 //       const emailjsTemplate = {
 //         service_id: 'default_service',
@@ -428,7 +427,8 @@ export const forget_password_token: RequestHandler = catchAsync(
 export const reset_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req?.params;
-    const { password } = req.body
+    console.log(token);
+    const { password } = req.body;
 
     try {
       const resetTokenData: any = await prisma.passwordResetToken.findUnique({
