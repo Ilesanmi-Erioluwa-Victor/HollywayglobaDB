@@ -444,33 +444,30 @@ export const reset_password: RequestHandler = catchAsync(
     const { token, password } = req.body;
 
     try {
-        const resetTokenData = await prisma.passwordResetToken.findUnique({
-          where: { token },
-          include: { user: true },
-        });
+      const resetTokenData: any = await prisma.passwordResetToken.findUnique({
+        where: { token },
+        include: { user: true },
+      });
 
-        if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
-          throwError("Invalid or expired token", StatusCodes.NOT_FOUND)
-        }
-
-      
-      if (!user) {
-        return next(
-          throwError('Token is invalid or has expired', StatusCodes.BAD_REQUEST)
-        );
+      if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
+        throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
       }
-      await UserModel.updateOne(
-        {
-          _id: user._id,
+
+      const salt: string = await bcrypt.genSalt(10);
+      const hashedPassword: string = await bcrypt.hash(password, salt);
+
+      await prisma.user.update({
+        where: { id: resetTokenData.user.id },
+        data: {
+          password: hashedPassword,
         },
-        {
-          $set: {
-            password,
-            password_reset_token: '',
-            password_reset_expires: '',
-          },
-        }
-      );
+      });
+
+      await prisma.passwordResetToken.delete({
+        where: { id: resetTokenData.id },
+      });
+
+      res.json({ message: 'Password reset successful' });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

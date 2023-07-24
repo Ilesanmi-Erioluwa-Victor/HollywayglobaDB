@@ -21,7 +21,6 @@ const catchAsync_1 = require("../../utils/catchAsync");
 const ValidateMongoId_1 = __importDefault(require("../../utils/ValidateMongoId"));
 const token_1 = __importDefault(require("../../config/generateToken/token"));
 const prisma_1 = require("../../prisma");
-const model_user_1 = require("./model.user");
 const createAccountverification_1 = require("../../helper/createAccountverification");
 const sendMail_1 = require("../../helper/sendMail");
 const generatePasswordResetToken_1 = __importDefault(require("../../helper/generatePasswordResetToken"));
@@ -374,20 +373,20 @@ exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
             include: { user: true },
         });
         if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
-            (0, cacheError_1.throwError)("Invalid or expired token", http_status_codes_1.StatusCodes.NOT_FOUND);
+            (0, cacheError_1.throwError)('Invalid or expired token', http_status_codes_1.StatusCodes.NOT_FOUND);
         }
-        if (!user) {
-            return next((0, cacheError_1.throwError)('Token is invalid or has expired', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        }
-        yield model_user_1.UserModel.updateOne({
-            _id: user._id,
-        }, {
-            $set: {
-                password,
-                password_reset_token: '',
-                password_reset_expires: '',
+        const salt = yield bcryptjs_1.default.genSalt(10);
+        const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
+        yield prisma_1.prisma.user.update({
+            where: { id: resetTokenData.user.id },
+            data: {
+                password: hashedPassword,
             },
         });
+        yield prisma_1.prisma.passwordResetToken.delete({
+            where: { id: resetTokenData.id },
+        });
+        res.json({ message: 'Password reset successful' });
     }
     catch (error) {
         if (!error.statusCode) {
