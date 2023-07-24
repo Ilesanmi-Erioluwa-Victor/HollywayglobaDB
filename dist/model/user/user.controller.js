@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reset_password = exports.forget_password_token = exports.account_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const crypto_1 = __importDefault(require("crypto"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cacheError_1 = require("../../middlewares/cacheError");
 const http_status_codes_1 = require("http-status-codes");
@@ -370,16 +369,13 @@ exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) =>
 exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token, password } = req.body;
     try {
-        const hashedToken = crypto_1.default
-            .createHash('sha256')
-            .update(token)
-            .digest('hex');
-        const user = yield model_user_1.UserModel.findOne({
-            password_reset_token: hashedToken,
-            password_reset_expires: {
-                $gt: Date.now(),
-            },
+        const resetTokenData = yield prisma_1.prisma.passwordResetToken.findUnique({
+            where: { token },
+            include: { user: true },
         });
+        if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
+            (0, cacheError_1.throwError)("Invalid or expired token", http_status_codes_1.StatusCodes.NOT_FOUND);
+        }
         if (!user) {
             return next((0, cacheError_1.throwError)('Token is invalid or has expired', http_status_codes_1.StatusCodes.BAD_REQUEST));
         }

@@ -444,19 +444,16 @@ export const reset_password: RequestHandler = catchAsync(
     const { token, password } = req.body;
 
     try {
-    
-      const hashedToken = crypto
-        .createHash('sha256')
-        .update(token)
-        .digest('hex');
+        const resetTokenData = await prisma.passwordResetToken.findUnique({
+          where: { token },
+          include: { user: true },
+        });
 
-      const user = await UserModel.findOne({
-        password_reset_token: hashedToken,
-        password_reset_expires: {
-          $gt: Date.now(),
-        },
-      });
+        if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
+          throwError("Invalid or expired token", StatusCodes.NOT_FOUND)
+        }
 
+      
       if (!user) {
         return next(
           throwError('Token is invalid or has expired', StatusCodes.BAD_REQUEST)
