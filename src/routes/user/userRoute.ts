@@ -26,7 +26,7 @@ userRouter.put('/reset_password', reset_password);
 userRouter.put('/verify_account/:token', account_verification);
 userRouter.get('/', AuthMiddleWare,isUserVerified, get_users);
 userRouter.get('/:id', AuthMiddleWare, get_user);
-userRouter.delete('/:id', AuthMiddleWare, delete_user);
+userRouter.delete('/:id', AuthMiddleWare,isUserVerified, delete_user);
 userRouter.put('/password/:id', AuthMiddleWare, update_password);
 userRouter.put('/update-profile/:id', AuthMiddleWare, update_user);
 

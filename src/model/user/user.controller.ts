@@ -56,7 +56,7 @@ export const create_user: RequestHandler = catchAsync(
           mobile: mobile as string,
         },
       });
-     generateToken(user?.id)
+      generateToken(user?.id);
       const tokenUser: any = await createAccountVerificationToken(user?.id);
       await sendMail(tokenUser, req, res, next);
 
