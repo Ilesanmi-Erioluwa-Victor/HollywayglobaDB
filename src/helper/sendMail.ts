@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+  import { prisma } from '../prisma';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 
@@ -18,8 +19,9 @@ export const sendMail = async (
   res: Response,
   next: NextFunction
 ) => {
+  // const user = await prisma.user.findUnique({})
   const { accountVerificationToken, firstName, lastName, email } = data;
-  console.log(accountVerificationToken)
+  console.log(data.email)
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,

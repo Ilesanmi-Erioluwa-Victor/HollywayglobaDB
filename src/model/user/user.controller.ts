@@ -3,12 +3,10 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import crypto from 'crypto';
+import dotenv from 'dotenv';
 import { throwError } from '../../middlewares/cacheError';
 import { StatusCodes } from 'http-status-codes';
-
-// import { UserModel } from './model.user';
 import { catchAsync } from '../../utils/catchAsync';
 import ValidateMongoDbId from '../../utils/ValidateMongoId';
 import generateToken from '../../config/generateToken/token';
@@ -16,6 +14,7 @@ import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
 import { createAccountVerificationToken } from '../../helper/createAccountverification';
 import { sendMail } from '../../helper/sendMail';
+import { generateVerificationToken } from '../../helper/generateToken';
 
 dotenv.config();
 
@@ -36,7 +35,6 @@ export const create_user: RequestHandler = catchAsync(
         );
 
       const exist_user = await prisma.user.findUnique({ where: { email } });
-
       if (exist_user) {
         return next(
           throwError(
@@ -58,6 +56,10 @@ export const create_user: RequestHandler = catchAsync(
           mobile: mobile as string,
         },
       });
+
+      const tokenUser: any = await createAccountVerificationToken(user?.id);
+      await sendMail(tokenUser, req, res, next);
+
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
@@ -81,27 +83,30 @@ export const login_user: RequestHandler = catchAsync(
         },
       });
 
-      if (exist_user?.isAccountVerified === false)
-        throwError(
-          'Verify your account in your gmail, before you can log in',
-          StatusCodes.BAD_REQUEST
-        );
-      if (exist_user && (await bcrypt.compare(password, exist_user.password))) {
+      if (!exist_user) {
+        throwError('No user found', StatusCodes.BAD_REQUEST);
+      }
+
+      if (await bcrypt.compare(password, exist_user.password)) {
+        if (!exist_user.isAccountVerified) {
+          throwError(
+            'Verify your account in your gmail before you can log in',
+            StatusCodes.BAD_REQUEST
+          );
+        }
+
         res.json({
-          _id: exist_user?._id,
-          firstName: exist_user?.firstName,
-          lastName: exist_user?.lastName,
-          email: exist_user?.email,
-          profilePhoto: exist_user?.profilePhoto,
-          token: generateToken(exist_user?._id),
+          _id: exist_user._id,
+          firstName: exist_user.firstName,
+          lastName: exist_user.lastName,
+          email: exist_user.email,
+          profilePhoto: exist_user.profilePhoto,
+          token: generateToken(exist_user._id),
         });
       } else {
-        res.status(401);
-        next(
-          throwError(
-            `Login Failed, invalid credentials..`,
-            StatusCodes.NOT_FOUND
-          )
+        throwError(
+          'Login Failed, invalid credentials',
+          StatusCodes.UNAUTHORIZED
         );
       }
     } catch (error: any) {

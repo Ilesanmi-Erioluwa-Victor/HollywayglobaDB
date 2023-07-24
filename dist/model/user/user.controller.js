@@ -14,16 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reset_password = exports.forget_password_token = exports.account_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const crypto_1 = __importDefault(require("crypto"));
+const dotenv_1 = __importDefault(require("dotenv"));
 const cacheError_1 = require("../../middlewares/cacheError");
 const http_status_codes_1 = require("http-status-codes");
-// import { UserModel } from './model.user';
 const catchAsync_1 = require("../../utils/catchAsync");
 const ValidateMongoId_1 = __importDefault(require("../../utils/ValidateMongoId"));
 const token_1 = __importDefault(require("../../config/generateToken/token"));
 const prisma_1 = require("../../prisma");
 const model_user_1 = require("./model.user");
+const createAccountverification_1 = require("../../helper/createAccountverification");
+const sendMail_1 = require("../../helper/sendMail");
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -46,6 +47,8 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 mobile: mobile,
             },
         });
+        const tokenUser = yield (0, createAccountverification_1.createAccountVerificationToken)(user === null || user === void 0 ? void 0 : user.id);
+        yield (0, sendMail_1.sendMail)(tokenUser, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: 'You have successfully created your account, log in now',
             status: 'success',
@@ -66,21 +69,24 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
                 email: email,
             },
         });
-        if ((exist_user === null || exist_user === void 0 ? void 0 : exist_user.isAccountVerified) === false)
-            (0, cacheError_1.throwError)('Verify your account in your gmail, before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
-        if (exist_user && (yield bcryptjs_1.default.compare(password, exist_user.password))) {
+        if (!exist_user) {
+            (0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        }
+        if (yield bcryptjs_1.default.compare(password, exist_user.password)) {
+            if (!exist_user.isAccountVerified) {
+                (0, cacheError_1.throwError)('Verify your account in your gmail before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
+            }
             res.json({
-                _id: exist_user === null || exist_user === void 0 ? void 0 : exist_user._id,
-                firstName: exist_user === null || exist_user === void 0 ? void 0 : exist_user.firstName,
-                lastName: exist_user === null || exist_user === void 0 ? void 0 : exist_user.lastName,
-                email: exist_user === null || exist_user === void 0 ? void 0 : exist_user.email,
-                profilePhoto: exist_user === null || exist_user === void 0 ? void 0 : exist_user.profilePhoto,
-                token: (0, token_1.default)(exist_user === null || exist_user === void 0 ? void 0 : exist_user._id),
+                _id: exist_user._id,
+                firstName: exist_user.firstName,
+                lastName: exist_user.lastName,
+                email: exist_user.email,
+                profilePhoto: exist_user.profilePhoto,
+                token: (0, token_1.default)(exist_user._id),
             });
         }
         else {
-            res.status(401);
-            next((0, cacheError_1.throwError)(`Login Failed, invalid credentials..`, http_status_codes_1.StatusCodes.NOT_FOUND));
+            (0, cacheError_1.throwError)('Login Failed, invalid credentials', http_status_codes_1.StatusCodes.UNAUTHORIZED);
         }
     }
     catch (error) {
