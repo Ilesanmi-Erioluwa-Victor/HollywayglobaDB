@@ -366,64 +366,6 @@ export const forget_password_token: RequestHandler = catchAsync(
   }
 );
 
-// export const forgot_password: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const user: string | any = await UserModel.findOne({
-//       email: req.body.email,
-//     });
-//     console.log(user);
-
-//     if (!user)
-//       return next(
-//         throwError(
-//           'Sorry, No user found with this email',
-//           StatusCodes.BAD_REQUEST
-//         )
-//       );
-
-//     try {
-//       const resetToken = user.createPasswordResetToken();
-//       await user.save({ validateBeforeSave: false });
-
-//       const emailjsTemplate = {
-//         service_id: 'default_service',
-//         template_id: `${process.env.EMAILJS_TEMPLATE_ID}`,
-//         user_id: `${process.env.EMAILJS_PUBLIC_KEY}`,
-//         accessToken: `${process.env.EMAILJS_PRIVATE_KEY}`,
-//         template_params: {
-//           name: user?.first_name,
-//           message: `Forgot your  password ? make a
-//       request with your new password and passwordConfirm to
-//        ${resetURL}.\nif you didn't forget your password, please ignore this email`,
-//           subject: 'Password reset Token',
-//         },
-//       };
-//       await axios
-//         .post('https://api.emailjs.com/api/v1.0/email/send', {
-//           data: JSON.stringify(emailjsTemplate),
-//           contentType: 'application/json',
-//         })
-//         .then((response) => console.log(response));
-
-//       res.status(StatusCodes.OK).json({
-//         status: 'success',
-//         message: 'Token sent to your email',
-//       });
-//     } catch (error: any) {
-//       user.password_reset_token = undefined;
-//       user.password_reset_expires = undefined;
-//       await user.save({ validateBeforeSave: false });
-//       console.log(error);
-//       return next(
-//         throwError(
-//           'There was an error sending Email, try again',
-//           StatusCodes.BAD_GATEWAY
-//         )
-//       );
-//     }
-//   }
-// );
-
 export const reset_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req?.params;
@@ -454,7 +396,10 @@ export const reset_password: RequestHandler = catchAsync(
         where: { id: resetTokenData.id },
       });
 
-      res.json({ message: 'Password reset successful, login now', status : "success"});
+      res.json({
+        message: 'Password reset successful, login now',
+        status: 'success',
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
