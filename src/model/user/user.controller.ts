@@ -321,7 +321,11 @@ export const account_verification: RequestHandler = catchAsync(
 export const forget_password_token: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
-    const user: string | any = await UserModel.findOne({ email });
+    const user: string | any = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
     if (!user) throwError('No user found.., try again', StatusCodes.NOT_FOUND);
 
     try {

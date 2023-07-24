@@ -266,7 +266,11 @@ exports.account_verification = (0, catchAsync_1.catchAsync)((req, res, next) => 
 }));
 exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.body;
-    const user = yield model_user_1.UserModel.findOne({ email });
+    const user = yield prisma_1.prisma.user.findUnique({
+        where: {
+            email,
+        },
+    });
     if (!user)
         (0, cacheError_1.throwError)('No user found.., try again', http_status_codes_1.StatusCodes.NOT_FOUND);
     try {
