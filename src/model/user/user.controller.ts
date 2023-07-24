@@ -139,15 +139,21 @@ export const delete_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id }: any = req?.params;
     ValidateMongoDbId(id);
+    //TODO i want to write logic to deleted permanently if active
+    // is false for two months
     try {
-      const deleted_user: string | any = await prisma.user.delete({
+      const deleted_user: string | any = await prisma.user.update({
         where: {
           id: id,
         },
+        data: {
+          active: false,
+        },
       });
-      // deleted_user.active = false;
+
       res.json({
-        message: 'You have successfully deleted your account',
+        message:
+          'Please, kindly note, by not logining to your account for two months, this will permanently delete your account.',
       });
     } catch (error: any) {
       if (!error.statusCode) {
