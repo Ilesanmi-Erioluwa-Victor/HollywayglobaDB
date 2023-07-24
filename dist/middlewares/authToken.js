@@ -52,16 +52,17 @@ exports.isUserVerified = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
     try {
         const id = req === null || req === void 0 ? void 0 : req.authId;
         (0, ValidateMongoId_1.default)(id);
+        const user = yield prisma_1.prisma.user.findUnique({
+            where: {
+                id: id,
+            },
+        });
+        next();
     }
-    catch (error) { }
-    console.log('This is user ' + id);
-    if (!id)
-        throw new Error('No user with this ID');
-    const user = yield prisma_1.prisma.user.findUnique({
-        where: {
-            id: id,
-        },
-    });
-    c;
-    next();
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
 }));
