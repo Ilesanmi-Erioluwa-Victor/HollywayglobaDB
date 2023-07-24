@@ -353,7 +353,6 @@ export const forget_password_token: RequestHandler = catchAsync(
       });
 
       await sendUserToken(user, req, res, next)
-      // const sendMsg = await sgMail.send(msg);
       res.json({
         message: `A reset token has been sent to your gmail`,
         status: 'success',
@@ -428,7 +427,8 @@ export const forget_password_token: RequestHandler = catchAsync(
 
 export const reset_password: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { token, password } = req.body;
+    const { token } = req?.params;
+    const { password } = req.body
 
     try {
       const resetTokenData: any = await prisma.passwordResetToken.findUnique({
