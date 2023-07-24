@@ -75,7 +75,7 @@ export const create_user: RequestHandler = catchAsync(
       );
 
       res.status(StatusCodes.CREATED).json({
-        message: 'You have successfully created your account, log in now',
+        message: 'You have successfully created your account, Please verify your gmail before you log in',
         status: 'success',
       });
     } catch (error: any) {

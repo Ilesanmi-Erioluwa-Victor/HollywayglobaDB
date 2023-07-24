@@ -56,7 +56,7 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
             lastName: user === null || user === void 0 ? void 0 : user.lastName,
         }, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
-            message: 'You have successfully created your account, log in now',
+            message: 'You have successfully created your account, Please verify your gmail before you log in',
             status: 'success',
         });
     }
