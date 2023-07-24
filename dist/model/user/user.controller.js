@@ -48,7 +48,8 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 mobile: mobile,
             },
         });
-        res.status(http_status_codes_1.StatusCodes.CREATED).json({
+        yield (0, createAccountverification_1.createAccountVerificationToken)();
+        yield res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: 'You have successfully created your account, log in now',
             status: 'success',
         });

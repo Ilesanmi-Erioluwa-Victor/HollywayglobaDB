@@ -60,7 +60,10 @@ export const create_user: RequestHandler = catchAsync(
           mobile: mobile as string,
         },
       });
-      
+
+      await createAccountVerificationToken();
+      await
+
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
