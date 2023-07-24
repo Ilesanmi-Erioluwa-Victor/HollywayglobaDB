@@ -14,6 +14,7 @@ import { prisma } from '../../prisma';
 import { UserModel } from './model.user';
 import { createAccountVerificationToken } from '../../helper/createAccountverification';
 import { sendMail } from '../../helper/sendMail';
+import generatePasswordResetToken from '../../helper/generatePasswordResetToken';
 // import { hashedPassword } from '../../helper/hashedPassword';
 
 dotenv.config();
@@ -326,12 +327,16 @@ export const forget_password_token: RequestHandler = catchAsync(
         email,
       },
     });
-    if (!user) throwError('No user found with provided email.., try again', StatusCodes.NOT_FOUND);
+    if (!user)
+      throwError(
+        'No user found with provided email.., try again',
+        StatusCodes.NOT_FOUND
+      );
 
     try {
-      const token = await user.createPasswordResetToken();
-      await user.save();
-
+      const resetToken = generatePasswordResetToken();
+      const expirationTime = new Date();
+      expirationTime.setHours(expirationTime.getHours() + 1);
       //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
       //   <a href= ${req.protocol}://${req.get(
       //     'host'

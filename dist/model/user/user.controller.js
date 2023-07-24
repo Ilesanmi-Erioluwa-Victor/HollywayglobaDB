@@ -25,6 +25,7 @@ const prisma_1 = require("../../prisma");
 const model_user_1 = require("./model.user");
 const createAccountverification_1 = require("../../helper/createAccountverification");
 const sendMail_1 = require("../../helper/sendMail");
+const generatePasswordResetToken_1 = __importDefault(require("../../helper/generatePasswordResetToken"));
 // import { hashedPassword } from '../../helper/hashedPassword';
 dotenv_1.default.config();
 exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -274,8 +275,9 @@ exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) =>
     if (!user)
         (0, cacheError_1.throwError)('No user found with provided email.., try again', http_status_codes_1.StatusCodes.NOT_FOUND);
     try {
-        const token = yield user.createPasswordResetToken();
-        yield user.save();
+        const resetToken = (0, generatePasswordResetToken_1.default)();
+        const expirationTime = new Date();
+        expirationTime.setHours(expirationTime.getHours() + 1);
         //   const resetUrl = `If you were requested to reset your account password, reset now, otherwise ignore this message
         //   <a href= ${req.protocol}://${req.get(
         //     'host'
