@@ -374,7 +374,7 @@ exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
         yield prisma_1.prisma.passwordResetToken.delete({
             where: { id: resetTokenData.id },
         });
-        res.json({ message: 'Password reset successful' });
+        res.json({ message: 'Password reset successful, login now', status: "success" });
     }
     catch (error) {
         if (!error.statusCode) {

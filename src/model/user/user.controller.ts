@@ -454,7 +454,7 @@ export const reset_password: RequestHandler = catchAsync(
         where: { id: resetTokenData.id },
       });
 
-      res.json({ message: 'Password reset successful' });
+      res.json({ message: 'Password reset successful, login now', status : "success"});
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
