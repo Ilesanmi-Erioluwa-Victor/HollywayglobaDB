@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { throwError } from '../middlewares/error/cacheError';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../configurations/db';
+import { ENV } from '../configurations/config';
 
-dotenv.config();
 
 export const catchAsync = (fn: any) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -44,11 +43,11 @@ export function generatePasswordResetToken(): string {
 }
 
 export const generateToken = (id: string) => {
-  if (!process.env.JWT_SERCRET_KEY)
+  if (!ENV.JWT.secret)
     throwError('JWT_KEY is required in environment', StatusCodes.BAD_REQUEST);
 
-  const token = jwt.sign({ id }, `${process.env.JWT_SERCRET_KEY}`, {
-    expiresIn: `${process.env.JWT_EXPIRES_IN}`,
+  const token = jwt.sign({ id }, `${ENV.JWT.secret}`, {
+    expiresIn: `${ENV.JWT.expires}`,
   });
   return token;
 };

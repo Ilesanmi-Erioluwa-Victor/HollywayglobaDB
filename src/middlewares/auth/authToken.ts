@@ -1,14 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { throwError } from '../error/cacheError';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import { catchAsync } from '../../helper/utils';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../../configurations/db';
 import { ValidateMongoDbId } from '../../helper/utils';
-
-dotenv.config();
-
+import { ENV } from '../../configurations/config';
 interface CustomRequest extends Request {
   authId?: string;
 }
@@ -23,13 +20,13 @@ export const AuthMiddleWare = catchAsync(
         req?.headers?.authorization.startsWith('Bearer')
       ) {
         token = req?.headers?.authorization.split(' ')[1];
-        if (!`${process.env.JWT_SERCRET_KEY}`) {
+        if (!`${ENV.JWT.secret}`) {
           throwError('SERVER JWT PASSWORD NOT SET', StatusCodes.BAD_REQUEST);
         }
         if (token) {
           const decoded = jwt.verify(
             token,
-            `${process.env.JWT_SERCRET_KEY}`
+            `${ENV.JWT.secret}`
           ) as {
             id: string;
           };
