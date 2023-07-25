@@ -1,10 +1,7 @@
 import nodemailer from 'nodemailer';
 import { prisma } from '../configurations/db';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
+import { ENV } from '../configurations/config';
 interface User {
   firstName: string;
   lastName: string;
@@ -24,8 +21,8 @@ export const sendMail = async (
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
     auth: {
-      user: `${process.env.NODEMAILER_USERNAME}`,
-      pass: `${process.env.NODEMAILER_PASS}`,
+      user: `${ENV.NODEMAILER.USERNAME}`,
+      pass: `${ENV.NODEMAILER.PASSWORD}`,
     },
   });
 
@@ -69,8 +66,8 @@ export const sendUserToken = async (
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
     auth: {
-      user: `${process.env.NODEMAILER_USERNAME}`,
-      pass: `${process.env.NODEMAILER_PASS}`,
+      user: `${ENV.NODEMAILER.USERNAME}`,
+      pass: `${ENV.NODEMAILER.PASSWORD}`,
     },
   });
 

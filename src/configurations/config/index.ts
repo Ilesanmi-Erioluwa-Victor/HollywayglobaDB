@@ -11,19 +11,15 @@ dotenv.config();
 
 export const ENV = {
   JWT: {
-    secret: JWT_SECRET_KEY,
-    expires: JWT_EXPIRES_IN,
+    SECRET: JWT_SECRET_KEY,
+    EXPIRES: JWT_EXPIRES_IN,
   },
 
   PORT: {
-    port: PORT,
+    PORT: PORT,
   },
   NODEMAILER: {
-    password: NODEMAILER_PASS,
-    username: NODEMAILER_USERNAME,
-  },
-
-  DATABASE: {
-    url: DATABASE_URL,
+    PASSWORD: NODEMAILER_PASS,
+    USERNAME: NODEMAILER_USERNAME,
   },
 };

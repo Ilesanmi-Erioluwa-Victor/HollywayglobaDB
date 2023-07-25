@@ -43,11 +43,11 @@ export function generatePasswordResetToken(): string {
 }
 
 export const generateToken = (id: string) => {
-  if (!ENV.JWT.secret)
+  if (!ENV.JWT.SECRET)
     throwError('JWT_KEY is required in environment', StatusCodes.BAD_REQUEST);
 
-  const token = jwt.sign({ id }, `${ENV.JWT.secret}`, {
-    expiresIn: `${ENV.JWT.expires}`,
+  const token = jwt.sign({ id }, `${ENV.JWT.SECRET}`, {
+    expiresIn: `${ENV.JWT.EXPIRES}`,
   });
   return token;
 };

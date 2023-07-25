@@ -20,14 +20,11 @@ export const AuthMiddleWare = catchAsync(
         req?.headers?.authorization.startsWith('Bearer')
       ) {
         token = req?.headers?.authorization.split(' ')[1];
-        if (!`${ENV.JWT.secret}`) {
+        if (!`${ENV.JWT.SECRET}`) {
           throwError('SERVER JWT PASSWORD NOT SET', StatusCodes.BAD_REQUEST);
         }
         if (token) {
-          const decoded = jwt.verify(
-            token,
-            `${ENV.JWT.secret}`
-          ) as {
+          const decoded = jwt.verify(token, `${ENV.JWT.SECRET}`) as {
             id: string;
           };
           req.authId = decoded.id;
