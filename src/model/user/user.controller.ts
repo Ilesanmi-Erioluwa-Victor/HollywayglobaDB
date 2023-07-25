@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../helper/utils';
 import { ValidateMongoDbId } from '../../helper/utils';
 import { generateToken } from '../../helper/utils';
-import { prisma } from '../../config/db';
+import { prisma } from '../../configurations/db';
 import { createAccountVerificationToken } from '../../helper/utils';
 import { sendMail, sendUserToken } from '../../templates/sendMail';
 import { generatePasswordResetToken } from '../../helper/utils';
