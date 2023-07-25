@@ -1,24 +1,17 @@
-import mongoose from 'mongoose';
-
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
 import dotenv from 'dotenv';
 import { throwError } from '../../middlewares/cacheError';
 import { StatusCodes } from 'http-status-codes';
-import { catchAsync } from '../../utils/catchAsync';
-import ValidateMongoDbId from '../../utils/ValidateMongoId';
-import generateToken from '../../config/generateToken/token';
+import { catchAsync } from '../../helper/utils/catchAsync';
+import ValidateMongoDbId from '../../helper/utils/ValidateMongoId';
+import generateToken from '../../helper/token';
 import { prisma } from '../../prisma';
-import { UserModel } from './model.user';
 import { createAccountVerificationToken } from '../../helper/createAccountverification';
-import { sendMail, sendUserToken } from '../../helper/sendMail';
+import { sendMail, sendUserToken } from '../../templates/sendMail';
 import generatePasswordResetToken from '../../helper/generatePasswordResetToken';
-// import { hashedPassword } from '../../helper/hashedPassword';
 
 dotenv.config();
-
 interface CustomRequest extends Request {
   authId?: string; // Replace 'any' with the appropriate type for the user object
 }
@@ -379,19 +372,17 @@ export const reset_password: RequestHandler = catchAsync(
         );
       }
 
-           if (!password) {
-          throwError(
-            'Please, provide password for reset',
-            StatusCodes.BAD_REQUEST
-          );
+      if (!password) {
+        throwError(
+          'Please, provide password for reset',
+          StatusCodes.BAD_REQUEST
+        );
       }
-      
+
       const resetTokenData: any = await prisma.passwordResetToken.findUnique({
         where: { token },
         include: { user: true },
       });
-
-      console.log(resetTokenData)
       if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
         throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
       }

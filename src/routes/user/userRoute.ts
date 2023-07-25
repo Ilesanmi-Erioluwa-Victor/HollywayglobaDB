@@ -1,4 +1,7 @@
-import { AuthMiddleWare, isUserVerified } from './../../middlewares/authToken';
+import {
+  AuthMiddleWare,
+  isUserVerified,
+} from '../../middlewares/auth/authToken';
 import express from 'express';
 import {
   create_user,
@@ -24,10 +27,20 @@ userRouter.put('/reset_password/:token', reset_password);
 
 // userRouter.post('/sendmail/:id', AuthMiddleWare, generate_verification);
 userRouter.put('/verify_account/:token', account_verification);
-userRouter.get('/', AuthMiddleWare,isUserVerified, get_users);
-userRouter.get('/:id', AuthMiddleWare,isUserVerified, get_user);
-userRouter.delete('/:id', AuthMiddleWare,isUserVerified, delete_user);
-userRouter.put('/password/:id', AuthMiddleWare,isUserVerified, update_password);
-userRouter.put('/update_profile/:id', AuthMiddleWare,isUserVerified, update_user);
+userRouter.get('/', AuthMiddleWare, isUserVerified, get_users);
+userRouter.get('/:id', AuthMiddleWare, isUserVerified, get_user);
+userRouter.delete('/:id', AuthMiddleWare, isUserVerified, delete_user);
+userRouter.put(
+  '/password/:id',
+  AuthMiddleWare,
+  isUserVerified,
+  update_password
+);
+userRouter.put(
+  '/update_profile/:id',
+  AuthMiddleWare,
+  isUserVerified,
+  update_user
+);
 
 export default userRouter;

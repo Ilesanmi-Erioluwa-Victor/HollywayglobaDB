@@ -1,51 +1,54 @@
-import crypto from "node:crypto";
-import { AdminModel } from "./model.admin";
-import { RequestHandler, Response, Request, NextFunction } from "express";
-import { StatusCodes } from "http-status-codes";
-import { Jwt } from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { catchAsync } from '../../utils/catchAsync'
-import { throwError } from "../../middlewares/cacheError";
+import crypto from 'node:crypto';
+import { AdminModel } from './model.admin';
+import { RequestHandler, Response, Request, NextFunction } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { Jwt } from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import { catchAsync } from '../../helper/utils/catchAsync';
+import { throwError } from '../../middlewares/cacheError';
 
-export const signUp : RequestHandler = catchAsync(async (req : Request, res : Response, next : NextFunction) => {
-       const { email } = req.body;
+export const signUp: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
 
     try {
-        if(await AdminModel?.emailTaken(email)) throwError("You are already an admin, please,kindly log into your account", StatusCodes.CONFLICT)
+      if (await AdminModel?.emailTaken(email))
+        throwError(
+          'You are already an admin, please,kindly log into your account',
+          StatusCodes.CONFLICT
+        );
 
-          const admin = AdminModel.create({
-            email: req.body.email,
-            password: req.body.password,
-            username: req.body.username,
-          });
+      const admin = AdminModel.create({
+        email: req.body.email,
+        password: req.body.password,
+        username: req.body.username,
+      });
 
-
-          res.status(201).json({
-            message : "admin account created successfully",
-            status :"Success"
-          })
-    } catch (error : any) {
-        next(error)
+      res.status(201).json({
+        message: 'admin account created successfully',
+        status: 'Success',
+      });
+    } catch (error: any) {
+      next(error);
     }
-})
+  }
+);
 
-export const login : RequestHandler = catchAsync( async (req : Request, res : Response, next : NextFunction) =>{
-  const { email, password } = req.body;
-  try {
+export const login: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+    try {
+      const admin = await AdminModel.findOne({ email: email });
 
-    const admin = await AdminModel.findOne({ email: email });
+      // if (admin && (await admin.isPasswordMatched(password))) {
+      //   res.json({
+      //     _id: admin?._id,
+      //     token: generateToken(admin?._id),
+      //   });
+      // } else {
+      //   res.status(401); throwError(`Login Failed, invalid credentials..`, StatusCodes.BAD_REQUEST);
 
-    // if (admin && (await admin.isPasswordMatched(password))) {
-    //   res.json({
-    //     _id: admin?._id,
-    //     token: generateToken(admin?._id),
-    //   });
-    // } else {
-    //   res.status(401); throwError(`Login Failed, invalid credentials..`, StatusCodes.BAD_REQUEST);
-    
-    // }
-  } catch (error) {
-    
-    }
-  
-})
+      // }
+    } catch (error) {}
+  }
+);

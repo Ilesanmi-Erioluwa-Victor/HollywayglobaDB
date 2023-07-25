@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import { throwError } from './cacheError';
+import { throwError } from '../cacheError';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { catchAsync } from '../utils/catchAsync';
+import { catchAsync } from '../../helper/utils';
 import { StatusCodes } from 'http-status-codes';
-import { prisma } from '../prisma';
-import ValidateMongoDbId from '../utils/ValidateMongoId';
+import { prisma } from '../../prisma';
+import { ValidateMongoDbId } from '../../helper/utils';
 
 dotenv.config();
 
