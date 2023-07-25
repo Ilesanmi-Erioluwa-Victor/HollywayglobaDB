@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { throwError } from '../middlewares/error/cacheError';
 import { StatusCodes } from 'http-status-codes';
-import { prisma } from '../prisma';
+import { prisma } from '../config/prisma';
 
 dotenv.config();
 

@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { prisma } from '../prisma';
+import { prisma } from '../config/prisma';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 

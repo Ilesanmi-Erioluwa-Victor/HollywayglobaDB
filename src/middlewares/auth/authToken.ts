@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { catchAsync } from '../../helper/utils';
 import { StatusCodes } from 'http-status-codes';
-import { prisma } from '../../prisma';
+import { prisma } from '../../config/prisma';
 import { ValidateMongoDbId } from '../../helper/utils';
 
 dotenv.config();
