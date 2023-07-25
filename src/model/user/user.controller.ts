@@ -9,10 +9,8 @@ import { prisma } from '../../configurations/db';
 import { createAccountVerificationToken } from '../../helper/utils';
 import { sendMail, sendUserToken } from '../../templates/sendMail';
 import { generatePasswordResetToken } from '../../helper/utils';
+import { CustomRequest } from '../../interfaces/custom';
 
-interface CustomRequest extends Request {
-  authId?: string; // Replace 'any' with the appropriate type for the user object
-}
 
 export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

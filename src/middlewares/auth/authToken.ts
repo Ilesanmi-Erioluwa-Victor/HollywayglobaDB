@@ -6,9 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../../configurations/db';
 import { ValidateMongoDbId } from '../../helper/utils';
 import { ENV } from '../../configurations/config';
-interface CustomRequest extends Request {
-  authId?: string;
-}
+import { CustomRequest } from '../../interfaces/custom';
 
 export const AuthMiddleWare = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -46,12 +44,9 @@ export const AuthMiddleWare = catchAsync(
   }
 );
 
-interface CustomUser extends Request {
-  authId?: string;
-}
 
 export const isUserVerified = catchAsync(
-  async (req: CustomUser, res: Response, next: NextFunction) => {
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const id: string | any = req?.authId;
       ValidateMongoDbId(id);
