@@ -1,15 +1,15 @@
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { throwError } from '../../middlewares/cacheError';
+import { throwError } from '../../middlewares/error/cacheError';
 import { StatusCodes } from 'http-status-codes';
-import { catchAsync } from '../../helper/utils/catchAsync';
-import ValidateMongoDbId from '../../helper/utils/ValidateMongoId';
-import generateToken from '../../helper/token';
+import { catchAsync } from '../../helper/utils';
+import { ValidateMongoDbId } from '../../helper/utils';
+import { generateToken } from '../../helper/utils';
 import { prisma } from '../../prisma';
-import { createAccountVerificationToken } from '../../helper/createAccountverification';
+import { createAccountVerificationToken } from '../../helper/utils';
 import { sendMail, sendUserToken } from '../../templates/sendMail';
-import generatePasswordResetToken from '../../helper/generatePasswordResetToken';
+import { generatePasswordResetToken } from '../../helper/utils';
 
 dotenv.config();
 interface CustomRequest extends Request {

@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Jwt } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { catchAsync } from '../../helper/utils/catchAsync';
-import { throwError } from '../../middlewares/cacheError';
+import { throwError } from '../../middlewares/error/cacheError';
 
 export const signUp: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

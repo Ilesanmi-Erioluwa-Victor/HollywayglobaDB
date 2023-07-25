@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { throwError } from '../cacheError';
+import { throwError } from '../error/cacheError';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { catchAsync } from '../../helper/utils';

@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { throwError } from '../middlewares/cacheError';
+import { throwError } from '../middlewares/error/cacheError';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../prisma';
 

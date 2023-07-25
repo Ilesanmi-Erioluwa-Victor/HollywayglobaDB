@@ -8,7 +8,7 @@ dotenv.config();
 import adminRouter from './routes/admin/adminRoute';
 import userRouter from './routes/user/userRoute';
 import { requestErrorInterface } from './interfaces/requestErrorInterface';
-import { pageNotFound } from './middlewares/_404';
+import { pageNotFound } from './middlewares/error/_404';
 
 const app: Application = express();
 
