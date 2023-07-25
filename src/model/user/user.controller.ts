@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
-import dotenv from 'dotenv';
 import { throwError } from '../../middlewares/error/cacheError';
 import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../helper/utils';
@@ -11,7 +10,6 @@ import { createAccountVerificationToken } from '../../helper/utils';
 import { sendMail, sendUserToken } from '../../templates/sendMail';
 import { generatePasswordResetToken } from '../../helper/utils';
 
-dotenv.config();
 interface CustomRequest extends Request {
   authId?: string; // Replace 'any' with the appropriate type for the user object
 }
