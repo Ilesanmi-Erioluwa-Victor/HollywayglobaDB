@@ -1,15 +1,13 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
 import path from 'path';
-dotenv.config();
 
 import adminRouter from './routes/admin/adminRoute';
 import userRouter from './routes/user/userRoute';
 import { requestErrorInterface } from './interfaces/requestErrorInterface';
 import { pageNotFound } from './middlewares/error/_404';
-
+import { ENV } from './configurations/config';
 const app: Application = express();
 
 app.use(cors());
@@ -51,7 +49,7 @@ app.get('/', function (req, res) {
 const startConnection = async () => {
   try {
     app.listen(process.env.PORT || 5000, () => {
-      console.log(`App running on port ${process.env.PORT || 8080}`);
+      console.log(`App running on port ${ENV.PORT.PORT || 8080}`);
     });
   } catch (error: any) {
     console.log(error.message);
