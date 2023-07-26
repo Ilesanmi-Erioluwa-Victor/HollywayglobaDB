@@ -17,9 +17,9 @@ const db_1 = require("../../configurations/db");
 exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, name } = req.body;
     try {
-        if (yield db_1.prisma.admin.findUnique({
+        if (yield db_1.prisma.admin.findFirst({
             where: {
-                email,
+                email: email,
             },
         }))
             next((0, cacheError_1.throwError)('You are already an admin, please,kindly log into your account', http_status_codes_1.StatusCodes.CONFLICT));

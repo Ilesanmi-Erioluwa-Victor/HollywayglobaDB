@@ -11,9 +11,9 @@ export const adminSignUp: RequestHandler = catchAsync(
 
     try {
       if (
-        await prisma.admin.findUnique({
+        await prisma.admin.findFirst({
           where: {
-            email,
+            email: email as string,
           },
         })
       )
