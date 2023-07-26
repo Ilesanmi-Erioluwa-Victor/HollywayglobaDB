@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { throwError } from '../error/cacheError';
 import jwt from 'jsonwebtoken';
 import { catchAsync } from '../../helper/utils';
-import { BAD_REQUEST, StatusCodes } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../../configurations/db';
 import { ValidateMongoDbId } from '../../helper/utils';
 import { ENV } from '../../configurations/config';
@@ -79,7 +79,7 @@ export const adminRole = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const authId = req?.authId;
-      console.log(authId);
+      console.log(req?.role);
       const adminId = req?.params?.id;
       console.log(adminId);
       ValidateMongoDbId(authId as string);

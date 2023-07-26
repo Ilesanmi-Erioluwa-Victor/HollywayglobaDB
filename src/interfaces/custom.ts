@@ -2,6 +2,7 @@ import { Request } from 'express';
 
 export interface CustomRequest extends Request {
   authId?: string;
+  role?: string;
 }
 
 export interface Admin {

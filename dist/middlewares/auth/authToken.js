@@ -74,7 +74,7 @@ exports.adminRole = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0
     var _c;
     try {
         const authId = req === null || req === void 0 ? void 0 : req.authId;
-        console.log(authId);
+        console.log(req === null || req === void 0 ? void 0 : req.role);
         const adminId = (_c = req === null || req === void 0 ? void 0 : req.params) === null || _c === void 0 ? void 0 : _c.id;
         console.log(adminId);
         (0, utils_2.ValidateMongoDbId)(authId);
