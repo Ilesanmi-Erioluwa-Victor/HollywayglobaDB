@@ -103,6 +103,23 @@ export const adminSignIn: RequestHandler = catchAsync(
   }
 );
 
+export const get_users: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const users = await prisma.user.findMany();
+      res.json({
+        length: users.length,
+        users,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
 export const adminAccount_Verification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.params;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adminAccount_Verification = exports.adminSignIn = exports.adminSignUp = void 0;
+exports.adminAccount_Verification = exports.get_users = exports.adminSignIn = exports.adminSignUp = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const utils_1 = require("../../helper/utils");
@@ -79,6 +79,21 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
             res.status(401);
             (0, cacheError_1.throwError)(`Login Failed, invalid credentials..`, http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.get_users = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield db_1.prisma.user.findMany();
+        res.json({
+            length: users.length,
+            users,
+        });
     }
     catch (error) {
         if (!error.statusCode) {

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reset_password = exports.forget_password_token = exports.account_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
+exports.reset_password = exports.forget_password_token = exports.account_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const cacheError_1 = require("../../middlewares/error/cacheError");
 const http_status_codes_1 = require("http-status-codes");
@@ -87,21 +87,6 @@ exports.login_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
         else {
             (0, cacheError_1.throwError)('Login Failed, invalid credentials', http_status_codes_1.StatusCodes.UNAUTHORIZED);
         }
-    }
-    catch (error) {
-        if (!error.statusCode) {
-            error.statusCode = 500;
-        }
-        next(error);
-    }
-}));
-exports.get_users = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const users = yield db_1.prisma.user.findMany();
-        res.json({
-            length: users.length,
-            users,
-        });
     }
     catch (error) {
         if (!error.statusCode) {

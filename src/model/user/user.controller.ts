@@ -108,22 +108,6 @@ export const login_user: RequestHandler = catchAsync(
   }
 );
 
-export const get_users: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const users = await prisma.user.findMany();
-      res.json({
-        length: users.length,
-        users,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
 
 export const delete_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
