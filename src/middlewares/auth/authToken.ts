@@ -79,7 +79,9 @@ export const adminRole = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const authId = req?.authId;
+      console.log(authId)
       const adminId = req?.params?.id;
+      console.log(adminId)
       ValidateMongoDbId(authId as string);
       ValidateMongoDbId(adminId);
 
