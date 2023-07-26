@@ -206,7 +206,7 @@ export const update_user = catchAsync(
       );
     }
     try {
-      const userprofile: string | any = await prisma.user.update({
+      const userprofile = await prisma.user.update({
         where: {
           id,
         },
