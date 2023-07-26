@@ -97,7 +97,7 @@ export const adminSignIn: RequestHandler = catchAsync(
         );
       }
     } catch (error: any) {
-         if (!error.statusCode) {
+      if (!error.statusCode) {
         error.statusCode = 500;
       }
       next(error);
@@ -105,7 +105,7 @@ export const adminSignIn: RequestHandler = catchAsync(
   }
 );
 
-export const account_verification: RequestHandler = catchAsync(
+export const adminAccount_Verification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.params;
     try {

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.account_verification = exports.adminSignIn = exports.adminSignUp = void 0;
+exports.adminAccount_Verification = exports.adminSignIn = exports.adminSignUp = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const utils_1 = require("../../helper/utils");
@@ -89,7 +89,7 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
         next(error);
     }
 }));
-exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.adminAccount_Verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.params;
     try {
         const user = yield db_1.prisma.user.findFirst({
