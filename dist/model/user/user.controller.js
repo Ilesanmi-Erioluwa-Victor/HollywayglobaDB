@@ -297,6 +297,7 @@ exports.forget_password_token = (0, utils_1.catchAsync)((req, res, next) => __aw
     }
 }));
 exports.reset_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     const { token } = req === null || req === void 0 ? void 0 : req.params;
     const { password } = req.body;
     try {
@@ -316,13 +317,13 @@ exports.reset_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
         yield db_1.prisma.user.update({
-            where: { id: resetTokenData.user.id },
+            where: { id: (_b = resetTokenData === null || resetTokenData === void 0 ? void 0 : resetTokenData.user) === null || _b === void 0 ? void 0 : _b.id },
             data: {
                 password: hashedPassword,
             },
         });
         yield db_1.prisma.passwordResetToken.delete({
-            where: { id: resetTokenData.id },
+            where: { id: resetTokenData === null || resetTokenData === void 0 ? void 0 : resetTokenData.id },
         });
         res.json({
             message: 'Password reset successful, login now',

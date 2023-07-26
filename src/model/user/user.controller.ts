@@ -376,7 +376,7 @@ export const reset_password: RequestHandler = catchAsync(
         );
       }
 
-      const resetTokenData: any = await prisma.passwordResetToken.findUnique({
+      const resetTokenData = await prisma.passwordResetToken.findUnique({
         where: { token },
         include: { user: true },
       });
@@ -384,18 +384,18 @@ export const reset_password: RequestHandler = catchAsync(
         throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
       }
 
-      const salt: string = await bcrypt.genSalt(10);
-      const hashedPassword: string = await bcrypt.hash(password, salt);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
       await prisma.user.update({
-        where: { id: resetTokenData.user.id },
+        where: { id: resetTokenData?.user?.id },
         data: {
           password: hashedPassword,
         },
       });
 
       await prisma.passwordResetToken.delete({
-        where: { id: resetTokenData.id },
+        where: { id: resetTokenData?.id },
       });
 
       res.json({
