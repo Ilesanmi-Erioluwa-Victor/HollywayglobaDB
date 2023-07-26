@@ -24,7 +24,7 @@ export const AuthMiddleWare = catchAsync(
         if (token) {
           const decoded = jwt.verify(token, `${ENV.JWT.SECRET}`) as {
             id: string;
-            role : string
+            role: string;
           };
           req.authId = decoded.id;
         }
@@ -105,15 +105,16 @@ export const adminRole = catchAsync(
             'Please, verify your gmail, before you cam perform this operation',
             StatusCodes.BAD_REQUEST
           )
-        ); else if (admin?.role.includes(admin?.role.toString()) === false) {
+        );
+      else if (admin?.role.includes(admin?.role.toString()) === false) {
         throwError(
           'Sorry, You cant perform this operation....',
           StatusCodes.BAD_REQUEST
         );
-      } 
-console.log(admin?.role.includes(admin?.role.toString()));
+      }
+      console.log(admin?.role.includes(admin?.role.toString()));
       // if else {
-        
+
       // }
 
       next();
