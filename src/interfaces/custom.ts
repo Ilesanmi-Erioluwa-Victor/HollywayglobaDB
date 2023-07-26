@@ -12,7 +12,7 @@ export interface Admin {
   id?: string;
 }
 
-export interface loginUser {
+export interface loginAdmin {
   id: string;
   name: string;
   email: string;

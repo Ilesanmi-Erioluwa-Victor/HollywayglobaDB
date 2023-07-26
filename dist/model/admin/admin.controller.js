@@ -63,14 +63,11 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
         if (!admin) {
             (0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
-        //  if (await bcrypt.compare(password, admin?.password)) {
-        //    if (!admin.isAccountVerified) {
-        //      throwError(
-        //        'Verify your account in your gmail before you can log in',
-        //        StatusCodes.BAD_REQUEST
-        //      );
-        //    }
-        //  }
+        if (yield bcryptjs_1.default.compare(password, admin === null || admin === void 0 ? void 0 : admin.password)) {
+            if (!admin.isAccountVerified) {
+                (0, cacheError_1.throwError)('Verify your account in your gmail before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
+            }
+        }
         else {
             res.status(401);
             (0, cacheError_1.throwError)(`Login Failed, invalid credentials..`, http_status_codes_1.StatusCodes.BAD_REQUEST);

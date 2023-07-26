@@ -8,7 +8,7 @@ import {
 } from '../../helper/utils';
 import { throwError } from '../../middlewares/error/cacheError';
 import { prisma } from '../../configurations/db';
-import { Admin } from './../../interfaces/custom';
+import { Admin, loginAdmin } from './../../interfaces/custom';
 import { sendMailAdmin } from '../../templates/sendMail';
 
 export const adminSignUp: RequestHandler = catchAsync(
@@ -64,7 +64,7 @@ export const adminSignIn: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
-      const admin = await prisma.admin.findUnique({
+      const admin : loginAdmin | any = await prisma.admin.findUnique({
         where: {
           email: email as string,
         },
@@ -74,14 +74,14 @@ export const adminSignIn: RequestHandler = catchAsync(
        throwError('No user found', StatusCodes.BAD_REQUEST);
      }
 
-    //  if (await bcrypt.compare(password, admin?.password)) {
-    //    if (!admin.isAccountVerified) {
-    //      throwError(
-    //        'Verify your account in your gmail before you can log in',
-    //        StatusCodes.BAD_REQUEST
-    //      );
-    //    }
-    //  }
+     if (await bcrypt.compare(password, admin?.password)) {
+       if (!admin.isAccountVerified) {
+         throwError(
+           'Verify your account in your gmail before you can log in',
+           StatusCodes.BAD_REQUEST
+         );
+       }
+     }
      else {
        res.status(401);
        throwError(
