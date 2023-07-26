@@ -61,7 +61,6 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
                 email,
             },
         }));
-        console.log(admin);
         if (!admin) {
             (0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
@@ -83,5 +82,10 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
             (0, cacheError_1.throwError)(`Login Failed, invalid credentials..`, http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
     }
-    catch (error) { }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
 }));

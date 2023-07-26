@@ -70,7 +70,6 @@ export const adminSignIn: RequestHandler = catchAsync(
           email,
         },
       });
-      console.log(admin);
       if (!admin) {
         throwError('No user found', StatusCodes.BAD_REQUEST);
       }
@@ -97,6 +96,11 @@ export const adminSignIn: RequestHandler = catchAsync(
           StatusCodes.BAD_REQUEST
         );
       }
-    } catch (error) {}
+    } catch (error: any) {
+         if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
 );
