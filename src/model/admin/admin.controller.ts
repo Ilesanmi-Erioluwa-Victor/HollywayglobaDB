@@ -65,7 +65,7 @@ export const adminSignIn: RequestHandler = catchAsync(
     const { email, password } = req.body;
 
     try {
-      const admin: loginAdmin | any = await prisma.admin.findUnique({
+      const admin: loginAdmin | any = await prisma.admin?.findUnique({
         where: {
           email,
         },
@@ -82,6 +82,14 @@ export const adminSignIn: RequestHandler = catchAsync(
             StatusCodes.BAD_REQUEST
           );
         }
+        res.json({
+          id: admin?.id,
+          firstName: admin.firstName,
+          lastName: admin.lastName,
+          email: admin.email,
+          profilePhoto: admin.profilePhoto,
+          token: generateToken(admin?.id),
+        });
       } else {
         res.status(401);
         throwError(

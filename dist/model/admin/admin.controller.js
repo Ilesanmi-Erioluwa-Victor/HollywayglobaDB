@@ -53,13 +53,14 @@ exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
     }
 }));
 exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { email, password } = req.body;
     try {
-        const admin = yield db_1.prisma.admin.findUnique({
+        const admin = yield ((_a = db_1.prisma.admin) === null || _a === void 0 ? void 0 : _a.findUnique({
             where: {
                 email,
             },
-        });
+        }));
         console.log(admin);
         if (!admin) {
             (0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST);
@@ -68,6 +69,14 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
             if (!admin.isAccountVerified) {
                 (0, cacheError_1.throwError)('Verify your account in your gmail before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
+            res.json({
+                id: admin === null || admin === void 0 ? void 0 : admin.id,
+                firstName: admin.firstName,
+                lastName: admin.lastName,
+                email: admin.email,
+                profilePhoto: admin.profilePhoto,
+                token: (0, utils_1.generateToken)(admin === null || admin === void 0 ? void 0 : admin.id),
+            });
         }
         else {
             res.status(401);
