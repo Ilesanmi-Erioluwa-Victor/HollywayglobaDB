@@ -10,7 +10,7 @@ import { createAccountVerificationToken } from '../../helper/utils';
 import { sendMail, sendUserToken } from '../../templates/sendMail';
 import { generatePasswordResetToken } from '../../helper/utils';
 import { CustomRequest } from '../../interfaces/custom';
-import { User, loginUser } from '../../interfaces/custom';
+import { signupUser, loginUser } from '../../interfaces/custom';
 
 export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -37,16 +37,16 @@ export const create_user: RequestHandler = catchAsync(
       const salt: string = await bcrypt.genSalt(10);
       const hashedPassword: string = await bcrypt.hash(password, salt);
 
-      const user = await prisma.user.create({
+      const user: signupUser = await prisma.user.create({
         data: {
-          firstName: firstName as string,
-          lastName: lastName as string,
-          email: email as string,
+          firstName,
+          lastName,
+          email,
           password: hashedPassword,
-          mobile: mobile as string,
+          mobile
         },
       });
-      generateToken(user?.id);
+      generateToken(user?.id as string);
       const tokenUser = await createAccountVerificationToken(user?.id);
       await sendMail(tokenUser, req, res, next);
 

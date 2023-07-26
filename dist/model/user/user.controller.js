@@ -37,11 +37,11 @@ exports.create_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
         const user = yield db_1.prisma.user.create({
             data: {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
+                firstName,
+                lastName,
+                email,
                 password: hashedPassword,
-                mobile: mobile,
+                mobile
             },
         });
         (0, utils_3.generateToken)(user === null || user === void 0 ? void 0 : user.id);

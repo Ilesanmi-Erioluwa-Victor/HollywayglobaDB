@@ -13,11 +13,16 @@ exports.adminSignUp = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const utils_1 = require("../../helper/utils");
 const cacheError_1 = require("../../middlewares/error/cacheError");
+const db_1 = require("../../configurations/db");
 exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, name } = req.body;
     try {
-        if (yield (AdminModel === null || AdminModel === void 0 ? void 0 : AdminModel.emailTaken(email)))
-            (0, cacheError_1.throwError)('You are already an admin, please,kindly log into your account', http_status_codes_1.StatusCodes.CONFLICT);
+        if (yield db_1.prisma.admin.findUnique({
+            where: {
+                email,
+            },
+        }))
+            next((0, cacheError_1.throwError)('You are already an admin, please,kindly log into your account', http_status_codes_1.StatusCodes.CONFLICT));
         const admin = AdminModel.create({
             email: req.body.email,
             password: req.body.password,

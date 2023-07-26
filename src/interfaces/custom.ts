@@ -26,6 +26,15 @@ export interface User {
   PasswordResetToken?: string[];
 }
 
+export interface signupUser {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobile: string;
+  password: string;
+}
+
 export interface loginUser {
   id: string;
   firstName: string;

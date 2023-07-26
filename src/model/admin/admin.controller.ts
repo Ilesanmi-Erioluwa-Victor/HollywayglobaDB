@@ -10,10 +10,18 @@ export const adminSignUp: RequestHandler = catchAsync(
     const { email, password, name } = req.body;
 
     try {
-      if (await AdminModel?.emailTaken(email))
-        throwError(
-          'You are already an admin, please,kindly log into your account',
-          StatusCodes.CONFLICT
+      if (
+        await prisma.admin.findUnique({
+          where: {
+            email,
+          },
+        })
+      )
+        next(
+          throwError(
+            'You are already an admin, please,kindly log into your account',
+            StatusCodes.CONFLICT
+          )
         );
 
       const admin = AdminModel.create({
