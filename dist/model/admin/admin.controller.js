@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adminSignIn = exports.adminSignUp = void 0;
+exports.account_verification = exports.adminSignIn = exports.adminSignUp = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const utils_1 = require("../../helper/utils");
@@ -81,6 +81,42 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
             res.status(401);
             (0, cacheError_1.throwError)(`Login Failed, invalid credentials..`, http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { token } = req.params;
+    try {
+        const user = yield db_1.prisma.user.findFirst({
+            where: {
+                accountVerificationToken: token,
+                accountVerificationTokenExpires: {
+                    gt: new Date(),
+                },
+            },
+        });
+        if (!user) {
+            (0, cacheError_1.throwError)('Token expired or something went wrong, try again', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        }
+        const updatedUser = yield db_1.prisma.user.update({
+            where: {
+                id: user === null || user === void 0 ? void 0 : user.id,
+            },
+            data: {
+                isAccountVerified: true,
+                accountVerificationToken: '',
+                accountVerificationTokenExpires: null,
+            },
+        });
+        res.json({
+            status: 'Success',
+            message: 'You have successfully, verify your account, log in now',
+        });
     }
     catch (error) {
         if (!error.statusCode) {

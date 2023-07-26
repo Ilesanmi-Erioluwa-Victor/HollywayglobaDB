@@ -104,3 +104,47 @@ export const adminSignIn: RequestHandler = catchAsync(
     }
   }
 );
+
+export const account_verification: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.params;
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          accountVerificationToken: token,
+          accountVerificationTokenExpires: {
+            gt: new Date(),
+          },
+        },
+      });
+
+      if (!user) {
+        throwError(
+          'Token expired or something went wrong, try again',
+          StatusCodes.BAD_REQUEST
+        );
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          isAccountVerified: true,
+          accountVerificationToken: '',
+          accountVerificationTokenExpires: null,
+        },
+      });
+
+      res.json({
+        status: 'Success',
+        message: 'You have successfully, verify your account, log in now',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);

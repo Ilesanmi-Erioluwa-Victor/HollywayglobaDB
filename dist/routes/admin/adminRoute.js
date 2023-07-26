@@ -8,4 +8,5 @@ const admin_controller_1 = require("../../model/admin/admin.controller");
 const adminRouter = express_1.default.Router();
 adminRouter.post("/admin_signup", admin_controller_1.adminSignUp);
 adminRouter.post('/admin_login', admin_controller_1.adminSignIn);
+adminRouter.put('/verify_account:token', admin_controller_1.adminSignIn);
 exports.default = adminRouter;
