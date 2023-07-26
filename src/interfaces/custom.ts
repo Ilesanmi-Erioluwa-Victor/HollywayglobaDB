@@ -6,6 +6,7 @@ export interface CustomRequest extends Request {
 
 export interface Admin {
   name: string;
+  password: string;
 }
 export interface User {
   id: string;
