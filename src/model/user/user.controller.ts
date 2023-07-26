@@ -316,7 +316,7 @@ export const forget_password_token: RequestHandler = catchAsync(
 
     if (!email)
       throwError(
-        'Please, provide email for you to rest your password',
+        'Please, provide email for you to reset your password',
         StatusCodes.BAD_REQUEST
       );
     const user = await prisma.user.findUnique({
