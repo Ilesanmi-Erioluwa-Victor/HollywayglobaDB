@@ -14,13 +14,12 @@ model Admin {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name   String
   email  String
-  role   Role[]
+  role   Role @default(MODERATOR)
 }
 
-model Role {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  role  Admin  @relation(fields: [roleId], references: [id])
-  roleId String @db.ObjectId
+enum Role {
+  ADMIN
+  MODERATOR
 }
 
 model User {
