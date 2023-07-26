@@ -230,7 +230,6 @@ exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(
 }));
 exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.params;
-    // console.log(token);
     try {
         const user = yield db_1.prisma.user.findFirst({
             where: {
@@ -281,7 +280,7 @@ exports.forget_password_token = (0, utils_1.catchAsync)((req, res, next) => __aw
             data: {
                 token: resetToken,
                 expirationTime,
-                userId: user.id,
+                userId: user === null || user === void 0 ? void 0 : user.id,
             },
         });
         yield (0, sendMail_1.sendUserToken)(password_reset, req, res, next);

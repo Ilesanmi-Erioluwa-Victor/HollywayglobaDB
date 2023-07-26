@@ -271,7 +271,6 @@ export const update_password = catchAsync(
 export const account_verification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.params;
-    // console.log(token);
     try {
       const user = await prisma.user.findFirst({
         where: {
@@ -319,7 +318,7 @@ export const forget_password_token: RequestHandler = catchAsync(
         'Please, provide email for you to rest your password',
         StatusCodes.BAD_REQUEST
       );
-    const user: string | any = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
@@ -339,7 +338,7 @@ export const forget_password_token: RequestHandler = catchAsync(
         data: {
           token: resetToken,
           expirationTime,
-          userId: user.id,
+          userId: user?.id as string,
         },
       });
 
