@@ -88,10 +88,12 @@ exports.adminRole = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0
             next((0, cacheError_1.throwError)('Sorry, this ID does not match', http_status_codes_1.StatusCodes.BAD_REQUEST));
         if (!(admin === null || admin === void 0 ? void 0 : admin.isAccountVerified))
             next((0, cacheError_1.throwError)('Please, verify your gmail, before you cam perform this operation', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        console.log(admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role));
-        if (!(admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role))) {
+        else if ((admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role.toString())) === false) {
             (0, cacheError_1.throwError)('Sorry, You cant perform this operation....', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
+        console.log(admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role.toString()));
+        // if else {
+        // }
         next();
     }
     catch (error) {

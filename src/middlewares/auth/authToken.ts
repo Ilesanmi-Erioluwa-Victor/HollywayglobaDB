@@ -105,14 +105,16 @@ export const adminRole = catchAsync(
             'Please, verify your gmail, before you cam perform this operation',
             StatusCodes.BAD_REQUEST
           )
-        );
-console.log(admin?.role.includes(admin?.role));
-      if (!admin?.role.includes(admin?.role)) {
+        ); else if (admin?.role.includes(admin?.role.toString()) === false) {
         throwError(
           'Sorry, You cant perform this operation....',
           StatusCodes.BAD_REQUEST
         );
-      }
+      } 
+console.log(admin?.role.includes(admin?.role.toString()));
+      // if else {
+        
+      // }
 
       next();
     } catch (error: any) {
