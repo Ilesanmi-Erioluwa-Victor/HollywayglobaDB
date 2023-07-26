@@ -15,12 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
-dotenv_1.default.config();
 const adminRoute_1 = __importDefault(require("./routes/admin/adminRoute"));
 const userRoute_1 = __importDefault(require("./routes/user/userRoute"));
-const _404_1 = require("./middlewares/_404");
+const _404_1 = require("./middlewares/error/_404");
+const config_1 = require("./configurations/config");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
@@ -58,7 +57,7 @@ app.get('/', function (req, res) {
 const startConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         app.listen(process.env.PORT || 5000, () => {
-            console.log(`App running on port ${process.env.PORT || 8080}`);
+            console.log(`App running on port ${config_1.ENV.PORT.PORT || 8080}`);
         });
     }
     catch (error) {

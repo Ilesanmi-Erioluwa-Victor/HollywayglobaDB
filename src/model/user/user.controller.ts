@@ -10,7 +10,7 @@ import { createAccountVerificationToken } from '../../helper/utils';
 import { sendMail, sendUserToken } from '../../templates/sendMail';
 import { generatePasswordResetToken } from '../../helper/utils';
 import { CustomRequest } from '../../interfaces/custom';
-
+import { User, loginUser } from '../../interfaces/custom';
 
 export const create_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -47,7 +47,7 @@ export const create_user: RequestHandler = catchAsync(
         },
       });
       generateToken(user?.id);
-      const tokenUser: any = await createAccountVerificationToken(user?.id);
+      const tokenUser = await createAccountVerificationToken(user?.id);
       await sendMail(tokenUser, req, res, next);
 
       res.status(StatusCodes.CREATED).json({
@@ -67,17 +67,19 @@ export const login_user: RequestHandler = catchAsync(
     const { email, password } = req.body;
 
     try {
-      const exist_user: any = await prisma.user.findUnique({
+      const exist_user: loginUser | any= await prisma.user?.findUnique({
         where: {
           email: email,
         },
       });
 
+      console.log(exist_user);
+
       if (!exist_user) {
         throwError('No user found', StatusCodes.BAD_REQUEST);
       }
 
-      if (await bcrypt.compare(password, exist_user.password)) {
+      if (await bcrypt.compare(password, exist_user?.password)) {
         if (!exist_user.isAccountVerified) {
           throwError(
             'Verify your account in your gmail before you can log in',
@@ -127,7 +129,7 @@ export const get_users: RequestHandler = catchAsync(
 
 export const delete_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id }: any = req?.params;
+    const { id } = req?.params;
     ValidateMongoDbId(id);
     //TODO i want to write logic to deleted permanently if active
     // is false for two months

@@ -14,31 +14,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reset_password = exports.forget_password_token = exports.account_verification = exports.update_password = exports.update_user = exports.get_user = exports.delete_user = exports.get_users = exports.login_user = exports.create_user = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const cacheError_1 = require("../../middlewares/cacheError");
+const cacheError_1 = require("../../middlewares/error/cacheError");
 const http_status_codes_1 = require("http-status-codes");
-const catchAsync_1 = require("../../utils/catchAsync");
-const ValidateMongoId_1 = __importDefault(require("../../utils/ValidateMongoId"));
-const token_1 = __importDefault(require("../../config/generateToken/token"));
-const prisma_1 = require("../../prisma");
-const createAccountverification_1 = require("../../helper/createAccountverification");
-const sendMail_1 = require("../../helper/sendMail");
-const generatePasswordResetToken_1 = __importDefault(require("../../helper/generatePasswordResetToken"));
-// import { hashedPassword } from '../../helper/hashedPassword';
-dotenv_1.default.config();
-exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const utils_1 = require("../../helper/utils");
+const utils_2 = require("../../helper/utils");
+const utils_3 = require("../../helper/utils");
+const db_1 = require("../../configurations/db");
+const utils_4 = require("../../helper/utils");
+const sendMail_1 = require("../../templates/sendMail");
+const utils_5 = require("../../helper/utils");
+exports.create_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstName, lastName, password, email, mobile } = req.body;
         if (!firstName || !lastName || !password || !email || !mobile)
             return next((0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        const exist_user = yield prisma_1.prisma.user.findUnique({ where: { email } });
+        const exist_user = yield db_1.prisma.user.findUnique({ where: { email } });
         if (exist_user) {
             return next((0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
         }
         // TODO  i will write it to it logic util later
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
-        const user = yield prisma_1.prisma.user.create({
+        const user = yield db_1.prisma.user.create({
             data: {
                 firstName: firstName,
                 lastName: lastName,
@@ -47,8 +44,8 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
                 mobile: mobile,
             },
         });
-        (0, token_1.default)(user === null || user === void 0 ? void 0 : user.id);
-        const tokenUser = yield (0, createAccountverification_1.createAccountVerificationToken)(user === null || user === void 0 ? void 0 : user.id);
+        (0, utils_3.generateToken)(user === null || user === void 0 ? void 0 : user.id);
+        const tokenUser = yield (0, utils_4.createAccountVerificationToken)(user === null || user === void 0 ? void 0 : user.id);
         yield (0, sendMail_1.sendMail)(tokenUser, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: 'You have successfully created your account, log in now',
@@ -62,18 +59,20 @@ exports.create_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
         next(error);
     }
 }));
-exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.login_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { email, password } = req.body;
     try {
-        const exist_user = yield prisma_1.prisma.user.findUnique({
+        const exist_user = yield ((_a = db_1.prisma.user) === null || _a === void 0 ? void 0 : _a.findUnique({
             where: {
                 email: email,
             },
-        });
+        }));
+        console.log(exist_user);
         if (!exist_user) {
             (0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
-        if (yield bcryptjs_1.default.compare(password, exist_user.password)) {
+        if (yield bcryptjs_1.default.compare(password, exist_user === null || exist_user === void 0 ? void 0 : exist_user.password)) {
             if (!exist_user.isAccountVerified) {
                 (0, cacheError_1.throwError)('Verify your account in your gmail before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
@@ -83,7 +82,7 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
                 lastName: exist_user.lastName,
                 email: exist_user.email,
                 profilePhoto: exist_user.profilePhoto,
-                token: (0, token_1.default)(exist_user === null || exist_user === void 0 ? void 0 : exist_user.id),
+                token: (0, utils_3.generateToken)(exist_user === null || exist_user === void 0 ? void 0 : exist_user.id),
             });
         }
         else {
@@ -97,9 +96,9 @@ exports.login_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(
         next(error);
     }
 }));
-exports.get_users = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.get_users = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield prisma_1.prisma.user.findMany();
+        const users = yield db_1.prisma.user.findMany();
         res.json({
             length: users.length,
             users,
@@ -112,13 +111,13 @@ exports.get_users = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(v
         next(error);
     }
 }));
-exports.delete_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.delete_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
-    (0, ValidateMongoId_1.default)(id);
+    (0, utils_2.ValidateMongoDbId)(id);
     //TODO i want to write logic to deleted permanently if active
     // is false for two months
     try {
-        const deleted_user = yield prisma_1.prisma.user.update({
+        const deleted_user = yield db_1.prisma.user.update({
             where: {
                 id: id,
             },
@@ -138,11 +137,11 @@ exports.delete_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
         next(error);
     }
 }));
-exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.get_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
-    (0, ValidateMongoId_1.default)(id);
+    (0, utils_2.ValidateMongoDbId)(id);
     try {
-        const user = yield prisma_1.prisma.user.findUnique({
+        const user = yield db_1.prisma.user.findUnique({
             where: {
                 id,
             },
@@ -166,16 +165,16 @@ exports.get_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(vo
 //     res.json(error.message);
 //   }
 // });
-exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.update_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
-    (0, ValidateMongoId_1.default)(id);
+    (0, utils_2.ValidateMongoDbId)(id);
     const allowedFields = ['firstName', 'lastName', 'email'];
     const unexpectedFields = Object.keys(req.body).filter((field) => !allowedFields.includes(field));
     if (unexpectedFields.length > 0) {
         (0, cacheError_1.throwError)(`Unexpected fields: ${unexpectedFields.join(', ')}, Sorry it's not part of the parameter`, http_status_codes_1.StatusCodes.BAD_REQUEST);
     }
     try {
-        const userprofile = yield prisma_1.prisma.user.update({
+        const userprofile = yield db_1.prisma.user.update({
             where: {
                 id,
             },
@@ -197,17 +196,17 @@ exports.update_user = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
         next(error);
     }
 }));
-exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req === null || req === void 0 ? void 0 : req.params;
         const { password } = req.body;
-        (0, ValidateMongoId_1.default)(id);
+        (0, utils_2.ValidateMongoDbId)(id);
         if (!password)
             (0, cacheError_1.throwError)('Please, provide password before you can change your current password', http_status_codes_1.StatusCodes.BAD_REQUEST);
         // TODO  i will write it to it logic util later
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
-        const user = yield prisma_1.prisma.user.update({
+        const user = yield db_1.prisma.user.update({
             where: {
                 id,
             },
@@ -229,11 +228,11 @@ exports.update_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         next(error);
     }
 }));
-exports.account_verification = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.params;
     // console.log(token);
     try {
-        const user = yield prisma_1.prisma.user.findFirst({
+        const user = yield db_1.prisma.user.findFirst({
             where: {
                 accountVerificationToken: token,
                 accountVerificationTokenExpires: {
@@ -244,7 +243,7 @@ exports.account_verification = (0, catchAsync_1.catchAsync)((req, res, next) => 
         if (!user) {
             (0, cacheError_1.throwError)('Token expired or something went wrong, try again', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
-        const updatedUser = yield prisma_1.prisma.user.update({
+        const updatedUser = yield db_1.prisma.user.update({
             where: {
                 id: user === null || user === void 0 ? void 0 : user.id,
             },
@@ -263,11 +262,11 @@ exports.account_verification = (0, catchAsync_1.catchAsync)((req, res, next) => 
         next(error);
     }
 }));
-exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.forget_password_token = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.body;
     if (!email)
         (0, cacheError_1.throwError)('Please, provide email for you to rest your password', http_status_codes_1.StatusCodes.BAD_REQUEST);
-    const user = yield prisma_1.prisma.user.findUnique({
+    const user = yield db_1.prisma.user.findUnique({
         where: {
             email,
         },
@@ -275,10 +274,10 @@ exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) =>
     if (!user)
         (0, cacheError_1.throwError)('No user found with provided email.., try again', http_status_codes_1.StatusCodes.NOT_FOUND);
     try {
-        const resetToken = (0, generatePasswordResetToken_1.default)();
+        const resetToken = (0, utils_5.generatePasswordResetToken)();
         const expirationTime = new Date();
         expirationTime.setHours(expirationTime.getHours() + 1);
-        const password_reset = yield prisma_1.prisma.passwordResetToken.create({
+        const password_reset = yield db_1.prisma.passwordResetToken.create({
             data: {
                 token: resetToken,
                 expirationTime,
@@ -298,7 +297,7 @@ exports.forget_password_token = (0, catchAsync_1.catchAsync)((req, res, next) =>
         next(error);
     }
 }));
-exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.reset_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req === null || req === void 0 ? void 0 : req.params;
     const { password } = req.body;
     try {
@@ -308,23 +307,22 @@ exports.reset_password = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
         if (!password) {
             (0, cacheError_1.throwError)('Please, provide password for reset', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
-        const resetTokenData = yield prisma_1.prisma.passwordResetToken.findUnique({
+        const resetTokenData = yield db_1.prisma.passwordResetToken.findUnique({
             where: { token },
             include: { user: true },
         });
-        console.log(resetTokenData);
         if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
             (0, cacheError_1.throwError)('Invalid or expired token', http_status_codes_1.StatusCodes.NOT_FOUND);
         }
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
-        yield prisma_1.prisma.user.update({
+        yield db_1.prisma.user.update({
             where: { id: resetTokenData.user.id },
             data: {
                 password: hashedPassword,
             },
         });
-        yield prisma_1.prisma.passwordResetToken.delete({
+        yield db_1.prisma.passwordResetToken.delete({
             where: { id: resetTokenData.id },
         });
         res.json({
