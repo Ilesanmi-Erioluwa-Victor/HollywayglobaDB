@@ -134,7 +134,7 @@ export const delete_user: RequestHandler = catchAsync(
     //TODO i want to write logic to deleted permanently if active
     // is false for two months
     try {
-      const deleted_user: string | any = await prisma.user.update({
+      const deleted_user = await prisma.user.update({
         where: {
           id: id,
         },
