@@ -4,6 +4,9 @@ export interface CustomRequest extends Request {
   authId?: string;
 }
 
+export interface Admin {
+  name: string;
+}
 export interface User {
   id: string;
   firstName: string;
