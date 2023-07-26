@@ -67,7 +67,7 @@ export const login_user: RequestHandler = catchAsync(
     const { email, password } = req.body;
 
     try {
-      const exist_user: loginUser | any= await prisma.user?.findUnique({
+      const exist_user : loginUser | any= await prisma.user?.findUnique({
         where: {
           email: email,
         },
