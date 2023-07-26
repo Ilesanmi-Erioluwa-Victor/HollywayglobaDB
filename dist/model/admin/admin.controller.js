@@ -29,10 +29,12 @@ exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
         }
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
-        const admin = db_1.prisma.admin.create({
-            email,
-            password: hashedPassword,
-            name,
+        const admin = yield db_1.prisma.admin.create({
+            data: {
+                email,
+                password: hashedPassword,
+                name,
+            },
         });
         res.status(201).json({
             message: 'admin account created successfully',

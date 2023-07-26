@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../helper/utils';
 import { throwError } from '../../middlewares/error/cacheError';
 import { prisma } from '../../configurations/db';
-import { Admin } from '../../interfaces/custom';
+import { Admin } from './../../interfaces/custom';
 
 export const adminSignUp: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -31,10 +31,12 @@ export const adminSignUp: RequestHandler = catchAsync(
       const salt: string = await bcrypt.genSalt(10);
       const hashedPassword: string = await bcrypt.hash(password, salt);
 
-      const admin: Admin = prisma.admin.create({
-        email,
-        password: hashedPassword,
-        name,
+      const admin: Admin = await prisma.admin.create({
+        data: {
+          email,
+          password: hashedPassword,
+          name,
+        },
       });
 
       res.status(201).json({

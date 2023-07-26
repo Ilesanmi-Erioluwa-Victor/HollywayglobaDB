@@ -8,8 +8,6 @@ export interface Admin {
   name: string;
   password: string;
   email: string;
-  role?: string;
-  id? : string
 }
 export interface User {
   id: string;
