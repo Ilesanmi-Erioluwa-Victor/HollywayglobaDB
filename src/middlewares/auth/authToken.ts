@@ -24,6 +24,7 @@ export const AuthMiddleWare = catchAsync(
         if (token) {
           const decoded = jwt.verify(token, `${ENV.JWT.SECRET}`) as {
             id: string;
+            role : string
           };
           req.authId = decoded.id;
         }
