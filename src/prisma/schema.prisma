@@ -35,7 +35,7 @@ model AdminPasswordResetToken {
   token          String   @unique @default("")
   expirationTime DateTime
   adminId        String   @db.ObjectId
-  user           Admin    @relation(fields: [adminId], references: [id])
+  admin           Admin    @relation(fields: [adminId], references: [id])
 }
 
 model User {
