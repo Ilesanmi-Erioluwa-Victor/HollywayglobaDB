@@ -11,9 +11,16 @@ datasource db {
 }
 
 model Admin {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  email   String
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  email  String
+  role   Role[]
+}
+
+model Role {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  role  Admin  @relation(fields: [roleId], references: [id])
+  roleId String @db.ObjectId
 }
 
 model User {
@@ -46,8 +53,8 @@ model Address {
 
 model Product {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  admin       Admin    @relation(fields: [adminId], references: [id])
-  adminId     String   @db.ObjectId
+  // admin       Admin    @relation(fields: [adminId], references: [id])
+  // adminId     String   @db.ObjectId
   title       String
   slug        String   @unique
   description String
