@@ -49,7 +49,7 @@ exports.AuthMiddleWare = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
 }));
 exports.isUserVerified = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (!(req === null || req === void 0 ? void 0 : req.authId))
-        next((0, cacheError_1.throwError)("Sorry, you are not authorized", http_status_codes_1.StatusCodes.BAD_REQUEST));
+        next((0, cacheError_1.throwError)('Sorry, you are not authorized', http_status_codes_1.StatusCodes.BAD_REQUEST));
     try {
         const id = req === null || req === void 0 ? void 0 : req.authId;
         (0, utils_2.ValidateMongoDbId)(id);
@@ -82,6 +82,8 @@ exports.adminRole = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0
                 id: adminId,
             },
         });
+        if ((admin === null || admin === void 0 ? void 0 : admin.id) !== authId)
+            next((0, cacheError_1.throwError)('Sorry, this ID does not match', http_status_codes_1.StatusCodes.ACCEPTED));
         console.log(admin === null || admin === void 0 ? void 0 : admin.role);
         if (!(admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role))) {
             (0, cacheError_1.throwError)('Sorry, You cant perform this operation....', http_status_codes_1.StatusCodes.BAD_REQUEST);

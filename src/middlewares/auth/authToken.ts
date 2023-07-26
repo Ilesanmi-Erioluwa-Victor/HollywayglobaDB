@@ -46,7 +46,10 @@ export const AuthMiddleWare = catchAsync(
 
 export const isUserVerified = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    if(!req?.authId) next(throwError("Sorry, you are not authorized", StatusCodes.BAD_REQUEST))
+    if (!req?.authId)
+      next(
+        throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
+      );
     try {
       const id = req?.authId;
       ValidateMongoDbId(id as string);
@@ -77,7 +80,7 @@ export const adminRole = catchAsync(
     try {
       const authId = req?.authId;
       const adminId = req?.params?.id;
-       ValidateMongoDbId(authId as string);
+      ValidateMongoDbId(authId as string);
       ValidateMongoDbId(adminId);
 
       const admin = await prisma.admin.findUnique({
@@ -85,7 +88,10 @@ export const adminRole = catchAsync(
           id: adminId,
         },
       });
-      console.log(admin?.role); 
+
+      if (admin?.id !== authId)
+        next(throwError('Sorry, this ID does not match', StatusCodes.ACCEPTED));
+      console.log(admin?.role);
       if (!admin?.role.includes(admin?.role)) {
         throwError(
           'Sorry, You cant perform this operation....',
