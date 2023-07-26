@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { throwError } from '../error/cacheError';
 import jwt from 'jsonwebtoken';
 import { catchAsync } from '../../helper/utils';
-import { StatusCodes } from 'http-status-codes';
+import { BAD_REQUEST, StatusCodes } from 'http-status-codes';
 import { prisma } from '../../configurations/db';
 import { ValidateMongoDbId } from '../../helper/utils';
 import { ENV } from '../../configurations/config';
@@ -96,13 +96,21 @@ export const adminRole = catchAsync(
         next(
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
         );
-      console.log(admin?.role);
+
       if (!admin?.role.includes(admin?.role)) {
         throwError(
           'Sorry, You cant perform this operation....',
           StatusCodes.BAD_REQUEST
         );
       }
+
+      if (!admin?.isAccountVerified)
+        next(
+          throwError(
+            'Please, verify your gmail, before you cam perform this operation',
+            StatusCodes.BAD_REQUEST
+          )
+        );
 
       next();
     } catch (error: any) {
