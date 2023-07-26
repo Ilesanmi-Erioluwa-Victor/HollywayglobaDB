@@ -44,7 +44,6 @@ export const AuthMiddleWare = catchAsync(
   }
 );
 
-
 export const isUserVerified = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
@@ -62,6 +61,34 @@ export const isUserVerified = catchAsync(
           StatusCodes.BAD_REQUEST
         );
       }
+      next();
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
+export const adminRole = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+      const id: string | any = req?.authId;
+      ValidateMongoDbId(id);
+
+      const admin = await prisma.admin.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      if (!admin?.role.includes(admin?.role)) {
+        throwError(
+          'Sorry, You cant perform this operation....',
+          StatusCodes.BAD_REQUEST
+        );
+      }
+      console.log(admin?.role);
       next();
     } catch (error: any) {
       if (!error.statusCode) {

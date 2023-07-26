@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isUserVerified = exports.AuthMiddleWare = void 0;
+exports.adminRole = exports.isUserVerified = exports.AuthMiddleWare = void 0;
 const cacheError_1 = require("../error/cacheError");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const utils_1 = require("../../helper/utils");
@@ -59,6 +59,28 @@ exports.isUserVerified = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
         if (!(user === null || user === void 0 ? void 0 : user.isAccountVerified)) {
             (0, cacheError_1.throwError)('Sorry, your account is not verified, please check your email and verify your email', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
+        next();
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.adminRole = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req === null || req === void 0 ? void 0 : req.authId;
+        (0, utils_2.ValidateMongoDbId)(id);
+        const admin = yield db_1.prisma.admin.findUnique({
+            where: {
+                id: id,
+            },
+        });
+        if (!(admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role))) {
+            (0, cacheError_1.throwError)('Sorry, You cant perform this operation....', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        }
+        console.log(admin === null || admin === void 0 ? void 0 : admin.role);
         next();
     }
     catch (error) {
