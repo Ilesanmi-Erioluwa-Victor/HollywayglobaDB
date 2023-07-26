@@ -8,7 +8,6 @@ import {
   create_user,
   login_user,
   reset_password,
-  get_users,
   get_user,
   delete_user,
   update_user,
