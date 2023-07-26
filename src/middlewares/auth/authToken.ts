@@ -97,13 +97,6 @@ export const adminRole = catchAsync(
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
         );
 
-      if (!admin?.role.includes(admin?.role)) {
-        throwError(
-          'Sorry, You cant perform this operation....',
-          StatusCodes.BAD_REQUEST
-        );
-      }
-
       if (!admin?.isAccountVerified)
         next(
           throwError(
@@ -111,6 +104,13 @@ export const adminRole = catchAsync(
             StatusCodes.BAD_REQUEST
           )
         );
+
+      if (!admin?.role.includes(admin?.role)) {
+        throwError(
+          'Sorry, You cant perform this operation....',
+          StatusCodes.BAD_REQUEST
+        );
+      }
 
       next();
     } catch (error: any) {
