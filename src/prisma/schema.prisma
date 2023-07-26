@@ -48,7 +48,7 @@ model User {
   isBlocked                       Boolean              @default(false)
   address                         Address[]
   wishlist                        WishList[]
-  refreshToken                    String?              @default("")
+  role                            String?              @default("user")
   active                          Boolean              @default(true)
   profilePhoto                    String               @default("'https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png'")
   isAccountVerified               Boolean              @default(false)
