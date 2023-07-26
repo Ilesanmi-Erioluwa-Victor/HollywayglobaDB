@@ -5,9 +5,9 @@ import { catchAsync } from '../../helper/utils';
 import { throwError } from '../../middlewares/error/cacheError';
 import { prisma } from '../../configurations/db';
 
-export const signUp: RequestHandler = catchAsync(
+export const adminSignUp: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email } = req.body;
+    const { email, password, name } = req.body;
 
     try {
       if (await AdminModel?.emailTaken(email))
