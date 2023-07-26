@@ -29,7 +29,7 @@ export const sendMail = async (
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/verify_account/${accountVerificationToken}>Click to verify..</a>
+  )}/api/v1/user/verify_account/${accountVerificationToken}>Click to verify..</a>
        `;
 
   const mailOptions = {
@@ -74,7 +74,7 @@ export const sendUserToken = async (
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/reset_password/${
+  )}/api/v1/user/reset_password/${
     data?.token
   }>Click here to reset your password..</a>
        `;
