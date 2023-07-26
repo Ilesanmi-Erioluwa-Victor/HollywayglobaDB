@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateToken = exports.generatePasswordResetToken = exports.createAccountVerificationToken = exports.ValidateMongoDbId = exports.catchAsync = void 0;
+exports.generateToken = exports.generatePasswordResetToken = exports.createAccountVerificationTokenAdmin = exports.createAccountVerificationToken = exports.ValidateMongoDbId = exports.catchAsync = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -45,6 +45,19 @@ const createAccountVerificationToken = (userId) => __awaiter(void 0, void 0, voi
     return user;
 });
 exports.createAccountVerificationToken = createAccountVerificationToken;
+const createAccountVerificationTokenAdmin = (adminId) => __awaiter(void 0, void 0, void 0, function* () {
+    const verificationToken = crypto_1.default.randomBytes(32).toString('hex');
+    const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
+    const admin = yield db_1.prisma.admin.update({
+        where: { id: adminId },
+        data: {
+            accountVerificationToken: verificationToken,
+            accountVerificationTokenExpires: tokenExpiration,
+        },
+    });
+    return admin;
+});
+exports.createAccountVerificationTokenAdmin = createAccountVerificationTokenAdmin;
 function generatePasswordResetToken() {
     const resetToken = crypto_1.default.randomBytes(32).toString('hex');
     const expirationTime = new Date();

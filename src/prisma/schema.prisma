@@ -11,12 +11,18 @@ datasource db {
 }
 
 model Admin {
-  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
-  name                    String
-  email                   String                    @unique
-  password                String
-  role                    Role                      @default(MODERATOR)
-  AdminPasswordResetToken AdminPasswordResetToken[]
+  id                              String                    @id @default(auto()) @map("_id") @db.ObjectId
+  name                            String
+  email                           String                    @unique
+  password                        String
+  role                            Role                      @default(MODERATOR)
+  AdminPasswordResetToken         AdminPasswordResetToken[]
+  isAccountVerified               Boolean                   @default(false)
+  accountVerificationToken        String?                   @default("")
+  accountVerificationTokenExpires DateTime?                 @default(now())
+  createdAt                       DateTime                  @default(now())
+  updatedAt                       DateTime                  @updatedAt
+  v                               Int?                      @map("__v")
 }
 
 enum Role {

@@ -34,6 +34,19 @@ export const createAccountVerificationToken = async (userId: any) => {
   return user;
 };
 
+export const createAccountVerificationTokenAdmin = async (adminId: string) => {
+  const verificationToken = crypto.randomBytes(32).toString('hex');
+  const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
+  const admin = await prisma.admin.update({
+    where: { id: adminId },
+    data: {
+      accountVerificationToken: verificationToken,
+      accountVerificationTokenExpires: tokenExpiration,
+    },
+  });
+  return admin;
+};
+
 export function generatePasswordResetToken(): string {
   const resetToken = crypto.randomBytes(32).toString('hex');
   const expirationTime = new Date();
