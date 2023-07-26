@@ -159,7 +159,7 @@ export const delete_user: RequestHandler = catchAsync(
 
 export const get_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id }: string | any = req?.params;
+    const { id } = req?.params;
     ValidateMongoDbId(id);
     try {
       const user = await prisma.user.findUnique({
