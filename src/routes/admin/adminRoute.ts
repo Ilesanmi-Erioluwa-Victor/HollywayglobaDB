@@ -8,5 +8,5 @@ adminRouter.post("/admin_signup", adminSignUp);
 adminRouter.post('/admin_login', adminSignIn);
 adminRouter.put('/verify_account/:token', adminAccount_Verification);
 
-adminRouter.get('/users', AuthMiddleWare, adminRole, get_users);
+adminRouter.get('/users/:id', AuthMiddleWare, adminRole, get_users);
 export default adminRouter;

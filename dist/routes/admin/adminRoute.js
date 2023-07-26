@@ -10,5 +10,5 @@ const adminRouter = express_1.default.Router();
 adminRouter.post("/admin_signup", admin_controller_1.adminSignUp);
 adminRouter.post('/admin_login', admin_controller_1.adminSignIn);
 adminRouter.put('/verify_account/:token', admin_controller_1.adminAccount_Verification);
-adminRouter.get('/users', authToken_1.AuthMiddleWare, authToken_1.adminRole, admin_controller_1.get_users);
+adminRouter.get('/users/:id', authToken_1.AuthMiddleWare, authToken_1.adminRole, admin_controller_1.get_users);
 exports.default = adminRouter;
