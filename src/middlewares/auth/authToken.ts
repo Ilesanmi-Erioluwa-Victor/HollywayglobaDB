@@ -105,7 +105,7 @@ export const adminRole = catchAsync(
             StatusCodes.BAD_REQUEST
           )
         );
-console.log(!admin?.role.includes(admin?.role));
+console.log(admin?.role.includes(admin?.role));
       if (!admin?.role.includes(admin?.role)) {
         throwError(
           'Sorry, You cant perform this operation....',
