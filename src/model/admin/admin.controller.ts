@@ -109,7 +109,7 @@ export const adminAccount_Verification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.params;
     try {
-      const user = await prisma.user.findFirst({
+      const user = await prisma.admin.findFirst({
         where: {
           accountVerificationToken: token,
           accountVerificationTokenExpires: {

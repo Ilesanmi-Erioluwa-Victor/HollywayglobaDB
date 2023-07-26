@@ -92,7 +92,7 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
 exports.adminAccount_Verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.params;
     try {
-        const user = yield db_1.prisma.user.findFirst({
+        const user = yield db_1.prisma.admin.findFirst({
             where: {
                 accountVerificationToken: token,
                 accountVerificationTokenExpires: {
