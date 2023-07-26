@@ -70,10 +70,8 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
             }
             res.json({
                 id: admin === null || admin === void 0 ? void 0 : admin.id,
-                firstName: admin.firstName,
-                lastName: admin.lastName,
+                name: admin.name,
                 email: admin.email,
-                profilePhoto: admin.profilePhoto,
                 token: (0, utils_1.generateToken)(admin === null || admin === void 0 ? void 0 : admin.id),
             });
         }

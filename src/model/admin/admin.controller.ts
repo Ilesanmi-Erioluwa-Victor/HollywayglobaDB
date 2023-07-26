@@ -83,10 +83,8 @@ export const adminSignIn: RequestHandler = catchAsync(
         }
         res.json({
           id: admin?.id,
-          firstName: admin.firstName,
-          lastName: admin.lastName,
+          name: admin.name,
           email: admin.email,
-          profilePhoto: admin.profilePhoto,
           token: generateToken(admin?.id),
         });
       } else {
