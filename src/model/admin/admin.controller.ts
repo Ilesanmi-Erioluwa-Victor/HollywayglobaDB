@@ -1,10 +1,11 @@
 import bcrypt from 'bcryptjs';
 import { RequestHandler, Response, Request, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { catchAsync } from '../../helper/utils';
+import { catchAsync, createAccountVerificationToken, generateToken } from '../../helper/utils';
 import { throwError } from '../../middlewares/error/cacheError';
 import { prisma } from '../../configurations/db';
 import { Admin } from './../../interfaces/custom';
+import { sendMail } from '../../templates/sendMail';
 
 export const adminSignUp: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -39,11 +40,18 @@ export const adminSignUp: RequestHandler = catchAsync(
         },
       });
 
-      res.status(201).json({
-        message: 'admin account created successfully',
-        status: 'Success',
+      generateToken(admin?.id as string);
+      const tokenAdmin = await createAccountVerificationToken(admin?.id);
+      await sendMail(tokenAdmin, req, res, next);
+
+      res.status(StatusCodes.CREATED).json({
+        message: 'You have successfully created your account, log in now',
+        status: 'success',
       });
     } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
       next(error);
     }
   }
