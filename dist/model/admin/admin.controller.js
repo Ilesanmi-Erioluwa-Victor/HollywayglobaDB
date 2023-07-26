@@ -103,7 +103,7 @@ exports.adminAccount_Verification = (0, utils_1.catchAsync)((req, res, next) => 
         if (!user) {
             (0, cacheError_1.throwError)('Token expired or something went wrong, try again', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
-        const updatedUser = yield db_1.prisma.user.update({
+        const updatedUser = yield db_1.prisma.admin.update({
             where: {
                 id: user === null || user === void 0 ? void 0 : user.id,
             },

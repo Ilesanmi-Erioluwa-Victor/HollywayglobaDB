@@ -125,7 +125,7 @@ export const adminAccount_Verification: RequestHandler = catchAsync(
         );
       }
 
-      const updatedUser = await prisma.user.update({
+      const updatedUser = await prisma.admin.update({
         where: {
           id: user?.id,
         },
