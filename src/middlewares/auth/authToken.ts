@@ -79,9 +79,8 @@ export const adminRole = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const authId = req?.authId;
-      console.log(req?.role);
       const adminId = req?.params?.id;
-      console.log(adminId);
+
       ValidateMongoDbId(authId as string);
       ValidateMongoDbId(adminId);
 
@@ -106,7 +105,7 @@ export const adminRole = catchAsync(
             StatusCodes.BAD_REQUEST
           )
         );
-
+console.log(!admin?.role.includes(admin?.role));
       if (!admin?.role.includes(admin?.role)) {
         throwError(
           'Sorry, You cant perform this operation....',
