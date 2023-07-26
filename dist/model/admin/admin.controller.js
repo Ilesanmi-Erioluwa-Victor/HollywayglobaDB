@@ -15,18 +15,18 @@ const utils_1 = require("../../helper/utils");
 const cacheError_1 = require("../../middlewares/error/cacheError");
 const db_1 = require("../../configurations/db");
 exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password, name } = req.body;
     try {
-        if (yield db_1.prisma.admin.findFirst({
-            where: {
-                email: email,
-            },
-        }))
-            next((0, cacheError_1.throwError)('You are already an admin, please,kindly log into your account', http_status_codes_1.StatusCodes.CONFLICT));
-        const admin = AdminModel.create({
-            email: req.body.email,
+        const { email, password, name } = req.body;
+        if (!email || !password || !name)
+            return next((0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        const exist_admin = yield db_1.prisma.admin.findUnique({ where: { email } });
+        if (exist_admin) {
+            return next((0, cacheError_1.throwError)('You are already an admin, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
+        }
+        const admin = db_1.prisma.admin.create({
+            email,
             password: req.body.password,
-            username: req.body.username,
+            name,
         });
         res.status(201).json({
             message: 'admin account created successfully',

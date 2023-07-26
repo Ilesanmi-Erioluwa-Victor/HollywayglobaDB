@@ -12,10 +12,10 @@ datasource db {
 
 model Admin {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  email String
+  name     String
+  email    String @unique
   password String
-  role  Role   @default(MODERATOR)
+  role     Role   @default(MODERATOR)
 }
 
 enum Role {

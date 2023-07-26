@@ -4,30 +4,35 @@ import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../helper/utils';
 import { throwError } from '../../middlewares/error/cacheError';
 import { prisma } from '../../configurations/db';
+import { Admin } from '../../interfaces/custom';
 
 export const adminSignUp: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password, name } = req.body;
-
     try {
-      if (
-        await prisma.admin.findFirst({
-          where: {
-            email: email as string,
-          },
-        })
-      )
-        next(
+      const { email, password, name } = req.body;
+
+      if (!email || !password || !name)
+        return next(
           throwError(
-            'You are already an admin, please,kindly log into your account',
-            StatusCodes.CONFLICT
+            'Missing credentials, please provide all required information',
+            StatusCodes.BAD_REQUEST
           )
         );
+       const exist_admin = await prisma.admin.findUnique({ where: { email} });
+       if (exist_admin) {
+         return next(
+           throwError(
+             'You are already an admin, kindly login to your account',
+             StatusCodes.CONFLICT
+           )
+         );
+       }
+  
 
-      const admin = AdminModel.create({
-        email: req.body.email,
+      const admin: Admin = prisma.admin.create({
+        email,
         password: req.body.password,
-        username: req.body.username,
+        name,
       });
 
       res.status(201).json({
