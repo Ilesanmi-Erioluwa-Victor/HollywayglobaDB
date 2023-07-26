@@ -48,6 +48,8 @@ exports.AuthMiddleWare = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
     }
 }));
 exports.isUserVerified = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!(req === null || req === void 0 ? void 0 : req.authId))
+        next((0, cacheError_1.throwError)("Sorry, you are not authorized", http_status_codes_1.StatusCodes.BAD_REQUEST));
     try {
         const id = req === null || req === void 0 ? void 0 : req.authId;
         (0, utils_2.ValidateMongoDbId)(id);
@@ -69,18 +71,21 @@ exports.isUserVerified = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
     }
 }));
 exports.adminRole = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
     try {
-        const id = req === null || req === void 0 ? void 0 : req.authId;
-        (0, utils_2.ValidateMongoDbId)(id);
+        const authId = req === null || req === void 0 ? void 0 : req.authId;
+        const adminId = (_c = req === null || req === void 0 ? void 0 : req.params) === null || _c === void 0 ? void 0 : _c.id;
+        (0, utils_2.ValidateMongoDbId)(authId);
+        (0, utils_2.ValidateMongoDbId)(adminId);
         const admin = yield db_1.prisma.admin.findUnique({
             where: {
-                id: id,
+                id: adminId,
             },
         });
+        console.log(admin === null || admin === void 0 ? void 0 : admin.role);
         if (!(admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role))) {
             (0, cacheError_1.throwError)('Sorry, You cant perform this operation....', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
-        console.log(admin === null || admin === void 0 ? void 0 : admin.role);
         next();
     }
     catch (error) {
