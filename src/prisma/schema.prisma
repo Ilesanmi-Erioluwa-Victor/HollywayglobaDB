@@ -11,16 +11,25 @@ datasource db {
 }
 
 model Admin {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String @unique
-  password String
-  role     Role   @default(MODERATOR)
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String
+  email                   String                    @unique
+  password                String
+  role                    Role                      @default(MODERATOR)
+  AdminPasswordResetToken AdminPasswordResetToken[]
 }
 
 enum Role {
   ADMIN
   MODERATOR
+}
+
+model AdminPasswordResetToken {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  token          String   @unique @default("")
+  expirationTime DateTime
+  adminId        String   @db.ObjectId
+  user           Admin    @relation(fields: [adminId], references: [id])
 }
 
 model User {

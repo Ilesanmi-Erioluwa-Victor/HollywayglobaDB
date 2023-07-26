@@ -1,0 +1,15 @@
+{
+    "_id": "b46814a4-871b-4929-b760-ccf36b3e9851",
+    "name": "(Global Env)",
+    "default": false,
+    "global": true,
+    "sortNum": -2,
+    "created": "2023-07-26T05:28:45.517Z",
+    "modified": "2023-07-26T05:28:45.517Z",
+    "data": [
+        {
+            "name": "Hollwayglobal",
+            "value": "http://localhost:8080/api/v1/"
+        }
+    ]
+}
