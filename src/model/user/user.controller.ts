@@ -43,7 +43,7 @@ export const create_user: RequestHandler = catchAsync(
           lastName,
           email,
           password: hashedPassword,
-          mobile
+          mobile,
         },
       });
       generateToken(user?.id as string);
@@ -67,13 +67,11 @@ export const login_user: RequestHandler = catchAsync(
     const { email, password } = req.body;
 
     try {
-      const exist_user : loginUser | any= await prisma.user?.findUnique({
+      const exist_user: loginUser | any = await prisma.user?.findUnique({
         where: {
           email: email,
         },
       });
-
-      console.log(exist_user);
 
       if (!exist_user) {
         throwError('No user found', StatusCodes.BAD_REQUEST);

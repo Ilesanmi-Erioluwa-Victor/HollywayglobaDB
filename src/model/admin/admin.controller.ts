@@ -1,7 +1,11 @@
 import bcrypt from 'bcryptjs';
 import { RequestHandler, Response, Request, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { catchAsync, createAccountVerificationToken, generateToken } from '../../helper/utils';
+import {
+  catchAsync,
+  createAccountVerificationToken,
+  generateToken,
+} from '../../helper/utils';
 import { throwError } from '../../middlewares/error/cacheError';
 import { prisma } from '../../configurations/db';
 import { Admin } from './../../interfaces/custom';
@@ -39,7 +43,7 @@ export const adminSignUp: RequestHandler = catchAsync(
           name,
         },
       });
-  console.log(admin)
+      console.log(admin);
       // generateToken(admin?.id as string);
       // const tokenAdmin = await createAccountVerificationToken(admin?.id);
       // await sendMail(tokenAdmin, req, res, next);

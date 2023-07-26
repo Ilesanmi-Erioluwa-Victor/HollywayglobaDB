@@ -41,7 +41,7 @@ exports.create_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
                 lastName,
                 email,
                 password: hashedPassword,
-                mobile
+                mobile,
             },
         });
         (0, utils_3.generateToken)(user === null || user === void 0 ? void 0 : user.id);
@@ -68,7 +68,6 @@ exports.login_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
                 email: email,
             },
         }));
-        console.log(exist_user);
         if (!exist_user) {
             (0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
