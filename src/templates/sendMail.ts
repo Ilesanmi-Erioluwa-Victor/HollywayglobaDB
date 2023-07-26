@@ -115,7 +115,7 @@ export const sendMailAdmin = async (
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
     'host'
-  )}/api/v1/user/verify_account/${accountVerificationToken}>Click to verify..</a>
+  )}/api/v1/admin/verify_account/${accountVerificationToken}>Click to verify..</a>
        `;
 
   const mailOptions = {

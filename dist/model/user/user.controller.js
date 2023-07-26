@@ -251,7 +251,10 @@ exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awa
                 accountVerificationTokenExpires: null,
             },
         });
-        res.json(updatedUser);
+        res.json({
+            status: 'Success',
+            message: 'You have successfully, verify your account, log in now',
+        });
     }
     catch (error) {
         if (!error.statusCode) {

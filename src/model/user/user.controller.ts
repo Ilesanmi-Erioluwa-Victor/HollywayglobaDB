@@ -297,7 +297,10 @@ export const account_verification: RequestHandler = catchAsync(
         },
       });
 
-      res.json(updatedUser);
+      res.json({
+        status: 'Success',
+        message: 'You have successfully, verify your account, log in now',
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
