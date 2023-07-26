@@ -1,4 +1,4 @@
-import crypto from 'node:crypto';
+import bcrypt from 'bcryptjs';
 import { RequestHandler, Response, Request, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../helper/utils';
@@ -18,20 +18,22 @@ export const adminSignUp: RequestHandler = catchAsync(
             StatusCodes.BAD_REQUEST
           )
         );
-       const exist_admin = await prisma.admin.findUnique({ where: { email} });
-       if (exist_admin) {
-         return next(
-           throwError(
-             'You are already an admin, kindly login to your account',
-             StatusCodes.CONFLICT
-           )
-         );
-       }
-  
+      const exist_admin = await prisma.admin.findUnique({ where: { email } });
+      if (exist_admin) {
+        return next(
+          throwError(
+            'You are already an admin, kindly login to your account',
+            StatusCodes.CONFLICT
+          )
+        );
+      }
+
+      const salt: string = await bcrypt.genSalt(10);
+      const hashedPassword: string = await bcrypt.hash(password, salt);
 
       const admin: Admin = prisma.admin.create({
         email,
-        password: req.body.password,
+        password: hashedPassword,
         name,
       });
 

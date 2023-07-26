@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminSignUp = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const utils_1 = require("../../helper/utils");
 const cacheError_1 = require("../../middlewares/error/cacheError");
@@ -23,9 +27,11 @@ exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
         if (exist_admin) {
             return next((0, cacheError_1.throwError)('You are already an admin, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
         }
+        const salt = yield bcryptjs_1.default.genSalt(10);
+        const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
         const admin = db_1.prisma.admin.create({
             email,
-            password: req.body.password,
+            password: hashedPassword,
             name,
         });
         res.status(201).json({
