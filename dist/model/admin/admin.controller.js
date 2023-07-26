@@ -57,9 +57,10 @@ exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
     try {
         const admin = yield db_1.prisma.admin.findUnique({
             where: {
-                email: email,
+                email,
             },
         });
+        console.log(admin);
         if (!admin) {
             (0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST);
         }

@@ -17,6 +17,7 @@ export interface loginAdmin {
   name: string;
   email: string;
   password: string;
+  role?: string;
   active: boolean;
   isAccountVerified: boolean;
   accountVerificationToken: string;

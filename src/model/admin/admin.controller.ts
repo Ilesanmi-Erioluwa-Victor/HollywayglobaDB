@@ -63,32 +63,32 @@ export const adminSignUp: RequestHandler = catchAsync(
 export const adminSignIn: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
+
     try {
-      const admin : loginAdmin | any = await prisma.admin.findUnique({
+      const admin: loginAdmin | any = await prisma.admin.findUnique({
         where: {
-          email: email as string,
+          email,
         },
       });
+      console.log(admin);
+      if (!admin) {
+        throwError('No user found', StatusCodes.BAD_REQUEST);
+      }
 
-     if (!admin) {
-       throwError('No user found', StatusCodes.BAD_REQUEST);
-     }
-
-     if (await bcrypt.compare(password, admin?.password)) {
-       if (!admin.isAccountVerified) {
-         throwError(
-           'Verify your account in your gmail before you can log in',
-           StatusCodes.BAD_REQUEST
-         );
-       }
-     }
-     else {
-       res.status(401);
-       throwError(
-         `Login Failed, invalid credentials..`,
-         StatusCodes.BAD_REQUEST
-       );
-     }
+      if (await bcrypt.compare(password, admin?.password)) {
+        if (!admin.isAccountVerified) {
+          throwError(
+            'Verify your account in your gmail before you can log in',
+            StatusCodes.BAD_REQUEST
+          );
+        }
+      } else {
+        res.status(401);
+        throwError(
+          `Login Failed, invalid credentials..`,
+          StatusCodes.BAD_REQUEST
+        );
+      }
     } catch (error) {}
   }
 );
