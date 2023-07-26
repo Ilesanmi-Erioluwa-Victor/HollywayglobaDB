@@ -89,8 +89,13 @@ export const adminRole = catchAsync(
         },
       });
 
+      if (!admin)
+        next(throwError('Sorry, No user found', StatusCodes.BAD_REQUEST));
+
       if (admin?.id !== authId)
-        next(throwError('Sorry, this ID does not match', StatusCodes.ACCEPTED));
+        next(
+          throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
+        );
       console.log(admin?.role);
       if (!admin?.role.includes(admin?.role)) {
         throwError(
