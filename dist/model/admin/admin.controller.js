@@ -18,7 +18,6 @@ const http_status_codes_1 = require("http-status-codes");
 const utils_1 = require("../../helper/utils");
 const cacheError_1 = require("../../middlewares/error/cacheError");
 const db_1 = require("../../configurations/db");
-const sendMail_1 = require("../../templates/sendMail");
 exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, name } = req.body;
@@ -37,9 +36,10 @@ exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
                 name,
             },
         });
-        (0, utils_1.generateToken)(admin === null || admin === void 0 ? void 0 : admin.id);
-        const tokenAdmin = yield (0, utils_1.createAccountVerificationToken)(admin === null || admin === void 0 ? void 0 : admin.id);
-        yield (0, sendMail_1.sendMail)(tokenAdmin, req, res, next);
+        console.log(admin);
+        // generateToken(admin?.id as string);
+        // const tokenAdmin = await createAccountVerificationToken(admin?.id);
+        // await sendMail(tokenAdmin, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: 'You have successfully created your account, log in now',
             status: 'success',

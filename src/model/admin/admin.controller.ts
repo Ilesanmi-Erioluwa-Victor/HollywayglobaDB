@@ -39,10 +39,10 @@ export const adminSignUp: RequestHandler = catchAsync(
           name,
         },
       });
-
-      generateToken(admin?.id as string);
-      const tokenAdmin = await createAccountVerificationToken(admin?.id);
-      await sendMail(tokenAdmin, req, res, next);
+  console.log(admin)
+      // generateToken(admin?.id as string);
+      // const tokenAdmin = await createAccountVerificationToken(admin?.id);
+      // await sendMail(tokenAdmin, req, res, next);
 
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',

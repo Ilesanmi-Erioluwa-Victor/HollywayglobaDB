@@ -48,7 +48,7 @@ app.get('/', function (req, res) {
 
 const startConnection = async () => {
   try {
-    app.listen(process.env.PORT || 5000, () => {
+    app.listen(ENV.PORT.PORT || 5000, () => {
       console.log(`App running on port ${ENV.PORT.PORT || 8080}`);
     });
   } catch (error: any) {

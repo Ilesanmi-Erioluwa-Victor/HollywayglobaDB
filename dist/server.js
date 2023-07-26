@@ -56,7 +56,7 @@ app.get('/', function (req, res) {
 // );
 const startConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        app.listen(process.env.PORT || 5000, () => {
+        app.listen(config_1.ENV.PORT.PORT || 5000, () => {
             console.log(`App running on port ${config_1.ENV.PORT.PORT || 8080}`);
         });
     }
