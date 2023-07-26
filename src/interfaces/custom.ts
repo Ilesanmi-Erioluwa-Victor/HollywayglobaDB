@@ -11,6 +11,20 @@ export interface Admin {
   role?: string;
   id?: string;
 }
+
+export interface loginUser {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  active: boolean;
+  isAccountVerified: boolean;
+  accountVerificationToken: string;
+  accountVerificationTokenExpires?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+  v?: number;
+}
 export interface User {
   id: string;
   firstName: string;

@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adminSignUp = void 0;
+exports.adminSignIn = exports.adminSignUp = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const utils_1 = require("../../helper/utils");
 const cacheError_1 = require("../../middlewares/error/cacheError");
 const db_1 = require("../../configurations/db");
+const sendMail_1 = require("../../templates/sendMail");
 exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, name } = req.body;
@@ -36,10 +37,9 @@ exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
                 name,
             },
         });
-        console.log(admin);
-        // generateToken(admin?.id as string);
-        // const tokenAdmin = await createAccountVerificationToken(admin?.id);
-        // await sendMail(tokenAdmin, req, res, next);
+        (0, utils_1.generateToken)(admin === null || admin === void 0 ? void 0 : admin.id);
+        const tokenAdmin = yield (0, utils_1.createAccountVerificationTokenAdmin)(admin === null || admin === void 0 ? void 0 : admin.id);
+        yield (0, sendMail_1.sendMailAdmin)(tokenAdmin, req, res, next);
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: 'You have successfully created your account, log in now',
             status: 'success',
@@ -52,19 +52,29 @@ exports.adminSignUp = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
         next(error);
     }
 }));
-// export const login: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { email, password } = req.body;
-//     try {
-//       const admin = await AdminModel.findOne({ email: email });
-//       // if (admin && (await admin.isPasswordMatched(password))) {
-//       //   res.json({
-//       //     _id: admin?._id,
-//       //     token: generateToken(admin?._id),
-//       //   });
-//       // } else {
-//       //   res.status(401); throwError(`Login Failed, invalid credentials..`, StatusCodes.BAD_REQUEST);
-//       // }
-//     } catch (error) {}
-//   }
-// );
+exports.adminSignIn = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    try {
+        const admin = yield db_1.prisma.admin.findUnique({
+            where: {
+                email: email,
+            },
+        });
+        if (!admin) {
+            (0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        }
+        //  if (await bcrypt.compare(password, admin?.password)) {
+        //    if (!admin.isAccountVerified) {
+        //      throwError(
+        //        'Verify your account in your gmail before you can log in',
+        //        StatusCodes.BAD_REQUEST
+        //      );
+        //    }
+        //  }
+        else {
+            res.status(401);
+            (0, cacheError_1.throwError)(`Login Failed, invalid credentials..`, http_status_codes_1.StatusCodes.BAD_REQUEST);
+        }
+    }
+    catch (error) { }
+}));

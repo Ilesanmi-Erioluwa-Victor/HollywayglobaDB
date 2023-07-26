@@ -34,7 +34,7 @@ export const createAccountVerificationToken = async (userId: any) => {
   return user;
 };
 
-export const createAccountVerificationTokenAdmin = async (adminId: string) => {
+export const createAccountVerificationTokenAdmin = async (adminId: any) => {
   const verificationToken = crypto.randomBytes(32).toString('hex');
   const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
   const admin = await prisma.admin.update({

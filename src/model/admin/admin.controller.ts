@@ -3,13 +3,13 @@ import { RequestHandler, Response, Request, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   catchAsync,
-  createAccountVerificationToken,
+  createAccountVerificationTokenAdmin,
   generateToken,
 } from '../../helper/utils';
 import { throwError } from '../../middlewares/error/cacheError';
 import { prisma } from '../../configurations/db';
 import { Admin } from './../../interfaces/custom';
-import { sendMail } from '../../templates/sendMail';
+import { sendMailAdmin } from '../../templates/sendMail';
 
 export const adminSignUp: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -43,10 +43,9 @@ export const adminSignUp: RequestHandler = catchAsync(
           name,
         },
       });
-      console.log(admin);
-      // generateToken(admin?.id as string);
-      // const tokenAdmin = await createAccountVerificationToken(admin?.id);
-      // await sendMail(tokenAdmin, req, res, next);
+      generateToken(admin?.id as string);
+      const tokenAdmin = await createAccountVerificationTokenAdmin(admin?.id);
+      await sendMailAdmin(tokenAdmin, req, res, next);
 
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
@@ -61,21 +60,35 @@ export const adminSignUp: RequestHandler = catchAsync(
   }
 );
 
-// export const login: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { email, password } = req.body;
-//     try {
-//       const admin = await AdminModel.findOne({ email: email });
+export const adminSignIn: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+    try {
+      const admin = await prisma.admin.findUnique({
+        where: {
+          email: email as string,
+        },
+      });
 
-//       // if (admin && (await admin.isPasswordMatched(password))) {
-//       //   res.json({
-//       //     _id: admin?._id,
-//       //     token: generateToken(admin?._id),
-//       //   });
-//       // } else {
-//       //   res.status(401); throwError(`Login Failed, invalid credentials..`, StatusCodes.BAD_REQUEST);
+     if (!admin) {
+       throwError('No user found', StatusCodes.BAD_REQUEST);
+     }
 
-//       // }
-//     } catch (error) {}
-//   }
-// );
+    //  if (await bcrypt.compare(password, admin?.password)) {
+    //    if (!admin.isAccountVerified) {
+    //      throwError(
+    //        'Verify your account in your gmail before you can log in',
+    //        StatusCodes.BAD_REQUEST
+    //      );
+    //    }
+    //  }
+     else {
+       res.status(401);
+       throwError(
+         `Login Failed, invalid credentials..`,
+         StatusCodes.BAD_REQUEST
+       );
+     }
+    } catch (error) {}
+  }
+);
