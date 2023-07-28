@@ -217,9 +217,9 @@ exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awa
     const authId = req === null || req === void 0 ? void 0 : req.authId;
     if (!authId)
         next((0, cacheError_1.throwError)('Sorry, you are not authorized', http_status_codes_1.StatusCodes.BAD_REQUEST));
-    (0, utils_2.ValidateMongoDbId)(authId);
-    (0, utils_2.ValidateMongoDbId)(id);
     try {
+        (0, utils_2.ValidateMongoDbId)(authId);
+        (0, utils_2.ValidateMongoDbId)(id);
         const user = yield db_1.prisma.user.findUnique({
             where: {
                 id: id,

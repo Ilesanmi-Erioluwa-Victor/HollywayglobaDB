@@ -258,10 +258,11 @@ export const account_verification: RequestHandler = catchAsync(
       next(
         throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
       );
-    
-    ValidateMongoDbId(authId as string);
-    ValidateMongoDbId(id);
+
     try {
+      ValidateMongoDbId(authId as string);
+      ValidateMongoDbId(id);
+
       const user = await prisma.user.findUnique({
         where: {
           id: id,
