@@ -9,7 +9,7 @@ import {
   createAccountVerificationToken,
   generatePasswordResetToken,
 } from '../../../helper/utils';
-import { CustomRequest  } from '../../../interfaces/custom';
+import { CustomRequest } from '../../../interfaces/custom';
 import { findUserMEmail, createUserM, findUserMId } from '../models';
 import { sendMail } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -88,8 +88,9 @@ export const loginUser: RequestHandler = catchAsync(
   }
 );
 
-export const getUser: RequestHandler =catchAsync(
-    async (req: CustomRequest, res: Response, next: NextFunction) => {
-        const { id } =req?.params
-    }
-)
+export const getUser: RequestHandler = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id } = req?.params;
+    ValidateMongoDbId(id);
+  }
+);
