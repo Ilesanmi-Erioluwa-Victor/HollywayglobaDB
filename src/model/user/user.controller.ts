@@ -108,7 +108,6 @@ export const login_user: RequestHandler = catchAsync(
   }
 );
 
-
 export const delete_user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req?.params;
