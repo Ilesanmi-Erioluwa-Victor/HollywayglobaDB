@@ -94,7 +94,7 @@ export const getUser: RequestHandler = catchAsync(
         ValidateMongoDbId(id);
         
         try {
-            
+            const user = await findUserMId(id)
         } catch (error) {
             
         }
