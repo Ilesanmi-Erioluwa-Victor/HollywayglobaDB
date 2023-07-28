@@ -161,20 +161,17 @@ exports.forgetPasswordToken = (0, utils_1.catchAsync)((req, res, next) => __awai
         const resetToken = (0, utils_1.generatePasswordResetToken)();
         const expirationTime = new Date();
         expirationTime.setHours(expirationTime.getHours() + 1);
-        const password_reset = ;
+        const password_reset = yield (0, models_1.forgetPasswordTokenM)(resetToken, expirationTime, user === null || user === void 0 ? void 0 : user.id);
+        yield sendUserToken(password_reset, req, res, next);
+        res.json({
+            message: `A reset token has been sent to your gmail`,
+            status: 'success',
+        });
     }
-    finally { }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
 }));
-await sendUserToken(password_reset, req, res, next);
-res.json({
-    message: `A reset token has been sent to your gmail`,
-    status: 'success',
-});
-try { }
-catch (error) {
-    if (!error.statusCode) {
-        error.statusCode = 500;
-    }
-    next(error);
-}
-;

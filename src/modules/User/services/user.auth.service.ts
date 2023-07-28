@@ -17,6 +17,7 @@ import {
   updateUserM,
   updateUserPasswordM,
   accountVerificationUpdatedM,
+  forgetPasswordTokenM,
   accountVerificationM,
 } from '../models';
 import { sendMail } from '../../../templates/sendMail';
@@ -238,8 +239,10 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
       const expirationTime = new Date();
       expirationTime.setHours(expirationTime.getHours() + 1);
 
-      const password_reset = 
-      });
+      const password_reset = await forgetPasswordTokenM(
+        resetToken,
+        expirationTime
+      , user?.id as string);
 
       await sendUserToken(password_reset, req, res, next);
       res.json({

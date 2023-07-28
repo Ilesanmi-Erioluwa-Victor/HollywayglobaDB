@@ -113,7 +113,7 @@ export const accountVerificationUpdatedM = async (
   return user;
 };
 
-export const forgetPasswordToken = async (
+export const forgetPasswordTokenM = async (
   token: string,
   expirationTime: Date,
   userId: string

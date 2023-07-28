@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgetPasswordToken = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
+exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
 const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -99,7 +99,7 @@ const accountVerificationUpdatedM = (id, isAccountVerified, accountVerificationT
     return user;
 });
 exports.accountVerificationUpdatedM = accountVerificationUpdatedM;
-const forgetPasswordToken = (token, expirationTime, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const forgetPasswordTokenM = (token, expirationTime, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield db_1.prisma.passwordResetToken.create({
         data: {
             token,
@@ -109,4 +109,4 @@ const forgetPasswordToken = (token, expirationTime, userId) => __awaiter(void 0,
     });
     return user;
 });
-exports.forgetPasswordToken = forgetPasswordToken;
+exports.forgetPasswordTokenM = forgetPasswordTokenM;
