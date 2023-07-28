@@ -4,8 +4,7 @@ import {
   generateToken,
   createAccountVerificationToken,
 } from '../../helper/utils';
-import { sendMail } from '../../templates/sendMail';
-import { findUserI, signupUser } from './user.interface';
+import {  signupUser } from './user.interface';
 
 export const createUserM = async (user: signupUser) => {
   const { firstName, lastName, email, mobile, password } = user;
