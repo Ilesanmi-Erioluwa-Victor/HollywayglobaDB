@@ -71,4 +71,5 @@ exports.loginUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0
         next(error);
     }
 }));
-exports.getUser = (0, utils_1.catchAsync)(async());
+exports.getUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+}));
