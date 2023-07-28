@@ -46,7 +46,7 @@ exports.loginUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0
     try {
         const user = yield (0, models_1.findUserMEmail)(email);
         if (!user)
-            next((0, cacheError_1.throwError)('No user found', http_status_codes_1.StatusCodes.BAD_REQUEST));
+            next((0, cacheError_1.throwError)('No user found with this email', http_status_codes_1.StatusCodes.BAD_REQUEST));
         if (yield bcryptjs_1.default.compare(password, user === null || user === void 0 ? void 0 : user.password)) {
             if (!user.isAccountVerified) {
                 (0, cacheError_1.throwError)('Verify your account in your gmail before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);

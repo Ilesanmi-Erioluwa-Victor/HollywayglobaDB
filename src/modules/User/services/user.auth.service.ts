@@ -61,7 +61,10 @@ export const loginUser: RequestHandler = catchAsync(
     try {
       const user: loginUserI | any = await findUserMEmail(email);
 
-      if (!user) next(throwError('No user found', StatusCodes.BAD_REQUEST));
+      if (!user)
+        next(
+          throwError('No user found with this email', StatusCodes.BAD_REQUEST)
+        );
       if (await bcrypt.compare(password, user?.password)) {
         if (!user.isAccountVerified) {
           throwError(
