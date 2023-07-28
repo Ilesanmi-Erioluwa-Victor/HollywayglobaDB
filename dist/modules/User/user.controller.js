@@ -12,4 +12,5 @@ route.post('/login', user_auth_service_1.loginUser);
 route.get('/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.getUser);
 route.put('/updateProfile/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.updateUser);
 route.put('/password/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.updatePassword);
+route.put('/:id/verify_account/:token', user_auth_service_1.accountVerification);
 exports.default = route;

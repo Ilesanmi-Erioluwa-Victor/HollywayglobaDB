@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
+exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
 const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -66,9 +66,36 @@ const updateUserPasswordM = (id, password) => __awaiter(void 0, void 0, void 0, 
             id,
         },
         data: {
-            password: yield (0, utils_1.hashedPassword)(password)
+            password: yield (0, utils_1.hashedPassword)(password),
         },
     });
     return user;
 });
 exports.updateUserPasswordM = updateUserPasswordM;
+const accountVerificationM = (id, accountVerificationToken, time) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.user.findUnique({
+        where: {
+            id,
+            accountVerificationToken,
+            accountVerificationTokenExpires: {
+                gt: time,
+            },
+        },
+    });
+    return user;
+});
+exports.accountVerificationM = accountVerificationM;
+const accountVerificationUpdatedM = (id, isAccountVerified, accountVerificationToken, accountVerificationTokenExpires) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.user.update({
+        where: {
+            id,
+        },
+        data: {
+            isAccountVerified,
+            accountVerificationToken,
+            accountVerificationTokenExpires,
+        },
+    });
+    return user;
+});
+exports.accountVerificationUpdatedM = accountVerificationUpdatedM;

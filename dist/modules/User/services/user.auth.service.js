@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
@@ -117,6 +117,30 @@ exports.updatePassword = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
         const user = yield (0, models_1.updateUserPasswordM)(id, password);
         res.json({
             message: 'You have successfully update your password',
+        });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.accountVerification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { token, id } = req.params;
+    (0, utils_1.ValidateMongoDbId)(id);
+    if (!id)
+        next((0, cacheError_1.throwError)('Sorry, your id is not valid', http_status_codes_1.StatusCodes.BAD_REQUEST));
+    if (!token)
+        next((0, cacheError_1.throwError)('Sorry, this token is not valid, try again', http_status_codes_1.StatusCodes.BAD_REQUEST));
+    try {
+        const user = yield (0, models_1.accountVerificationM)(id, token, new Date());
+        if (!user)
+            next((0, cacheError_1.throwError)('Sorry, no user found, try again', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        const updaterUser = yield (0, models_1.accountVerificationUpdatedM)(user === null || user === void 0 ? void 0 : user.id, true, '', null);
+        res.json({
+            status: 'Success',
+            message: 'You have successfully, verify your account, log in now',
         });
     }
     catch (error) {
