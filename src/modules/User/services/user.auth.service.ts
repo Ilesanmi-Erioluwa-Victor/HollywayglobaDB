@@ -34,7 +34,7 @@ export const createUser: RequestHandler = catchAsync(
             StatusCodes.CONFLICT
           )
         );
-        
+
       const user = await createUserM(req.body);
       sendMail(user, req, res, next);
       res.status(StatusCodes.CREATED).json({
@@ -91,12 +91,15 @@ export const loginUser: RequestHandler = catchAsync(
 export const getUser: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
-        ValidateMongoDbId(id);
-        try {
-            const user = await findUserMId(id);
-            res.json(user)
-        } catch (error) {
-            
-        }
+    ValidateMongoDbId(id);
+    try {
+      const user = await findUserMId(id);
+      res.json(user);
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
 );

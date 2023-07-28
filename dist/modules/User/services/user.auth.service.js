@@ -79,5 +79,9 @@ exports.getUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, 
         res.json(user);
     }
     catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
     }
 }));
