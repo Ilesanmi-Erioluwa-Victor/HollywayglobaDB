@@ -10,7 +10,12 @@ import {
   generatePasswordResetToken,
 } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
-import { findUserMEmail, createUserM, findUserMId, updateUserM } from '../models';
+import {
+  findUserMEmail,
+  createUserM,
+  findUserMId,
+  updateUserM,
+} from '../models';
 import { sendMail } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
 
@@ -121,13 +126,13 @@ export const updateUser = catchAsync(
         StatusCodes.BAD_REQUEST
       );
     }
-        try {
-        const user = await updateUserM(
-          id,
-          req.body.firstName,
-          req.body.lastName,
-          req.body.email
-        );
+    try {
+      const user = await updateUserM(
+        id,
+        req.body.firstName,
+        req.body.lastName,
+        req.body.email
+      );
       res.json({
         message: 'You have successfully updated your profile',
         user: user,
@@ -140,4 +145,3 @@ export const updateUser = catchAsync(
     }
   }
 );
-

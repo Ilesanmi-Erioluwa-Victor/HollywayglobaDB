@@ -4,7 +4,7 @@ import {
   generateToken,
   createAccountVerificationToken,
 } from '../../helper/utils';
-import {  signupUser } from './user.interface';
+import { signupUser } from './user.interface';
 
 export const createUserM = async (user: signupUser) => {
   const { firstName, lastName, email, mobile, password } = user;
@@ -42,13 +42,22 @@ export const findUserMEmail = async (email: string) => {
   return userEmail;
 };
 
-export const updateUserM = async (id: string) => {
+export const updateUserM = async (
+  id: string,
+  firstName: string,
+  lastName: string,
+  email: string
+) => {
   const user = await prisma.user.update({
     where: {
-      id
-    }, 
+      id,
+    },
     data: {
-      
-    }
-  })
-}
+      firstName,
+      lastName,
+      email,
+    },
+  });
+
+  return user;
+};

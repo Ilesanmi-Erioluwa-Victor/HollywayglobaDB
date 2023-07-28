@@ -46,12 +46,17 @@ const findUserMEmail = (email) => __awaiter(void 0, void 0, void 0, function* ()
     return userEmail;
 });
 exports.findUserMEmail = findUserMEmail;
-const updateUserM = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserM = (id, firstName, lastName, email) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield db_1.prisma.user.update({
         where: {
-            id
+            id,
         },
-        data: {}
+        data: {
+            firstName,
+            lastName,
+            email,
+        },
     });
+    return user;
 });
 exports.updateUserM = updateUserM;
