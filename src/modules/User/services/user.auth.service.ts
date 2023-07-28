@@ -193,9 +193,10 @@ export const accountVerification: RequestHandler = catchAsync(
     try {
       const user = await accountVerificationM(id, token, new Date());
 
-      if (!user) {
-        throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST);
-      }
+      if (!user)
+        next(
+          throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST)
+        );
 
       const updatedUser = await prisma.user.update({
         where: {
