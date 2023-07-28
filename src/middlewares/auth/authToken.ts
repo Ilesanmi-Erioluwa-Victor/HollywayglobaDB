@@ -72,12 +72,12 @@ export const isUserVerified = catchAsync(
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
         );
       
-      if (!user?.isAccountVerified) {
+      if (!user?.isAccountVerified) 
         throwError(
           'Sorry, your account is not verified, please check your email and verify your email',
           StatusCodes.BAD_REQUEST
         );
-      }
+      
       next();
     } catch (error: any) {
       if (!error.statusCode) {
