@@ -13,7 +13,14 @@ import {
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { firstName, lastName, password, email, mobile } = req.body;
+        const { firstName, lastName, password, email, mobile } = req.body;
+        if (!firstName || !lastName || !password || !email || !mobile)
+          return next(
+            throwError(
+              'Missing credentials, please provide all required information',
+              StatusCodes.BAD_REQUEST
+            )
+          );
     } catch (error) {}
   }
 );
