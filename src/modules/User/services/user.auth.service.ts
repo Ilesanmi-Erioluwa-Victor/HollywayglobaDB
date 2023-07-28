@@ -87,3 +87,4 @@ export const loginUser: RequestHandler = catchAsync(
   }
 );
 
+export const getUser 
