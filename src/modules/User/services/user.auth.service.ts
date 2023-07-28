@@ -55,7 +55,14 @@ export const loginUser: RequestHandler = catchAsync(
       const user = await findUserMEmail(email);
 
         if (!user) next(throwError('No user found', StatusCodes.BAD_REQUEST));
-        
+        if (await bcrypt.compare(password, user?.password)) {
+            if (!user.isAccountVerified) {
+                throwError(
+                    'Verify your account in your gmail before you can log in',
+                    StatusCodes.BAD_REQUEST
+                );
+            }
+        }
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
