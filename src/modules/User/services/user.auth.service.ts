@@ -179,14 +179,17 @@ export const accountVerification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
     ValidateMongoDbId(id);
-      if (!id)
-        next(
-          throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
-        );
-    try {
-    
-    
+    if (!id)
+      next(throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST));
 
+    if (!token)
+      next(
+        throwError(
+          'Sorry, this token is not valid, try again',
+          StatusCodes.BAD_REQUEST
+        )
+      );
+    try {
       const user = await prisma.user.findUnique({
         where: {
           id: id,
