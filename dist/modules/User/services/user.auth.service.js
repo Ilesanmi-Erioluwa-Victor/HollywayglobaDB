@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = void 0;
+exports.loginUser = exports.createUser = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
 const utils_1 = require("../../../helper/utils");
@@ -37,3 +37,4 @@ exports.createUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
         next(error);
     }
 }));
+exports.loginUser = (0, utils_1.catchAsync)();

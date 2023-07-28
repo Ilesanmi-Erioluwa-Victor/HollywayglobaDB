@@ -47,3 +47,5 @@ export const createUser: RequestHandler = catchAsync(
     }
   }
 );
+
+export const loginUser : RequestHandler = catchAsync()
