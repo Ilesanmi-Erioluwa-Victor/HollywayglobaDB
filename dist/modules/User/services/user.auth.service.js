@@ -114,17 +114,6 @@ exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(
         (0, utils_1.ValidateMongoDbId)(id);
         if (!password)
             (0, cacheError_1.throwError)('Please, provide password before you can change your current password', http_status_codes_1.StatusCodes.BAD_REQUEST);
-        // TODO  i will write it to it logic util later
-        const salt = yield bcryptjs_1.default.genSalt(10);
-        const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
-        const user = yield prisma.user.update({
-            where: {
-                id,
-            },
-            data: {
-                password: hashedPassword,
-            },
-        });
         if (password) {
             res.json({
                 message: 'You have successfully update your password',

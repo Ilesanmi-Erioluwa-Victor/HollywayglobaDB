@@ -160,18 +160,7 @@ export const update_password = catchAsync(
           'Please, provide password before you can change your current password',
           StatusCodes.BAD_REQUEST
         );
-      // TODO  i will write it to it logic util later
-      const salt: string = await bcrypt.genSalt(10);
-      const hashedPassword: string = await bcrypt.hash(password, salt);
 
-      const user = await prisma.user.update({
-        where: {
-          id,
-        },
-        data: {
-          password: hashedPassword,
-        },
-      });
       if (password) {
         res.json({
           message: 'You have successfully update your password',
