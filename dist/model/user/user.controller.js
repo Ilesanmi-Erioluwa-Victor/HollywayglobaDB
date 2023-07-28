@@ -215,6 +215,8 @@ exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(
 exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { token, id } = req.params;
     const authId = req === null || req === void 0 ? void 0 : req.authId;
+    if (authId)
+        next((0, cacheError_1.throwError)('Sorry, you are not authorized', http_status_codes_1.StatusCodes.BAD_REQUEST));
     try {
         const user = yield db_1.prisma.user.findFirst({
             where: {

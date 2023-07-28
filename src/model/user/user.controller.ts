@@ -252,7 +252,12 @@ export const update_password = catchAsync(
 export const account_verification: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
-     const authId = req?.authId;
+    const authId = req?.authId;
+
+    if (authId)
+      next(
+        throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
+      );
     try {
       const user = await prisma.user.findFirst({
         where: {
