@@ -8,4 +8,5 @@ const user_auth_service_1 = require("./services/user.auth.service");
 const route = express_1.default.Router();
 route.post('/signup', user_auth_service_1.createUser);
 route.post('/login', user_auth_service_1.loginUser);
+route.get("/:id");
 exports.default = route;
