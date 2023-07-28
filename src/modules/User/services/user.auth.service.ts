@@ -198,19 +198,12 @@ export const accountVerification: RequestHandler = catchAsync(
         next(
           throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST)
         );
-      const updaterUser = await accountVerificationUpdatedM(user?.id as string, true, "", null)
-
-      const updatedUser = await prisma.user.update({
-        where: {
-          id: user?.id,
-        },
-        data: {
-          isAccountVerified: true,
-          accountVerificationToken: '',
-          accountVerificationTokenExpires: null,
-        },
-      });
-
+      const updaterUser = await accountVerificationUpdatedM(
+        user?.id as string,
+        true,
+        '',
+        null
+      );
       res.json({
         status: 'Success',
         message: 'You have successfully, verify your account, log in now',
