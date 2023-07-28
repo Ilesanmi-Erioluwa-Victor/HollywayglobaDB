@@ -23,8 +23,8 @@ export const createUser: RequestHandler = catchAsync(
           )
         );
 
-      const user = findUser(email);
-      if (!user)
+      const user = await findUser(email);
+      if (user)
         next(
           throwError(
             'You are already a member, kindly login to your account',
