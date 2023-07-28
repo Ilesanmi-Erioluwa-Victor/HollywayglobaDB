@@ -47,37 +47,34 @@ export const AuthMiddleWare = catchAsync(
 
 export const isUserVerified = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    if (!req?.authId)
+    const authId = req?.authId;
+    const userId = req?.params?.id;
+
+    if (!authId)
       next(
         throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
       );
-
-    const authId = req?.authId;
-    const userId = req?.params?.id;
 
     ValidateMongoDbId(authId as string);
     ValidateMongoDbId(userId);
 
     try {
-      const id = req?.authId;
-      ValidateMongoDbId(id as string);
-
       const user = await prisma.user.findUnique({
         where: {
-          id: userId,
+          id: authId,
         },
       });
-          if (user?.id !== authId)
+      if (user?.id !== authId)
         next(
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
         );
-      
-      if (!user?.isAccountVerified) 
+
+      if (!user?.isAccountVerified)
         throwError(
           'Sorry, your account is not verified, please check your email and verify your email',
           StatusCodes.BAD_REQUEST
         );
-      
+
       next();
     } catch (error: any) {
       if (!error.statusCode) {
