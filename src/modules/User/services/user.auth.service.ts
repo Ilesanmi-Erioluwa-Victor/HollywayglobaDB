@@ -217,7 +217,7 @@ export const accountVerification: RequestHandler = catchAsync(
   }
 );
 
-export const forget_password_token: RequestHandler = catchAsync(
+export const forgetPasswordToken: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
 

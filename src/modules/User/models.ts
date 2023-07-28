@@ -112,3 +112,7 @@ export const accountVerificationUpdatedM = async (
 
   return user;
 };
+
+export const forgetPaaswordToken = async () => {
+  
+}

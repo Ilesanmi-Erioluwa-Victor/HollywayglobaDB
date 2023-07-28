@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forget_password_token = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.forgetPasswordToken = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
@@ -150,7 +150,7 @@ exports.accountVerification = (0, utils_1.catchAsync)((req, res, next) => __awai
         next(error);
     }
 }));
-exports.forget_password_token = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.forgetPasswordToken = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.body;
     if (!email)
         (0, cacheError_1.throwError)('Please, provide email for you to reset your password', http_status_codes_1.StatusCodes.BAD_REQUEST);
