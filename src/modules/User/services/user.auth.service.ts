@@ -9,6 +9,7 @@ import {
   createAccountVerificationToken,
   generatePasswordResetToken,
 } from '../../../helper/utils';
+import { CustomRequest  } from '../../../interfaces/custom';
 import { findUserMEmail, createUserM, findUserMId } from '../models';
 import { sendMail } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -87,4 +88,6 @@ export const loginUser: RequestHandler = catchAsync(
   }
 );
 
-export const getUser 
+export const getUser: RequestHandler =catchAsync(
+    async()
+)
