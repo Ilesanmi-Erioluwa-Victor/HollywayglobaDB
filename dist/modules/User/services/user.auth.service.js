@@ -94,6 +94,7 @@ exports.updateUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
         (0, cacheError_1.throwError)(`Unexpected fields: ${unexpectedFields.join(', ')}, Sorry it's not part of the parameter`, http_status_codes_1.StatusCodes.BAD_REQUEST);
     }
     try {
+        const user = yield (0, models_1.findUserMEmail)(id);
         const userprofile = yield prisma.user.update({
             where: {
                 id,

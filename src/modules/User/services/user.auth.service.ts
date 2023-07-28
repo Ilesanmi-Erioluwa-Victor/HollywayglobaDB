@@ -121,7 +121,8 @@ export const updateUser = catchAsync(
         StatusCodes.BAD_REQUEST
       );
     }
-    try {
+        try {
+            const user = await findUserMEmail(id);
       const userprofile = await prisma.user.update({
         where: {
           id,
