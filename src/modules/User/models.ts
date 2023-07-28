@@ -1,9 +1,8 @@
 import { prisma } from '../../configurations/db';
-import { hashedPassword } from '../../helper/utils';
-import { findUserI } from './user.interface';
-hashedPassword
+import { hashedPassword, generateToken, createAccountVerificationToken } from '../../helper/utils';
+import { findUserI, signupUser } from './user.interface';
 
-export const findUser = async (user: findUserI) => {
+export const findUserM = async (user: findUserI) => {
   const { id, email } = user;
   if (id) {
     return await prisma.user.findUnique({
@@ -22,10 +21,18 @@ export const findUser = async (user: findUserI) => {
   }
 };
 
-export const createUser = async (user) => {
-  await prisma.user.create({
+export const createUserM = async (user: signupUser) => {
+  const { firstName, lastName, email, mobile, password } = user;
+  const createUser = await prisma.user.create({
     data: {
-      
-    }
-  })
+      firstName,
+      lastName,
+      email,
+      mobile,
+      password: await hashedPassword(password),
+    },
+  });
+
+  generateToken(createUser?.id as string);
+   const tokenUser = await createAccountVerificationToken(createUser?.id);
 };

@@ -9,7 +9,7 @@ import {
   createAccountVerificationToken,
   generatePasswordResetToken,
 } from '../../../helper/utils';
-import { findUser } from '../models';
+import { findUserM, createUserM } from '../models';
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -23,7 +23,7 @@ export const createUser: RequestHandler = catchAsync(
           )
         );
 
-      const existEmail = await findUser(email);
+      const existEmail = await findUserM(email);
       if (existEmail)
         next(
           throwError(
@@ -32,7 +32,7 @@ export const createUser: RequestHandler = catchAsync(
           )
             );
         
-        const user :
+        const user = await createUserM(req.body)
     } catch (error) {}
   }
 );
