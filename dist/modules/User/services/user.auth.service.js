@@ -154,7 +154,7 @@ exports.forgetPasswordToken = (0, utils_1.catchAsync)((req, res, next) => __awai
     const { email } = req.body;
     if (!email)
         (0, cacheError_1.throwError)('Please, provide email for you to reset your password', http_status_codes_1.StatusCodes.BAD_REQUEST);
-    const user = yield findUser;
+    const user = yield (0, models_1.findUserMEmail)(email);
     if (!user)
         (0, cacheError_1.throwError)('No user found with provided email.., try again', http_status_codes_1.StatusCodes.NOT_FOUND);
     try {

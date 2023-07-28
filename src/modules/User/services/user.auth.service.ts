@@ -226,7 +226,7 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
         'Please, provide email for you to reset your password',
         StatusCodes.BAD_REQUEST
       );
-    const user = await findUser
+    const user = await findUserMEmail(email);
     if (!user)
       throwError(
         'No user found with provided email.., try again',
@@ -259,4 +259,3 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
     }
   }
 );
-
