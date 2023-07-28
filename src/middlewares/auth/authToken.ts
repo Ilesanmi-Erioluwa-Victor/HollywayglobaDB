@@ -7,6 +7,7 @@ import { prisma } from '../../configurations/db';
 import { ValidateMongoDbId } from '../../helper/utils';
 import { ENV } from '../../configurations/config';
 import { CustomRequest } from '../../interfaces/custom';
+import { findUserMId } from '../../modules/User/models';
 
 export const AuthMiddleWare = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -50,22 +51,11 @@ export const isUserVerified = catchAsync(
     const authId = req?.authId;
     const userId = req?.params?.id;
 
-    if (!authId)
-      next(
-        throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
-      );
-
     ValidateMongoDbId(authId as string);
     ValidateMongoDbId(userId);
 
-    console.log(authId, userId)
-
     try {
-      const user = await prisma.user.findUnique({
-        where: {
-          id: authId,
-        },
-      });
+      const user = await findUserMId(authId as string);
       if (user?.id.toString() !== authId?.toString())
         next(
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)

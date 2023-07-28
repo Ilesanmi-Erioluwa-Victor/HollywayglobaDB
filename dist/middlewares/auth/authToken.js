@@ -20,6 +20,7 @@ const http_status_codes_1 = require("http-status-codes");
 const db_1 = require("../../configurations/db");
 const utils_2 = require("../../helper/utils");
 const config_1 = require("../../configurations/config");
+const models_1 = require("../../modules/User/models");
 exports.AuthMiddleWare = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     let token;
@@ -51,17 +52,10 @@ exports.isUserVerified = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
     var _c;
     const authId = req === null || req === void 0 ? void 0 : req.authId;
     const userId = (_c = req === null || req === void 0 ? void 0 : req.params) === null || _c === void 0 ? void 0 : _c.id;
-    if (!authId)
-        next((0, cacheError_1.throwError)('Sorry, you are not authorized', http_status_codes_1.StatusCodes.BAD_REQUEST));
     (0, utils_2.ValidateMongoDbId)(authId);
     (0, utils_2.ValidateMongoDbId)(userId);
-    console.log(authId, userId);
     try {
-        const user = yield db_1.prisma.user.findUnique({
-            where: {
-                id: authId,
-            },
-        });
+        const user = yield (0, models_1.findUserMId)(authId);
         if ((user === null || user === void 0 ? void 0 : user.id.toString()) !== (authId === null || authId === void 0 ? void 0 : authId.toString()))
             next((0, cacheError_1.throwError)('Sorry, this ID does not match', http_status_codes_1.StatusCodes.BAD_REQUEST));
         if (!(user === null || user === void 0 ? void 0 : user.isAccountVerified))
