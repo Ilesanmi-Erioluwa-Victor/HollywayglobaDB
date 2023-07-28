@@ -64,7 +64,7 @@ export const isUserVerified = catchAsync(
           id: authId,
         },
       });
-      if (user?.id !== authId)
+      if (user?.id.toString() !== authId?.toString())
         next(
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
         );

@@ -1,7 +1,0 @@
-DATABASE_URL=mongodb+srv://Hollywayglobal:Makinwajunior1452@cluster0.tciz7ra.mongodb.net/Hollywayglobal?retryWrites=true&w=majority
-JWT_SECRET_KEY =jkjiujhnbnbbmbhgkhg
-JWT_EXPIRES_IN =30d
-PORT = 8080
-CRYPTO = process.env.CRYPTO
-NODEMAILER_PASS =fd3bf8ced447a6
-NODEMAILER_USERNAME =69b3b8602ccc41
