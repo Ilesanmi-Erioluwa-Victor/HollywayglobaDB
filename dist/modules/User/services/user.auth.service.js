@@ -60,6 +60,9 @@ exports.loginUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0
                 token: (0, utils_1.generateToken)(user === null || user === void 0 ? void 0 : user.id),
             });
         }
+        else {
+            (0, cacheError_1.throwError)('Login Failed, invalid credentials', http_status_codes_1.StatusCodes.UNAUTHORIZED);
+        }
     }
     catch (error) {
         if (!error.statusCode) {

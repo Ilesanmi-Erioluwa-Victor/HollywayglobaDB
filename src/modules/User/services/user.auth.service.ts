@@ -72,6 +72,11 @@ export const loginUser: RequestHandler = catchAsync(
           profilePhoto: user.profilePhoto,
           token: generateToken(user?.id),
         });
+      } else {
+        throwError(
+          'Login Failed, invalid credentials',
+          StatusCodes.UNAUTHORIZED
+        );
       }
     } catch (error: any) {
       if (!error.statusCode) {
