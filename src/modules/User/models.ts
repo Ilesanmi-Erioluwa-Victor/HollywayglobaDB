@@ -41,3 +41,7 @@ export const findUserMEmail = async (email: string) => {
 
   return userEmail;
 };
+
+export const updateUser = async (id: string) => {
+  
+}
