@@ -250,22 +250,11 @@ export const update_password = catchAsync(
 );
 
 export const account_verification: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { token, id } = req.params;
-    const authId = req?.authId;
-
-    if (!authId)
-      next(
-        throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
-      );
-
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.params;
     try {
-      ValidateMongoDbId(authId as string);
-      ValidateMongoDbId(id);
-
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findFirst({
         where: {
-          id: id,
           accountVerificationToken: token,
           accountVerificationTokenExpires: {
             gt: new Date(),
@@ -274,10 +263,7 @@ export const account_verification: RequestHandler = catchAsync(
       });
 
       if (!user) {
-        throwError(
-          'Token expired or something went wrong, try again',
-          StatusCodes.BAD_REQUEST
-        );
+        throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST);
       }
 
       const updatedUser = await prisma.user.update({
