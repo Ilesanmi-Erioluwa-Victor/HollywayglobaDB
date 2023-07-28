@@ -114,8 +114,6 @@ export const updateUser = catchAsync(
     const { id } = req?.params;
     ValidateMongoDbId(id);
 
-    if (!id) next(throwError('Sorry, invalid ID', StatusCodes.BAD_REQUEST));
-
     const allowedFields = ['firstName', 'lastName', 'email'];
     const unexpectedFields = Object.keys(req.body).filter(
       (field) => !allowedFields.includes(field)
