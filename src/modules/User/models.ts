@@ -93,4 +93,9 @@ export const accountVerificationM = async (
   return user;
 };
 
-export const accountVerificationUpdatedM = async()
+export const accountVerificationUpdatedM = async(
+  id: string,
+  isAccountVerified: boolean,
+  accountVerificationToken: string,
+  accountVerificationTokenExpires : any
+)
