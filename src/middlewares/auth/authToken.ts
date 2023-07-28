@@ -106,7 +106,6 @@ export const adminRole = (roles: string) => {
             StatusCodes.BAD_REQUEST
           )
         );
-        console.log(admin?.role)
 
        if (!roles.includes(admin?.role as string)) {
         throwError(
