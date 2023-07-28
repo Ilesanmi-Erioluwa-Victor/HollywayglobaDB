@@ -1,5 +1,6 @@
 import { prisma } from '../../configurations/db';
 import { hashedPassword, generateToken, createAccountVerificationToken } from '../../helper/utils';
+import { sendMail } from '../../templates/sendMail';
 import { findUserI, signupUser } from './user.interface';
 
 export const findUserM = async (user: findUserI) => {
@@ -34,5 +35,6 @@ export const createUserM = async (user: signupUser) => {
   });
 
   generateToken(createUser?.id as string);
-   const tokenUser = await createAccountVerificationToken(createUser?.id);
+  const tokenUser = await createAccountVerificationToken(createUser?.id);
+  return tokenUser;
 };

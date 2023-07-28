@@ -10,6 +10,7 @@ import {
   generatePasswordResetToken,
 } from '../../../helper/utils';
 import { findUserM, createUserM } from '../models';
+import { sendMail } from '../../../templates/sendMail';
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -30,9 +31,10 @@ export const createUser: RequestHandler = catchAsync(
             'You are already a member, kindly login to your account',
             StatusCodes.CONFLICT
           )
-            );
-        
-        const user = await createUserM(req.body)
+        );
+
+      const user = await createUserM(req.body);
+      sendMail(user, req, res, next);
     } catch (error) {}
   }
 );
