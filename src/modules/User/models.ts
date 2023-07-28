@@ -89,4 +89,6 @@ export const accountVericationM = async (
       },
     },
   });
+
+  return user;
 };
