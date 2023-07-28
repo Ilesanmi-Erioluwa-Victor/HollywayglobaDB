@@ -61,3 +61,19 @@ export const updateUserM = async (
 
   return user;
 };
+
+export const updateUserPasswordM = async (
+  id: string,
+  password : string
+) => {
+  const user = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+     password : await hashedPassword(password)
+    },
+  });
+
+  return user;
+};

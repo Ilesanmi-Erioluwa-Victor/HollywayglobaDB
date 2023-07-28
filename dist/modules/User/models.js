@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
+exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
 const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -60,3 +60,15 @@ const updateUserM = (id, firstName, lastName, email) => __awaiter(void 0, void 0
     return user;
 });
 exports.updateUserM = updateUserM;
+const updateUserPasswordM = (id, password) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.user.update({
+        where: {
+            id,
+        },
+        data: {
+            password: yield (0, utils_1.hashedPassword)(password)
+        },
+    });
+    return user;
+});
+exports.updateUserPasswordM = updateUserPasswordM;

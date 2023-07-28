@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.update_password = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
@@ -99,6 +99,38 @@ exports.updateUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
             message: 'You have successfully updated your profile',
             user: user,
         });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req === null || req === void 0 ? void 0 : req.params;
+        const { password } = req.body;
+        (0, utils_1.ValidateMongoDbId)(id);
+        if (!password)
+            (0, cacheError_1.throwError)('Please, provide password before you can change your current password', http_status_codes_1.StatusCodes.BAD_REQUEST);
+        // TODO  i will write it to it logic util later
+        const salt = yield bcryptjs_1.default.genSalt(10);
+        const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
+        const user = yield prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                password: hashedPassword,
+            },
+        });
+        if (password) {
+            res.json({
+                message: 'You have successfully update your password',
+            });
+        }
+        // TODO still have a bug to fix, which, when user don't provide password, use the initial one
     }
     catch (error) {
         if (!error.statusCode) {
