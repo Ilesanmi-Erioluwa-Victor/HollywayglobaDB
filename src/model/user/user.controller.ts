@@ -33,10 +33,7 @@ export const create_user: RequestHandler = catchAsync(
           )
         );
       }
-      // TODO  i will write it to it logic util later
-      const salt: string = await bcrypt.genSalt(10);
-      const hashedPassword: string = await bcrypt.hash(password, salt);
-
+ 
       const user: signupUser = await prisma.user.create({
         data: {
           firstName,

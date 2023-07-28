@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { throwError } from '../middlewares/error/cacheError';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
-
 
 export const catchAsync = (fn: any) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -64,3 +64,10 @@ export const generateToken = (id: string) => {
   });
   return token;
 };
+
+export async function hashedPassword(password: string): Promise<string> {
+  const salt: string = await bcrypt.genSalt(10);
+  const hashedPassword: string = await bcrypt.hash(password, salt);
+
+  return hashedPassword;
+}
