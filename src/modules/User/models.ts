@@ -80,5 +80,6 @@ export const updateUserPasswordM = async (
 
 export const accountVericationM = async(
   id: string,
-  
+  accountVerificationToken: string,
+  accountVerificationTokenExpires: Date
 )
