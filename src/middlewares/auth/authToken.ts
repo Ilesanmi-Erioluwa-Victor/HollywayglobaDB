@@ -51,13 +51,20 @@ export const isUserVerified = catchAsync(
       next(
         throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
       );
+
+    const authId = req?.authId;
+    const userId = req?.params?.id;
+
+    ValidateMongoDbId(authId as string);
+    ValidateMongoDbId(userId);
+
     try {
       const id = req?.authId;
       ValidateMongoDbId(id as string);
 
       const user = await prisma.user.findUnique({
         where: {
-          id: id,
+          id: userId,
         },
       });
       if (!user?.isAccountVerified) {
@@ -107,7 +114,7 @@ export const adminRole = (roles: string) => {
           )
         );
 
-       if (!roles.includes(admin?.role as string)) {
+      if (!roles.includes(admin?.role as string)) {
         throwError(
           'Sorry, You cant perform this operation....',
           StatusCodes.BAD_REQUEST
