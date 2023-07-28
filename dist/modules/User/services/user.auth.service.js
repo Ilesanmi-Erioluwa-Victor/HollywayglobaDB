@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.forget_password_token = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
@@ -141,6 +141,41 @@ exports.accountVerification = (0, utils_1.catchAsync)((req, res, next) => __awai
         res.json({
             status: 'Success',
             message: 'You have successfully, verify your account, log in now',
+        });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.forget_password_token = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    if (!email)
+        (0, cacheError_1.throwError)('Please, provide email for you to reset your password', http_status_codes_1.StatusCodes.BAD_REQUEST);
+    const user = yield prisma.user.findUnique({
+        where: {
+            email,
+        },
+    });
+    if (!user)
+        (0, cacheError_1.throwError)('No user found with provided email.., try again', http_status_codes_1.StatusCodes.NOT_FOUND);
+    try {
+        const resetToken = (0, utils_1.generatePasswordResetToken)();
+        const expirationTime = new Date();
+        expirationTime.setHours(expirationTime.getHours() + 1);
+        const password_reset = yield prisma.passwordResetToken.create({
+            data: {
+                token: resetToken,
+                expirationTime,
+                userId: user === null || user === void 0 ? void 0 : user.id,
+            },
+        });
+        yield sendUserToken(password_reset, req, res, next);
+        res.json({
+            message: `A reset token has been sent to your gmail`,
+            status: 'success',
         });
     }
     catch (error) {

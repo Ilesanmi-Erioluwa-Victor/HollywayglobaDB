@@ -216,3 +216,51 @@ export const accountVerification: RequestHandler = catchAsync(
     }
   }
 );
+
+export const forget_password_token: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+
+    if (!email)
+      throwError(
+        'Please, provide email for you to reset your password',
+        StatusCodes.BAD_REQUEST
+      );
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!user)
+      throwError(
+        'No user found with provided email.., try again',
+        StatusCodes.NOT_FOUND
+      );
+
+    try {
+      const resetToken = generatePasswordResetToken();
+      const expirationTime = new Date();
+      expirationTime.setHours(expirationTime.getHours() + 1);
+
+      const password_reset = await prisma.passwordResetToken.create({
+        data: {
+          token: resetToken,
+          expirationTime,
+          userId: user?.id as string,
+        },
+      });
+
+      await sendUserToken(password_reset, req, res, next);
+      res.json({
+        message: `A reset token has been sent to your gmail`,
+        status: 'success',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
