@@ -113,6 +113,18 @@ export const accountVerificationUpdatedM = async (
   return user;
 };
 
-export const forgetPaaswordToken = async () => {
-  
-}
+export const forgetPaaswordToken = async (
+  token: string,
+  expirationTime: Date,
+  userId: string
+) => {
+  const user = await prisma.passwordResetToken.create({
+    data: {
+      token,
+      expirationTime,
+      userId,
+    },
+  });
+
+  return user;
+};

@@ -238,12 +238,7 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
       const expirationTime = new Date();
       expirationTime.setHours(expirationTime.getHours() + 1);
 
-      const password_reset = await prisma.passwordResetToken.create({
-        data: {
-          token: resetToken,
-          expirationTime,
-          userId: user?.id as string,
-        },
+      const password_reset = 
       });
 
       await sendUserToken(password_reset, req, res, next);

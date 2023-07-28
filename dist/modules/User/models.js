@@ -99,6 +99,14 @@ const accountVerificationUpdatedM = (id, isAccountVerified, accountVerificationT
     return user;
 });
 exports.accountVerificationUpdatedM = accountVerificationUpdatedM;
-const forgetPaaswordToken = () => __awaiter(void 0, void 0, void 0, function* () {
+const forgetPaaswordToken = (token, expirationTime, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.passwordResetToken.create({
+        data: {
+            token,
+            expirationTime,
+            userId,
+        },
+    });
+    return user;
 });
 exports.forgetPaaswordToken = forgetPaaswordToken;
