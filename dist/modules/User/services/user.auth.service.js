@@ -51,6 +51,14 @@ exports.loginUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0
             if (!user.isAccountVerified) {
                 (0, cacheError_1.throwError)('Verify your account in your gmail before you can log in', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
+            res.json({
+                id: user === null || user === void 0 ? void 0 : user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                profilePhoto: user.profilePhoto,
+                token: (0, utils_1.generateToken)(user === null || user === void 0 ? void 0 : user.id),
+            });
         }
     }
     catch (error) {

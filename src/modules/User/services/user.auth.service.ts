@@ -63,6 +63,15 @@ export const loginUser: RequestHandler = catchAsync(
             StatusCodes.BAD_REQUEST
           );
         }
+
+        res.json({
+          id: user?.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          profilePhoto: user.profilePhoto,
+          token: generateToken(user?.id),
+        });
       }
     } catch (error: any) {
       if (!error.statusCode) {
