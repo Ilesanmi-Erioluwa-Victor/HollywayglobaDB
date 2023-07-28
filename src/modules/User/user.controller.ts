@@ -5,6 +5,7 @@ import {
   loginUser,
   updatePassword,
   updateUser,
+  accountVerification,
 } from './services/user.auth.service';
 import {
   AuthMiddleWare,
@@ -18,4 +19,5 @@ route.post('/login', loginUser);
 route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
 route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);
 route.put('/password/:id', AuthMiddleWare, isUserVerified, updatePassword);
+route.put('/:id/verify_account/:token', accountVerification);
 export default route;
