@@ -39,4 +39,8 @@ exports.createUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
 }));
 exports.loginUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
+    try {
+    }
+    catch (error) {
+    }
 }));
