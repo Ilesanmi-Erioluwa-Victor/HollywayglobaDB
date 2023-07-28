@@ -4,3 +4,6 @@ import { StatusCodes } from 'http-status-codes';
 import { throwError } from '../../../middlewares/error/cacheError';
 import { catchAsync, ValidateMongoDbId, generateToken, createAccountVerificationToken, generatePasswordResetToken } from '../../../helper/utils';
 
+export const createUser: RequestHandler= catchAsync(() => {
+    
+})
