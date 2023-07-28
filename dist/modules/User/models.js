@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
+exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
 const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,7 +46,7 @@ const findUserMEmail = (email) => __awaiter(void 0, void 0, void 0, function* ()
     return userEmail;
 });
 exports.findUserMEmail = findUserMEmail;
-const updateUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserM = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield db_1.prisma.user.update({
         where: {
             id
@@ -54,4 +54,4 @@ const updateUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
         data: {}
     });
 });
-exports.updateUser = updateUser;
+exports.updateUserM = updateUserM;

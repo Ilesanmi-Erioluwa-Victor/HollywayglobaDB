@@ -42,7 +42,7 @@ export const findUserMEmail = async (email: string) => {
   return userEmail;
 };
 
-export const updateUser = async (id: string) => {
+export const updateUserM = async (id: string) => {
   const user = await prisma.user.update({
     where: {
       id

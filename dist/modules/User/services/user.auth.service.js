@@ -94,20 +94,10 @@ exports.updateUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
         (0, cacheError_1.throwError)(`Unexpected fields: ${unexpectedFields.join(', ')}, Sorry it's not part of the parameter`, http_status_codes_1.StatusCodes.BAD_REQUEST);
     }
     try {
-        const user = yield (0, models_1.findUserMEmail)(id);
-        const userprofile = yield prisma.user.update({
-            where: {
-                id,
-            },
-            data: {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                email: req.body.email,
-            },
-        });
+        const user = yield (0, models_1.updateUserM)(id, req.body.firstName, req.body.lastName, req.body.email);
         res.json({
             message: 'You have successfully updated your profile',
-            user: userprofile,
+            user: user,
         });
     }
     catch (error) {

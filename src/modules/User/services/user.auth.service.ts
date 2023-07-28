@@ -10,7 +10,7 @@ import {
   generatePasswordResetToken,
 } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
-import { findUserMEmail, createUserM, findUserMId } from '../models';
+import { findUserMEmail, createUserM, findUserMId, updateUserM } from '../models';
 import { sendMail } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
 
@@ -122,21 +122,15 @@ export const updateUser = catchAsync(
       );
     }
         try {
-            const user = await findUserMEmail(id);
-      const userprofile = await prisma.user.update({
-        where: {
+        const user = await updateUserM(
           id,
-        },
-        data: {
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-        },
-      });
-
+          req.body.firstName,
+          req.body.lastName,
+          req.body.email
+        );
       res.json({
         message: 'You have successfully updated your profile',
-        user: userprofile,
+        user: user,
       });
     } catch (error: any) {
       if (!error.statusCode) {
