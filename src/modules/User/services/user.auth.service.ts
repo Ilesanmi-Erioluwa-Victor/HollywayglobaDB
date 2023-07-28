@@ -92,9 +92,9 @@ export const getUser: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
         ValidateMongoDbId(id);
-        
         try {
-            const user = await findUserMId(id)
+            const user = await findUserMId(id);
+            res.json(user)
         } catch (error) {
             
         }

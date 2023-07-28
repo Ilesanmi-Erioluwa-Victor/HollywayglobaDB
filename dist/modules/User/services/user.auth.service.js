@@ -76,6 +76,7 @@ exports.getUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, 
     (0, utils_1.ValidateMongoDbId)(id);
     try {
         const user = yield (0, models_1.findUserMId)(id);
+        res.json(user);
     }
     catch (error) {
     }
