@@ -174,3 +174,69 @@ export const updatePassword = catchAsync(
     }
   }
 );
+
+export const accountVerification: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token, id } = req.params;
+    // const authId = req?.authId;
+    //   if (!authId)
+    // next(
+    //   throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
+    // );
+
+    // ValidateMongoDbId(authId as string);
+    ValidateMongoDbId(id);
+
+    console.log(id);
+
+    try {
+      if (!id)
+        next(
+          throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
+        );
+
+      if (!token)
+        next(
+          throwError(
+            'Sorry, this token is not valid, try again',
+            StatusCodes.BAD_REQUEST
+          )
+        );
+
+      const user = await prisma.user.findUnique({
+        where: {
+          id: id,
+          accountVerificationToken: token,
+          accountVerificationTokenExpires: {
+            gt: new Date(),
+          },
+        },
+      });
+
+      if (!user) {
+        throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST);
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          isAccountVerified: true,
+          accountVerificationToken: '',
+          accountVerificationTokenExpires: null,
+        },
+      });
+
+      res.json({
+        status: 'Success',
+        message: 'You have successfully, verify your account, log in now',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
