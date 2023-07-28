@@ -35,6 +35,10 @@ export const createUser: RequestHandler = catchAsync(
 
       const user = await createUserM(req.body);
       sendMail(user, req, res, next);
+      res.status(StatusCodes.CREATED).json({
+        message: 'You have successfully created your account, log in now',
+        status: 'success',
+      });
     } catch (error) {}
   }
 );
