@@ -16,6 +16,7 @@ import {
   findUserMId,
   updateUserM,
   updateUserPasswordM,
+  accountVerificationM,
 } from '../models';
 import { sendMail } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -190,15 +191,7 @@ export const accountVerification: RequestHandler = catchAsync(
         )
       );
     try {
-      const user = await prisma.user.findUnique({
-        where: {
-          id: id,
-          accountVerificationToken: token,
-          accountVerificationTokenExpires: {
-            gt: new Date(),
-          },
-        },
-      });
+      const user = await accountVerificationM(id, token, new Date());
 
       if (!user) {
         throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST);

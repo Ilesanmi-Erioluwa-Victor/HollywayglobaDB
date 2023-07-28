@@ -75,7 +75,7 @@ export const updateUserPasswordM = async (id: string, password: string) => {
   return user;
 };
 
-export const accountVericationM = async (
+export const accountVerificationM = async (
   id: string,
   accountVerificationToken: string,
   time: Date
