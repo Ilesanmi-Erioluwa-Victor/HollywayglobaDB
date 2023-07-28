@@ -15,6 +15,7 @@ import {
   createUserM,
   findUserMId,
   updateUserM,
+  updateUserPasswordM,
 } from '../models';
 import { sendMail } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -151,8 +152,8 @@ export const updateUser = catchAsync(
 
 export const update_password = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-      const { id } = req?.params;
-      const { password } = req.body;
+    const { id } = req?.params;
+    const { password } = req.body;
     try {
       ValidateMongoDbId(id);
       if (!password)
@@ -160,13 +161,11 @@ export const update_password = catchAsync(
           'Please, provide password before you can change your current password',
           StatusCodes.BAD_REQUEST
         );
-         
-      if (password) {
-        res.json({
-          message: 'You have successfully update your password',
-        });
-      }
-      // TODO still have a bug to fix, which, when user don't provide password, use the initial one
+      const user = await updateUserPasswordM(id, password);
+
+      res.json({
+        message: 'You have successfully update your password',
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

@@ -114,12 +114,10 @@ exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(
         (0, utils_1.ValidateMongoDbId)(id);
         if (!password)
             (0, cacheError_1.throwError)('Please, provide password before you can change your current password', http_status_codes_1.StatusCodes.BAD_REQUEST);
-        if (password) {
-            res.json({
-                message: 'You have successfully update your password',
-            });
-        }
-        // TODO still have a bug to fix, which, when user don't provide password, use the initial one
+        const user = yield (0, models_1.updateUserPasswordM)(id, password);
+        res.json({
+            message: 'You have successfully update your password',
+        });
     }
     catch (error) {
         if (!error.statusCode) {
