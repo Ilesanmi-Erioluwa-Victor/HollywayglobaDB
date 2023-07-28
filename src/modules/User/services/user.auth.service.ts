@@ -51,8 +51,11 @@ export const createUser: RequestHandler = catchAsync(
 export const loginUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-        try {
-        const user = await findUserMEmail(email)
+    try {
+      const user = await findUserMEmail(email);
+
+        if (!user) next(throwError('No user found', StatusCodes.BAD_REQUEST));
+        
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
