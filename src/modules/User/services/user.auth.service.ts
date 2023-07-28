@@ -90,6 +90,6 @@ export const loginUser: RequestHandler = catchAsync(
 
 export const getUser: RequestHandler =catchAsync(
     async (req: CustomRequest, res: Response, next: NextFunction) => {
-        
+        const { id } =req?.params
     }
 )
