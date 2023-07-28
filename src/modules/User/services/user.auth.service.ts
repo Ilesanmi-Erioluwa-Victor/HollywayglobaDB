@@ -50,6 +50,6 @@ export const createUser: RequestHandler = catchAsync(
 
 export const loginUser: RequestHandler = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        
+        const { email, password } = req.body
     }
 )
