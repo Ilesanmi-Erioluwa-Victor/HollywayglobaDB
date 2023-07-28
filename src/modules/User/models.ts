@@ -78,4 +78,7 @@ export const updateUserPasswordM = async (
   return user;
 };
 
-export const accountVericationM = async()
+export const accountVericationM = async(
+  id: string,
+  
+)
