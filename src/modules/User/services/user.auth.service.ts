@@ -25,20 +25,26 @@ export const createUser: RequestHandler = catchAsync(
         );
 
       const existEmail = await findUserM(email);
-      if (existEmail)
+      if (existEmail) {
         next(
           throwError(
             'You are already a member, kindly login to your account',
             StatusCodes.CONFLICT
           )
         );
-
-      const user = await createUserM(req.body);
-      sendMail(user, req, res, next);
-      res.status(StatusCodes.CREATED).json({
-        message: 'You have successfully created your account, log in now',
-        status: 'success',
-      });
-    } catch (error) {}
+      } else {
+        const user = await createUserM(req.body);
+        sendMail(user, req, res, next);
+        res.status(StatusCodes.CREATED).json({
+          message: 'You have successfully created your account, log in now',
+          status: 'success',
+        });
+      }
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
 );

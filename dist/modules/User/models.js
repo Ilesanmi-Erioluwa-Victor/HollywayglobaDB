@@ -9,9 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserM = exports.findUserM = void 0;
+exports.findUserM = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
+const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const { firstName, lastName, email, mobile, password } = user;
+    const createUser = yield db_1.prisma.user.create({
+        data: {
+            firstName,
+            lastName,
+            email,
+            mobile,
+            password: yield (0, utils_1.hashedPassword)(password),
+        },
+    });
+    (0, utils_1.generateToken)(createUser === null || createUser === void 0 ? void 0 : createUser.id);
+    const tokenUser = yield (0, utils_1.createAccountVerificationToken)(createUser === null || createUser === void 0 ? void 0 : createUser.id);
+    return tokenUser;
+});
+exports.createUserM = createUserM;
 const findUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, email } = user;
     if (id) {
@@ -30,19 +46,3 @@ const findUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.findUserM = findUserM;
-const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const { firstName, lastName, email, mobile, password } = user;
-    const createUser = yield db_1.prisma.user.create({
-        data: {
-            firstName,
-            lastName,
-            email,
-            mobile,
-            password: yield (0, utils_1.hashedPassword)(password),
-        },
-    });
-    (0, utils_1.generateToken)(createUser === null || createUser === void 0 ? void 0 : createUser.id);
-    const tokenUser = yield (0, utils_1.createAccountVerificationToken)(createUser === null || createUser === void 0 ? void 0 : createUser.id);
-    return tokenUser;
-});
-exports.createUserM = createUserM;

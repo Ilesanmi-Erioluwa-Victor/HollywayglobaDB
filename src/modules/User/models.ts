@@ -1,7 +1,28 @@
 import { prisma } from '../../configurations/db';
-import { hashedPassword, generateToken, createAccountVerificationToken } from '../../helper/utils';
+import {
+  hashedPassword,
+  generateToken,
+  createAccountVerificationToken,
+} from '../../helper/utils';
 import { sendMail } from '../../templates/sendMail';
 import { findUserI, signupUser } from './user.interface';
+
+export const createUserM = async (user: signupUser) => {
+  const { firstName, lastName, email, mobile, password } = user;
+  const createUser = await prisma.user.create({
+    data: {
+      firstName,
+      lastName,
+      email,
+      mobile,
+      password: await hashedPassword(password),
+    },
+  });
+
+  generateToken(createUser?.id as string);
+  const tokenUser = await createAccountVerificationToken(createUser?.id);
+  return tokenUser;
+};
 
 export const findUserM = async (user: findUserI) => {
   const { id, email } = user;
@@ -20,21 +41,4 @@ export const findUserM = async (user: findUserI) => {
       },
     });
   }
-};
-
-export const createUserM = async (user: signupUser) => {
-  const { firstName, lastName, email, mobile, password } = user;
-  const createUser = await prisma.user.create({
-    data: {
-      firstName,
-      lastName,
-      email,
-      mobile,
-      password: await hashedPassword(password),
-    },
-  });
-
-  generateToken(createUser?.id as string);
-  const tokenUser = await createAccountVerificationToken(createUser?.id);
-  return tokenUser;
 };
