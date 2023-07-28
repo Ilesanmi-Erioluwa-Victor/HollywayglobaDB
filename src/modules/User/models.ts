@@ -62,26 +62,31 @@ export const updateUserM = async (
   return user;
 };
 
-export const updateUserPasswordM = async (
-  id: string,
-  password : string
-) => {
+export const updateUserPasswordM = async (id: string, password: string) => {
   const user = await prisma.user.update({
     where: {
       id,
     },
     data: {
-     password : await hashedPassword(password)
+      password: await hashedPassword(password),
     },
   });
 
   return user;
 };
 
-export const accountVericationM = async(
+export const accountVericationM = async (
   id: string,
   accountVerificationToken: string,
-  accountVerificationTokenExpires: Date
+  time: Date
 ) => {
-  const user = await prisma.user.findUnique({})
-}
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+      accountVerificationToken,
+      accountVerificationTokenExpires: {
+        gt: time,
+      },
+    },
+  });
+};
