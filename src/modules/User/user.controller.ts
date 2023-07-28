@@ -1,5 +1,10 @@
 import express from 'express';
-import { createUser, getUser, loginUser } from './services/user.auth.service';
+import {
+  createUser,
+  getUser,
+  loginUser,
+  updateUser,
+} from './services/user.auth.service';
 import {
   AuthMiddleWare,
   isUserVerified,
@@ -10,4 +15,5 @@ route.post('/signup', createUser);
 route.post('/login', loginUser);
 
 route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
+route.put('/update_profile/:id', AuthMiddleWare, isUserVerified, updateUser);
 export default route;

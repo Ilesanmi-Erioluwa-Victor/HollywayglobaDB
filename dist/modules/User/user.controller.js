@@ -10,4 +10,5 @@ const route = express_1.default.Router();
 route.post('/signup', user_auth_service_1.createUser);
 route.post('/login', user_auth_service_1.loginUser);
 route.get('/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.getUser);
+route.put('/update_profile/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.updateUser);
 exports.default = route;
