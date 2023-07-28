@@ -67,6 +67,11 @@ export const isUserVerified = catchAsync(
           id: userId,
         },
       });
+          if (user?.id !== authId)
+        next(
+          throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
+        );
+      
       if (!user?.isAccountVerified) {
         throwError(
           'Sorry, your account is not verified, please check your email and verify your email',
