@@ -76,8 +76,8 @@ export const isUserVerified = catchAsync(
   }
 );
 
-export const adminRole = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const adminRole = (roles: string) => {
+  return async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const authId = req?.authId;
       const adminId = req?.params?.id;
@@ -106,16 +106,14 @@ export const adminRole = catchAsync(
             StatusCodes.BAD_REQUEST
           )
         );
-      else if (admin?.role.includes(admin?.role.toString()) === false) {
+        console.log(admin?.role)
+
+       if (!roles.includes(admin?.role as string)) {
         throwError(
           'Sorry, You cant perform this operation....',
           StatusCodes.BAD_REQUEST
         );
       }
-      console.log(admin?.role.includes(admin?.role.toString()));
-      // if else {
-
-      // }
 
       next();
     } catch (error: any) {
@@ -124,5 +122,5 @@ export const adminRole = catchAsync(
       }
       next(error);
     }
-  }
-);
+  };
+};

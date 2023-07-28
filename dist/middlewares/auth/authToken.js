@@ -70,36 +70,37 @@ exports.isUserVerified = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
         next(error);
     }
 }));
-exports.adminRole = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c;
-    try {
-        const authId = req === null || req === void 0 ? void 0 : req.authId;
-        const adminId = (_c = req === null || req === void 0 ? void 0 : req.params) === null || _c === void 0 ? void 0 : _c.id;
-        (0, utils_2.ValidateMongoDbId)(authId);
-        (0, utils_2.ValidateMongoDbId)(adminId);
-        const admin = yield db_1.prisma.admin.findUnique({
-            where: {
-                id: adminId,
-            },
-        });
-        if (!admin)
-            next((0, cacheError_1.throwError)('Sorry, No user found', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        if ((admin === null || admin === void 0 ? void 0 : admin.id) !== authId)
-            next((0, cacheError_1.throwError)('Sorry, this ID does not match', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        if (!(admin === null || admin === void 0 ? void 0 : admin.isAccountVerified))
-            next((0, cacheError_1.throwError)('Please, verify your gmail, before you cam perform this operation', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        else if ((admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role.toString())) === false) {
-            (0, cacheError_1.throwError)('Sorry, You cant perform this operation....', http_status_codes_1.StatusCodes.BAD_REQUEST);
+const adminRole = (roles) => {
+    return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            const authId = req === null || req === void 0 ? void 0 : req.authId;
+            const adminId = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id;
+            (0, utils_2.ValidateMongoDbId)(authId);
+            (0, utils_2.ValidateMongoDbId)(adminId);
+            const admin = yield db_1.prisma.admin.findUnique({
+                where: {
+                    id: adminId,
+                },
+            });
+            if (!admin)
+                next((0, cacheError_1.throwError)('Sorry, No user found', http_status_codes_1.StatusCodes.BAD_REQUEST));
+            if ((admin === null || admin === void 0 ? void 0 : admin.id) !== authId)
+                next((0, cacheError_1.throwError)('Sorry, this ID does not match', http_status_codes_1.StatusCodes.BAD_REQUEST));
+            if (!(admin === null || admin === void 0 ? void 0 : admin.isAccountVerified))
+                next((0, cacheError_1.throwError)('Please, verify your gmail, before you cam perform this operation', http_status_codes_1.StatusCodes.BAD_REQUEST));
+            console.log(admin === null || admin === void 0 ? void 0 : admin.role);
+            if (!roles.includes(admin === null || admin === void 0 ? void 0 : admin.role)) {
+                (0, cacheError_1.throwError)('Sorry, You cant perform this operation....', http_status_codes_1.StatusCodes.BAD_REQUEST);
+            }
+            next();
         }
-        console.log(admin === null || admin === void 0 ? void 0 : admin.role.includes(admin === null || admin === void 0 ? void 0 : admin.role.toString()));
-        // if else {
-        // }
-        next();
-    }
-    catch (error) {
-        if (!error.statusCode) {
-            error.statusCode = 500;
+        catch (error) {
+            if (!error.statusCode) {
+                error.statusCode = 500;
+            }
+            next(error);
         }
-        next(error);
-    }
-}));
+    });
+};
+exports.adminRole = adminRole;
