@@ -40,7 +40,12 @@ exports.createUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
 exports.loginUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
+        const user = yield (0, models_1.findUserMEmail)(email);
     }
     catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
     }
 }));

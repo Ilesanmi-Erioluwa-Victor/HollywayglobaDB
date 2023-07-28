@@ -9,7 +9,7 @@ import {
   createAccountVerificationToken,
   generatePasswordResetToken,
 } from '../../../helper/utils';
-import { findUserMEmail, createUserM } from '../models';
+import { findUserMEmail, createUserM, findUserMId } from '../models';
 import { sendMail } from '../../../templates/sendMail';
 
 export const createUser: RequestHandler = catchAsync(
@@ -49,12 +49,15 @@ export const createUser: RequestHandler = catchAsync(
 );
 
 export const loginUser: RequestHandler = catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
-        const { email, password } = req.body;
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
         try {
-            
-        } catch (error) {
-            
-        }
+        const user = await findUserMEmail(email)
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
-)
+  }
+);
