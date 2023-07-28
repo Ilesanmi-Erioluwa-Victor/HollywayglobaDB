@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.update_user = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
@@ -85,7 +85,7 @@ exports.getUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, 
         next(error);
     }
 }));
-exports.update_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updateUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
     (0, utils_1.ValidateMongoDbId)(id);
     const allowedFields = ['firstName', 'lastName', 'email'];
