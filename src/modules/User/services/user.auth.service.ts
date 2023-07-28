@@ -20,7 +20,7 @@ import {
   forgetPasswordTokenM,
   accountVerificationM,
 } from '../models';
-import { sendMail } from '../../../templates/sendMail';
+import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
 
 export const createUser: RequestHandler = catchAsync(
@@ -239,12 +239,13 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
       const expirationTime = new Date();
       expirationTime.setHours(expirationTime.getHours() + 1);
 
-      const password_reset = await forgetPasswordTokenM(
+      const passwordReset = await forgetPasswordTokenM(
         resetToken,
-        expirationTime
-      , user?.id as string);
+        expirationTime,
+        user?.id as string
+      );
 
-      await sendUserToken(password_reset, req, res, next);
+      await sendUserToken(passwordReset, req, res, next);
       res.json({
         message: `A reset token has been sent to your gmail`,
         status: 'success',
