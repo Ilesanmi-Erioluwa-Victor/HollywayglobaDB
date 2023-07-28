@@ -16,6 +16,7 @@ import {
   findUserMId,
   updateUserM,
   updateUserPasswordM,
+  accountVerificationUpdatedM,
   accountVerificationM,
 } from '../models';
 import { sendMail } from '../../../templates/sendMail';
@@ -197,6 +198,7 @@ export const accountVerification: RequestHandler = catchAsync(
         next(
           throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST)
         );
+      const updaterUser = await accountVerificationUpdatedM(user?.id as string, true, "", null)
 
       const updatedUser = await prisma.user.update({
         where: {
