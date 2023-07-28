@@ -24,17 +24,13 @@ export const createUserM = async (user: signupUser) => {
   return tokenUser;
 };
 
-export const findUserM = async (user: findUserI) => {
-  const { id, email } = user;
-  if (id) {
-    const userId = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    return userId;
-  }
+export const findUserMId = async (id: string) => {
+  const userId = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+  return userId;
 };
 
 export const findUserMEmail = async (email: string) => {
