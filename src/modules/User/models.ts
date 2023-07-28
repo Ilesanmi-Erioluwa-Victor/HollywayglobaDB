@@ -1,5 +1,7 @@
 import { prisma } from '../../configurations/db';
-import {  findUserI } from './user.interface';
+import { hashedPassword } from '../../helper/utils';
+import { findUserI } from './user.interface';
+hashedPassword
 
 export const findUser = async (user: findUserI) => {
   const { id, email } = user;
@@ -18,4 +20,12 @@ export const findUser = async (user: findUserI) => {
       },
     });
   }
+};
+
+export const createUser = async (user) => {
+  await prisma.user.create({
+    data: {
+      
+    }
+  })
 };
