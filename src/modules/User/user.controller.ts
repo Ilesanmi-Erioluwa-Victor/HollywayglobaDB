@@ -6,6 +6,7 @@ import {
   updatePassword,
   updateUser,
   accountVerification,
+  forgetPasswordToken,
 } from './services/user.auth.service';
 import {
   AuthMiddleWare,
@@ -15,6 +16,8 @@ import {
 const route = express.Router();
 route.post('/signup', createUser);
 route.post('/login', loginUser);
+
+route.post('/forgetPassword', forgetPasswordToken);
 
 route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
 route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);

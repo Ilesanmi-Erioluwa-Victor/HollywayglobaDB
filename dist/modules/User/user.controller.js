@@ -9,6 +9,7 @@ const authToken_1 = require("../../middlewares/auth/authToken");
 const route = express_1.default.Router();
 route.post('/signup', user_auth_service_1.createUser);
 route.post('/login', user_auth_service_1.loginUser);
+route.post('/forgetPassword', user_auth_service_1.forgetPasswordToken);
 route.get('/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.getUser);
 route.put('/updateProfile/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.updateUser);
 route.put('/password/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.updatePassword);
