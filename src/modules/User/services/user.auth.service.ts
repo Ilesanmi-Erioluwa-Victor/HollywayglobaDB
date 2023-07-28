@@ -178,30 +178,14 @@ export const updatePassword = catchAsync(
 export const accountVerification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
-    // const authId = req?.authId;
-    //   if (!authId)
-    // next(
-    //   throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
-    // );
-
-    // ValidateMongoDbId(authId as string);
     ValidateMongoDbId(id);
-
-    console.log(id);
-
-    try {
       if (!id)
         next(
           throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
         );
-
-      if (!token)
-        next(
-          throwError(
-            'Sorry, this token is not valid, try again',
-            StatusCodes.BAD_REQUEST
-          )
-        );
+    try {
+    
+    
 
       const user = await prisma.user.findUnique({
         where: {
