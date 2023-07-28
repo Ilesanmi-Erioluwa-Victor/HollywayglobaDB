@@ -9,7 +9,7 @@ import {
   createAccountVerificationToken,
   generatePasswordResetToken,
 } from '../../../helper/utils';
-import { findUserM, createUserM } from '../models';
+import { findUserMEmail, createUserM } from '../models';
 import { sendMail } from '../../../templates/sendMail';
 
 export const createUser: RequestHandler = catchAsync(
@@ -24,22 +24,22 @@ export const createUser: RequestHandler = catchAsync(
           )
         );
 
-      const existEmail = await findUserM(email);
+      const existEmail = await findUserMEmail(email);
       if (existEmail) {
-        next(
+        return next(
           throwError(
             'You are already a member, kindly login to your account',
             StatusCodes.CONFLICT
           )
         );
-      } else {
-        const user = await createUserM(req.body);
-        sendMail(user, req, res, next);
-        res.status(StatusCodes.CREATED).json({
-          message: 'You have successfully created your account, log in now',
-          status: 'success',
-        });
       }
+
+      const user = await createUserM(req.body);
+      sendMail(user, req, res, next);
+      res.status(StatusCodes.CREATED).json({
+        message: 'You have successfully created your account, log in now',
+        status: 'success',
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

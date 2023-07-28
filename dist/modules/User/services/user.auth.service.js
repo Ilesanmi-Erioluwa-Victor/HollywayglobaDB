@@ -20,18 +20,16 @@ exports.createUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
         const { firstName, lastName, password, email, mobile } = req.body;
         if (!firstName || !lastName || !password || !email || !mobile)
             return next((0, cacheError_1.throwError)('Missing credentials, please provide all required information', http_status_codes_1.StatusCodes.BAD_REQUEST));
-        const existEmail = yield (0, models_1.findUserM)(email);
+        const existEmail = yield (0, models_1.findUserMEmail)(email);
         if (existEmail) {
-            next((0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
+            return next((0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
         }
-        else {
-            const user = yield (0, models_1.createUserM)(req.body);
-            (0, sendMail_1.sendMail)(user, req, res, next);
-            res.status(http_status_codes_1.StatusCodes.CREATED).json({
-                message: 'You have successfully created your account, log in now',
-                status: 'success',
-            });
-        }
+        const user = yield (0, models_1.createUserM)(req.body);
+        (0, sendMail_1.sendMail)(user, req, res, next);
+        res.status(http_status_codes_1.StatusCodes.CREATED).json({
+            message: 'You have successfully created your account, log in now',
+            status: 'success',
+        });
     }
     catch (error) {
         if (!error.statusCode) {

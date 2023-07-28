@@ -35,13 +35,14 @@ export const findUserM = async (user: findUserI) => {
 
     return userId;
   }
+};
 
-  if (email) {
-    const userEmail = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-    return userEmail;
-  }
+export const findUserMEmail = async (email: string) => {
+  const userEmail = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  return userEmail;
 };
