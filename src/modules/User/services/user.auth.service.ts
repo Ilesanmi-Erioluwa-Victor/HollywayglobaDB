@@ -151,16 +151,16 @@ export const updateUser = catchAsync(
 
 export const update_password = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    try {
       const { id } = req?.params;
       const { password } = req.body;
+    try {
       ValidateMongoDbId(id);
       if (!password)
         throwError(
           'Please, provide password before you can change your current password',
           StatusCodes.BAD_REQUEST
         );
-
+         
       if (password) {
         res.json({
           message: 'You have successfully update your password',

@@ -108,9 +108,9 @@ exports.updateUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
     }
 }));
 exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req === null || req === void 0 ? void 0 : req.params;
+    const { password } = req.body;
     try {
-        const { id } = req === null || req === void 0 ? void 0 : req.params;
-        const { password } = req.body;
         (0, utils_1.ValidateMongoDbId)(id);
         if (!password)
             (0, cacheError_1.throwError)('Please, provide password before you can change your current password', http_status_codes_1.StatusCodes.BAD_REQUEST);
