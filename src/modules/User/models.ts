@@ -43,5 +43,12 @@ export const findUserMEmail = async (email: string) => {
 };
 
 export const updateUser = async (id: string) => {
-  const user = await 
+  const user = await prisma.user.update({
+    where: {
+      id
+    }, 
+    data: {
+      
+    }
+  })
 }
