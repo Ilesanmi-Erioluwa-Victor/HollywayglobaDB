@@ -103,3 +103,46 @@ export const getUser: RequestHandler = catchAsync(
     }
   }
 );
+
+export const update_user = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id } = req?.params;
+    ValidateMongoDbId(id);
+
+    const allowedFields = ['firstName', 'lastName', 'email'];
+    const unexpectedFields = Object.keys(req.body).filter(
+      (field) => !allowedFields.includes(field)
+    );
+    if (unexpectedFields.length > 0) {
+      throwError(
+        `Unexpected fields: ${unexpectedFields.join(
+          ', '
+        )}, Sorry it's not part of the parameter`,
+        StatusCodes.BAD_REQUEST
+      );
+    }
+    try {
+      const userprofile = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+        },
+      });
+
+      res.json({
+        message: 'You have successfully updated your profile',
+        user: userprofile,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+

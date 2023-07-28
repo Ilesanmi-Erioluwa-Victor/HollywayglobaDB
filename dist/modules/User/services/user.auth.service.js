@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.update_user = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
@@ -77,6 +77,37 @@ exports.getUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, 
     try {
         const user = yield (0, models_1.findUserMId)(id);
         res.json(user);
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.update_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req === null || req === void 0 ? void 0 : req.params;
+    (0, utils_1.ValidateMongoDbId)(id);
+    const allowedFields = ['firstName', 'lastName', 'email'];
+    const unexpectedFields = Object.keys(req.body).filter((field) => !allowedFields.includes(field));
+    if (unexpectedFields.length > 0) {
+        (0, cacheError_1.throwError)(`Unexpected fields: ${unexpectedFields.join(', ')}, Sorry it's not part of the parameter`, http_status_codes_1.StatusCodes.BAD_REQUEST);
+    }
+    try {
+        const userprofile = yield prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+            },
+        });
+        res.json({
+            message: 'You have successfully updated your profile',
+            user: userprofile,
+        });
     }
     catch (error) {
         if (!error.statusCode) {
