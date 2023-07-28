@@ -1,8 +1,3 @@
-export interface findUserI {
-  id?: string;
-  email?: string;
-}
-
 export interface signupUser {
   id?: string;
   firstName: string;

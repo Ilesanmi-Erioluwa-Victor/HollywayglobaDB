@@ -25,14 +25,13 @@ export const createUser: RequestHandler = catchAsync(
         );
 
       const existEmail = await findUserMEmail(email);
-      if (existEmail) {
-        return next(
+      if (existEmail)
+        next(
           throwError(
             'You are already a member, kindly login to your account',
             StatusCodes.CONFLICT
           )
         );
-      }
 
       const user = await createUserM(req.body);
       sendMail(user, req, res, next);
