@@ -93,17 +93,5 @@ export const getUser: RequestHandler = catchAsync(
     const { id } = req?.params;
         ValidateMongoDbId(id);
         
-            const allowedFields = ['firstName', 'lastName', 'email'];
-            const unexpectedFields = Object.keys(req.body).filter(
-              (field) => !allowedFields.includes(field)
-            );
-            if (unexpectedFields.length > 0) {
-              throwError(
-                `Unexpected fields: ${unexpectedFields.join(
-                  ', '
-                )}, Sorry it's not part of the parameter`,
-                StatusCodes.BAD_REQUEST
-              );
-            }
   }
 );
