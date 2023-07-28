@@ -18,7 +18,7 @@ const db_1 = require("../configurations/db");
 const config_1 = require("../configurations/config");
 const sendMail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // const user = await prisma.user.findUnique({})
-    const { accountVerificationToken, firstName, lastName, email } = data;
+    const { accountVerificationToken, firstName, lastName, email, id } = data;
     const transport = nodemailer_1.default.createTransport({
         host: 'sandbox.smtp.mailtrap.io',
         port: 2525,
@@ -28,7 +28,7 @@ const sendMail = (data, req, res, next) => __awaiter(void 0, void 0, void 0, fun
         },
     });
     const resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/user/verify_account/${accountVerificationToken}>Click to verify..</a>
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
        `;
     const mailOptions = {
         from: 'HollwayGlobalIncLimited@gmail.com',

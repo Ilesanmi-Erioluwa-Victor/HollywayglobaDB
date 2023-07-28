@@ -3,6 +3,7 @@ import { prisma } from '../configurations/db';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { ENV } from '../configurations/config';
 interface User {
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -16,7 +17,7 @@ export const sendMail = async (
   next: NextFunction
 ) => {
   // const user = await prisma.user.findUnique({})
-  const { accountVerificationToken, firstName, lastName, email } = data;
+  const { accountVerificationToken, firstName, lastName, email, id } = data;
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
@@ -29,7 +30,7 @@ export const sendMail = async (
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
     'host'
-  )}/api/v1/user/verify_account/${accountVerificationToken}>Click to verify..</a>
+  )}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
        `;
 
   const mailOptions = {
