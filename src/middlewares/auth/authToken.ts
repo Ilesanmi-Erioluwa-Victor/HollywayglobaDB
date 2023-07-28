@@ -51,11 +51,21 @@ export const isUserVerified = catchAsync(
     const authId = req?.authId;
     const userId = req?.params?.id;
 
+    if (!authId)
+      next(
+        throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
+      );
+    if (!userId) {
+      next(
+        throwError('Sorry, invalid ID', StatusCodes.BAD_REQUEST)
+      );
+   }
     ValidateMongoDbId(authId as string);
     ValidateMongoDbId(userId);
 
     try {
-      const user = await findUserMId(authId as string);
+      
+      const user = await findUserMId(authId as string)
       if (user?.id.toString() !== authId?.toString())
         next(
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)

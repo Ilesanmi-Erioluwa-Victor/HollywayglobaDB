@@ -15,5 +15,5 @@ route.post('/signup', createUser);
 route.post('/login', loginUser);
 
 route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
-route.put('/update_profile/:id', AuthMiddleWare, isUserVerified, updateUser);
+route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);
 export default route;
