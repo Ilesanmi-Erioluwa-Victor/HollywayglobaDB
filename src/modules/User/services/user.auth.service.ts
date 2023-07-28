@@ -86,3 +86,4 @@ export const loginUser: RequestHandler = catchAsync(
     }
   }
 );
+

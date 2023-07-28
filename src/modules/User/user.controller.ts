@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser } from './services/user.auth.service';
+import { createUser, loginUser } from './services/user.auth.service';
 
 const route = express.Router();
 route.post('/signup', createUser);
