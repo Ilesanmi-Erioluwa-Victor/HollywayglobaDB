@@ -252,7 +252,7 @@ export const update_password = catchAsync(
 
 export const account_verification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = req.params;
+    const { token, id } = req.params;
     try {
       const user = await prisma.user.findFirst({
         where: {

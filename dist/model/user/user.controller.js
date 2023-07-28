@@ -213,7 +213,7 @@ exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(
     }
 }));
 exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { token } = req.params;
+    const { token, id } = req.params;
     try {
         const user = yield db_1.prisma.user.findFirst({
             where: {
