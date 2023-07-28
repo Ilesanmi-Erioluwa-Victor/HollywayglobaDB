@@ -47,5 +47,6 @@ const findUserMEmail = (email) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.findUserMEmail = findUserMEmail;
 const updateUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield ;
 });
 exports.updateUser = updateUser;
