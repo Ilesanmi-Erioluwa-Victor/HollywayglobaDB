@@ -27,18 +27,21 @@ export const createUserM = async (user: signupUser) => {
 export const findUserM = async (user: findUserI) => {
   const { id, email } = user;
   if (id) {
-    return await prisma.user.findUnique({
+    const userId = await prisma.user.findUnique({
       where: {
         id,
       },
     });
+
+    return userId;
   }
 
   if (email) {
-    return await prisma.user.findUnique({
+    const userEmail = await prisma.user.findUnique({
       where: {
         email,
       },
     });
+    return userEmail;
   }
 };

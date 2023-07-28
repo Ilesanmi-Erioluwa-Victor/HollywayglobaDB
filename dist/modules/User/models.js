@@ -31,18 +31,20 @@ exports.createUserM = createUserM;
 const findUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, email } = user;
     if (id) {
-        return yield db_1.prisma.user.findUnique({
+        const userId = yield db_1.prisma.user.findUnique({
             where: {
                 id,
             },
         });
+        return userId;
     }
     if (email) {
-        return yield db_1.prisma.user.findUnique({
+        const userEmail = yield db_1.prisma.user.findUnique({
             where: {
                 email,
             },
         });
+        return userEmail;
     }
 });
 exports.findUserM = findUserM;
