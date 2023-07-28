@@ -11,6 +11,7 @@ import {
 } from '../../../helper/utils';
 import { findUserMEmail, createUserM, findUserMId } from '../models';
 import { sendMail } from '../../../templates/sendMail';
+import { loginUserI } from '../user.interface';
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -52,17 +53,17 @@ export const loginUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
-      const user = await findUserMEmail(email);
+      const user: loginUserI | any = await findUserMEmail(email);
 
-        if (!user) next(throwError('No user found', StatusCodes.BAD_REQUEST));
-        if (await bcrypt.compare(password, user?.password)) {
-            if (!user.isAccountVerified) {
-                throwError(
-                    'Verify your account in your gmail before you can log in',
-                    StatusCodes.BAD_REQUEST
-                );
-            }
+      if (!user) next(throwError('No user found', StatusCodes.BAD_REQUEST));
+      if (await bcrypt.compare(password, user?.password)) {
+        if (!user.isAccountVerified) {
+          throwError(
+            'Verify your account in your gmail before you can log in',
+            StatusCodes.BAD_REQUEST
+          );
         }
+      }
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

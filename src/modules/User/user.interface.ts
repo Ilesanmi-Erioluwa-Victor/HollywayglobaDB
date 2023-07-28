@@ -7,7 +7,7 @@ export interface signupUser {
   password: string;
 }
 
-export interface loginUser {
+export interface loginUserI {
   id: string;
   firstName: string;
   lastName: string;
