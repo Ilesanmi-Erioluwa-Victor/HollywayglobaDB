@@ -9,6 +9,7 @@ import {
   createAccountVerificationToken,
   generatePasswordResetToken,
 } from '../../../helper/utils';
+import { findUser } from '../models';
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -20,7 +21,9 @@ export const createUser: RequestHandler = catchAsync(
               'Missing credentials, please provide all required information',
               StatusCodes.BAD_REQUEST
             )
-          );
+            );
+        
+            const user = findUser(email)
     } catch (error) {}
   }
 );
