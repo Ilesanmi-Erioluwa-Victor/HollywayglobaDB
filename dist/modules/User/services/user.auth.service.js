@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.update_password = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
@@ -107,7 +107,7 @@ exports.updateUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
         next(error);
     }
 }));
-exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updatePassword = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
     const { password } = req.body;
     try {

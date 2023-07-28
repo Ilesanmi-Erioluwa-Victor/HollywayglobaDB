@@ -150,7 +150,7 @@ export const updateUser = catchAsync(
   }
 );
 
-export const update_password = catchAsync(
+export const updatePassword = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     const { password } = req.body;

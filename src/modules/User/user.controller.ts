@@ -3,6 +3,7 @@ import {
   createUser,
   getUser,
   loginUser,
+  updatePassword,
   updateUser,
 } from './services/user.auth.service';
 import {
@@ -16,4 +17,5 @@ route.post('/login', loginUser);
 
 route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
 route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);
+route.put('/password/:id', AuthMiddleWare, isUserVerified, updatePassword);
 export default route;
