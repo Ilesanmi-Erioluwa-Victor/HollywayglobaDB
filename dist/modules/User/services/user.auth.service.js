@@ -88,6 +88,8 @@ exports.getUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, 
 exports.updateUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req === null || req === void 0 ? void 0 : req.params;
     (0, utils_1.ValidateMongoDbId)(id);
+    if (!id)
+        next((0, cacheError_1.throwError)('Sorry, invalid ID', http_status_codes_1.StatusCodes.BAD_REQUEST));
     const allowedFields = ['firstName', 'lastName', 'email'];
     const unexpectedFields = Object.keys(req.body).filter((field) => !allowedFields.includes(field));
     if (unexpectedFields.length > 0) {
