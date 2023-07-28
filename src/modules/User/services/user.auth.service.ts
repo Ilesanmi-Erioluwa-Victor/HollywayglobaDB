@@ -226,11 +226,7 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
         'Please, provide email for you to reset your password',
         StatusCodes.BAD_REQUEST
       );
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    const user = await findUser
     if (!user)
       throwError(
         'No user found with provided email.., try again',
