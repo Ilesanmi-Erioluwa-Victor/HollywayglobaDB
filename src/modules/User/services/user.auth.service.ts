@@ -34,7 +34,7 @@ export const createUser: RequestHandler = catchAsync(
             StatusCodes.CONFLICT
           )
         );
-
+        
       const user = await createUserM(req.body);
       sendMail(user, req, res, next);
       res.status(StatusCodes.CREATED).json({
