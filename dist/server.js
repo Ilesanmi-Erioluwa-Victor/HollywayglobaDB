@@ -17,7 +17,7 @@ const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const path_1 = __importDefault(require("path"));
 const adminRoute_1 = __importDefault(require("./routes/admin/adminRoute"));
-const userRoute_1 = __importDefault(require("./routes/user/userRoute"));
+const user_controller_1 = __importDefault(require("./modules/User/user.controller"));
 const _404_1 = require("./middlewares/error/_404");
 const config_1 = require("./configurations/config");
 const app = (0, express_1.default)();
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use('/api/v1/admin/', adminRoute_1.default);
-app.use('/api/v1/user', userRoute_1.default);
+app.use('/api/v1/user', user_controller_1.default);
 app.use(_404_1.pageNotFound);
 app.get('/', function (req, res) {
     res.sendFile(path_1.default.join(__dirname, '/public'));

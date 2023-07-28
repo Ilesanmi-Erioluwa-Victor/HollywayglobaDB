@@ -9,19 +9,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findUser = void 0;
+exports.createUserM = exports.findUserM = void 0;
 const db_1 = require("../../configurations/db");
-const findUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
+const utils_1 = require("../../helper/utils");
+const findUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, email } = user;
     if (id) {
         return yield db_1.prisma.user.findUnique({
             where: {
-                id
-            }
+                id,
+            },
         });
     }
     if (email) {
-        return yield db_1.prisma.user.fin;
+        return yield db_1.prisma.user.findUnique({
+            where: {
+                email,
+            },
+        });
     }
 });
-exports.findUser = findUser;
+exports.findUserM = findUserM;
+const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const { firstName, lastName, email, mobile, password } = user;
+    const createUser = yield db_1.prisma.user.create({
+        data: {
+            firstName,
+            lastName,
+            email,
+            mobile,
+            password: yield (0, utils_1.hashedPassword)(password),
+        },
+    });
+    (0, utils_1.generateToken)(createUser === null || createUser === void 0 ? void 0 : createUser.id);
+    const tokenUser = yield (0, utils_1.createAccountVerificationToken)(createUser === null || createUser === void 0 ? void 0 : createUser.id);
+    return tokenUser;
+});
+exports.createUserM = createUserM;

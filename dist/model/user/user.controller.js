@@ -32,7 +32,6 @@ exports.create_user = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
         if (exist_user) {
             return next((0, cacheError_1.throwError)('You are already a member, kindly login to your account', http_status_codes_1.StatusCodes.CONFLICT));
         }
-        // TODO  i will write it to it logic util later
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
         const user = yield db_1.prisma.user.create({
