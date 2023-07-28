@@ -92,3 +92,5 @@ export const accountVerificationM = async (
 
   return user;
 };
+
+export const accountVerificationUpdatedM = async()
