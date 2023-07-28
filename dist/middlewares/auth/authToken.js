@@ -55,6 +55,7 @@ exports.isUserVerified = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
         next((0, cacheError_1.throwError)('Sorry, you are not authorized', http_status_codes_1.StatusCodes.BAD_REQUEST));
     (0, utils_2.ValidateMongoDbId)(authId);
     (0, utils_2.ValidateMongoDbId)(userId);
+    console.log(authId, userId);
     try {
         const user = yield db_1.prisma.user.findUnique({
             where: {

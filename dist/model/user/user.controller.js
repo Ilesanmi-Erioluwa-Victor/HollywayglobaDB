@@ -213,10 +213,23 @@ exports.update_password = (0, utils_1.catchAsync)((req, res, next) => __awaiter(
     }
 }));
 exports.account_verification = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { token } = req.params;
+    const { token, id } = req.params;
+    // const authId = req?.authId;
+    //   if (!authId)
+    // next(
+    //   throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
+    // );
+    // ValidateMongoDbId(authId as string);
+    (0, utils_2.ValidateMongoDbId)(id);
+    console.log(id);
     try {
-        const user = yield db_1.prisma.user.findFirst({
+        if (!id)
+            next((0, cacheError_1.throwError)('Sorry, your id is not valid', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        if (!token)
+            next((0, cacheError_1.throwError)('Sorry, this token is not valid, try again', http_status_codes_1.StatusCodes.BAD_REQUEST));
+        const user = yield db_1.prisma.user.findUnique({
             where: {
+                id: id,
                 accountVerificationToken: token,
                 accountVerificationTokenExpires: {
                     gt: new Date(),

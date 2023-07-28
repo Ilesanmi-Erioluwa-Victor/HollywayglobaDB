@@ -58,6 +58,8 @@ export const isUserVerified = catchAsync(
     ValidateMongoDbId(authId as string);
     ValidateMongoDbId(userId);
 
+    console.log(authId, userId)
+
     try {
       const user = await prisma.user.findUnique({
         where: {
