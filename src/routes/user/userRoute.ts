@@ -26,7 +26,7 @@ userRouter.post('/forget_password', forget_password_token);
 userRouter.put('/reset_password/:token', reset_password);
 
 // userRouter.post('/sendmail/:id', AuthMiddleWare, generate_verification);
-userRouter.put('/verify_account/:token', account_verification);
+userRouter.put('/:id/verify_account/:token', account_verification);
 userRouter.get('/:id', AuthMiddleWare, isUserVerified, get_user);
 userRouter.delete('/:id', AuthMiddleWare, isUserVerified, delete_user);
 userRouter.put(
