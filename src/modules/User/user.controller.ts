@@ -7,6 +7,7 @@ import {
   updateUser,
   accountVerification,
   forgetPasswordToken,
+  resetPassword
 } from './services/user.auth.service';
 import {
   AuthMiddleWare,
@@ -18,7 +19,7 @@ route.post('/signup', createUser);
 route.post('/login', loginUser);
 
 route.post('/forgetPassword', forgetPasswordToken);
-
+route.put('/resetPassword/:token', resetPassword);
 route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
 route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);
 route.put('/password/:id', AuthMiddleWare, isUserVerified, updatePassword);

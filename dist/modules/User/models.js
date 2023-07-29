@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
+exports.resetPasswordTokenDeleteM = exports.resetPasswordUpdateM = exports.resetPasswordM = exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
 const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -110,3 +110,28 @@ const forgetPasswordTokenM = (token, expirationTime, userId) => __awaiter(void 0
     return user;
 });
 exports.forgetPasswordTokenM = forgetPasswordTokenM;
+const resetPasswordM = (token) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.passwordResetToken.findUnique({
+        where: { token },
+        include: { user: true },
+    });
+    return user;
+});
+exports.resetPasswordM = resetPasswordM;
+const resetPasswordUpdateM = (id, password) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.user.update({
+        where: { id },
+        data: {
+            password: yield (0, utils_1.hashedPassword)(password),
+        },
+    });
+    return user;
+});
+exports.resetPasswordUpdateM = resetPasswordUpdateM;
+const resetPasswordTokenDeleteM = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.passwordResetToken.delete({
+        where: { id },
+    });
+    return user;
+});
+exports.resetPasswordTokenDeleteM = resetPasswordTokenDeleteM;

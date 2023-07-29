@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgetPasswordToken = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.resetPassword = exports.forgetPasswordToken = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const cacheError_1 = require("../../../middlewares/error/cacheError");
@@ -165,6 +165,33 @@ exports.forgetPasswordToken = (0, utils_1.catchAsync)((req, res, next) => __awai
         yield (0, sendMail_1.sendUserToken)(passwordReset, req, res, next);
         res.json({
             message: `A reset token has been sent to your gmail`,
+            status: 'success',
+        });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
+exports.resetPassword = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { token } = req === null || req === void 0 ? void 0 : req.params;
+    const { password } = req.body;
+    if (!token)
+        next((0, cacheError_1.throwError)('Sorry, invalid token or something went wrong', http_status_codes_1.StatusCodes.BAD_GATEWAY));
+    if (!password)
+        next((0, cacheError_1.throwError)('Please, provide password for reset', http_status_codes_1.StatusCodes.BAD_REQUEST));
+    try {
+        const resetTokenData = yield (0, models_1.resetPasswordM)(token);
+        if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
+            (0, cacheError_1.throwError)('Invalid or expired token', http_status_codes_1.StatusCodes.NOT_FOUND);
+        }
+        const user = yield (0, models_1.resetPasswordUpdateM)((_a = resetTokenData === null || resetTokenData === void 0 ? void 0 : resetTokenData.user) === null || _a === void 0 ? void 0 : _a.id, password);
+        const deleteUserPasswordResetToken = yield (0, models_1.resetPasswordTokenDeleteM)(resetTokenData === null || resetTokenData === void 0 ? void 0 : resetTokenData.id);
+        res.json({
+            message: 'Password reset successful, login now',
             status: 'success',
         });
     }

@@ -128,3 +128,30 @@ export const forgetPasswordTokenM = async (
 
   return user;
 };
+
+export const resetPasswordM = async (token: string) => {
+  const user = await prisma.passwordResetToken.findUnique({
+    where: { token },
+    include: { user: true },
+  });
+  return user;
+};
+
+export const resetPasswordUpdateM = async (id: string, password: string) => {
+  const user = await prisma.user.update({
+    where: { id },
+    data: {
+      password: await hashedPassword(password),
+    },
+  });
+
+  return user;
+};
+
+export const resetPasswordTokenDeleteM = async (id: string) => {
+  const user = await prisma.passwordResetToken.delete({
+    where: { id },
+  });
+
+  return user;
+};

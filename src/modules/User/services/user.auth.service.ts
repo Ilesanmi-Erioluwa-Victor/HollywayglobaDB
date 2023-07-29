@@ -6,7 +6,6 @@ import {
   catchAsync,
   ValidateMongoDbId,
   generateToken,
-  createAccountVerificationToken,
   generatePasswordResetToken,
 } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
@@ -19,6 +18,9 @@ import {
   accountVerificationUpdatedM,
   forgetPasswordTokenM,
   accountVerificationM,
+  resetPasswordM,
+  resetPasswordUpdateM,
+  resetPasswordTokenDeleteM,
 } from '../models';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -248,6 +250,54 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
       await sendUserToken(passwordReset, req, res, next);
       res.json({
         message: `A reset token has been sent to your gmail`,
+        status: 'success',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
+export const resetPassword: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req?.params;
+    const { password } = req.body;
+
+    if (!token)
+      next(
+        throwError(
+          'Sorry, invalid token or something went wrong',
+          StatusCodes.BAD_GATEWAY
+        )
+      );
+
+    if (!password)
+      next(
+        throwError(
+          'Please, provide password for reset',
+          StatusCodes.BAD_REQUEST
+        )
+      );
+    try {
+      const resetTokenData = await resetPasswordM(token);
+      if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
+        throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
+      }
+
+      const user = await resetPasswordUpdateM(
+        resetTokenData?.user?.id as string,
+        password
+      );
+
+      const deleteUserPasswordResetToken = await resetPasswordTokenDeleteM(
+        resetTokenData?.id as string
+      );
+
+      res.json({
+        message: 'Password reset successful, login now',
         status: 'success',
       });
     } catch (error: any) {
