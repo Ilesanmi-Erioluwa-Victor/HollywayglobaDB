@@ -1,0 +1,35 @@
+name: HollywayGlobal Codebase
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: windows-2022
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache Dependecies
+        uses: actions/cache@v3
+        with:
+            path: ~/.npm
+            key: dev-node-modules-${{ hashFiles('**/package-lock.json')}}
+      - name: Install Dependecies
+        run: npm ci
+      - name: Test code
+        run : npm run test
+#   dev:
+#      needs : test
+#      runs-on: windows-2022
+#      steps:
+#       - name: Get code
+#         uses: actions/checkout@v3
+#       - name: Cache Dependecies
+#         uses: actions/cache@v3
+#         with:
+#             path: ~/.npm
+#             key: dev-node-modules-${{ hashFiles('**/package-lock.json')}}
+#       - name: Install Dependecies
+#         run: npm ci
+#       - name: Test code
+#         run : npm run test
