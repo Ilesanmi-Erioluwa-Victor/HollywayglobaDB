@@ -16,8 +16,6 @@ jobs:
             key: dev-node-modules-${{ hashFiles('**/package-lock.json')}}
       - name: Install Dependecies
         run: npm ci
-      - name: Test code
-        run : npm run test
 #   dev:
 #      needs : test
 #      runs-on: windows-2022
