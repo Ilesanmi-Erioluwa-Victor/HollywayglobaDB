@@ -277,7 +277,7 @@ export const resetPassword: RequestHandler = catchAsync(
     if (!password)
       next(
         throwError(
-          'Please, provide password for reset',
+          'Please, provide password for reset!!!',
           StatusCodes.BAD_REQUEST
         )
       );
