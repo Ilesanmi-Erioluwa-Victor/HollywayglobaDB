@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.profileImageResize = exports.profileImage = void 0;
 const multer_1 = __importDefault(require("multer"));
 const sharp_1 = __importDefault(require("sharp"));
 const multerStorage = multer_1.default.memoryStorage();
@@ -25,14 +26,14 @@ const multerFilter = (req, file, cb) => {
         });
     }
 };
-const profileImage = (0, multer_1.default)({
+exports.profileImage = (0, multer_1.default)({
     storage: multerStorage,
     fileFilter: multerFilter,
     limits: {
         fileSize: 2000000,
     },
 });
-const profilePhotoResize = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const profileImageResize = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.file)
         return next();
     yield (0, sharp_1.default)(req.file.buffer)
@@ -41,3 +42,4 @@ const profilePhotoResize = (req, res, next) => __awaiter(void 0, void 0, void 0,
         .jpeg({ quality: 90 });
     next();
 });
+exports.profileImageResize = profileImageResize;

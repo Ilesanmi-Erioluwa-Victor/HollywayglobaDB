@@ -16,7 +16,7 @@ const multerFilter = (req: any, file : any, cb : any) => {
   }
 };
 
-const profileImage = multer({
+export const profileImage = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
   limits: {
@@ -24,7 +24,7 @@ const profileImage = multer({
   },
 });
 
-const profilePhotoResize = async (req : Request, res : Response, next : NextFunction) => {
+export const profileImageResize = async (req : Request, res : Response, next : NextFunction) => {
   if (!req.file) return next();
   await sharp(req.file.buffer)
     .resize(250, 250)
