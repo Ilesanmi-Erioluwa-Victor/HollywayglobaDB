@@ -84,4 +84,4 @@ function hashedPassword(password) {
     });
 }
 exports.hashedPassword = hashedPassword;
-exports.upload = (0, multer_1.default)({ dest: "uploads/" });
+exports.upload = (0, multer_1.default)({ dest: "src/uploads" });
