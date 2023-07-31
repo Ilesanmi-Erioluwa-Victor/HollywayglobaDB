@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import fs from 'fs';
+import path from 'path';
 import { throwError } from '../../../middlewares/error/cacheError';
 import {
   catchAsync,
@@ -316,14 +317,25 @@ export const uploadProfile: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     ValidateMongoDbId(id);
-    if(!req?.file) next(throwError("Sorry, please select an image to be uploaded", StatusCodes.BAD_REQUEST ))
+    if (!req?.file) next(throwError("Sorry, please select an image to be uploaded", StatusCodes.BAD_REQUEST))
+    
+    const image: any = req.file;
+    
+    const allowedImageMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+    if (
+      !allowedImageMimeTypes.includes(image.mimetype) ||
+      !allowedImageExtensions.includes(
+        path.extname(image.originalname).toLowerCase()
+      )
+    ) {
+      return next(throwError('Only image files (JPEG, PNG, GIF) are allowed.', StatusCodes.BAD_REQUEST));
+    }
     try {
-      const image: any = req.file;
+     
       const localPath = `src/uploads/${image.filename}`;
-
       const upload: any = await cloudinaryUploadImage(localPath, 'users');
       const user = await userProfilePictureUpdateM(id, upload.url);
-      console.log(user);
       fs.unlinkSync(localPath);
     } catch (error: any) {
       if (!error.statusCode) {
