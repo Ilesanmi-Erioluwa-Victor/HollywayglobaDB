@@ -308,3 +308,8 @@ export const resetPassword: RequestHandler = catchAsync(
     }
   }
 );
+
+
+export const uploadProfile: RequestHandler = catchAsync(async( req: Request, res : Response, next : NextFunction) => {
+   
+})
