@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadProfile = exports.resetPassword = exports.forgetPasswordToken = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.createAddress = exports.uploadProfile = exports.resetPassword = exports.forgetPasswordToken = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const fs_1 = __importDefault(require("fs"));
@@ -227,3 +227,7 @@ exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
         next(error);
     }
 }));
+exports.createAddress = (0, utils_1.catchAsync)(asyn(req, Request, res, Response, next, express_1.NextFunction));
+{
+}
+;
