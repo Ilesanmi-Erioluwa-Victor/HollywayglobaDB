@@ -35,7 +35,7 @@ model AdminPasswordResetToken {
   token          String   @unique @default("")
   expirationTime DateTime
   adminId        String   @db.ObjectId
-  admin           Admin    @relation(fields: [adminId], references: [id])
+  admin          Admin    @relation(fields: [adminId], references: [id])
 }
 
 model User {
@@ -61,9 +61,10 @@ model User {
 }
 
 model Address {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  user            User   @relation(fields: [userId], references: [id])
+  userId          String @db.ObjectId
+  deliveryAddress String
 }
 
 model Product {
