@@ -1,12 +1,11 @@
 import { Response, Request, NextFunction } from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
-import path from 'path'
+import path from 'path';
 
 const multerStorage = multer.memoryStorage();
 
-const multerFilter = (req: any, file : any, cb : any) => {
-
+const multerFilter = (req: any, file: any, cb: any) => {
   if (file.mimetype.startsWith('image')) {
     cb(null, true);
   } else {
@@ -24,11 +23,19 @@ export const profileImage = multer({
   },
 });
 
-export const profileImageResize = async (req : Request, res : Response, next : NextFunction) => {
+export const profileImageResize = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   if (!req.file) return next();
+  // src / uploads;
+  req.file.filename = `user-${Date.now()}-${req.file.originalname}`;
+
   await sharp(req.file.buffer)
     .resize(250, 250)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
+    .toFile(path.join(`src/uploads/${req.file.filename}`));
   next();
 };
