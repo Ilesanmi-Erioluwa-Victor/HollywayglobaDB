@@ -14,7 +14,7 @@ import {
   AuthMiddleWare,
   isUserVerified,
 } from '../../middlewares/auth/authToken';
-import { upload } from '../../helper/utils';
+// import { upload } from '../../helper/utils';
 import {
   profileImage,
   profileImageResize,
@@ -22,7 +22,7 @@ import {
 const route = express.Router();
 route.post('/signup', createUser);
 route.post('/login', loginUser);
-route.post("address/create")
+route.post("address/create",AuthMiddleWare,isUserVerified,)
 
 route.post('/forgetPassword', forgetPasswordToken);
 route.put('/resetPassword/:token', resetPassword);
