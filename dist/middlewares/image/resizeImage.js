@@ -37,7 +37,6 @@ exports.profileImage = (0, multer_1.default)({
 const profileImageResize = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.file)
         return next();
-    // src / uploads;
     req.file.filename = `user-${Date.now()}-${req.file.originalname}`;
     yield (0, sharp_1.default)(req.file.buffer)
         .resize(250, 250)

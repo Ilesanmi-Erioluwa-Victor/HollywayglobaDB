@@ -29,7 +29,6 @@ export const profileImageResize = async (
   next: NextFunction
 ) => {
   if (!req.file) return next();
-  // src / uploads;
   req.file.filename = `user-${Date.now()}-${req.file.originalname}`;
 
   await sharp(req.file.buffer)
