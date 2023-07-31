@@ -28,7 +28,7 @@ route.put('/resetPassword/:token', resetPassword);
 route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
 route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);
 route.post(
-  '/uploadImage/:id',
+  '/:id/uploadImage',
   AuthMiddleWare,
   profileImage.single('image'),
   profileImageResize,

@@ -14,7 +14,7 @@ route.post('/forgetPassword', user_auth_service_1.forgetPasswordToken);
 route.put('/resetPassword/:token', user_auth_service_1.resetPassword);
 route.get('/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.getUser);
 route.put('/updateProfile/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.updateUser);
-route.post('/uploadImage/:id', authToken_1.AuthMiddleWare, resizeImage_1.profileImage.single('image'), resizeImage_1.profileImageResize, authToken_1.isUserVerified, user_auth_service_1.uploadProfile);
+route.post('/:id/uploadImage', authToken_1.AuthMiddleWare, resizeImage_1.profileImage.single('image'), resizeImage_1.profileImageResize, authToken_1.isUserVerified, user_auth_service_1.uploadProfile);
 route.put('/password/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.updatePassword);
 route.put('/:id/verify_account/:token', user_auth_service_1.accountVerification);
 exports.default = route;

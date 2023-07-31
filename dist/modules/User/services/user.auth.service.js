@@ -206,6 +206,7 @@ exports.resetPassword = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
 }));
 exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
+    (0, utils_1.ValidateMongoDbId)(id);
     const image = req.file;
     console.log(image);
     const localPath = `src/uploads/${image.filename}`;

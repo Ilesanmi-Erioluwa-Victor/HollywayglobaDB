@@ -315,6 +315,7 @@ export const resetPassword: RequestHandler = catchAsync(
 export const uploadProfile: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id
+    ValidateMongoDbId(id)
     const image : any= req.file;
     console.log(image)
     const localPath = `src/uploads/${image.filename}`;
