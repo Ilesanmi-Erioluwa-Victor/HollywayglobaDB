@@ -16,7 +16,6 @@ exports.uploadProfile = exports.resetPassword = exports.forgetPasswordToken = ex
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 const cacheError_1 = require("../../../middlewares/error/cacheError");
 const utils_1 = require("../../../helper/utils");
 const models_1 = require("../models");
@@ -209,18 +208,16 @@ exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     const id = req.params.id;
     (0, utils_1.ValidateMongoDbId)(id);
     if (!(req === null || req === void 0 ? void 0 : req.file))
-        next((0, cacheError_1.throwError)("Sorry, please select an image to be uploaded", http_status_codes_1.StatusCodes.BAD_REQUEST));
+        next((0, cacheError_1.throwError)('Sorry, please select an image to be uploaded', http_status_codes_1.StatusCodes.BAD_REQUEST));
     const image = req.file;
-    const allowedImageMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
-    if (!allowedImageMimeTypes.includes(image.mimetype) ||
-        !allowedImageExtensions.includes(path_1.default.extname(image.originalname).toLowerCase())) {
-        return next((0, cacheError_1.throwError)('Only image files (JPEG, PNG, GIF) are allowed.', http_status_codes_1.StatusCodes.BAD_REQUEST));
-    }
     try {
         const localPath = `src/uploads/${image.filename}`;
         const upload = yield (0, cloudinary_1.cloudinaryUploadImage)(localPath, 'users');
         const user = yield (0, models_1.userProfilePictureUpdateM)(id, upload.url);
+        res.json({
+            status: 'Success',
+            message: 'You have successfully updated your image',
+        });
         fs_1.default.unlinkSync(localPath);
     }
     catch (error) {
