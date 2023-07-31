@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importDefault(require("multer"));
 const sharp_1 = __importDefault(require("sharp"));
-const path_1 = __importDefault(require("path"));
 const multerStorage = multer_1.default.memoryStorage();
 const multerFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('image')) {
@@ -36,11 +35,9 @@ const profileImage = (0, multer_1.default)({
 const profilePhotoResize = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.file)
         return next();
-    req.file.filename = `user-${Date.now()}-${req.file.originalname}`;
     yield (0, sharp_1.default)(req.file.buffer)
         .resize(250, 250)
         .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(path_1.default.join(`public/images/profile/${req.file.filename}`));
+        .jpeg({ quality: 90 });
     next();
 });
