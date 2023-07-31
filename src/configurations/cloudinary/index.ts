@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { ENV } from '../config';
-import { catchAsync } from '../../helper/utils';
+import  multer from "multer"
 
 cloudinary.config({
   cloud_name: ENV.CLOUDIANRY.NAME,
@@ -8,17 +8,16 @@ cloudinary.config({
   api_secret: ENV.CLOUDIANRY.SECRET,
 });
 
-export const cloudinaryUploadImage = catchAsync(
-  async (file: string) => {
-    try {
-      const data = await cloudinary.uploader.upload(file, {
-        resource_type: 'auto',
-      });
-      return {
-        url: data?.secure_url,
-      };
-    } catch (error) {
-      return error;
-    }
+export const cloudinaryUploadImage = async (file: string) => {
+  try {
+    const data = await cloudinary.uploader.upload(file, {
+      resource_type: 'auto',
+    });
+    return {
+      url: data?.secure_url,
+    };
+  } catch (error) {
+    return error;
   }
-);
+};
+

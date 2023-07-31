@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hashedPassword = exports.generateToken = exports.generatePasswordResetToken = exports.createAccountVerificationTokenAdmin = exports.createAccountVerificationToken = exports.ValidateMongoDbId = exports.catchAsync = void 0;
+exports.upload = exports.hashedPassword = exports.generateToken = exports.generatePasswordResetToken = exports.createAccountVerificationTokenAdmin = exports.createAccountVerificationToken = exports.ValidateMongoDbId = exports.catchAsync = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -21,6 +21,7 @@ const cacheError_1 = require("../middlewares/error/cacheError");
 const http_status_codes_1 = require("http-status-codes");
 const db_1 = require("../configurations/db");
 const config_1 = require("../configurations/config");
+const multer_1 = __importDefault(require("multer"));
 const catchAsync = (fn) => {
     return (req, res, next) => {
         fn(req, res, next).catch((err) => next(err));
@@ -83,3 +84,4 @@ function hashedPassword(password) {
     });
 }
 exports.hashedPassword = hashedPassword;
+exports.upload = (0, multer_1.default)({ dest: "uploads/" });

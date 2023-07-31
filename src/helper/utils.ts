@@ -7,6 +7,7 @@ import { throwError } from '../middlewares/error/cacheError';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
+import multer from "multer"
 
 export const catchAsync = (fn: any) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -71,3 +72,7 @@ export async function hashedPassword(password: string): Promise<string> {
 
   return hashedPassword;
 }
+
+
+export const upload = multer({dest : "uploads/"})
+ 

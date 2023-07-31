@@ -24,6 +24,7 @@ import {
 } from '../models';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
+import { cloudinaryUploadImage } from '../../../configurations/cloudinary';
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -309,7 +310,25 @@ export const resetPassword: RequestHandler = catchAsync(
   }
 );
 
+export const uploadProfile: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const image = req.file;
+    console.log(image)
+    console.log(req.body.file)
+    // const upload = cloudinaryUploadImage(image)
+    //   .then((result) => {
+    //     res.status(200).send({
+    //       message: 'success',
+    //       result,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     res.status(500).send({
+    //       message: 'failure',
+    //       error,
+    //     });
+    //   });
 
-export const uploadProfile: RequestHandler = catchAsync(async( req: Request, res : Response, next : NextFunction) => {
-   
-})
+    // console.log('sent successfully');
+  }
+);
