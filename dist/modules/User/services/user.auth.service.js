@@ -208,7 +208,7 @@ exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     const id = req.params.id;
     const image = req.file;
     console.log(image);
-    const localPath = `uploads/${image.filename}`;
+    const localPath = `src/uploads/${image.filename}`;
     const upload = yield (0, cloudinary_1.cloudinaryUploadImage)(localPath, "users");
     const user = yield (0, models_1.userProfilePictureUpdateM)(id, upload.url);
     console.log(user);
