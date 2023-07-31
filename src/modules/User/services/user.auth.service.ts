@@ -345,13 +345,13 @@ export const uploadProfile: RequestHandler = catchAsync(
 );
 
 export const createAddress: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    ValidateMongoDbId(id);
-    if (!id) throwError("You are not logged in", StatusCodes.FORBIDDEN)
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    // const { id } = req.params;
+    // ValidateMongoDbId(id);
+    // if (!id) throwError("You are not logged in", StatusCodes.FORBIDDEN)
     try {
-         const user = await findUserMId(id)
-         console.log(user)      
+        //  const user = await findUserMId(id)
+         console.log(req.authId)      
     }catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

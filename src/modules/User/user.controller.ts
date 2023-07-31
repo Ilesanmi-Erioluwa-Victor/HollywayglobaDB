@@ -9,7 +9,7 @@ import {
   forgetPasswordToken,
   resetPassword,
   uploadProfile,
-  createAddress
+  createAddress,
 } from './services/user.auth.service';
 import {
   AuthMiddleWare,
@@ -23,7 +23,7 @@ import {
 const route = express.Router();
 route.post('/signup', createUser);
 route.post('/login', loginUser);
-route.post("address/create",AuthMiddleWare,isUserVerified,)
+route.post('/address/create', AuthMiddleWare, isUserVerified, createAddress);
 
 route.post('/forgetPassword', forgetPasswordToken);
 route.put('/resetPassword/:token', resetPassword);
