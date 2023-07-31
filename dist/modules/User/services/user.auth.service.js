@@ -228,17 +228,18 @@ exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     }
 }));
 exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // const { id } = req.params;
-    // ValidateMongoDbId(id);
-    // if (!id) throwError("You are not logged in", StatusCodes.FORBIDDEN)
-    //   try {
-    //       //  const user = await findUserMId(id)
-    //            
-    //   }catch (error: any) {
-    //     if (!error.statusCode) {
-    //       error.statusCode = 500;
-    //     }
-    //     next(error);
-    //   }
-    console.log(req.authId);
+    const { id } = req.params;
+    (0, utils_1.ValidateMongoDbId)(id);
+    if (!id)
+        (0, cacheError_1.throwError)("Invalid ID", http_status_codes_1.StatusCodes.FORBIDDEN);
+    try {
+        //  const user = await findUserMId(id)
+        console.log(id);
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
 }));

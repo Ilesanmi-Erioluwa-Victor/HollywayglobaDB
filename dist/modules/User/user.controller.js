@@ -11,7 +11,7 @@ const resizeImage_1 = require("../../middlewares/image/resizeImage");
 const route = express_1.default.Router();
 route.post('/signup', user_auth_service_1.createUser);
 route.post('/login', user_auth_service_1.loginUser);
-route.post('/address/create', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.createAddress);
+route.post('/:id/address/create', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.createAddress);
 route.post('/forgetPassword', user_auth_service_1.forgetPasswordToken);
 route.put('/resetPassword/:token', user_auth_service_1.resetPassword);
 route.get('/:id', authToken_1.AuthMiddleWare, authToken_1.isUserVerified, user_auth_service_1.getUser);
