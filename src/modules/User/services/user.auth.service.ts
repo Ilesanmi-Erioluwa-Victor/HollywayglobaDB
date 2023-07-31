@@ -350,8 +350,8 @@ export const createAddress: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     if (!id) throwError("Invalid ID", StatusCodes.FORBIDDEN)
     try {
-        //  const user = await findUserMId(id)
-            console.log(id)  
+         const user = await findUserMId(id)
+            console.log(user)  
     }catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

@@ -233,8 +233,8 @@ exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     if (!id)
         (0, cacheError_1.throwError)("Invalid ID", http_status_codes_1.StatusCodes.FORBIDDEN);
     try {
-        //  const user = await findUserMId(id)
-        console.log(id);
+        const user = yield (0, models_1.findUserMId)(id);
+        console.log(user);
     }
     catch (error) {
         if (!error.statusCode) {
