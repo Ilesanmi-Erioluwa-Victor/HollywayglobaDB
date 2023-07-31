@@ -24,7 +24,7 @@ const profileImage = multer({
   },
 });
 
-const profilePhotoResize = async (req, res, next) => {
+const profilePhotoResize = async (req : Request, res : Response, next : NextFunction) => {
   if (!req.file) return next();
   await sharp(req.file.buffer)
     .resize(250, 250)
