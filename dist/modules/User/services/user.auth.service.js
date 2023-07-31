@@ -214,11 +214,11 @@ exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
         const localPath = `src/uploads/${image.filename}`;
         const upload = yield (0, cloudinary_1.cloudinaryUploadImage)(localPath, 'users');
         const user = yield (0, models_1.userProfilePictureUpdateM)(id, upload.url);
+        fs_1.default.unlinkSync(localPath);
         res.json({
             status: 'Success',
             message: 'You have successfully updated your image',
         });
-        fs_1.default.unlinkSync(localPath);
     }
     catch (error) {
         if (!error.statusCode) {

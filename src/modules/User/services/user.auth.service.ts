@@ -330,11 +330,11 @@ export const uploadProfile: RequestHandler = catchAsync(
       const localPath = `src/uploads/${image.filename}`;
       const upload: any = await cloudinaryUploadImage(localPath, 'users');
       const user = await userProfilePictureUpdateM(id, upload.url);
+      fs.unlinkSync(localPath);
       res.json({
         status: 'Success',
         message: 'You have successfully updated your image',
       });
-      fs.unlinkSync(localPath);
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
