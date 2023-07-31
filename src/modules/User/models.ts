@@ -168,5 +168,8 @@ export const userProfilePictureUpdateM = async (id: string, profilePhoto : strin
 };
 
 export const createAddressM = async (id: string,) => {
-  
+  const address = await prisma.address.create({
+    data: {},
+    include: { user: true },
+  });
 }

@@ -146,5 +146,9 @@ const userProfilePictureUpdateM = (id, profilePhoto) => __awaiter(void 0, void 0
 });
 exports.userProfilePictureUpdateM = userProfilePictureUpdateM;
 const createAddressM = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const address = yield db_1.prisma.address.create({
+        data: {},
+        include: { user: true },
+    });
 });
 exports.createAddressM = createAddressM;
