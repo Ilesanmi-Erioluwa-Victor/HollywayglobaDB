@@ -11,7 +11,7 @@ import { signupUser, Cloudinary } from './user.interface';
 
 export const createUserM = async (user: signupUser) => {
   const { firstName, lastName, email, mobile, password, profilePhoto } = user;
-  const uploadedImage = await cloudinaryUploadImage(profilePhoto);
+  const uploadedImage = await cloudinaryUploadImage(profilePhot);
   const createUser = await prisma.user.create({
     data: {
       firstName,
