@@ -6,13 +6,12 @@ import path from 'path';
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req: any, file: any, cb: any) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb({
-      message: 'Unsupported file type or format',
-    });
-  }
+ if (file.mimetype.startsWith('image')) {
+   cb(null, true);
+ } else {
+   const error = new Error('Unsupported file type or format');
+   cb(error);
+ }
 };
 
 export const profileImage = multer({

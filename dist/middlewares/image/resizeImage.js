@@ -22,9 +22,8 @@ const multerFilter = (req, file, cb) => {
         cb(null, true);
     }
     else {
-        cb({
-            message: 'Unsupported file type or format',
-        });
+        const error = new Error('Unsupported file type or format');
+        cb(error);
     }
 };
 exports.profileImage = (0, multer_1.default)({
