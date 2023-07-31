@@ -9,6 +9,7 @@ import {
   forgetPasswordToken,
   resetPassword,
   uploadProfile,
+  createAddress
 } from './services/user.auth.service';
 import {
   AuthMiddleWare,
