@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userProfilePictureUpdateM = exports.resetPasswordTokenDeleteM = exports.resetPasswordUpdateM = exports.resetPasswordM = exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
+exports.createAddressM = exports.userProfilePictureUpdateM = exports.resetPasswordTokenDeleteM = exports.resetPasswordUpdateM = exports.resetPasswordM = exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
 const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -145,3 +145,6 @@ const userProfilePictureUpdateM = (id, profilePhoto) => __awaiter(void 0, void 0
     return user;
 });
 exports.userProfilePictureUpdateM = userProfilePictureUpdateM;
+const createAddressM = (id) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.createAddressM = createAddressM;

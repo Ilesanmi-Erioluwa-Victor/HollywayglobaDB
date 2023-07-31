@@ -166,3 +166,7 @@ export const userProfilePictureUpdateM = async (id: string, profilePhoto : strin
 
   return user;
 };
+
+export const createAddressM = async (id: string,) => {
+  
+}
