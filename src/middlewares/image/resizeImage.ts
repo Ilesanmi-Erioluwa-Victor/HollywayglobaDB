@@ -1,3 +1,4 @@
+import { Response, Request, NextFunction } from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
 import path from 'path'
