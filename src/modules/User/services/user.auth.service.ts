@@ -319,9 +319,9 @@ export const uploadProfile: RequestHandler = catchAsync(
     console.log(image)
     const localPath = `uploads/${image.filename}`;
     
-    const upload: any = await cloudinaryUploadImage(image.originalname)
+    const upload: any = await cloudinaryUploadImage(localPath)
     const user = await userProfilePictureUpdateM(id, upload.url)
-    fs.unlinkSync(localPath);
     console.log(user);
+    fs.unlinkSync(localPath);
   }
 );
