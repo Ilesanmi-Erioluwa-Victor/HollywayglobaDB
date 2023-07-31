@@ -15,7 +15,10 @@ import {
   isUserVerified,
 } from '../../middlewares/auth/authToken';
 import { upload } from '../../helper/utils';
-
+import {
+  profileImage,
+  profileImageResize,
+} from '../../middlewares/image/resizeImage';
 const route = express.Router();
 route.post('/signup', createUser);
 route.post('/login', loginUser);
@@ -27,7 +30,8 @@ route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);
 route.post(
   '/uploadImage/:id',
   AuthMiddleWare,
-  upload.single('image'),
+  profileImage.single('image'),
+  profileImageResize,
   isUserVerified,
   uploadProfile
 );
