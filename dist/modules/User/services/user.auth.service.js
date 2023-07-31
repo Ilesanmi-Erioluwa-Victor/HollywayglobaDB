@@ -227,7 +227,6 @@ exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
         next(error);
     }
 }));
-exports.createAddress = (0, utils_1.catchAsync)(asyn(req, Request, res, Response, next, express_1.NextFunction));
-{
-}
-;
+exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    cons;
+}));

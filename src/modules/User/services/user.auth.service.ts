@@ -344,6 +344,8 @@ export const uploadProfile: RequestHandler = catchAsync(
   }
 );
 
-export const createAddress = catchAsync(asyn(req: Request, res: Response, next: NextFunction) => {
-  
-});
+export const createAddress: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    cons;
+  }
+);
