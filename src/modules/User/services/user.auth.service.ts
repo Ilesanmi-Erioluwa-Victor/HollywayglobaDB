@@ -316,9 +316,9 @@ export const uploadProfile: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     ValidateMongoDbId(id);
+    if(!req?.file) next(throwError("Sorry, please select an image to be uploaded", StatusCodes.BAD_REQUEST ))
     try {
       const image: any = req.file;
-      console.log(image);
       const localPath = `src/uploads/${image.filename}`;
 
       const upload: any = await cloudinaryUploadImage(localPath, 'users');
