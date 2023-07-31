@@ -58,7 +58,7 @@ exports.isUserVerified = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
         next((0, cacheError_1.throwError)('Sorry, invalid ID', http_status_codes_1.StatusCodes.BAD_REQUEST));
     }
     (0, utils_2.ValidateMongoDbId)(authId);
-    (0, utils_2.ValidateMongoDbId)(userId);
+    // ValidateMongoDbId(userId);
     try {
         const user = yield (0, models_1.findUserMId)(authId);
         if ((user === null || user === void 0 ? void 0 : user.id.toString()) !== (authId === null || authId === void 0 ? void 0 : authId.toString()))

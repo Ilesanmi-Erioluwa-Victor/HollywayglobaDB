@@ -61,7 +61,7 @@ export const isUserVerified = catchAsync(
       );
    }
     ValidateMongoDbId(authId as string);
-    ValidateMongoDbId(userId);
+    // ValidateMongoDbId(userId);
 
     try {
       
