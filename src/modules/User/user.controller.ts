@@ -22,6 +22,7 @@ import {
 const route = express.Router();
 route.post('/signup', createUser);
 route.post('/login', loginUser);
+route.post("address/create")
 
 route.post('/forgetPassword', forgetPasswordToken);
 route.put('/resetPassword/:token', resetPassword);
