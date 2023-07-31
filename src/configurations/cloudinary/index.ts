@@ -8,10 +8,11 @@ cloudinary.config({
   api_secret: ENV.CLOUDIANRY.SECRET,
 });
 
-export const cloudinaryUploadImage = async (file: string) => {
+export const cloudinaryUploadImage = async (file: string, folder: string) => {
   try {
     const data = await cloudinary.uploader.upload(file, {
       resource_type: 'auto',
+      folder: `Hollway/${folder}`
     });
     return {
       url: data?.secure_url,

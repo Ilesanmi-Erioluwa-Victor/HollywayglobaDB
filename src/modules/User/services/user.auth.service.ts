@@ -319,7 +319,7 @@ export const uploadProfile: RequestHandler = catchAsync(
     console.log(image)
     const localPath = `uploads/${image.filename}`;
     
-    const upload: any = await cloudinaryUploadImage(localPath)
+    const upload: any = await cloudinaryUploadImage(localPath, "users")
     const user = await userProfilePictureUpdateM(id, upload.url)
     console.log(user);
     fs.unlinkSync(localPath);

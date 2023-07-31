@@ -17,10 +17,11 @@ cloudinary_1.v2.config({
     api_key: config_1.ENV.CLOUDIANRY.KEY,
     api_secret: config_1.ENV.CLOUDIANRY.SECRET,
 });
-const cloudinaryUploadImage = (file) => __awaiter(void 0, void 0, void 0, function* () {
+const cloudinaryUploadImage = (file, folder) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = yield cloudinary_1.v2.uploader.upload(file, {
             resource_type: 'auto',
+            folder: `Hollway/${folder}`
         });
         return {
             url: data === null || data === void 0 ? void 0 : data.secure_url,
