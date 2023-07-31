@@ -16,7 +16,6 @@ import {
 } from '../../middlewares/auth/authToken';
 import { upload } from '../../helper/utils';
 
-
 const route = express.Router();
 route.post('/signup', createUser);
 route.post('/login', loginUser);
@@ -27,11 +26,11 @@ route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
 route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);
 route.post(
   '/uploadImage/:id',
-  upload.single('image'),
   AuthMiddleWare,
+  upload.single('image'),
   isUserVerified,
   uploadProfile
 );
-route.put('/password/:id',AuthMiddleWare, isUserVerified, updatePassword);
+route.put('/password/:id', AuthMiddleWare, isUserVerified, updatePassword);
 route.put('/:id/verify_account/:token', accountVerification);
 export default route;
