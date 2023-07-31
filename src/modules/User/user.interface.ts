@@ -5,6 +5,7 @@ export interface signupUser {
   email: string;
   mobile: string;
   password: string;
+  profilePhoto? : string
 }
 
 export interface loginUserI {
@@ -25,3 +26,7 @@ export interface loginUserI {
   updatedAt?: Date;
   v?: number;
 }
+
+export interface Cloudinary {
+  url?: string;
+} 

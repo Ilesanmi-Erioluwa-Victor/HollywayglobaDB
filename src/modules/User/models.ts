@@ -1,19 +1,24 @@
+import { cloudinaryUploadImage } from '../../configurations/cloudinary';
 import { prisma } from '../../configurations/db';
 import {
   hashedPassword,
   generateToken,
   createAccountVerificationToken,
 } from '../../helper/utils';
-import { signupUser } from './user.interface';
+import { signupUser, Cloudinary } from './user.interface';
+
+
 
 export const createUserM = async (user: signupUser) => {
-  const { firstName, lastName, email, mobile, password } = user;
+  const { firstName, lastName, email, mobile, password, profilePhoto } = user;
+  const uploadedImage = await cloudinaryUploadImage(profilePhoto);
   const createUser = await prisma.user.create({
     data: {
       firstName,
       lastName,
       email,
       mobile,
+      profilePhoto: uploadedImage.url,
       password: await hashedPassword(password),
     },
   });
