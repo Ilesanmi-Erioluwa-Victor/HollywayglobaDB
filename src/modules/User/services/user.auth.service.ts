@@ -348,7 +348,16 @@ export const createAddress: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if(!id) throwError("You are not logged in", StatusCodes.FORBIDDEN)
-    const address = 
+    if (!id) throwError("You are not logged in", StatusCodes.FORBIDDEN)
+    try {
+         const user = await findUserMId(id)
+         console.log(user)      
+    }catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
+
 );

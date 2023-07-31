@@ -232,5 +232,14 @@ exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     (0, utils_1.ValidateMongoDbId)(id);
     if (!id)
         (0, cacheError_1.throwError)("You are not logged in", http_status_codes_1.StatusCodes.FORBIDDEN);
-    const address = ;
+    try {
+        const user = yield (0, models_1.findUserMId)(id);
+        console.log(user);
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
 }));
