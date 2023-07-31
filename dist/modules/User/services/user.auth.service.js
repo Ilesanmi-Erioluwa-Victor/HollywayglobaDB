@@ -207,11 +207,19 @@ exports.resetPassword = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
 exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     (0, utils_1.ValidateMongoDbId)(id);
-    const image = req.file;
-    console.log(image);
-    const localPath = `src/uploads/${image.filename}`;
-    const upload = yield (0, cloudinary_1.cloudinaryUploadImage)(localPath, "users");
-    const user = yield (0, models_1.userProfilePictureUpdateM)(id, upload.url);
-    console.log(user);
-    fs_1.default.unlinkSync(localPath);
+    try {
+        const image = req.file;
+        console.log(image);
+        const localPath = `src/uploads/${image.filename}`;
+        const upload = yield (0, cloudinary_1.cloudinaryUploadImage)(localPath, 'users');
+        const user = yield (0, models_1.userProfilePictureUpdateM)(id, upload.url);
+        console.log(user);
+        fs_1.default.unlinkSync(localPath);
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
 }));
