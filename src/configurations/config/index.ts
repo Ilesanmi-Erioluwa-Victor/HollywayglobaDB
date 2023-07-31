@@ -7,7 +7,9 @@ const PORT = process.env.PORT;
 const CRYPTO = process.env.CRYPTO;
 const NODEMAILER_PASS = process.env.NODEMAILER_PASS;
 const NODEMAILER_USERNAME = process.env.NODEMAILER_USERNAME;
-
+const CLOUDIANRY_CLOUD_NAME = process.env.CLOUDIANRY_CLOUD_NAME;
+const CLOUDIANRY_API_KEY = process.env.CLOUDIANRY_API_KEY;
+const CLOUDIANRY_API_SECRET = process.env.CLOUDIANRY_API_SECRET;
 
 
 export const ENV = {
