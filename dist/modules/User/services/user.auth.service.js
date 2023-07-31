@@ -15,10 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadProfile = exports.resetPassword = exports.forgetPasswordToken = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
+const fs_1 = __importDefault(require("fs"));
 const cacheError_1 = require("../../../middlewares/error/cacheError");
 const utils_1 = require("../../../helper/utils");
 const models_1 = require("../models");
 const sendMail_1 = require("../../../templates/sendMail");
+const cloudinary_1 = require("../../../configurations/cloudinary");
 exports.createUser = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstName, lastName, password, email, mobile } = req.body;
@@ -203,21 +205,12 @@ exports.resetPassword = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     }
 }));
 exports.uploadProfile = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
     const image = req.file;
     console.log(image);
-    console.log(req.body.file);
-    // const upload = cloudinaryUploadImage(image)
-    //   .then((result) => {
-    //     res.status(200).send({
-    //       message: 'success',
-    //       result,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     res.status(500).send({
-    //       message: 'failure',
-    //       error,
-    //     });
-    //   });
-    // console.log('sent successfully');
+    const localPath = `uploads/${image.filename}`;
+    const upload = yield (0, cloudinary_1.cloudinaryUploadImage)(image.originalname);
+    const user = yield (0, models_1.userProfilePictureUpdateM)(id, upload.url);
+    fs_1.default.unlinkSync(localPath);
+    console.log(user);
 }));

@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import fs from 'fs';
 import { throwError } from '../../../middlewares/error/cacheError';
 import {
   catchAsync,
@@ -21,6 +22,7 @@ import {
   resetPasswordM,
   resetPasswordUpdateM,
   resetPasswordTokenDeleteM,
+  userProfilePictureUpdateM,
 } from '../models';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -312,23 +314,14 @@ export const resetPassword: RequestHandler = catchAsync(
 
 export const uploadProfile: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const image = req.file;
+    const id = req.params.id
+    const image : any= req.file;
     console.log(image)
-    console.log(req.body.file)
-    // const upload = cloudinaryUploadImage(image)
-    //   .then((result) => {
-    //     res.status(200).send({
-    //       message: 'success',
-    //       result,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     res.status(500).send({
-    //       message: 'failure',
-    //       error,
-    //     });
-    //   });
-
-    // console.log('sent successfully');
+    const localPath = `uploads/${image.filename}`;
+    
+    const upload: any = await cloudinaryUploadImage(image.originalname)
+    const user = await userProfilePictureUpdateM(id, upload.url)
+    fs.unlinkSync(localPath);
+    console.log(user);
   }
 );

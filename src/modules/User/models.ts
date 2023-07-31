@@ -155,3 +155,14 @@ export const resetPasswordTokenDeleteM = async (id: string) => {
 
   return user;
 };
+
+export const userProfilePictureUpdateM = async (id: string, profilePhoto : string) => {
+  const user = await prisma.user.update({
+    where: { id },
+    data: {
+      profilePhoto: profilePhoto,
+    },
+  });
+
+  return user;
+};
