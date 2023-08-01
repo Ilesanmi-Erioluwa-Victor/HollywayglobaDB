@@ -386,6 +386,7 @@ export const editAddress: RequestHandler = catchAsync(
     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
       const user = await updateAddressM(id, req.body);
+      console.log(user)
       res.json({
         deliveryAddress: user.deliveryAddress,
         additionalInfo: user.additionalInfo,

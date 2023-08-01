@@ -197,7 +197,7 @@ export const updateAddressM = async (id: string, data: address) => {
       city: data.city,
       phone: data.phone,
       additionalPhone: data.additionalInfo,
-      user: { connect: { id: id } },
+      // user: { connect: { id: id } },
     },
   });
 
