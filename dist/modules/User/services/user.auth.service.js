@@ -260,7 +260,7 @@ exports.editAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
     try {
         const user = yield (0, models_1.findUserWithAddressM)(id);
         // const userAddress = await updateAddressM(id, req.body);
-        console.log(user);
+        console.log(user === null || user === void 0 ? void 0 : user.address[0].id);
         // res.json({
         //   deliveryAddress: userAddress.deliveryAddress,
         //   additionalInfo: userAddress.additionalInfo,

@@ -388,7 +388,7 @@ export const editAddress: RequestHandler = catchAsync(
     try {
       const user = await findUserWithAddressM(id)
       // const userAddress = await updateAddressM(id, req.body);
-      console.log(user)
+      console.log(user?.address[0].id)
       // res.json({
       //   deliveryAddress: userAddress.deliveryAddress,
       //   additionalInfo: userAddress.additionalInfo,
