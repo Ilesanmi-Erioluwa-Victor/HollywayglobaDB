@@ -210,4 +210,5 @@ export const findUserWithAddressM = async (id: string) => {
     },
     include: { address: true },
   });
+  return user;
 };
