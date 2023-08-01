@@ -234,6 +234,7 @@ exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
         (0, cacheError_1.throwError)('Invalid ID', http_status_codes_1.StatusCodes.FORBIDDEN);
     const { deliveryAddress, additionalInfo, region, city, phone, additionalPhone, } = req.body;
     try {
+        const userId = yield (0, models_1.findUserMId)(id);
         const user = yield (0, models_1.createAddressM)(req.body, id);
         console.log(user);
     }
