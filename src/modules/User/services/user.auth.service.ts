@@ -380,6 +380,7 @@ export const createAddress: RequestHandler = catchAsync(
   }
 );
 
+// TODO a bug to fix here..
 export const editAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
