@@ -359,8 +359,9 @@ export const createAddress: RequestHandler = catchAsync(
       additionalPhone,
     } = req.body;
     try {
+      const userId = await findUserMId(id);
       const user = await createAddressM(req.body, id);
-      console.log(user);
+      console.log(userId);
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
