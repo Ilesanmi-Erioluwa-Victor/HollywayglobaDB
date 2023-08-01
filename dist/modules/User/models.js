@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAddressM = exports.createAddressM = exports.userProfilePictureUpdateM = exports.resetPasswordTokenDeleteM = exports.resetPasswordUpdateM = exports.resetPasswordM = exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
+exports.findUserWithAddressM = exports.updateAddressM = exports.createAddressM = exports.userProfilePictureUpdateM = exports.resetPasswordTokenDeleteM = exports.resetPasswordUpdateM = exports.resetPasswordM = exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
 const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -171,9 +171,18 @@ const updateAddressM = (id, data) => __awaiter(void 0, void 0, void 0, function*
             region: data.region,
             city: data.city,
             phone: data.phone,
-            additionalPhone: data.additionalPhone
+            additionalPhone: data.additionalPhone,
         },
     });
     return user;
 });
 exports.updateAddressM = updateAddressM;
+const findUserWithAddressM = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.user.findUnique({
+        where: {
+            id,
+        },
+        include: { address: true },
+    });
+});
+exports.findUserWithAddressM = findUserWithAddressM;

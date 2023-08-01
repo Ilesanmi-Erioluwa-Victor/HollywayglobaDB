@@ -196,9 +196,18 @@ export const updateAddressM = async (id: string, data: address) => {
       region: data.region,
       city: data.city,
       phone: data.phone,
-      additionalPhone: data.additionalPhone
+      additionalPhone: data.additionalPhone,
     },
   });
 
   return user;
+};
+
+export const findUserWithAddressM = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    include: { address: true },
+  });
 };
