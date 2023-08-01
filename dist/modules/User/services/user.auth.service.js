@@ -231,9 +231,10 @@ exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     const { id } = req.params;
     (0, utils_1.ValidateMongoDbId)(id);
     if (!id)
-        (0, cacheError_1.throwError)("Invalid ID", http_status_codes_1.StatusCodes.FORBIDDEN);
+        (0, cacheError_1.throwError)('Invalid ID', http_status_codes_1.StatusCodes.FORBIDDEN);
+    const { deliveryAddress, additionalInfo, region, city, phone, additionalPhone, } = req.body;
     try {
-        const user = yield (0, models_1.findUserMId)(id);
+        const user = yield (0, models_1.createAddressM)(req.body);
         console.log(user);
     }
     catch (error) {

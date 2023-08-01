@@ -24,6 +24,7 @@ import {
   resetPasswordUpdateM,
   resetPasswordTokenDeleteM,
   userProfilePictureUpdateM,
+  createAddressM,
 } from '../models';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -348,16 +349,23 @@ export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError("Invalid ID", StatusCodes.FORBIDDEN)
+    if (!id) throwError('Invalid ID', StatusCodes.FORBIDDEN);
+    const {
+      deliveryAddress,
+      additionalInfo,
+      region,
+      city,
+      phone,
+      additionalPhone,
+    } = req.body;
     try {
-         const user = await findUserMId(id)
-            console.log(user)  
-    }catch (error: any) {
+      const user = await createAddressM(req.body);
+      console.log(user);
+    } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
       }
       next(error);
     }
-   }
-
+  }
 );
