@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAddress = exports.uploadProfile = exports.resetPassword = exports.forgetPasswordToken = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
+exports.editAddress = exports.createAddress = exports.uploadProfile = exports.resetPassword = exports.forgetPasswordToken = exports.accountVerification = exports.updatePassword = exports.updateUser = exports.getUser = exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const http_status_codes_1 = require("http-status-codes");
 const fs_1 = __importDefault(require("fs"));
@@ -252,27 +252,27 @@ exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
         next(error);
     }
 }));
-// export const editAddress: RequestHandler = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id } = req.params;
-//     ValidateMongoDbId(id);
-//     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
-//     try {
-//       const userAddress = await updateAddressM(id, req.body);
-//       console.log(id, req.body)
-//       // res.json({
-//       //   deliveryAddress: userAddress.deliveryAddress,
-//       //   additionalInfo: userAddress.additionalInfo,
-//       //   region: userAddress.region,
-//       //   city: userAddress.city,
-//       //   phone: userAddress.phone,
-//       //   additionalPhone: userAddress.additionalPhone,
-//       // });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+exports.editAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    (0, utils_1.ValidateMongoDbId)(id);
+    if (!id)
+        (0, cacheError_1.throwError)('Invalid ID', http_status_codes_1.StatusCodes.BAD_REQUEST);
+    try {
+        const userAddress = yield (0, models_1.updateAddressM)(id, req.body);
+        console.log(id, req.body);
+        // res.json({
+        //   deliveryAddress: userAddress.deliveryAddress,
+        //   additionalInfo: userAddress.additionalInfo,
+        //   region: userAddress.region,
+        //   city: userAddress.city,
+        //   phone: userAddress.phone,
+        //   additionalPhone: userAddress.additionalPhone,
+        // });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}));
