@@ -4,7 +4,7 @@ import {
   generateToken,
   createAccountVerificationToken,
 } from '../../helper/utils';
-import { signupUser } from './user.interface';
+import { address, signupUser } from './user.interface';
 
 export const createUserM = async (user: signupUser) => {
   const { firstName, lastName, email, mobile, password } = user;
@@ -167,9 +167,11 @@ export const userProfilePictureUpdateM = async (id: string, profilePhoto : strin
   return user;
 };
 
-export const createAddressM = async (id: string,) => {
-  const address = await prisma.address.create({
-    data: {},
+export const createAddressM = async (address : address) => {
+  const userddress = await prisma.address.create({
+    data: {
+
+    },
     include: { user: true },
   });
 }
