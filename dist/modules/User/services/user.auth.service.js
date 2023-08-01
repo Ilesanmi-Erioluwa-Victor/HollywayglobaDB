@@ -256,9 +256,7 @@ exports.editAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
     const { id } = req.params;
     (0, utils_1.ValidateMongoDbId)(id);
     if (!id)
-        (0, cacheError_1.throwError)('Invalid ID', http_status_codes_1.StatusCodes.FORBIDDEN);
-    const { deliveryAddress, additionalInfo, region, city, phone, additionalPhone, } = req.body;
-    // TODO, I want to add JOI as validator
+        (0, cacheError_1.throwError)('Invalid ID', http_status_codes_1.StatusCodes.BAD_REQUEST);
     try {
         const user = yield (0, models_1.createAddressM)(req.body, id);
         res.json({

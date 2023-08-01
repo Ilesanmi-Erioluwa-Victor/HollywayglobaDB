@@ -382,16 +382,7 @@ export const editAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.FORBIDDEN);
-    const {
-      deliveryAddress,
-      additionalInfo,
-      region,
-      city,
-      phone,
-      additionalPhone,
-    } = req.body;
-    // TODO, I want to add JOI as validator
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
       const user = await createAddressM(req.body, id);
       res.json({
