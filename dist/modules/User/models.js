@@ -145,10 +145,18 @@ const userProfilePictureUpdateM = (id, profilePhoto) => __awaiter(void 0, void 0
     return user;
 });
 exports.userProfilePictureUpdateM = userProfilePictureUpdateM;
-const createAddressM = (address) => __awaiter(void 0, void 0, void 0, function* () {
-    const userddress = yield db_1.prisma.address.create({
-        data: {},
-        include: { user: true },
+const createAddressM = (address, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const userAddress = yield db_1.prisma.address.create({
+        data: {
+            deliveryAddress: address.deliveryAddress,
+            additionalInfo: address.additionalInfo,
+            region: address.region,
+            city: address.city,
+            phone: address.phone,
+            additionalPhone: address.additionalPhone,
+            user: { connect: { id: userId } }
+        },
     });
+    return userAddress;
 });
 exports.createAddressM = createAddressM;
