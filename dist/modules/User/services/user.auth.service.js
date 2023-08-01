@@ -235,7 +235,7 @@ exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     const { deliveryAddress, additionalInfo, region, city, phone, additionalPhone, } = req.body;
     try {
         const user = yield (0, models_1.createAddressM)(req.body, id);
-        console.log(u);
+        res.json({});
     }
     catch (error) {
         if (!error.statusCode) {

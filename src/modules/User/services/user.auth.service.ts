@@ -360,7 +360,9 @@ export const createAddress: RequestHandler = catchAsync(
     } = req.body;
     try {
       const user = await createAddressM(req.body, id);
-      console.log(u);
+      res.json({
+        
+      })
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
