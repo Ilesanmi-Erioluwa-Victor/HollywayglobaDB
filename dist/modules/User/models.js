@@ -167,12 +167,12 @@ const updateAddressM = (id, data) => __awaiter(void 0, void 0, void 0, function*
         },
         data: {
             deliveryAddress: data.deliveryAddress,
-            additionalInfo: data.additionalPhone,
+            additionalInfo: data.additionalInfo,
             region: data.region,
             city: data.city,
             phone: data.phone,
-            additionalPhone: data.additionalInfo,
-            // user: { connect: { id: id } },
+            additionalPhone: data.additionalPhone,
+            user: { connect: { id: id } },
         },
     });
     return user;
