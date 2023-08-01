@@ -258,17 +258,17 @@ exports.editAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
     if (!id)
         (0, cacheError_1.throwError)('Invalid ID', http_status_codes_1.StatusCodes.BAD_REQUEST);
     try {
-        const user = yield (0, models_1.findUserWithAddressM)(id);
-        // const userAddress = await updateAddressM(id, req.body);
-        console.log(user === null || user === void 0 ? void 0 : user.address[0].id);
-        // res.json({
-        //   deliveryAddress: userAddress.deliveryAddress,
-        //   additionalInfo: userAddress.additionalInfo,
-        //   region: userAddress.region,
-        //   city: userAddress.city,
-        //   phone: userAddress.phone,
-        //   additionalPhone: userAddress.additionalPhone,
-        // });
+        const userWithAddress = yield (0, models_1.findUserWithAddressM)(id);
+        const userWithAddressId = userWithAddress === null || userWithAddress === void 0 ? void 0 : userWithAddress.address[0].id;
+        const userAddress = yield (0, models_1.updateAddressM)(userWithAddressId, req.body);
+        res.json({
+            deliveryAddress: userAddress.deliveryAddress,
+            additionalInfo: userAddress.additionalInfo,
+            region: userAddress.region,
+            city: userAddress.city,
+            phone: userAddress.phone,
+            additionalPhone: userAddress.additionalPhone,
+        });
     }
     catch (error) {
         if (!error.statusCode) {
