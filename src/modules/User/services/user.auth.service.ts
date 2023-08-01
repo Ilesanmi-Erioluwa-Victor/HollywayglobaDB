@@ -386,15 +386,15 @@ export const editAddress: RequestHandler = catchAsync(
     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
       const userAddress = await updateAddressM(id, req.body);
-      console.log(userAddress)
-      res.json({
-        deliveryAddress: userAddress.deliveryAddress,
-        additionalInfo: userAddress.additionalInfo,
-        region: userAddress.region,
-        city: userAddress.city,
-        phone: userAddress.phone,
-        additionalPhone: userAddress.additionalPhone,
-      });
+      console.log(id, req.body)
+      // res.json({
+      //   deliveryAddress: userAddress.deliveryAddress,
+      //   additionalInfo: userAddress.additionalInfo,
+      //   region: userAddress.region,
+      //   city: userAddress.city,
+      //   phone: userAddress.phone,
+      //   additionalPhone: userAddress.additionalPhone,
+      // });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

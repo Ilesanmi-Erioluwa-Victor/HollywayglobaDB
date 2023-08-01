@@ -171,8 +171,7 @@ const updateAddressM = (id, data) => __awaiter(void 0, void 0, void 0, function*
             region: data.region,
             city: data.city,
             phone: data.phone,
-            additionalPhone: data.additionalPhone,
-            user: { connect: { id: id } },
+            additionalPhone: data.additionalPhone
         },
     });
     return user;
