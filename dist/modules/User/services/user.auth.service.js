@@ -233,6 +233,7 @@ exports.createAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(vo
     if (!id)
         (0, cacheError_1.throwError)('Invalid ID', http_status_codes_1.StatusCodes.FORBIDDEN);
     const { deliveryAddress, additionalInfo, region, city, phone, additionalPhone, } = req.body;
+    // TODO, I want to add JOI as validator
     try {
         const user = yield (0, models_1.createAddressM)(req.body, id);
         res.json({

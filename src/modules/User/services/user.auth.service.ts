@@ -358,6 +358,7 @@ export const createAddress: RequestHandler = catchAsync(
       phone,
       additionalPhone,
     } = req.body;
+    // TODO, I want to add JOI as validator
     try {
       const user = await createAddressM(req.body, id);
       res.json({
