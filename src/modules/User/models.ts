@@ -156,7 +156,10 @@ export const resetPasswordTokenDeleteM = async (id: string) => {
   return user;
 };
 
-export const userProfilePictureUpdateM = async (id: string, profilePhoto : string) => {
+export const userProfilePictureUpdateM = async (
+  id: string,
+  profilePhoto: string
+) => {
   const user = await prisma.user.update({
     where: { id },
     data: {
@@ -176,9 +179,26 @@ export const createAddressM = async (address: address, userId: string) => {
       city: address.city,
       phone: address.phone,
       additionalPhone: address.additionalPhone,
-      user: { connect: { id: userId } }
+      user: { connect: { id: userId } },
     },
   });
   return userAddress;
 };
 
+export const updateAddressM = async (id: string, data: address) => {
+  const user = await prisma.address.update({
+    where: {
+      id,
+    },
+    data: {
+      deliveryAddress: data.deliveryAddress,
+      additionalInfo: data.additionalPhone,
+      region: data.region,
+      city: data.city,
+      phone: data.phone,
+      additionalPhone: data.additionalInfo,
+    },
+  });
+
+  return user;
+};

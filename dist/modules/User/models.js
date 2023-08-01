@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAddressM = exports.userProfilePictureUpdateM = exports.resetPasswordTokenDeleteM = exports.resetPasswordUpdateM = exports.resetPasswordM = exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
+exports.updateAddressM = exports.createAddressM = exports.userProfilePictureUpdateM = exports.resetPasswordTokenDeleteM = exports.resetPasswordUpdateM = exports.resetPasswordM = exports.forgetPasswordTokenM = exports.accountVerificationUpdatedM = exports.accountVerificationM = exports.updateUserPasswordM = exports.updateUserM = exports.findUserMEmail = exports.findUserMId = exports.createUserM = void 0;
 const db_1 = require("../../configurations/db");
 const utils_1 = require("../../helper/utils");
 const createUserM = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -154,9 +154,26 @@ const createAddressM = (address, userId) => __awaiter(void 0, void 0, void 0, fu
             city: address.city,
             phone: address.phone,
             additionalPhone: address.additionalPhone,
-            user: { connect: { id: userId } }
+            user: { connect: { id: userId } },
         },
     });
     return userAddress;
 });
 exports.createAddressM = createAddressM;
+const updateAddressM = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.prisma.address.update({
+        where: {
+            id,
+        },
+        data: {
+            deliveryAddress: data.deliveryAddress,
+            additionalInfo: data.additionalPhone,
+            region: data.region,
+            city: data.city,
+            phone: data.phone,
+            additionalPhone: data.additionalInfo,
+        },
+    });
+    return user;
+});
+exports.updateAddressM = updateAddressM;

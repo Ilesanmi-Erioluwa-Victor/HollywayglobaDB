@@ -25,6 +25,7 @@ import {
   resetPasswordTokenDeleteM,
   userProfilePictureUpdateM,
   createAddressM,
+  updateAddressM,
 } from '../models';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -384,7 +385,7 @@ export const editAddress: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
-      const user = await createAddressM(req.body, id);
+      const user = await updateAddressM(id, req.body);
       res.json({
         deliveryAddress: user.deliveryAddress,
         additionalInfo: user.additionalInfo,

@@ -258,7 +258,7 @@ exports.editAddress = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void
     if (!id)
         (0, cacheError_1.throwError)('Invalid ID', http_status_codes_1.StatusCodes.BAD_REQUEST);
     try {
-        const user = yield (0, models_1.createAddressM)(req.body, id);
+        const user = yield (0, models_1.updateAddressM)(id, req.body);
         res.json({
             deliveryAddress: user.deliveryAddress,
             additionalInfo: user.additionalInfo,
