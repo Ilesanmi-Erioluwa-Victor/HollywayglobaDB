@@ -17,6 +17,7 @@ import {
   findAdminEmailM,
 } from '../models';
 import { sendMailAdmin } from '../../../templates/sendMail';
+import { loginAdminI } from '../admin.interface';
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -56,7 +57,7 @@ export const loginAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
-      const admin: loginUserI | any = await findAdminEmailM(email);
+      const admin: loginAdminI | any = await findAdminEmailM(email);
 
       if (!user)
         next(
