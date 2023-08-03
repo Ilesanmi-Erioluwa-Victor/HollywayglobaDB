@@ -52,6 +52,47 @@ export const adminSignup: RequestHandler = catchAsync(
   }
 );
 
+export const loginAdmin: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+    try {
+      const user: loginUserI | any = await findUserMEmail(email);
+
+      if (!user)
+        next(
+          throwError('No user found with this email', StatusCodes.BAD_REQUEST)
+        );
+      if (await bcrypt.compare(password, user?.password)) {
+        if (!user.isAccountVerified) {
+          throwError(
+            'Verify your account in your gmail before you can log in',
+            StatusCodes.BAD_REQUEST
+          );
+        }
+
+        res.json({
+          id: user?.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          profilePhoto: user.profilePhoto,
+          token: generateToken(user?.id),
+        });
+      } else {
+        throwError(
+          'Login Failed, invalid credentials',
+          StatusCodes.UNAUTHORIZED
+        );
+      }
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
