@@ -1,9 +1,6 @@
-export interface signupUser {
+export interface signupAdmin {
   id?: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  mobile: string;
   password: string;
-  profilePhoto?: string;
 }

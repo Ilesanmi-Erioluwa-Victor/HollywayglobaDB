@@ -1,3 +1,4 @@
+import { signupAdmin } from './admin.interface';
 import { prisma } from '../../configurations/db';
 import {
     hashedPassword,
@@ -25,9 +26,9 @@ export const findAdminEmailM = async (email: string) => {
   return userEmail;
 };
 
-export const createAdminM = async (admin: signupUser) => {
-  const { name email, password } = user;
-  const createUser = await prisma.user.create({
+export const createAdminM = async (admin: signupAdmin) => {
+  const { name, email, password } = admin;
+  const createUser = await prisma.admin.create({
     data: {
       name,
       email,
