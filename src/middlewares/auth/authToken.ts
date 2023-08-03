@@ -84,38 +84,39 @@ export const isUserVerified = catchAsync(
   }
 );
 
-export const adminRole = catchAsync( async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const adminRole = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const authId = req?.authId;
       const adminId = req?.params?.id;
 
       console.log(authId, adminId);
-      // ValidateMongoDbId(authId as string);
-      // ValidateMongoDbId(adminId);
+      ValidateMongoDbId(authId as string);
+      ValidateMongoDbId(adminId);
 
-      // const admin = await findAdminIdM(adminId);
-      // if (!admin)
-      //   next(throwError('Sorry, No user found', StatusCodes.BAD_REQUEST));
+      const admin = await findAdminIdM(adminId);
+      if (!admin)
+        next(throwError('Sorry, No user found', StatusCodes.BAD_REQUEST));
 
-      // if (admin?.id !== authId)
-      //   next(
-      //     throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
-      //   );
+      if (admin?.id !== authId)
+        next(
+          throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
+        );
 
-      // if (!admin?.isAccountVerified)
-      //   next(
-      //     throwError(
-      //       'Please, verify your gmail, before you cam perform this operation',
-      //       StatusCodes.BAD_REQUEST
-      //     )
-      //   );
+      if (!admin?.isAccountVerified)
+        next(
+          throwError(
+            'Please, verify your gmail, before you cam perform this operation',
+            StatusCodes.BAD_REQUEST
+          )
+        );
 
-      // if (admin?.role !== 'ADMIN') {
-      //   throwError(
-      //     'Sorry, You cant perform this operation....',
-      //     StatusCodes.BAD_REQUEST
-      //   );
-      // }
+      if (admin?.role !== 'ADMIN') {
+        throwError(
+          'Sorry, You cant perform this operation....',
+          StatusCodes.BAD_REQUEST
+        );
+      }
 
       next();
     } catch (error: any) {
@@ -124,4 +125,5 @@ export const adminRole = catchAsync( async (req: CustomRequest, res: Response, n
       }
       next(error);
     }
-});
+  }
+);
