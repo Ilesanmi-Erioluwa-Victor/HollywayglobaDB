@@ -14,6 +14,17 @@ export const findAdminIdM = async (id: string) => {
     })
     return adminId;
 }
+
+export const findAdminEmailM = async (email: string) => {
+  const userEmail = await prisma.admin.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  return userEmail;
+};
+
 export const createAdminM = async (admin: ) => {
     
 }
