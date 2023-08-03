@@ -9,7 +9,8 @@
     "start": "node ./dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
     "build": "rimraf ./dist && tsc",
-    "push" :"npx prisma db push"
+    "push" :"npx prisma db push",
+    "studio" : "npx prisma studio"
   },
   "prisma": {
     "schema": "src/prisma/schema.prisma"
