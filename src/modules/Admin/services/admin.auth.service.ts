@@ -6,18 +6,21 @@ import {
   catchAsync,
   ValidateMongoDbId,
   generateToken,
-    createAccountVerificationTokenAdmin,
-  generatePasswordResetToken
+  createAccountVerificationTokenAdmin,
+  generatePasswordResetToken,
 } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
 
-export const adminSignup : RequestHandler = catchAsync(
-    async (req: Request,  res : Response, next: NextFunction) => {
-     try {
-         const { email, password, name } = req.body;
-     } catch (error : any ) {
-        
-     }
+export const adminSignup: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password, name } = req.body;
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
-)
+  }
+);
