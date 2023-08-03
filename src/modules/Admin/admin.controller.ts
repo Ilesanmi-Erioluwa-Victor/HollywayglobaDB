@@ -5,6 +5,7 @@ import { accountVerificationAdmin, adminSignup, loginAdmin } from './services/ad
 const route = express.Router();
 route.post('/admin_signup', adminSignup);
 route.post("/admin_login", loginAdmin)
+route.get("/admin/:id/users",)
 route.put('/:id/verify_account/:token', accountVerificationAdmin);
 
 export default route;
