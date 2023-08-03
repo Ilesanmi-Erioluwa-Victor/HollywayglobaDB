@@ -25,6 +25,19 @@ export const findAdminEmailM = async (email: string) => {
   return userEmail;
 };
 
-export const createAdminM = async (admin: ) => {
-    
-}
+export const createAdminM = async (admin: signupUser) => {
+  const { name email, password } = user;
+  const createUser = await prisma.user.create({
+    data: {
+      firstName,
+      lastName,
+      email,
+      mobile,
+      password: await hashedPassword(password),
+    },
+  });
+
+  generateToken(createUser?.id as string);
+  const tokenUser = await createAccountVerificationToken(createUser?.id);
+  return tokenUser;
+};
