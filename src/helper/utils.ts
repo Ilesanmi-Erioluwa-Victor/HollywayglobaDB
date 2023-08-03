@@ -74,5 +74,5 @@ export async function hashedPassword(password: string): Promise<string> {
 }
 
 
-export const upload = multer({dest : "src/uploads"})
+// export const upload = multer({dest : "src/uploads"})
  
