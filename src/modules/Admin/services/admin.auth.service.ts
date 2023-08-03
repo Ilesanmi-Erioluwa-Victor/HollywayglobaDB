@@ -12,4 +12,8 @@ import {
 
 import { CustomRequest } from '../../../interfaces/custom';
 
-export const
+export const adminSignup : RequestHandler = catchAsync(
+    async () => {
+        
+    }
+)
