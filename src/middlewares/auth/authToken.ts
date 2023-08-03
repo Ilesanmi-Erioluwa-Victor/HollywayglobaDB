@@ -26,7 +26,6 @@ export const AuthMiddleWare = catchAsync(
         if (token) {
           const decoded = jwt.verify(token, `${ENV.JWT.SECRET}`) as {
             id: string;
-            role: string;
           };
           req.authId = decoded.id;
         }
@@ -57,16 +56,13 @@ export const isUserVerified = catchAsync(
         throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
       );
     if (!userId) {
-      next(
-        throwError('Sorry, invalid ID', StatusCodes.BAD_REQUEST)
-      );
-   }
+      next(throwError('Sorry, invalid ID', StatusCodes.BAD_REQUEST));
+    }
     ValidateMongoDbId(authId as string);
     // ValidateMongoDbId(userId);
 
     try {
-      
-      const user = await findUserMId(authId as string)
+      const user = await findUserMId(authId as string);
       if (user?.id.toString() !== authId?.toString())
         next(
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
@@ -97,7 +93,7 @@ export const adminRole = () => {
       ValidateMongoDbId(authId as string);
       ValidateMongoDbId(adminId);
 
-      const admin = await findAdminIdM(adminId)
+      const admin = await findAdminIdM(adminId);
       if (!admin)
         next(throwError('Sorry, No user found', StatusCodes.BAD_REQUEST));
 
@@ -114,7 +110,7 @@ export const adminRole = () => {
           )
         );
 
-      if (admin?.role !== "ADMIN") {
+      if (admin?.role !== 'ADMIN') {
         throwError(
           'Sorry, You cant perform this operation....',
           StatusCodes.BAD_REQUEST

@@ -387,9 +387,12 @@ export const editAddress: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
-      const userWithAddress = await findUserWithAddressM(id)
-      const userWithAddressId = userWithAddress?.address[0].id
-      const userAddress = await updateAddressM(userWithAddressId as string, req.body);
+      const userWithAddress = await findUserWithAddressM(id);
+      const userWithAddressId = userWithAddress?.address[0].id;
+      const userAddress = await updateAddressM(
+        userWithAddressId as string,
+        req.body
+      );
       res.json({
         deliveryAddress: userAddress.deliveryAddress,
         additionalInfo: userAddress.additionalInfo,
