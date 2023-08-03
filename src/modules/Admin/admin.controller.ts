@@ -10,7 +10,7 @@ import {
 const route = express.Router();
 route.post('/admin_signup', adminSignup);
 route.post('/admin_login', loginAdmin);
-route.get('/admin/:id/users', AuthMiddleWare, adminRole, getUsersAdmin);
+route.get('/:id/users', AuthMiddleWare, adminRole, getUsersAdmin);
 route.put('/:id/verify_account/:token', accountVerificationAdmin);
 
 export default route;
