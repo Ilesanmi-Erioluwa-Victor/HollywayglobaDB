@@ -1,5 +1,5 @@
 import express from 'express';
 import {
   AuthMiddleWare,
-  isUserVerified,
+  adminRole,
 } from '../../middlewares/auth/authToken';
