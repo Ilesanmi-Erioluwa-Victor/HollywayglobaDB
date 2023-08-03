@@ -13,7 +13,7 @@ import {
 import { CustomRequest } from '../../../interfaces/custom';
 
 export const adminSignup : RequestHandler = catchAsync(
-    async () => {
-        
+    async (req: Request,  res : Response, next: NextFunction) => {
+
     }
 )
