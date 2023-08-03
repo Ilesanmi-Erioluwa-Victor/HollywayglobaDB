@@ -61,10 +61,10 @@ export const loginAdmin: RequestHandler = catchAsync(
 
       if (!admin)
         next(
-          throwError('No user found with this email', StatusCodes.BAD_REQUEST)
+          throwError('No record found with this email', StatusCodes.BAD_REQUEST)
         );
       if (await bcrypt.compare(password, admin?.password)) {
-        if (!user.isAccountVerified) {
+        if (!admin.isAccountVerified) {
           throwError(
             'Verify your account in your gmail before you can log in',
             StatusCodes.BAD_REQUEST
@@ -72,12 +72,10 @@ export const loginAdmin: RequestHandler = catchAsync(
         }
 
         res.json({
-          id: user?.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          profilePhoto: user.profilePhoto,
-          token: generateToken(user?.id),
+          id: admin?.id,
+          name: admin?.name,
+          email: admin?.email,
+          token: generateToken(admin?.id),
         });
       } else {
         throwError(
