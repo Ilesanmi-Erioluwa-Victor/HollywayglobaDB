@@ -56,7 +56,7 @@ export const loginAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
-      const user: loginUserI | any = await findUserMEmail(email);
+      const admin: loginUserI | any = await findAdminEmailM(email);
 
       if (!user)
         next(
