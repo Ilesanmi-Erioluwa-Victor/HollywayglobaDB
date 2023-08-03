@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import { prisma } from '../configurations/db';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { ENV } from '../configurations/config';
+import { findUserMId } from '../modules/User/models';
 interface User {
   id: string;
   firstName: string;
@@ -55,11 +56,7 @@ export const sendUserToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: data?.userId,
-    },
-  });
+  const user = await findUserMId(data?.userId as string)
 
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
