@@ -25,7 +25,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/v1/admin/', adminRouter);
+app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/user', userRoute);
 app.use(pageNotFound);
 app.get('/', function (req, res) {
