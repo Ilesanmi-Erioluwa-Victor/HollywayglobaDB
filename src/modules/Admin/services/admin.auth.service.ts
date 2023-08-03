@@ -59,11 +59,11 @@ export const loginAdmin: RequestHandler = catchAsync(
     try {
       const admin: loginAdminI | any = await findAdminEmailM(email);
 
-      if (!user)
+      if (!admin)
         next(
           throwError('No user found with this email', StatusCodes.BAD_REQUEST)
         );
-      if (await bcrypt.compare(password, user?.password)) {
+      if (await bcrypt.compare(password, admin?.password)) {
         if (!user.isAccountVerified) {
           throwError(
             'Verify your account in your gmail before you can log in',
