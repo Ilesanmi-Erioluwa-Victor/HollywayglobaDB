@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 
 import adminRouter from './modules/Admin/admin.controller';
-import userRoute from "./modules/User/user.controller"
+import userRoute from './modules/User/user.controller';
 import { requestErrorInterface } from './interfaces/requestErrorInterface';
 import { pageNotFound } from './middlewares/error/_404';
 import { ENV } from './configurations/config';
@@ -31,20 +31,6 @@ app.use(pageNotFound);
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public'));
 });
-// TODO still have ab ug to fix here
-// app.use(
-//   (
-//     error: requestErrorInterface,
-//     req: Request,
-//     res: Response,
-//     next: NextFunction
-//   ) => {
-//     console.log(error.message);
-//     const status = error.statusCode || 500;
-//     const message = error.message;
-//     res.status(status).json({ message });
-//   }
-// );
 
 const startConnection = async () => {
   try {
