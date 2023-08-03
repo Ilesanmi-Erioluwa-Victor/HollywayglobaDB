@@ -92,8 +92,7 @@ export const loginAdmin: RequestHandler = catchAsync(
   }
 );
 
-getUsersAdmin
-export const getUser: RequestHandler = catchAsync(
+export const getUsersAdmin: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
