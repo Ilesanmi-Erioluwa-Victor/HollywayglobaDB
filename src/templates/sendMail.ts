@@ -55,14 +55,12 @@ export const sendUserToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(data);
   const user = await prisma.user.findUnique({
     where: {
       id: data?.userId,
     },
   });
 
-  console.log(user);
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
