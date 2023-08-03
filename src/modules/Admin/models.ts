@@ -40,3 +40,21 @@ export const createAdminM = async (admin: signupAdmin) => {
   const tokenAdmin = await createAccountVerificationTokenAdmin(createAdmin?.id);
   return tokenAdmin;
 };
+
+export const accountVerificationM = async (
+  id: string,
+  accountVerificationToken: string,
+  time: Date
+) => {
+  const admin = await prisma.admin.findUnique({
+    where: {
+      id,
+      accountVerificationToken,
+      accountVerificationTokenExpires: {
+        gt: time,
+      },
+    },
+  });
+
+  return admin;
+};
