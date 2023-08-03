@@ -6,7 +6,11 @@ import {
   createAccountVerificationTokenAdmin,
 } from '../../helper/utils';
 
-export const findAdminById = async( adminId : string)
+export const findAdminIdM = async (adminId: string) => {
+    const adminId = await prisma.admin.findUnique({
+        
+    })
+}
 export const createAdminM = async (admin: ) => {
     
 }
