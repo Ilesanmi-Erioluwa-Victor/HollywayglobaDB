@@ -15,6 +15,7 @@ import {
   accountVerificationUpdatedAdminM,
   createAdminM,
   findAdminEmailM,
+  getUsersAdminM,
 } from '../models';
 import { sendMailAdmin } from '../../../templates/sendMail';
 import { loginAdminI } from '../admin.interface';
@@ -96,9 +97,13 @@ export const getUsersAdmin: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
-    try {
-      const user = await findUserMId(id);
-      res.json(user);
+        try {
+        
+      const users = await getUsersAdminM();
+        res.json({
+          length : users.length,
+          users
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

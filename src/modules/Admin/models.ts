@@ -41,7 +41,7 @@ export const createAdminM = async (admin: signupAdmin) => {
   return tokenAdmin;
 };
 
-export const getUsersM = async () => {
+export const getUsersAdminM = async () => {
   const users = await prisma.user.findMany({});
   return users;
 };
