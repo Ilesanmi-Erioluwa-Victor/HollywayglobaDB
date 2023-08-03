@@ -11,7 +11,7 @@ import {
 } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
-import { createAdminM } from '../models';
+import { createAdminM, findAdminEmailM } from '../models';
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -24,7 +24,9 @@ export const adminSignup: RequestHandler = catchAsync(
               StatusCodes.BAD_REQUEST
             )
             );
+            const existAdmin = await findAdminEmailM(email)
         const admin = await createAdminM(req.body)
+        
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
