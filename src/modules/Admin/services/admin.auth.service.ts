@@ -11,6 +11,7 @@ import {
 } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import { createAdminM, findAdminEmailM } from '../models';
+import { sendMailAdmin } from '../../../templates/sendMail';
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +32,8 @@ export const adminSignup: RequestHandler = catchAsync(
             StatusCodes.CONFLICT
           )
         );
-      const admin = await createAdminM(req.body);
+        const admin = await createAdminM(req.body);
+        sendMailAdmin(admin, req, res, next)
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
