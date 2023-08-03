@@ -29,10 +29,8 @@ export const createAdminM = async (admin: signupUser) => {
   const { name email, password } = user;
   const createUser = await prisma.user.create({
     data: {
-      firstName,
-      lastName,
+      name,
       email,
-      mobile,
       password: await hashedPassword(password),
     },
   });
