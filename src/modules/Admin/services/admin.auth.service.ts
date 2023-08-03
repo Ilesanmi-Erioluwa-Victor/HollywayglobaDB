@@ -10,7 +10,12 @@ import {
   generatePasswordResetToken,
 } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
-import { accountVerificationAdminM, accountVerificationUpdatedAdminM, createAdminM, findAdminEmailM } from '../models';
+import {
+  accountVerificationAdminM,
+  accountVerificationUpdatedAdminM,
+  createAdminM,
+  findAdminEmailM,
+} from '../models';
 import { sendMailAdmin } from '../../../templates/sendMail';
 
 export const adminSignup: RequestHandler = catchAsync(
