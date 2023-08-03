@@ -38,6 +38,5 @@ export const createAdminM = async (admin: signupAdmin) => {
 
   generateToken(createAdmin?.id as string);
   const tokenAdmin = await createAccountVerificationTokenAdmin(createAdmin?.id);
-    console.log(tokenAdmin)
-    return tokenAdmin;
+  return tokenAdmin;
 };

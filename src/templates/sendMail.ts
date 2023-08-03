@@ -130,7 +130,7 @@ export const sendMailAdmin = async (
 interface adminInfo {
   email?: string;
   token: string;
-  userId?: string;
+  id?: string;
 }
 
 export const sendAdminToken = async (
@@ -140,7 +140,7 @@ export const sendAdminToken = async (
   next: NextFunction
 ) => {
   console.log(data)
-  const admin = await findAdminIdM(data?.userId as string);
+  const admin = await findAdminIdM(data?.id as string);
 
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',

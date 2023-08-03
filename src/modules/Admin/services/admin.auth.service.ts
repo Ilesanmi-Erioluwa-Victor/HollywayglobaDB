@@ -62,7 +62,7 @@ export const accountVerificationAdmin: RequestHandler = catchAsync(
         )
       );
     try {
-      const user = await accountVerificationM(id, token, new Date());
+      const admin = await accountVerificationMAd(id, token, new Date());
 
       if (!user)
         next(
