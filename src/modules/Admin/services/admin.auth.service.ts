@@ -15,7 +15,14 @@ import { CustomRequest } from '../../../interfaces/custom';
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password, name } = req.body;
+        const { email, password, name } = req.body;
+        if (!email || !password || !name)
+          return next(
+            throwError(
+              'Missing credentials, please provide all required information',
+              StatusCodes.BAD_REQUEST
+            )
+          );
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
