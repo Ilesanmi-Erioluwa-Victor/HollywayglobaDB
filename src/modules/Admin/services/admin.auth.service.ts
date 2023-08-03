@@ -101,12 +101,11 @@ export const getUsersAdmin: RequestHandler = catchAsync(
       if (!id) {
         throwError('No user found', StatusCodes.BAD_REQUEST);
       }
-      const users = await getUsersAdminM();
-      console.log(users)
-    //   res.json({
-    //     length: users.length,
-    //     users,
-    //   });
+      //   const users = await getUsersAdminM();
+      //   console.log(users)
+      res.json({
+        length: 'Messaafe',
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
