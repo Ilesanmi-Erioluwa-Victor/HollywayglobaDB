@@ -24,7 +24,14 @@ export const adminSignup: RequestHandler = catchAsync(
               StatusCodes.BAD_REQUEST
             )
             );
-            const existAdmin = await findAdminEmailM(email)
+        const existAdmin = await findAdminEmailM(email)
+        if (existAdmin)
+          return next(
+            throwError(
+              'You are already an admin, kindly login to your account',
+              StatusCodes.CONFLICT
+            )
+          );
         const admin = await createAdminM(req.body)
         
     } catch (error: any) {
