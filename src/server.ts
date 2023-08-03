@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 
 import adminRouter from './modules/Admin/admin.controller';
-import route from "./modules/User/user.controller"
+import userRoute from "./modules/User/user.controller"
 import { requestErrorInterface } from './interfaces/requestErrorInterface';
 import { pageNotFound } from './middlewares/error/_404';
 import { ENV } from './configurations/config';
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/v1/admin/', adminRouter);
-app.use('/api/v1/user', route);
+app.use('/api/v1/user', userRoute);
 app.use(pageNotFound);
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public'));
