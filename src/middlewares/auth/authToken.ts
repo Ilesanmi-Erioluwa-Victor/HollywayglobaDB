@@ -8,6 +8,7 @@ import { ValidateMongoDbId } from '../../helper/utils';
 import { ENV } from '../../configurations/config';
 import { CustomRequest } from '../../interfaces/custom';
 import { findUserMId } from '../../modules/User/models';
+import { findAdminIdM } from '../../modules/Admin/models';
 
 export const AuthMiddleWare = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -96,12 +97,7 @@ export const adminRole = () => {
       ValidateMongoDbId(authId as string);
       ValidateMongoDbId(adminId);
 
-      const admin = await prisma.admin.findUnique({
-        where: {
-          id: adminId,
-        },
-      });
-
+      const admin = await findAdminIdM(adminId)
       if (!admin)
         next(throwError('Sorry, No user found', StatusCodes.BAD_REQUEST));
 
