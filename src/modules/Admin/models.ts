@@ -65,7 +65,7 @@ export const accountVerificationUpdatedAdminM = async (
   accountVerificationToken: string,
   accountVerificationTokenExpires: any
 ) => {
-  const user = await prisma.user.update({
+  const admin = await prisma.admin.update({
     where: {
       id,
     },
@@ -76,5 +76,5 @@ export const accountVerificationUpdatedAdminM = async (
     },
   });
 
-  return user;
+  return admin;
 };
