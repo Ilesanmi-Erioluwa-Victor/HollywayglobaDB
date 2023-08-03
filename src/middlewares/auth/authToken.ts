@@ -87,7 +87,7 @@ export const isUserVerified = catchAsync(
   }
 );
 
-export const adminRole = (roles: string) => {
+export const adminRole = () => {
   return async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const authId = req?.authId;
@@ -118,7 +118,7 @@ export const adminRole = (roles: string) => {
           )
         );
 
-      if (!roles.includes(admin?.role as string)) {
+      if (admin?.role !== "ADMIN") {
         throwError(
           'Sorry, You cant perform this operation....',
           StatusCodes.BAD_REQUEST
