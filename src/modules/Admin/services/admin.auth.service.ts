@@ -14,6 +14,10 @@ import { CustomRequest } from '../../../interfaces/custom';
 
 export const adminSignup : RequestHandler = catchAsync(
     async (req: Request,  res : Response, next: NextFunction) => {
-
+     try {
+         const { email, password, name } = req.body;
+     } catch (error : any ) {
+        
+     }
     }
 )
