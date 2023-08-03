@@ -5,3 +5,7 @@ import {
   generateToken,
   createAccountVerificationTokenAdmin,
 } from '../../helper/utils';
+
+export const createAdminM = async (admin: ) => {
+    
+}
