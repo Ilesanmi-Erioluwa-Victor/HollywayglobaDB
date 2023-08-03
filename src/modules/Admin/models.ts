@@ -41,7 +41,7 @@ export const createAdminM = async (admin: signupAdmin) => {
   return tokenAdmin;
 };
 
-export const accountVerificationM = async (
+export const accountVerificationAdminM = async (
   id: string,
   accountVerificationToken: string,
   time: Date
@@ -57,4 +57,24 @@ export const accountVerificationM = async (
   });
 
   return admin;
+};
+
+export const accountVerificationUpdatedAdminM = async (
+  id: string,
+  isAccountVerified: boolean,
+  accountVerificationToken: string,
+  accountVerificationTokenExpires: any
+) => {
+  const user = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      isAccountVerified,
+      accountVerificationToken,
+      accountVerificationTokenExpires,
+    },
+  });
+
+  return user;
 };

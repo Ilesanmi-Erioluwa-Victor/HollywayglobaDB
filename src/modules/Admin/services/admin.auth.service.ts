@@ -10,7 +10,7 @@ import {
   generatePasswordResetToken,
 } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
-import { createAdminM, findAdminEmailM } from '../models';
+import { accountVerificationAdminM, createAdminM, findAdminEmailM } from '../models';
 import { sendMailAdmin } from '../../../templates/sendMail';
 
 export const adminSignup: RequestHandler = catchAsync(
@@ -62,9 +62,9 @@ export const accountVerificationAdmin: RequestHandler = catchAsync(
         )
       );
     try {
-      const admin = await accountVerificationMAd(id, token, new Date());
+      const admin = await accountVerificationAdminM(id, token, new Date());
 
-      if (!user)
+      if (!admin)
         next(
           throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST)
         );
