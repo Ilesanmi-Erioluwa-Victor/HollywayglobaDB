@@ -9,7 +9,6 @@ import {
   createAccountVerificationTokenAdmin,
   generatePasswordResetToken,
 } from '../../../helper/utils';
-
 import { CustomRequest } from '../../../interfaces/custom';
 import { createAdminM, findAdminEmailM } from '../models';
 
