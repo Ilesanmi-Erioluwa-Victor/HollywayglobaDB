@@ -92,6 +92,23 @@ export const loginAdmin: RequestHandler = catchAsync(
   }
 );
 
+getUsersAdmin
+export const getUser: RequestHandler = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id } = req?.params;
+    ValidateMongoDbId(id);
+    try {
+      const user = await findUserMId(id);
+      res.json(user);
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
