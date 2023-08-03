@@ -6,4 +6,6 @@ import {
 import { adminSignup } from './services/admin.auth.service';
 
 const route = express.Router();
-route.post("adminsignup", adminSignup)
+route.post("adminSignup", adminSignup)
+
+export default route;

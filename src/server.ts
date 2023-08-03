@@ -3,7 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 
-import adminRouter from './routes/admin/adminRoute';
+import adminRouter from './modules/Admin/admin.controller';
 import route from "./modules/User/user.controller"
 import { requestErrorInterface } from './interfaces/requestErrorInterface';
 import { pageNotFound } from './middlewares/error/_404';
