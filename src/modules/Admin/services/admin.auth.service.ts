@@ -11,6 +11,7 @@ import {
 } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
+import { createAdminM } from '../models';
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -22,7 +23,8 @@ export const adminSignup: RequestHandler = catchAsync(
               'Missing credentials, please provide all required information',
               StatusCodes.BAD_REQUEST
             )
-          );
+            );
+        const admin = await createAdminM(req.body)
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
