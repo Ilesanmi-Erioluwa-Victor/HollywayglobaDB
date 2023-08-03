@@ -98,13 +98,11 @@ export const getUsersAdmin: RequestHandler = catchAsync(
     const { id } = req?.params;
     ValidateMongoDbId(id);
     try {
-      if (!id) {
-        throwError('No user found', StatusCodes.BAD_REQUEST);
-      }
-      //   const users = await getUsersAdminM();
-      //   console.log(users)
+      if (!id) next(throwError('No user found', StatusCodes.BAD_REQUEST));
+      const users = await getUsersAdminM();
       res.json({
-        length: 'Messaafe',
+        length: users.length,
+        users,
       });
     } catch (error: any) {
       if (!error.statusCode) {
