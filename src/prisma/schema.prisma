@@ -118,4 +118,6 @@ model Payment {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   card_number  Int
   card_expiry_date DateTime
+  card_cvv    Int
+  
 }
