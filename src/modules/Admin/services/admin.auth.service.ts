@@ -14,6 +14,7 @@ import {
   accountVerificationAdminM,
   accountVerificationUpdatedAdminM,
   createAdminM,
+  createCategoryM,
   findAdminEmailM,
   getUsersAdminM,
 } from '../models';
@@ -116,15 +117,11 @@ export const getUsersAdmin: RequestHandler = catchAsync(
 export const createCategory: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { id }= req.params;
   ValidateMongoDbId(id)
-
      try {
        if (!id)
          next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
-       const category = await getUsersAdminM();
-       res.json({
-         length: users.length,
-         users,
-       });
+       const category = await createCategoryM(req.body);
+     
      } catch (error: any) {
        if (!error.statusCode) {
          error.statusCode = 500;

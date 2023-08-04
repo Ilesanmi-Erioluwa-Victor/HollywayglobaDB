@@ -84,10 +84,13 @@ export const accountVerificationUpdatedAdminM = async (
   return admin;
 };
 
-export const createCategory = async () => {
-  const category = await prisma.category.create({
-
-  });
+export const createCategoryM = async (name : string) => {
   
+  const category = await prisma.category.create({
+    data: {
+    name
+  }
+  });
+
   return category;
 };
