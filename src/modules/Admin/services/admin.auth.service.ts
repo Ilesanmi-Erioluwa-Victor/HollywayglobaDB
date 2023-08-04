@@ -165,6 +165,31 @@ export const editCategory: RequestHandler = catchAsync(
   }
 );
 
+export const deleteCategory: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, categoryId } = req.params;
+    ValidateMongoDbId(id);
+    ValidateMongoDbId(categoryId);
+
+    try {
+      if (!id)
+        next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
+      if (!categoryId)
+        next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
+
+      const category = await editCategoryM(categoryId, name);
+      res.json({
+        message: 'You have successfully edited this category.',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
