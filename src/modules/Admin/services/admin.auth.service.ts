@@ -154,7 +154,7 @@ export const editCategory: RequestHandler = catchAsync(
 
       const category = await editCategoryM(categoryId, name);
       res.json({
-        message: 'You have successfully created category.',
+        message: 'You have successfully edited this category.',
       });
     } catch (error: any) {
       if (!error.statusCode) {
