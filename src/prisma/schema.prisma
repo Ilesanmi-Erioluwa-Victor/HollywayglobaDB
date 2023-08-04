@@ -58,7 +58,7 @@ model User {
   updatedAt                       DateTime             @updatedAt
   v                               Int?                 @map("__v")
   passwordresettoken              PasswordResetToken[]
-  payment                         Payment
+  payment                         Payment?
 }
 
 model Address {
@@ -112,8 +112,8 @@ model PasswordResetToken {
 }
 
 model Payment {
-  userId       String @db.ObjectId
+  userId       String @db.ObjectId @unique
   user         User   @relation(fields: [userId], references: [id])
   payment_type String
-  id           String
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
 }
