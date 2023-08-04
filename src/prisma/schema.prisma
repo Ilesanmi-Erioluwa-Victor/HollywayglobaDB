@@ -29,7 +29,6 @@ enum Role {
   ADMIN
   MODERATOR
 }
-
 model AdminPasswordResetToken {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   token          String   @unique @default("")
