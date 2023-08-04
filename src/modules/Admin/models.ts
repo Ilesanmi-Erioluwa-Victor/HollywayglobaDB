@@ -93,3 +93,16 @@ export const createCategoryM = async (body : categoryI) => {
 
   return category;
 };
+
+export const editCategoryM = async (id: string, name: string) => {
+  const category = await prisma.category.update({
+    where: {
+      id
+    },
+    data: {
+      name: name
+    },
+  });
+
+  return category;
+};
