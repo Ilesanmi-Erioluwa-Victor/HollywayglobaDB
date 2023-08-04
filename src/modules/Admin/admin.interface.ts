@@ -18,3 +18,7 @@ export interface loginAdminI {
   updatedAt?: Date;
   v?: number;
 }
+
+export interface categoryI {
+  name: string;
+}

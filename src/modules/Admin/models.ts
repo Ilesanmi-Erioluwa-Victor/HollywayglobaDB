@@ -1,4 +1,4 @@
-import { signupAdmin } from './admin.interface';
+import { categoryI, signupAdmin } from './admin.interface';
 import { prisma } from '../../configurations/db';
 import {
   hashedPassword,
@@ -84,10 +84,10 @@ export const accountVerificationUpdatedAdminM = async (
   return admin;
 };
 
-export const createCategoryM = async (name : string) => {
+export const createCategoryM = async (body : categoryI) => {
   const category = await prisma.category.create({
     data: {
-    name
+    name : body.name
   }
   });
 
