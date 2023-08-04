@@ -47,7 +47,6 @@ model User {
   password                        String
   isBlocked                       Boolean              @default(false)
   address                         Address[]
-  wishlist                        WishList[]
   role                            String?              @default("user")
   active                          Boolean              @default(true)
   profilePhoto                    String               @default("https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png")
@@ -59,6 +58,7 @@ model User {
   v                               Int?                 @map("__v")
   passwordresettoken              PasswordResetToken[]
   payment                         Payment?
+  ProductWishList                 ProductWishList[]
 }
 
 model Address {
@@ -74,20 +74,21 @@ model Address {
 }
 
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
   // admin       Admin    @relation(fields: [adminId], references: [id])
   // adminId     String   @db.ObjectId
-  title       String
-  slug        String   @unique
-  description String
-  price       Int
-  category    String
-  quantity    Int
-  images      String[]
-  brand       String
-  sold        Int      @default(0)
-  color       String
-  ratings     Rating?
+  title           String
+  slug            String            @unique
+  description     String
+  price           Int
+  category        String
+  quantity        Int
+  images          String[]
+  brand           String
+  sold            Int               @default(0)
+  color           String
+  ratings         Rating?
+  ProductWishList ProductWishList[]
 }
 
 model Rating {
@@ -97,10 +98,13 @@ model Rating {
   productId String  @unique @db.ObjectId
 }
 
-model WishList {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
+model ProductWishList {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  product    Product @relation(fields: [productId], references: [id])
+  productId  String  @db.ObjectId
+  user       User    @relation(fields: [userId], references: [id])
+  wishListId String  @db.ObjectId
+  userId     String  @db.ObjectId
 }
 
 model PasswordResetToken {
@@ -112,12 +116,12 @@ model PasswordResetToken {
 }
 
 model Payment {
-  userId       String @db.ObjectId @unique
-  user         User   @relation(fields: [userId], references: [id])
-  payment_type String 
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  card_number  Int
-  card_expiry_date DateTime
-  card_cvv    Int
-  card_holder_name String
+  userId         String   @unique @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id])
+  paymenType     String
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  cardNnumber    Int
+  cardExpiryDate DateTime
+  cardCvv        Int
+  cardHolderName String
 }
