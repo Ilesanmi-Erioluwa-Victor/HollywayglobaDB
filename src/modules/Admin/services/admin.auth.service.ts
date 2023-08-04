@@ -15,6 +15,7 @@ import {
   accountVerificationUpdatedAdminM,
   createAdminM,
   createCategoryM,
+  deleteCategoryM,
   editCategoryM,
   findAdminEmailM,
   getUsersAdminM,
@@ -177,9 +178,9 @@ export const deleteCategory: RequestHandler = catchAsync(
       if (!categoryId)
         next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
 
-      const category = await editCategoryM(categoryId, name);
+      const category = await deleteCategoryM(categoryId);
       res.json({
-        message: 'You have successfully edited this category.',
+        message: 'You have successfully deleted this category.',
       });
     } catch (error: any) {
       if (!error.statusCode) {

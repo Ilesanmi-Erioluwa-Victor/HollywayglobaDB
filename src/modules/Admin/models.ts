@@ -103,6 +103,14 @@ export const editCategoryM = async (id: string, name: string) => {
       name: name
     },
   });
+  return category;
+};
 
+export const deleteCategoryM = async (id: string) => {
+  const category = await prisma.category.delete({
+    where: {
+      id,
+    }
+  });
   return category;
 };
