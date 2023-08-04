@@ -98,7 +98,7 @@ export const getUsersAdmin: RequestHandler = catchAsync(
     const { id } = req?.params;
     ValidateMongoDbId(id);
     try {
-      if (!id) next(throwError('No user found', StatusCodes.BAD_REQUEST));
+      if (!id) next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
       const users = await getUsersAdminM();
       res.json({
         length: users.length,
