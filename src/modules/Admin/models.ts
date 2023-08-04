@@ -85,7 +85,6 @@ export const accountVerificationUpdatedAdminM = async (
 };
 
 export const createCategoryM = async (name : string) => {
-  
   const category = await prisma.category.create({
     data: {
     name
