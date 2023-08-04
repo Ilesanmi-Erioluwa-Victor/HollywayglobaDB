@@ -75,8 +75,6 @@ model Address {
 
 model Product {
   id              String            @id @default(auto()) @map("_id") @db.ObjectId
-  // admin       Admin    @relation(fields: [adminId], references: [id])
-  // adminId     String   @db.ObjectId
   title           String
   slug            String            @unique
   description     String
