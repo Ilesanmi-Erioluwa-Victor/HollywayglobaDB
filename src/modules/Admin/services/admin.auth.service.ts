@@ -114,7 +114,8 @@ export const getUsersAdmin: RequestHandler = catchAsync(
 );
 
 export const createCategory: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { id }= req.params
+  const { id }= req.params;
+  ValidateMongoDbId(id)
 })
 
 export const accountVerificationAdmin: RequestHandler = catchAsync(
