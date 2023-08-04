@@ -79,7 +79,7 @@ model Product {
   slug            String            @unique
   description     String
   price           Int
-  category        String
+  category        Category          @relation(fields: [categoryId], references: [id])
   quantity        Int
   images          String[]
   brand           String
@@ -87,6 +87,7 @@ model Product {
   color           String
   ratings         Rating?
   ProductWishList ProductWishList[]
+  categoryId      String            @db.ObjectId
 }
 
 model Rating {
@@ -122,4 +123,10 @@ model Payment {
   cardExpiryDate DateTime
   cardCvv        Int
   cardHolderName String
+}
+
+model Category {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  Product Product[]
+  name    String
 }
