@@ -119,5 +119,5 @@ model Payment {
   card_number  Int
   card_expiry_date DateTime
   card_cvv    Int
-  
+  card_holder_name String
 }
