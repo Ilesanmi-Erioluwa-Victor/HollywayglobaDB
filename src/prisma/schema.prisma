@@ -29,6 +29,7 @@ enum Role {
   ADMIN
   MODERATOR
 }
+
 model AdminPasswordResetToken {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   token          String   @unique @default("")
@@ -56,7 +57,8 @@ model User {
   createdAt                       DateTime             @default(now())
   updatedAt                       DateTime             @updatedAt
   v                               Int?                 @map("__v")
-  PasswordResetToken              PasswordResetToken[]
+  passwordresettoken              PasswordResetToken[]
+  payment                         Payment
 }
 
 model Address {
@@ -107,4 +109,11 @@ model PasswordResetToken {
   expirationTime DateTime
   userId         String   @db.ObjectId
   user           User     @relation(fields: [userId], references: [id])
+}
+
+model Payment {
+  userId       String @db.ObjectId
+  user         User   @relation(fields: [userId], references: [id])
+  payment_type String
+  id           String
 }
