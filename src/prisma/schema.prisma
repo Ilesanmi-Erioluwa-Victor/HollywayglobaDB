@@ -117,4 +117,5 @@ model Payment {
   payment_type String 
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   card_number  Int
+  card_expiry_date DateTime
 }
