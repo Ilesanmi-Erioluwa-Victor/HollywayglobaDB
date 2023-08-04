@@ -114,7 +114,7 @@ export const getUsersAdmin: RequestHandler = catchAsync(
 );
 
 export const createCategory: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  
+  const { id }= req.params
 })
 
 export const accountVerificationAdmin: RequestHandler = catchAsync(
