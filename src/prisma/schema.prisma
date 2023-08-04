@@ -114,6 +114,7 @@ model PasswordResetToken {
 model Payment {
   userId       String @db.ObjectId @unique
   user         User   @relation(fields: [userId], references: [id])
-  payment_type String
+  payment_type String 
   id           String @id @default(auto()) @map("_id") @db.ObjectId
+  card_number  Int
 }
