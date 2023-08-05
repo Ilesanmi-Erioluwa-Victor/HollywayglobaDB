@@ -28,7 +28,14 @@ export const createProductM = async (productI: createProductI) => {
         data: {
             title,
             slug,
-            description
+            description,
+            price,
+            quantity,
+            images,
+            brand,
+            stock,
+            colors,
+            category
        }
    }) 
 }
