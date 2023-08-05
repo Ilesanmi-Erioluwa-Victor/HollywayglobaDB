@@ -1,6 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import helmet from "helmet"
 import path from 'path';
 
 import adminRouter from './modules/Admin/admin.controller';
@@ -15,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/images', express.static('images'));
 app.use(express.static('public'));
 app.use(express.json());
-
+app.use(helmet());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
