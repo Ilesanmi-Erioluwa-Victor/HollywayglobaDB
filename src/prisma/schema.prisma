@@ -83,18 +83,21 @@ model Product {
   quantity        Int
   images          String[]
   brand           String
-  stock            Int               @default(0)
-  colors           String[]
-  ratings         Rating?
+  stock           Int               @default(0)
+  colors          String[]
+  reviews         Review[]
   ProductWishList ProductWishList[]
   categoryId      String            @db.ObjectId
 }
 
-model Rating {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  product   Product @relation(fields: [productId], references: [id])
-  star      Int     @default(0)
-  productId String  @unique @db.ObjectId
+model Review {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  rating    Float // Rating value (e.g., 4.5)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  productId String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model ProductWishList {
@@ -126,7 +129,7 @@ model Payment {
 }
 
 model Category {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   products Product[]
-  name    String
+  name     String
 }
