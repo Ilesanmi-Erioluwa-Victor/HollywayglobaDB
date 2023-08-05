@@ -5,5 +5,11 @@ import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync } from '../../../helper/utils';
 
 export const createProduct: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    
+    try {
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
 })
