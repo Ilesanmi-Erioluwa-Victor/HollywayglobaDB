@@ -6,8 +6,6 @@ import {
   catchAsync,
   ValidateMongoDbId,
   generateToken,
-  createAccountVerificationTokenAdmin,
-  generatePasswordResetToken,
 } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import {
