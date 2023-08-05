@@ -6,6 +6,7 @@ import { catchAsync } from '../../../helper/utils';
 
 export const createProduct: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const { } = req.body;
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
