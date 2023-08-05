@@ -5,8 +5,7 @@ export interface createProductI {
   price: number;
   quantity: number;
   images: string[];
-  brand: string;
   stock: number;
-  colors: string;
+  colors: string[];
   categoryId: string;
 }
