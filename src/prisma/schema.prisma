@@ -84,7 +84,7 @@ model Product {
   images          String[]
   brand           String
   sold            Int               @default(0)
-  color           String
+  colors           String[]
   ratings         Rating?
   ProductWishList ProductWishList[]
   categoryId      String            @db.ObjectId
