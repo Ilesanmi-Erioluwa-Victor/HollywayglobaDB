@@ -82,7 +82,7 @@ model Product {
   category        Category          @relation(fields: [categoryId], references: [id])
   quantity        Int
   images          String[]
-  brand           Brand
+  brand           Brand             @default(FOOD)
   stock           Int               @default(0)
   colors          String[]
   reviews         Review[]
@@ -91,6 +91,7 @@ model Product {
 }
 
 enum Brand {
+  FOOD
   NIKE
   APPLE
   COCACOLA
