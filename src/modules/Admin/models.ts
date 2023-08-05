@@ -2,7 +2,6 @@ import { categoryI, signupAdmin } from './admin.interface';
 import { prisma } from '../../configurations/db';
 import {
   hashedPassword,
-  generatePasswordResetToken,
   generateToken,
   createAccountVerificationTokenAdmin,
 } from '../../helper/utils';

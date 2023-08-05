@@ -19,7 +19,9 @@ export const createProduct: RequestHandler = catchAsync(
         colors,
         sold,
         categoryId,
-      } = req.body;
+        } = req.body;
+        
+        
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
