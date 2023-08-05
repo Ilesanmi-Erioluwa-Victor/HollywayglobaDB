@@ -9,3 +9,7 @@ export const findProductIdM = async (id: string) => {
     })
     return product;
 }
+
+export const createProductM = async (product: product) => {
+    
+}
