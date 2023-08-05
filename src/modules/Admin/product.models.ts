@@ -1,5 +1,6 @@
 import { categoryI, signupAdmin } from './admin.interface';
 import { prisma } from '../../configurations/db';
+import { createProductI } from './product.interface';
 
 export const findProductIdM = async (id: string) => {
     const product = await prisma.product.findUnique({
@@ -10,6 +11,6 @@ export const findProductIdM = async (id: string) => {
     return product;
 }
 
-export const createProductM = async (product: createproductI) => {
+export const createProductM = async (product: createProductI) => {
     
 }
