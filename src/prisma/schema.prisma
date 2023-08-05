@@ -82,12 +82,26 @@ model Product {
   category        Category          @relation(fields: [categoryId], references: [id])
   quantity        Int
   images          String[]
-  brand           String
+  brand           Brand
   stock           Int               @default(0)
   colors          String[]
   reviews         Review[]
   ProductWishList ProductWishList[]
   categoryId      String            @db.ObjectId
+}
+
+enum Brand {
+  NIKE
+  APPLE
+  COCACOLA
+  PUMA
+  SAMSUNG
+  PHILIPS
+  LENOVO
+  NOKIA
+  TECNO
+  INFINIX
+  REDMI
 }
 
 model Review {
