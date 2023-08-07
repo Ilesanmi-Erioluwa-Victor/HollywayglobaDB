@@ -4,7 +4,8 @@ import { throwError } from '../../../middlewares/error/cacheError';
 import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { createProductM } from '../product.models';
-findCa
+import { findCategoryIdM } from '../../Admin/models';
+
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req?.params;
@@ -15,7 +16,9 @@ export const createProduct: RequestHandler = catchAsync(
           'Your ID is not valid...',
           StatusCodes.BAD_REQUEST
         )
-      );
+            );
+        
+        const category = await findCategoryIdM()
     try {
       const {
         title,
