@@ -4,7 +4,7 @@ import { throwError } from '../../../middlewares/error/cacheError';
 import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { createProductM } from '../product.models';
-
+findCa
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req?.params;

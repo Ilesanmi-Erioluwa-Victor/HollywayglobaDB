@@ -114,7 +114,7 @@ export const deleteCategoryM = async (id: string) => {
   return category;
 };
 
-export const findCategoryM = async (id: string) => {
+export const findCategoryIdM = async (id: string) => {
   const category = await prisma.category.findUnique({
     where: {
       id,
