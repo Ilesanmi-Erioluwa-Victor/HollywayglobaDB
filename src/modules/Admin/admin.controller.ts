@@ -4,11 +4,13 @@ import {
   accountVerificationAdmin,
   adminSignup,
   loginAdmin,
-  getUsersAdmin,
+  getUsersAdmin
+} from './services/admin.auth.service';
+import {
   createCategory,
   editCategory,
   deleteCategory,
-} from './services/admin.auth.service';
+} from './services/admin.category.service';
 
 const route = express.Router();
 route.post('/admin_signup', adminSignup);
