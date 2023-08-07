@@ -2,12 +2,19 @@ import { RequestHandler, NextFunction, Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { throwError } from '../../../middlewares/error/cacheError';
 import { CustomRequest } from '../../../interfaces/custom';
-import { catchAsync } from '../../../helper/utils';
+import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { createProductM } from '../product.models';
 
 export const createProduct: RequestHandler = catchAsync(
     async (req: CustomRequest, res: Response, next: NextFunction) => {
         const authId = req?.authId;
+          if (!authId)
+            next(
+              throwError(
+                'You are not authorized to perform this action',
+                StatusCodes.FORBIDDEN
+              )
+            );
     try {
       const {
         title,

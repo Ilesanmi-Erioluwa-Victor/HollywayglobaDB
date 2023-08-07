@@ -4,7 +4,6 @@ import { throwError } from '../../../middlewares/error/cacheError';
 import {
   catchAsync,
   ValidateMongoDbId,
-  generateToken,
 } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import {
