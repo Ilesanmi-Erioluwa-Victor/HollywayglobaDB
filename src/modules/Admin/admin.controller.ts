@@ -16,12 +16,12 @@ import {
 const route = express.Router();
 route.post('/admin_signup', adminSignup);
 route.post('/admin_login', loginAdmin);
+route.put('/:id/verify_account/:token', accountVerificationAdmin);
+route.get('/:id/users', AuthMiddleWare, adminRole, getUsersAdmin);
 
 route.post('/:id/category', AuthMiddleWare, adminRole, createCategory);
-route.post('/:id/category', AuthMiddleWare, adminRole, createCategory);
 route.get('/:id/category/:categoryId', AuthMiddleWare, adminRole, editCategory);
+route.put('/:id/category', AuthMiddleWare, adminRole, createCategory);
 route.delete('/:id/category/:categoryId', AuthMiddleWare, adminRole, deleteCategory);
-route.get('/:id/users', AuthMiddleWare, adminRole, getUsersAdmin);
-route.put('/:id/verify_account/:token', accountVerificationAdmin);
 
 export default route;
