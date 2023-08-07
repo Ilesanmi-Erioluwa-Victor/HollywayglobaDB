@@ -1,11 +1,12 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import helmet from "helmet"
+import helmet from 'helmet';
 import path from 'path';
 
 import adminRouter from './modules/Admin/admin.controller';
 import userRoute from './modules/User/user.controller';
+import productRoute from './modules/Product/user.controller';
 import { requestErrorInterface } from './interfaces/requestErrorInterface';
 import { pageNotFound } from './middlewares/error/_404';
 import { ENV } from './configurations/config';
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/user', userRoute);
+app.use('/api/v1/products', productRouter);
 app.use(pageNotFound);
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public'));
