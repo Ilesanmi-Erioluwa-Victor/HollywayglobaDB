@@ -17,13 +17,14 @@ model Admin {
   password                        String
   role                            Role                      @default(MODERATOR)
   AdminPasswordResetToken         AdminPasswordResetToken[]
-  category                        Category[]
+  category                        Category  
   isAccountVerified               Boolean                   @default(false)
   accountVerificationToken        String?                   @default("")
   accountVerificationTokenExpires DateTime?                 @default(now())
   createdAt                       DateTime                  @default(now())
   updatedAt                       DateTime                  @updatedAt
   v                               Int?                      @map("__v")
+  categoryId                      String                    @db.ObjectId @unique
 }
 
 enum Role {
@@ -148,6 +149,6 @@ model Category {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
   products Product[]
   name     String
-  Admin    Admin?    @relation(fields: [adminId], references: [id])
+  admin    Admin     @relation(fields: [adminId], references: [id])
   adminId  String?   @db.ObjectId
 }
