@@ -17,6 +17,7 @@ model Admin {
   password                        String
   role                            Role                      @default(MODERATOR)
   AdminPasswordResetToken         AdminPasswordResetToken[]
+  category                        Category[]
   isAccountVerified               Boolean                   @default(false)
   accountVerificationToken        String?                   @default("")
   accountVerificationTokenExpires DateTime?                 @default(now())
@@ -147,4 +148,6 @@ model Category {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
   products Product[]
   name     String
+  Admin    Admin?    @relation(fields: [adminId], references: [id])
+  adminId  String?   @db.ObjectId
 }

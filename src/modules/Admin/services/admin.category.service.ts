@@ -103,7 +103,7 @@ export const findCategory: RequestHandler = catchAsync(
 
       const category = await findCategoryM(categoryId);
       res.json({
-       category
+        category,
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -115,19 +115,21 @@ export const findCategory: RequestHandler = catchAsync(
 );
 
 export const getCategories: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { id, categoryId } = req.params;
-    ValidateMongoDbId(id);
-
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const authId  = req?.authId;
+    console.log(authId);
     try {
-      if (!id)
-        next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
-      if (!categoryId)
-        next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
+      if (!authId)
+        next(
+          throwError(
+            'You are not authorized to perform this action',
+            StatusCodes.FORBIDDEN
+          )
+        );
 
       const category = await findCategoriesM();
       res.json({
-        length : category.length,
+        length: category.length,
         category,
       });
     } catch (error: any) {

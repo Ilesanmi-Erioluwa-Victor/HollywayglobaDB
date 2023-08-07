@@ -112,6 +112,8 @@ export const getUsersAdmin: RequestHandler = catchAsync(
   }
 );
 
+
+
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
