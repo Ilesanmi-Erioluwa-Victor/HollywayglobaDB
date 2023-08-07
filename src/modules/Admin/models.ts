@@ -113,3 +113,12 @@ export const deleteCategoryM = async (id: string) => {
   });
   return category;
 };
+
+export const findCategoryM = async (id: string) => {
+  const category = await prisma.category.findUnique({
+    where: {
+      id,
+    }
+  });
+  return category;
+};
