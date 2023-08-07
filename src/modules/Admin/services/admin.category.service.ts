@@ -10,7 +10,7 @@ import {
   createCategoryM,
   deleteCategoryM,
   editCategoryM,
-  findCategoryM,
+  findCategoryIdM,
   findCategoriesM,
 } from '../models';
 
@@ -100,7 +100,7 @@ export const findCategory: RequestHandler = catchAsync(
       if (!categoryId)
         next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
 
-      const category = await findCategoryM(categoryId);
+      const category = await findCategoryIdM(categoryId);
       res.json({
         category,
       });
