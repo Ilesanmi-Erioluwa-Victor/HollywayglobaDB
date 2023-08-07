@@ -17,8 +17,6 @@ export const createProduct: RequestHandler = catchAsync(
           StatusCodes.BAD_REQUEST
         )
             );
-        
-        const category = await findCategoryIdM()
     try {
       const {
         title,
@@ -26,7 +24,7 @@ export const createProduct: RequestHandler = catchAsync(
         description,
         price,
         quantity,
-        images,
+        // images,
         brand,
         stock,
         colors,

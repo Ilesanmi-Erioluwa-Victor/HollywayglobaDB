@@ -4,7 +4,7 @@ export interface createProductI {
   description: string;
   price: number;
   quantity: number;
-  images: string[];
+  // images: string[];
   stock: number;
   colors: string[];
   categoryId: string;

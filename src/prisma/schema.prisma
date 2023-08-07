@@ -82,7 +82,7 @@ model Product {
   price           Int
   category        Category          @relation(fields: [categoryId], references: [id])
   quantity        Int
-  images          String[]
+  // images          String[]
   brand           Brand             @default(FOOD)
   stock           Int               @default(0)
   colors          String[]
