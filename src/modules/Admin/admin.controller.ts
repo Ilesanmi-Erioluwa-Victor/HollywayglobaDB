@@ -7,7 +7,7 @@ import {
   getUsersAdmin,
   createCategory,
   editCategory,
-  deleteCategory
+  deleteCategory,
 } from './services/admin.auth.service';
 
 const route = express.Router();
