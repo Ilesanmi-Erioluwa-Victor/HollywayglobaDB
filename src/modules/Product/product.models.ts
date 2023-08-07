@@ -21,7 +21,9 @@ export const createProductM = async (productI: createProductI) => {
     // images,
     stock,
     colors,
+    brand,
     categoryId,
+    adminId
   } = productI;
   const product = await prisma.product.create({
     data: {
@@ -30,10 +32,12 @@ export const createProductM = async (productI: createProductI) => {
       description,
       price,
       quantity,
+      brand,
       // images,
       stock,
       colors,
       categoryId,
+      adminId
     },
   });
   return product;
