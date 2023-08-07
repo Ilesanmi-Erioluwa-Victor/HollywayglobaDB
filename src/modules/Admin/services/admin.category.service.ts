@@ -126,8 +126,9 @@ export const getCategories: RequestHandler = catchAsync(
       if (!categoryId)
         next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
 
-      const category = await findCategoriesM(categoryId);
+      const category = await findCategoriesM();
       res.json({
+        length : category.length,
         category,
       });
     } catch (error: any) {
