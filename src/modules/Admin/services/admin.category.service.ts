@@ -12,7 +12,7 @@ import {
   deleteCategoryM,
   editCategoryM,
   findCategoryM,
-
+  findCategoriesM,
 } from '../models';
 
 export const createCategory: RequestHandler = catchAsync(

@@ -12,9 +12,6 @@ import {
   accountVerificationAdminM,
   accountVerificationUpdatedAdminM,
   createAdminM,
-  createCategoryM,
-  deleteCategoryM,
-  editCategoryM,
   findAdminEmailM,
   getUsersAdminM,
 } from '../models';
