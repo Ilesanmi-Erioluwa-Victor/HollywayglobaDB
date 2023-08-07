@@ -6,15 +6,15 @@ import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { createProductM } from '../product.models';
 
 export const createProduct: RequestHandler = catchAsync(
-    async (req: CustomRequest, res: Response, next: NextFunction) => {
-        const authId = req?.authId;
-          if (!authId)
-            next(
-              throwError(
-                'You are not authorized to perform this action',
-                StatusCodes.FORBIDDEN
-              )
-            );
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const authId = req?.authId;
+    if (!authId)
+      next(
+        throwError(
+          'You are not authorized to perform this action',
+          StatusCodes.FORBIDDEN
+        )
+      );
     try {
       const {
         title,
@@ -30,6 +30,7 @@ export const createProduct: RequestHandler = catchAsync(
         categoryId,
       } = req.body;
       const createProduct = await createProductM(req.body);
+      console.log(createProduct);
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
