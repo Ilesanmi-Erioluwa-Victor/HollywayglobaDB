@@ -117,7 +117,6 @@ export const findCategory: RequestHandler = catchAsync(
 export const getCategories: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const authId  = req?.authId;
-    console.log(authId);
     try {
       if (!authId)
         next(
