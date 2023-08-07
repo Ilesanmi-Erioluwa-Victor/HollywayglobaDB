@@ -90,7 +90,6 @@ export const adminRole = catchAsync(
       const authId = req?.authId;
       const adminId = req?.params?.id;
 
-      console.log(authId, adminId);
       ValidateMongoDbId(authId as string);
       ValidateMongoDbId(adminId);
 
