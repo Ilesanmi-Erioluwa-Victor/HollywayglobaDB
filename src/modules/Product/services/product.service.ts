@@ -6,7 +6,8 @@ import { catchAsync } from '../../../helper/utils';
 import { createProductM } from '../product.models';
 
 export const createProduct: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+    async (req: CustomRequest, res: Response, next: NextFunction) => {
+        const authId = req?.authId;
     try {
       const {
         title,
