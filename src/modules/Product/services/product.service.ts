@@ -6,13 +6,14 @@ import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { createProductM } from '../product.models';
 
 export const createProduct: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const authId = req?.authId;
-    if (!authId)
+  async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req?.params;
+        ValidateMongoDbId(id)
+    if (!id)
       next(
         throwError(
-          'You are not authorized to perform this action',
-          StatusCodes.FORBIDDEN
+          'Your ID is not valid...',
+          StatusCodes.BAD_REQUEST
         )
       );
     try {
