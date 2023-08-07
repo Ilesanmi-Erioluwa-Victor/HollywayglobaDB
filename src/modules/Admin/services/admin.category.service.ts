@@ -21,7 +21,7 @@ export const createCategory: RequestHandler = catchAsync(
     try {
       if (!id)
         next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
-      const category = await createCategoryM(req.body);
+      const category = await createCategoryM(req.body, id);
       res.json({
         message: 'You have successfully created category.',
       });

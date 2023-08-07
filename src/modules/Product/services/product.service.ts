@@ -8,15 +8,10 @@ import { findCategoryIdM } from '../../Admin/models';
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req?.params;
-        ValidateMongoDbId(id)
+    const { id } = req?.params;
+    ValidateMongoDbId(id);
     if (!id)
-      next(
-        throwError(
-          'Your ID is not valid...',
-          StatusCodes.BAD_REQUEST
-        )
-            );
+      next(throwError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
     try {
       const {
         title,

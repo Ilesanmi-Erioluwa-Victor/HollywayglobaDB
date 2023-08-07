@@ -83,10 +83,11 @@ export const accountVerificationUpdatedAdminM = async (
   return admin;
 };
 
-export const createCategoryM = async (body : categoryI) => {
+export const createCategoryM = async (body : categoryI, adminId: string) => {
   const category = await prisma.category.create({
     data: {
-    name : body.name
+    name : body.name,
+    adminId
   }
   });
 
