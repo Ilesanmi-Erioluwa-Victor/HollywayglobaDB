@@ -118,7 +118,6 @@ export const getCategories: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id, categoryId } = req.params;
     ValidateMongoDbId(id);
-    ValidateMongoDbId(categoryId);
 
     try {
       if (!id)

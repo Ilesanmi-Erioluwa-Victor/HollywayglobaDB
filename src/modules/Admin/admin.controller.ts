@@ -11,6 +11,7 @@ import {
   editCategory,
   deleteCategory,
   findCategory,
+  getCategories,
 } from './services/admin.category.service';
 
 const route = express.Router();
@@ -22,6 +23,7 @@ route.get('/:id/users', AuthMiddleWare, adminRole, getUsersAdmin);
 route.post('/:id/category', AuthMiddleWare, adminRole, createCategory);
 route.get('/:id/category/:categoryId', AuthMiddleWare, adminRole, findCategory);
 route.put('/:id/category/:categoryId', AuthMiddleWare, adminRole, editCategory);
+route.get('/:id/category/', AuthMiddleWare, adminRole, getCategories);
 route.delete(
   '/:id/category/:categoryId',
   AuthMiddleWare,
