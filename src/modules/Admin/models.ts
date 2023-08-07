@@ -122,3 +122,8 @@ export const findCategoryM = async (id: string) => {
   });
   return category;
 };
+
+export const findCategoriesM = async () => {
+  const category = await prisma.category.findMany();
+  return category;
+};
