@@ -11,6 +11,7 @@ import {
   createCategoryM,
   deleteCategoryM,
   editCategoryM,
+  findCategoryM,
 
 } from '../models';
 
@@ -78,6 +79,31 @@ export const deleteCategory: RequestHandler = catchAsync(
       const category = await deleteCategoryM(categoryId);
       res.json({
         message: 'You have successfully deleted this category.',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
+export const findCategory: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, categoryId } = req.params;
+    ValidateMongoDbId(id);
+    ValidateMongoDbId(categoryId);
+
+    try {
+      if (!id)
+        next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
+      if (!categoryId)
+        next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
+
+      const category = await findCategoryM(categoryId);
+      res.json({
+       category
       });
     } catch (error: any) {
       if (!error.statusCode) {
