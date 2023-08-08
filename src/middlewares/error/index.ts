@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 class ErrorHandlerMiddleware {
+
   static notFound(req: Request, res: Response, next: NextFunction): void {
     const error = new Error(`Not found ${req?.originalUrl}`);
     res.status(404);

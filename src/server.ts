@@ -7,9 +7,9 @@ import path from 'path';
 import adminRoute from './modules/Admin/admin.controller';
 import userRoute from './modules/User/user.controller';
 import productRoute from './modules/Product/product.controller';
-import { requestErrorInterface } from './interfaces/requestErrorInterface';
-import { pageNotFound } from './middlewares/error/_404';
+import ErrorHandlerMiddleware from './middlewares/error';
 import { ENV } from './configurations/config';
+
 const app: Application = express();
 
 app.use(cors());
@@ -30,7 +30,11 @@ app.use((req, res, next) => {
 app.use('/api/v1/admin', adminRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
-app.use(pageNotFound);
+
+
+app.use(ErrorHandlerMiddleware.notFound);
+app.use(ErrorHandlerMiddleware.errorHandler);
+
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public'));
 });
