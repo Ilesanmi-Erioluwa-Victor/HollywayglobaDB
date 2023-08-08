@@ -10,6 +10,7 @@ import userRoute from './modules/User/user.controller';
 import productRoute from './modules/Product/product.controller';
 import AppError from './utils';
 import ErrorHandlerMiddleware from './middlewares/error';
+import SanitizeInputMiddleware from './middlewares/sanitize';
 import { ENV } from './configurations/config';
 
 const app: Application = express();
@@ -28,7 +29,7 @@ app.use((req, res, next) => {
   res.set('content-type', 'application/json');
   next();
 });
-app.use(xss());
+app.use(SanitizeInputMiddleware.sanitizeInput);
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public'));
