@@ -48,20 +48,7 @@ export const getProducts: RequestHandler = catchAsync(
     if (!id)
       next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
     try {
-      const {
-        title,
-        slug,
-        description,
-        price,
-        quantity,
-        // images,
-        brand,
-        stock,
-        colors,
-        sold,
-        categoryId,
-        adminId,
-      } = req.body;
+     
       const createProduct = await createProductM(req.body);
       res.json({
         status: 'Success',
