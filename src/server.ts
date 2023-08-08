@@ -8,6 +8,7 @@ import adminRoute from './modules/Admin/admin.controller';
 import userRoute from './modules/User/user.controller';
 import productRoute from './modules/Product/product.controller';
 import AppError from './utils';
+import ErrorHandlerMiddleware from './middlewares/error';
 import { ENV } from './configurations/config';
 
 const app: Application = express();
@@ -27,15 +28,20 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, '/public'));
+});
+
 app.use('/api/v1/admin', adminRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
 
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
+});
 
-
-
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '/public'));
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  ErrorHandlerMiddleware.sendErrorDev(err, res);
 });
 
 const startConnection = async () => {
