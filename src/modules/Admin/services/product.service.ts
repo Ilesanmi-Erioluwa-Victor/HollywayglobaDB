@@ -41,7 +41,7 @@ export const createProduct: RequestHandler = catchAsync(
 );
 
 export const getProductsAdmin: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
     if (!id)
@@ -63,7 +63,7 @@ export const getProductsAdmin: RequestHandler = catchAsync(
 );
 
 export const getProductAdmin: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id, productId } = req?.params;
     ValidateMongoDbId(id);
     ValidateMongoDbId(productId);
