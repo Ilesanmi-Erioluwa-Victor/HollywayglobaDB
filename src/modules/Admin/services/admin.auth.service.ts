@@ -112,6 +112,27 @@ export const getUsersAdmin: RequestHandler = catchAsync(
   }
 );
 
+export const getProducts: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req?.params;
+    ValidateMongoDbId(id);
+    if (!id)
+      next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
+    try {
+      const products = await getProductsM();
+      res.json({
+        status: 'Success',
+        data: products,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
