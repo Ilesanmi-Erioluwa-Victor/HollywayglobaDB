@@ -113,7 +113,7 @@ export const getUsersAdmin: RequestHandler = catchAsync(
   }
 );
 
-export const getProducts: RequestHandler = catchAsync(
+export const getProductsAdmin: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
