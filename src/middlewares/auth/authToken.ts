@@ -65,11 +65,11 @@ export const isUserVerified = catchAsync(
       const user = await findUserMId(authId as string);
       if (user?.id.toString() !== authId?.toString())
         next(
-          throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
+          new AppError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
         );
 
       if (!user?.isAccountVerified)
-        throwError(
+        new AppError(
           'Sorry, your account is not verified, please check your email and verify your email',
           StatusCodes.BAD_REQUEST
         );
