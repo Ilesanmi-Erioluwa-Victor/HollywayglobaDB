@@ -135,7 +135,7 @@ export const updateUser = catchAsync(
       (field) => !allowedFields.includes(field)
     );
     if (unexpectedFields.length > 0) {
-      throwError(
+      new AppError(
         `Unexpected fields: ${unexpectedFields.join(
           ', '
         )}, Sorry it's not part of the parameter`,
@@ -169,7 +169,7 @@ export const updatePassword = catchAsync(
     try {
       ValidateMongoDbId(id);
       if (!password)
-        throwError(
+        new AppError(
           'Please, provide password before you can change your current password',
           StatusCodes.BAD_REQUEST
         );
@@ -192,11 +192,11 @@ export const accountVerification: RequestHandler = catchAsync(
     const { token, id } = req.params;
     ValidateMongoDbId(id);
     if (!id)
-      next(throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST));
+      next(new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST));
 
     if (!token)
       next(
-        throwError(
+        new AppError(
           'Sorry, this token is not valid, try again',
           StatusCodes.BAD_REQUEST
         )
