@@ -3,7 +3,7 @@ import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import fs from 'fs';
 import path from 'path';
-import { throwError } from '../../../middlewares/error';
+import AppError from "../../../middlewares/error"
 import {
   catchAsync,
   ValidateMongoDbId,
