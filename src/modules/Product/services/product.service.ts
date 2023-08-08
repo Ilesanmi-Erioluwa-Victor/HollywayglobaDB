@@ -28,7 +28,10 @@ export const createProduct: RequestHandler = catchAsync(
         adminId,
       } = req.body;
       const createProduct = await createProductM(req.body);
-      console.log(createProduct, createProduct.adminId);
+      res.json({
+        status : "Success",
+        data: createProduct
+      })
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
