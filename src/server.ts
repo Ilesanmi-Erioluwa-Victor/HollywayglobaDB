@@ -2,6 +2,7 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
+import xss from "xss";
 import path from 'path';
 
 import adminRoute from './modules/Admin/admin.controller';
