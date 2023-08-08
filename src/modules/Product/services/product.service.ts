@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
-import { createProductM } from '../product.models';
+import { createProductM, getProductsM } from '../product.models';
 import { findCategoryIdM } from '../../Admin/models';
 
 export const createProduct: RequestHandler = catchAsync(
@@ -48,8 +48,7 @@ export const getProducts: RequestHandler = catchAsync(
     if (!id)
       next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
     try {
-     
-      const createProduct = await createProductM(req.body);
+      const createProduct = await getProductsM();
       res.json({
         status: 'Success',
         data: createProduct,
