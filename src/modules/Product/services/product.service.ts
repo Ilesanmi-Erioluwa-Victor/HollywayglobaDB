@@ -24,10 +24,11 @@ export const createProduct: RequestHandler = catchAsync(
         stock,
         colors,
         sold,
-        categoryId,
+          categoryId,
+        adminId
       } = req.body;
       const createProduct = await createProductM(req.body);
-      console.log(createProduct);
+      console.log(createProduct, createProduct.adminId);
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
