@@ -206,7 +206,10 @@ export const accountVerification: RequestHandler = catchAsync(
 
       if (!user)
         next(
-          throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST)
+          new AppError(
+            'Sorry, no user found, try again',
+            StatusCodes.BAD_REQUEST
+          )
         );
       const updaterUser = await accountVerificationUpdatedM(
         user?.id as string,
@@ -232,13 +235,13 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
     const { email } = req.body;
 
     if (!email)
-      throwError(
+      new AppError(
         'Please, provide email for you to reset your password',
         StatusCodes.BAD_REQUEST
       );
     const user = await findUserMEmail(email);
     if (!user)
-      throwError(
+      new AppError(
         'No user found with provided email.., try again',
         StatusCodes.NOT_FOUND
       );
