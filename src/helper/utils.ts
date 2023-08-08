@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import { throwError } from '../middlewares/error';
+import AppError from '../utils';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
@@ -19,7 +19,7 @@ export const ValidateMongoDbId = (id: string) => {
   const isValidId = mongoose.Types.ObjectId.isValid(id);
 
   if (!isValidId)
-    throwError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
+    new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
 };
 
 export const createAccountVerificationToken = async (userId: any) => {
@@ -58,7 +58,7 @@ export function generatePasswordResetToken(): string {
 
 export const generateToken = (id: string) => {
   if (!ENV.JWT.SECRET)
-    throwError('JWT_KEY is required in environment', StatusCodes.BAD_REQUEST);
+    new AppError('JWT_KEY is required in environment', StatusCodes.BAD_REQUEST);
 
   const token = jwt.sign({ id }, `${ENV.JWT.SECRET}`, {
     expiresIn: `${ENV.JWT.EXPIRES}`,
