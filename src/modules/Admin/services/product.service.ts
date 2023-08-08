@@ -49,7 +49,7 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     try {
       const products = await getProductsM();
       res.json({
-        length : products.length,
+        length: products.length,
         status: 'Success',
         data: products,
       });
