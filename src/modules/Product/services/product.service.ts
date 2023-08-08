@@ -48,10 +48,10 @@ export const getProducts: RequestHandler = catchAsync(
     if (!id)
       next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
     try {
-      const createProduct = await getProductsM();
+      const products = await getProductsM();
       res.json({
         status: 'Success',
-        data: createProduct,
+        data: products,
       });
     } catch (error: any) {
       if (!error.statusCode) {
