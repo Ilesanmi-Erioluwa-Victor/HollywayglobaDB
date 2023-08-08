@@ -14,7 +14,7 @@ class SanitizeInputMiddleware {
 
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        sanitizedObj[key] = xss(obj[key] as any);
+        sanitizedObj[key] = xss(obj[key] as string);
       }
     }
 
