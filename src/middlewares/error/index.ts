@@ -15,7 +15,6 @@ class ErrorHandlerMiddleware {
     return new AppError(message, 400);
   }
 
-
   static handleValidationErrorDB(err: any): AppError {
     const errors = Object.values(err.errors).map((el: any) => el.message);
 
@@ -84,7 +83,12 @@ class ErrorHandlerMiddleware {
     // }
   }
 
-
+  static sanitizeInput(req: Request, res: Response, next: NextFunction): void {
+      req.body = xss(req.body);
+      req.query = xss(req.query);
+      req.params = xss(req.params);
+      next();
+  }
 }
 
 export default ErrorHandlerMiddleware;
