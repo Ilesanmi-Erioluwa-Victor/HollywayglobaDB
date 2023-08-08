@@ -95,23 +95,23 @@ export const adminRole = catchAsync(
 
       const admin = await findAdminIdM(adminId);
       if (!admin)
-        next(throwError('Sorry, No user found', StatusCodes.BAD_REQUEST));
+        next(new AppError('Sorry, No user found', StatusCodes.BAD_REQUEST));
 
       if (admin?.id !== authId)
         next(
-          throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
+          new AppError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST)
         );
 
       if (!admin?.isAccountVerified)
         next(
-          throwError(
+          new AppError(
             'Please, verify your gmail, before you cam perform this operation',
             StatusCodes.BAD_REQUEST
           )
         );
 
       if (admin?.role !== 'ADMIN') {
-        throwError(
+        new AppError(
           'Sorry, You cant perform this operation....',
           StatusCodes.BAD_REQUEST
         );
