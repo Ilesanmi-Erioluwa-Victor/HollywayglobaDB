@@ -104,7 +104,7 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
       const product = await deleteProductM(productId);
       res.json({
         status: 'Success',
-        data: product,
+        message : "You have successfully deleted this product"
       });
     } catch (error: any) {
       if (!error.statusCode) {
