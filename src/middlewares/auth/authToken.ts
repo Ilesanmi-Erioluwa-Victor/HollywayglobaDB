@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { throwError } from '../error';
+import AppError from '../../utils';
 import jwt from 'jsonwebtoken';
 import { catchAsync } from '../../helper/utils';
 import { StatusCodes } from 'http-status-codes';
