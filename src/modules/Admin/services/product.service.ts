@@ -86,8 +86,17 @@ export const getProductAdmin: RequestHandler = catchAsync(
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
+        return;
       }
-      next(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2023') {
+          next(
+            new AppError('Invalid Id or try again', StatusCodes.BAD_REQUEST)
+          );
+        }
+
+        next(error);
+      }
     }
   }
 );
