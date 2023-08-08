@@ -71,7 +71,14 @@ class ErrorHandlerMiddleware {
 
     if (process.env.NODE_ENV === 'development') {
       ErrorHandlerMiddleware.sendErrorDev(err as AppError, res);
+
+      if (err instanceof PrismaClientKnownRequestError) {
+        err = ErrorHandlerMiddleware.handlePrismaError(err);
+      }
     }
+
+    // Handle Prisma Client Error
+   
     // else if (process.env.NODE_ENV === 'production') {
     //   let error = { ...err };
 
