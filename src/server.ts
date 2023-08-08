@@ -31,7 +31,11 @@ app.use((req, res, next) => {
 });
 app.use(SanitizeInputMiddleware.sanitizeInput);
 
-app.get('/', function (req, res) {
+app.use((req: Request, res : Response, next : NextFunction) => {
+  req.requestTime = new Date().toLocaleString();
+  next();
+});
+app.get('/', (req, res) =>{
   res.sendFile(path.join(__dirname, '/public'));
 });
 
