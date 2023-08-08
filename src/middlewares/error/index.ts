@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import AppError from '../../utils';
-import xss from 'xss';
 
 interface ErrorWithStatusCode extends Error {
   statusCode?: number;
@@ -81,13 +80,6 @@ class ErrorHandlerMiddleware {
 
     //   ErrorHandlerMiddleware.sendErrorProd(error, res);
     // }
-  }
-
-  static sanitizeInput(req: Request, res: Response, next: NextFunction): void {
-      req.body = xss(req.body);
-      req.query = xss(req.query);
-      req.params = xss(req.params);
-      next();
   }
 }
 
