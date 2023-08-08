@@ -7,7 +7,7 @@ import path from 'path';
 import adminRoute from './modules/Admin/admin.controller';
 import userRoute from './modules/User/user.controller';
 import productRoute from './modules/Product/product.controller';
-import ErrorHandlerMiddleware from './middlewares/error';
+import AppError from './utils';
 import { ENV } from './configurations/config';
 
 const app: Application = express();
@@ -32,8 +32,7 @@ app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
 
 
-app.use(ErrorHandlerMiddleware.notFound);
-app.use(ErrorHandlerMiddleware.errorHandler);
+
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/public'));

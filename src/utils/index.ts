@@ -1,5 +1,5 @@
 class AppError extends Error {
-  statusCode: number;
+  statusCode: number ;
   status: string;
   isOperational: boolean;
 
