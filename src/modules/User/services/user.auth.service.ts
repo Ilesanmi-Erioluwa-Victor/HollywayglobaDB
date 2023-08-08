@@ -278,7 +278,7 @@ export const resetPassword: RequestHandler = catchAsync(
 
     if (!token)
       next(
-        throwError(
+        new AppError(
           'Sorry, invalid token or something went wrong',
           StatusCodes.BAD_GATEWAY
         )
@@ -286,7 +286,7 @@ export const resetPassword: RequestHandler = catchAsync(
 
     if (!password)
       next(
-        throwError(
+        new AppError(
           'Please, provide password for reset!!!',
           StatusCodes.BAD_REQUEST
         )
@@ -294,7 +294,7 @@ export const resetPassword: RequestHandler = catchAsync(
     try {
       const resetTokenData = await resetPasswordM(token);
       if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
-        throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
+        new AppError('Invalid or expired token', StatusCodes.NOT_FOUND);
       }
 
       const user = await resetPasswordUpdateM(
@@ -325,7 +325,7 @@ export const uploadProfile: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     if (!req?.file)
       next(
-        throwError(
+        new AppError(
           'Sorry, please select an image to be uploaded',
           StatusCodes.BAD_REQUEST
         )
