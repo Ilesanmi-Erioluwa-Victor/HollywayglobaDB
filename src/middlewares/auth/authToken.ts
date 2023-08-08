@@ -30,7 +30,7 @@ export const AuthMiddleWare = catchAsync(
           req.authId = decoded.id;
         }
       } else {
-        throwError(
+        new AppError(
           `Sorry, there is no token attached to your Header, try again by attaching Token..`,
           StatusCodes.NOT_FOUND
         );
@@ -53,10 +53,10 @@ export const isUserVerified = catchAsync(
 
     if (!authId)
       next(
-        throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
+        new AppError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
       );
     if (!userId) {
-      next(throwError('Sorry, invalid ID', StatusCodes.BAD_REQUEST));
+      next(new AppError('Sorry, invalid ID', StatusCodes.BAD_REQUEST));
     }
     ValidateMongoDbId(authId as string);
     // ValidateMongoDbId(userId);
