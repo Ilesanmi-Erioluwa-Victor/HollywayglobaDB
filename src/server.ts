@@ -1,9 +1,8 @@
-
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
-import xss from "xss";
+import xss from 'xss';
 import path from 'path';
 
 import adminRoute from './modules/Admin/admin.controller';
@@ -15,14 +14,13 @@ import SanitizeInputMiddleware from './middlewares/sanitize';
 import { ENV } from './configurations/config';
 import { customTime } from './interfaces/custom';
 
-
 const app: Application = express();
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/images', express.static('images'));
 app.use(express.static('public'));
-app.use(express.json({ limit: "10kb" }));
+app.use(express.json({ limit: '10kb' }));
 app.use(helmet());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -32,13 +30,13 @@ app.use((req, res, next) => {
   res.set('content-type', 'application/json');
   next();
 });
-app.use(SanitizeInputMiddleware.sanitizeInput);
+// app.use(SanitizeInputMiddleware.sanitizeInput);
 
 app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();
   next();
 });
-app.get('/', (req, res) =>{
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/public'));
 });
 
