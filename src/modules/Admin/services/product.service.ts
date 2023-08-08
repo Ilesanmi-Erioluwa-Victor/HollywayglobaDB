@@ -114,3 +114,27 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
     }
   }
 );
+
+export const editProductAdmin: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, productId } = req?.params;
+    ValidateMongoDbId(id);
+    ValidateMongoDbId(productId);
+    if (!id)
+      next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
+    if (!productId)
+      next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+    try {
+      const product = await deleteProductM(productId);
+      res.json({
+        status: 'Success',
+        message: 'You have successfully deleted this product',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
