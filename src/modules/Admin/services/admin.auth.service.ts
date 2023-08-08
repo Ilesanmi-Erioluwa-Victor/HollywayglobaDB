@@ -17,6 +17,7 @@ import {
 } from '../models';
 import { sendMailAdmin } from '../../../templates/sendMail';
 import { loginAdminI } from '../admin.interface';
+import { getProductsM } from '../../Product/product.models';
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -113,11 +114,11 @@ export const getUsersAdmin: RequestHandler = catchAsync(
 );
 
 export const getProducts: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
-    if (!id)
-      next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
+   if (!id)
+     next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
     try {
       const products = await getProductsM();
       res.json({
