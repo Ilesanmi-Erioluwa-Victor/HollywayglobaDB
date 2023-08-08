@@ -1,6 +1,6 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { throwError } from '../../../middlewares/error';
+import AppError from '../../../utils';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import {
@@ -17,7 +17,7 @@ export const createCategory: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     try {
       if (!id)
-        next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
+        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
       const category = await createCategoryM(req.body, id);
       res.json({
         message: 'You have successfully created category.',
@@ -39,13 +39,13 @@ export const editCategory: RequestHandler = catchAsync(
     const { name } = req.body;
     if (!name)
       next(
-        throwError('Enter name of category to edit', StatusCodes.BAD_REQUEST)
+        new AppError('Enter name of category to edit', StatusCodes.BAD_REQUEST)
       );
     try {
       if (!id)
-        next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
+        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
       if (!categoryId)
-        next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
+        next(new AppError('No Category record found', StatusCodes.BAD_REQUEST));
 
       const category = await editCategoryM(categoryId, name);
       res.json({
@@ -68,7 +68,7 @@ export const deleteCategory: RequestHandler = catchAsync(
 
     try {
       if (!id)
-        next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
+        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
       if (!categoryId)
         next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
 
