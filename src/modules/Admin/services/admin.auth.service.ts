@@ -17,7 +17,6 @@ import {
 } from '../models';
 import { sendMailAdmin } from '../../../templates/sendMail';
 import { loginAdminI } from '../admin.interface';
-import { getProductsM } from '../product.models';
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

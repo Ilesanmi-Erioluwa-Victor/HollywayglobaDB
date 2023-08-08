@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
-import { createProductM } from '../product.models';
+import { createProductM, getProductsM } from '../product.models';
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -49,6 +49,7 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     try {
       const products = await getProductsM();
       res.json({
+        length : products.length,
         status: 'Success',
         data: products,
       });
