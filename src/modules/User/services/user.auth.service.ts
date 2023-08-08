@@ -354,7 +354,7 @@ export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.FORBIDDEN);
+    if (!id) new AppError('Invalid ID', StatusCodes.FORBIDDEN);
     const {
       deliveryAddress,
       additionalInfo,
@@ -388,7 +388,7 @@ export const editAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+    if (!id) new AppError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
       const userWithAddress = await findUserWithAddressM(id);
       const userWithAddressId = userWithAddress?.address[0].id;
