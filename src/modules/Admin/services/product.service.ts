@@ -3,7 +3,11 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
-import { createProductM, findProductIdM, getProductsM } from '../product.models';
+import {
+  createProductM,
+  findProductIdM,
+  getProductsM,
+} from '../product.models';
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -72,11 +76,10 @@ export const getProductAdmin: RequestHandler = catchAsync(
     if (!productId)
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
     try {
-      const products = await findProductIdM(productId);
+      const product = await findProductIdM(productId);
       res.json({
-        length: products.length,
         status: 'Success',
-        data: products,
+        data: product,
       });
     } catch (error: any) {
       if (!error.statusCode) {
