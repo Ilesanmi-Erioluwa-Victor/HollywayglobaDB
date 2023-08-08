@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { Prisma } from '@prisma/client';
 import AppError from '../../utils';
 
 interface ErrorWithStatusCode extends Error {
@@ -30,10 +29,6 @@ class ErrorHandlerMiddleware {
     return new AppError('Your token has expired! Please log in again.', 401);
   }
 
-  static handlePrismaError(err: PrismaClientKnownRequestError): AppError {
-    const message = 'Prisma Client Error';
-    return new AppError(message, 500); // You can adjust the status code as needed
-  }
 
   static sendErrorDev(err: AppError, res: Response): void {
     res.status(err.statusCode).json({
@@ -72,9 +67,7 @@ class ErrorHandlerMiddleware {
     if (process.env.NODE_ENV === 'development') {
       ErrorHandlerMiddleware.sendErrorDev(err as AppError, res);
 
-      if (err instanceof PrismaClientKnownRequestError) {
-        err = ErrorHandlerMiddleware.handlePrismaError(err);
-      }
+    
     }
 
     // Handle Prisma Client Error
