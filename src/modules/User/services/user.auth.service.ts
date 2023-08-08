@@ -3,7 +3,7 @@ import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import fs from 'fs';
 import path from 'path';
-import AppError from "../../../middlewares/error"
+import AppError from '../../../utils';
 import {
   catchAsync,
   ValidateMongoDbId,
@@ -38,7 +38,7 @@ export const createUser: RequestHandler = catchAsync(
       const { firstName, lastName, password, email, mobile } = req.body;
       if (!firstName || !lastName || !password || !email || !mobile)
         return next(
-          throwError(
+          new AppError(
             'Missing credentials, please provide all required information',
             StatusCodes.BAD_REQUEST
           )
@@ -47,7 +47,7 @@ export const createUser: RequestHandler = catchAsync(
       const existEmail = await findUserMEmail(email);
       if (existEmail)
         next(
-          throwError(
+          new AppError(
             'You are already a member, kindly login to your account',
             StatusCodes.CONFLICT
           )
@@ -76,7 +76,7 @@ export const loginUser: RequestHandler = catchAsync(
 
       if (!user)
         next(
-          throwError('No user found with this email', StatusCodes.BAD_REQUEST)
+          new AppError('No user found with this email', StatusCodes.BAD_REQUEST)
         );
       if (await bcrypt.compare(password, user?.password)) {
         if (!user.isAccountVerified) {
