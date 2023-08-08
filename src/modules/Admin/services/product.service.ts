@@ -3,8 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
-import { createProductM, getProductsM } from '../product.models';
-import { findCategoryIdM } from '../../Admin/models';
+import { createProductM } from '../product.models';
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -40,5 +39,3 @@ export const createProduct: RequestHandler = catchAsync(
     }
   }
 );
-
-

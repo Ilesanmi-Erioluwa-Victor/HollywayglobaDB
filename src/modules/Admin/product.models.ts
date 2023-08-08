@@ -1,4 +1,4 @@
-import { categoryI, signupAdmin } from '../Admin/admin.interface';
+import { categoryI, signupAdmin } from './admin.interface';
 import { prisma } from '../../configurations/db';
 import { createProductI } from './product.interface';
 

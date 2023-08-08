@@ -6,7 +6,7 @@ import path from 'path';
 
 import adminRoute from './modules/Admin/admin.controller';
 import userRoute from './modules/User/user.controller';
-import productRoute from './modules/Product/product.controller';
+import productRoute from './modules/Admin/product.controller';
 import AppError from './utils';
 import ErrorHandlerMiddleware from './middlewares/error';
 import SanitizeInputMiddleware from './middlewares/sanitize';
@@ -29,7 +29,6 @@ app.use((req, res, next) => {
   res.set('content-type', 'application/json');
   next();
 });
-
 
 app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();

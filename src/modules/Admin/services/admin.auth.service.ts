@@ -17,7 +17,7 @@ import {
 } from '../models';
 import { sendMailAdmin } from '../../../templates/sendMail';
 import { loginAdminI } from '../admin.interface';
-import { getProductsM } from '../../Product/product.models';
+import { getProductsM } from '../product.models';
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -61,7 +61,10 @@ export const loginAdmin: RequestHandler = catchAsync(
 
       if (!admin)
         next(
-          new AppError('No record found with this email', StatusCodes.BAD_REQUEST)
+          new AppError(
+            'No record found with this email',
+            StatusCodes.BAD_REQUEST
+          )
         );
       if (await bcrypt.compare(password, admin?.password)) {
         if (!admin.isAccountVerified) {
@@ -117,8 +120,8 @@ export const getProductsAdmin: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
-   if (!id)
-     next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
+    if (!id)
+      next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
     try {
       const products = await getProductsM();
       res.json({
