@@ -29,9 +29,9 @@ export const createProduct: RequestHandler = catchAsync(
       } = req.body;
       const createProduct = await createProductM(req.body);
       res.json({
-        status : "Success",
-        data: createProduct
-      })
+        status: 'Success',
+        data: createProduct,
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
