@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import AppError from '../../utils';
+import xss from 'xss';
 
 interface ErrorWithStatusCode extends Error {
   statusCode?: number;
@@ -82,6 +83,8 @@ class ErrorHandlerMiddleware {
     //   ErrorHandlerMiddleware.sendErrorProd(error, res);
     // }
   }
+
+
 }
 
 export default ErrorHandlerMiddleware;
