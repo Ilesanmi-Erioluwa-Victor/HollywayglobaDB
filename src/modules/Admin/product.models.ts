@@ -48,7 +48,7 @@ export const getProductsM = async () => {
   return product;
 };
 
-export const deleteProductsM = async (id : string) => {
+export const deleteProductM = async (id : string) => {
   const product = await prisma.product.findUnique({
     where : {
       id

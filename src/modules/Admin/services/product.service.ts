@@ -5,6 +5,7 @@ import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import {
   createProductM,
+  deleteProductM,
   findProductIdM,
   getProductsM,
 } from '../product.models';
@@ -100,7 +101,7 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
     if (!productId)
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
     try {
-      const product = await findProductIdM(productId);
+      const product = await deleteProductM(productId);
       res.json({
         status: 'Success',
         data: product,
