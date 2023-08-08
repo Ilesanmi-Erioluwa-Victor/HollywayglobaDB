@@ -1,10 +1,7 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { throwError } from '../../../middlewares/error/cacheError';
-import {
-  catchAsync,
-  ValidateMongoDbId,
-} from '../../../helper/utils';
+import { throwError } from '../../../middlewares/error';
+import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import {
   createCategoryM,
@@ -115,7 +112,7 @@ export const findCategory: RequestHandler = catchAsync(
 
 export const getCategories: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const authId  = req?.authId;
+    const authId = req?.authId;
     try {
       if (!authId)
         next(

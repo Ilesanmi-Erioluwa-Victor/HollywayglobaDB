@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { throwError } from '../../../middlewares/error/cacheError';
+import { throwError } from '../../../middlewares/error';
 import {
   catchAsync,
   ValidateMongoDbId,
@@ -111,8 +111,6 @@ export const getUsersAdmin: RequestHandler = catchAsync(
     }
   }
 );
-
-
 
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

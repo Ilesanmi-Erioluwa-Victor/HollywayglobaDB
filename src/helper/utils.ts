@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import { throwError } from '../middlewares/error/cacheError';
+import { throwError } from '../middlewares/error';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
@@ -73,6 +73,4 @@ export async function hashedPassword(password: string): Promise<string> {
   return hashedPassword;
 }
 
-
 // export const upload = multer({dest : "src/uploads"})
- 

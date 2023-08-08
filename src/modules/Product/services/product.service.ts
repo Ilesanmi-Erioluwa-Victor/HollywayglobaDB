@@ -1,6 +1,6 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { throwError } from '../../../middlewares/error/cacheError';
+import { throwError } from '../../../middlewares/error';
 import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { createProductM } from '../product.models';
@@ -24,8 +24,8 @@ export const createProduct: RequestHandler = catchAsync(
         stock,
         colors,
         sold,
-          categoryId,
-        adminId
+        categoryId,
+        adminId,
       } = req.body;
       const createProduct = await createProductM(req.body);
       console.log(createProduct, createProduct.adminId);
