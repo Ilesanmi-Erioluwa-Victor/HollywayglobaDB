@@ -1,5 +1,8 @@
 import { Request } from 'express';
 
+export interface customTime extends Request {
+  requestTime?: string;
+}
 export interface CustomRequest extends Request {
   authId?: string;
   role?: string;
@@ -57,7 +60,6 @@ export interface signupUser {
   mobile: string;
   password: string;
 }
-
 
 export interface loginUser {
   id: string;

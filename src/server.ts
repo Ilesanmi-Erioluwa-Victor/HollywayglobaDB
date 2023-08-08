@@ -1,3 +1,4 @@
+
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -12,6 +13,8 @@ import AppError from './utils';
 import ErrorHandlerMiddleware from './middlewares/error';
 import SanitizeInputMiddleware from './middlewares/sanitize';
 import { ENV } from './configurations/config';
+import { customTime } from './interfaces/custom';
+
 
 const app: Application = express();
 
@@ -31,7 +34,7 @@ app.use((req, res, next) => {
 });
 app.use(SanitizeInputMiddleware.sanitizeInput);
 
-app.use((req: Request, res : Response, next : NextFunction) => {
+app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();
   next();
 });
