@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { throwError } from '../../../middlewares/error';
+import AppError from '../../../utils';
 import {
   catchAsync,
   ValidateMongoDbId,
@@ -24,7 +24,7 @@ export const adminSignup: RequestHandler = catchAsync(
       const { email, password, name } = req.body;
       if (!email || !password || !name)
         return next(
-          throwError(
+          new AppError(
             'Missing credentials, please provide all required information',
             StatusCodes.BAD_REQUEST
           )
@@ -32,7 +32,7 @@ export const adminSignup: RequestHandler = catchAsync(
       const existAdmin = await findAdminEmailM(email);
       if (existAdmin)
         return next(
-          throwError(
+          new AppError(
             'You are already an admin, kindly login to your account',
             StatusCodes.CONFLICT
           )
@@ -60,11 +60,11 @@ export const loginAdmin: RequestHandler = catchAsync(
 
       if (!admin)
         next(
-          throwError('No record found with this email', StatusCodes.BAD_REQUEST)
+          new AppError('No record found with this email', StatusCodes.BAD_REQUEST)
         );
       if (await bcrypt.compare(password, admin?.password)) {
         if (!admin.isAccountVerified) {
-          throwError(
+          new AppError(
             'Verify your account in your gmail before you can log in',
             StatusCodes.BAD_REQUEST
           );
@@ -77,7 +77,7 @@ export const loginAdmin: RequestHandler = catchAsync(
           token: generateToken(admin?.id),
         });
       } else {
-        throwError(
+        new AppError(
           'Login Failed, invalid credentials',
           StatusCodes.UNAUTHORIZED
         );
@@ -97,7 +97,7 @@ export const getUsersAdmin: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     try {
       if (!id)
-        next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
+        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
       const users = await getUsersAdminM();
       res.json({
         length: users.length,
@@ -117,11 +117,13 @@ export const accountVerificationAdmin: RequestHandler = catchAsync(
     const { token, id } = req.params;
     ValidateMongoDbId(id);
     if (!id)
-      next(throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST));
+      next(
+        new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
+      );
 
     if (!token)
       next(
-        throwError(
+        new AppError(
           'Sorry, this token is not valid, try again',
           StatusCodes.BAD_REQUEST
         )
@@ -131,7 +133,10 @@ export const accountVerificationAdmin: RequestHandler = catchAsync(
 
       if (!admin)
         next(
-          throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST)
+          new AppError(
+            'Sorry, no user found, try again',
+            StatusCodes.BAD_REQUEST
+          )
         );
       const updatedAdmin = await accountVerificationUpdatedAdminM(
         admin?.id as string,
