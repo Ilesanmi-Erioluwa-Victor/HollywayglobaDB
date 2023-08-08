@@ -70,7 +70,7 @@ export const deleteCategory: RequestHandler = catchAsync(
       if (!id)
         next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
       if (!categoryId)
-        next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
+        next(new AppError('No Category record found', StatusCodes.BAD_REQUEST));
 
       const category = await deleteCategoryM(categoryId);
       res.json({
@@ -93,9 +93,9 @@ export const findCategory: RequestHandler = catchAsync(
 
     try {
       if (!id)
-        next(throwError('No Admin record found', StatusCodes.BAD_REQUEST));
+        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
       if (!categoryId)
-        next(throwError('No Category record found', StatusCodes.BAD_REQUEST));
+        next(new AppError('No Category record found', StatusCodes.BAD_REQUEST));
 
       const category = await findCategoryIdM(categoryId);
       res.json({
@@ -116,7 +116,7 @@ export const getCategories: RequestHandler = catchAsync(
     try {
       if (!authId)
         next(
-          throwError(
+          new AppError(
             'You are not authorized to perform this action',
             StatusCodes.FORBIDDEN
           )
