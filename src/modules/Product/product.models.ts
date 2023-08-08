@@ -42,3 +42,35 @@ export const createProductM = async (productI: createProductI) => {
   });
   return product;
 };
+
+export const getProductM = async (productI: createProductI) => {
+  const {
+    title,
+    slug,
+    description,
+    price,
+    quantity,
+    // images,
+    stock,
+    colors,
+    brand,
+    categoryId,
+    adminId
+  } = productI;
+  const product = await prisma.product.create({
+    data: {
+      title,
+      slug,
+      description,
+      price,
+      quantity,
+      brand,
+      // images,
+      stock,
+      colors,
+      categoryId,
+      adminId
+    },
+  });
+  return product;
+};
