@@ -2,7 +2,6 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
-import xss from 'xss';
 import path from 'path';
 
 import adminRoute from './modules/Admin/admin.controller';
@@ -30,7 +29,7 @@ app.use((req, res, next) => {
   res.set('content-type', 'application/json');
   next();
 });
-// app.use(SanitizeInputMiddleware.sanitizeInput);
+
 
 app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();
@@ -44,6 +43,7 @@ app.use('/api/v1/admin', adminRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
 
+app.use(SanitizeInputMiddleware.sanitizeInput);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
 });
