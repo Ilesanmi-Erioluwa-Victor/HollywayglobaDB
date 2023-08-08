@@ -5,6 +5,7 @@ import {
   adminSignup,
   loginAdmin,
   getUsersAdmin,
+  getProductsAdmin,
 } from './services/admin.auth.service';
 import {
   createCategory,
@@ -19,7 +20,7 @@ route.post('/sign_up', adminSignup);
 route.post('/login', loginAdmin);
 route.put('/:id/verify_account/:token', accountVerificationAdmin);
 route.get('/:id/users', AuthMiddleWare, adminRole, getUsersAdmin);
-route.get('/:id/users', AuthMiddleWare, adminRole, getUsersAdmin);
+route.get('/:id/products', AuthMiddleWare, adminRole, getProductsAdmin);
 
 route.post('/:id/category', AuthMiddleWare, adminRole, createCategory);
 route.get('/:id/category/:categoryId', AuthMiddleWare, adminRole, findCategory);
