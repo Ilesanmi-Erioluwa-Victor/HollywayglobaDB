@@ -61,3 +61,26 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     }
   }
 );
+
+export const getProductAdmin: RequestHandler = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id, productId } = req?.params;
+    ValidateMongoDbId(id);
+     ValidateMongoDbId(productId);
+    if (!id)
+      next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
+    try {
+      const products = await getProductsM();
+      res.json({
+        length: products.length,
+        status: 'Success',
+        data: products,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
