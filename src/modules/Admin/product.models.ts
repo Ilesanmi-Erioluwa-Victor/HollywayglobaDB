@@ -1,3 +1,4 @@
+import { data } from './../../data';
 import { categoryI, signupAdmin } from './admin.interface';
 import { prisma } from '../../configurations/db';
 import { createProductI } from './product.interface';
@@ -56,3 +57,18 @@ export const deleteProductM = async (id : string) => {
   })
   return product;
 };
+
+export const editProductM = async (id : string, data : any) => {
+  const product = await prisma.product.update({
+    where : {
+      id
+    },
+    data: {
+        data
+      }
+    
+  })
+  return product;
+};
+
+
