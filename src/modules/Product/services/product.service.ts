@@ -40,3 +40,38 @@ export const createProduct: RequestHandler = catchAsync(
     }
   }
 );
+
+export const getProducts: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req?.params;
+    ValidateMongoDbId(id);
+    if (!id)
+      next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
+    try {
+      const {
+        title,
+        slug,
+        description,
+        price,
+        quantity,
+        // images,
+        brand,
+        stock,
+        colors,
+        sold,
+        categoryId,
+        adminId,
+      } = req.body;
+      const createProduct = await createProductM(req.body);
+      res.json({
+        status: 'Success',
+        data: createProduct,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
