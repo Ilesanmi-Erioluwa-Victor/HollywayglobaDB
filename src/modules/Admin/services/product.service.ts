@@ -9,6 +9,7 @@ import {
   findProductIdM,
   getProductsM,
 } from '../product.models';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -104,13 +105,22 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
       const product = await deleteProductM(productId);
       res.json({
         status: 'Success',
-        message : "You have successfully deleted this product"
+        message: 'You have successfully deleted this product',
       });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
+        return;
       }
-      next(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2023') {
+          next(
+            new AppError('Invalid Id or try again', StatusCodes.BAD_REQUEST)
+          );
+        }
+
+        next(error);
+      }
     }
   }
 );
