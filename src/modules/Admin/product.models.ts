@@ -1,7 +1,7 @@
 import { data } from './../../data';
 import { categoryI, signupAdmin } from './admin.interface';
 import { prisma } from '../../configurations/db';
-import { createProductI } from './product.interface';
+import { createProductI, editProductI } from './product.interface';
 
 export const findProductIdM = async (id: string) => {
   const product = await prisma.product.findUnique({
@@ -58,13 +58,14 @@ export const deleteProductM = async (id : string) => {
   return product;
 };
 
-export const editProductM = async (id : string, data : any) => {
+export const editProductM = async (id : string, data : editProductI) => {
   const product = await prisma.product.update({
     where : {
       id
     },
     data: {
-        data
+      title: data.title,
+      
       }
     
   })
