@@ -8,6 +8,7 @@ import {
   deleteProductM,
   findProductIdM,
   getProductsM,
+  editProductM
 } from '../product.models';
 
 export const createProduct: RequestHandler = catchAsync(
@@ -117,15 +118,15 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
 
 export const editProductAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, productId } = req?.params;
-    ValidateMongoDbId(id);
+    const { adminId, productId } = req?.params;
+    ValidateMongoDbId(adminId);
     ValidateMongoDbId(productId);
-    if (!id)
+    if (!adminId)
       next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
     if (!productId)
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
     try {
-      const product = await deleteProductM(productId);
+      const product = await editProductM(productId,req.body);
       res.json({
         status: 'Success',
         message: 'You have successfully deleted this product',
