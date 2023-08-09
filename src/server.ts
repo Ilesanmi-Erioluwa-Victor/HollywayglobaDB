@@ -2,7 +2,7 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
-import morgan from "morgan";
+import morgan from 'morgan';
 import path from 'path';
 
 import adminRoute from './modules/Admin/admin.controller';
@@ -30,6 +30,8 @@ app.use((req, res, next) => {
   res.set('content-type', 'application/json');
   next();
 });
+
+ENV.MODE.DEVELOPMENT === 'development' ? app.use(morgan('dev')) : '';
 
 app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();
