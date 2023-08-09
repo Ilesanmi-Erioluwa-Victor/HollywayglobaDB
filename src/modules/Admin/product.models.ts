@@ -24,7 +24,7 @@ export const createProductM = async (productI: createProductI) => {
     colors,
     brand,
     categoryId,
-    adminId
+    adminId,
   } = productI;
   const product = await prisma.product.create({
     data: {
@@ -38,45 +38,42 @@ export const createProductM = async (productI: createProductI) => {
       stock,
       colors,
       categoryId,
-      adminId
+      adminId,
     },
   });
   return product;
 };
 
 export const getProductsM = async () => {
-  const product = await prisma.product.findMany()
+  const product = await prisma.product.findMany();
   return product;
 };
 
-export const deleteProductM = async (id : string) => {
+export const deleteProductM = async (id: string) => {
   const product = await prisma.product.findUnique({
-    where : {
-      id
-    }
-  })
+    where: {
+      id,
+    },
+  });
   return product;
 };
 
-export const editProductM = async (id : string, data : editProductI) => {
+export const editProductM = async (id: string, data: editProductI) => {
   const product = await prisma.product.update({
-    where : {
-      id
+    where: {
+      id,
     },
     data: {
       title: data.title,
-      slug : data.slug,
-       description: data.description,
-  price: data.price,
-  quantity: data.quantity,
-  // images: string[];
-  stock: data.stock,
-  brand: data.brand,
-  colors:
-      }
-    
-  })
+      slug: data.slug,
+      description: data.description,
+      price: data.price,
+      quantity: data.quantity,
+      // images: string[];
+      stock: data.stock,
+      brand: data.brand,
+      colors: data.colors,
+    },
+  });
   return product;
 };
-
-
