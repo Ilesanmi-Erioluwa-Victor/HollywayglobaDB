@@ -10,6 +10,8 @@ import {
   getProductsM,
   editProductM
 } from '../product.models';
+import { Prisma } from '@prisma/client';
+
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -63,6 +65,14 @@ export const getProductsAdmin: RequestHandler = catchAsync(
       if (!error.statusCode) {
         error.statusCode = 500;
       }
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    // The .code property can be accessed in a type-safe manner
+    if (error.code === 'P2002') {
+      console.log(
+        'There is a unique constraint violation, a new user cannot be created with this email'
+      )
+    }
+  }
       next(error);
     }
   }

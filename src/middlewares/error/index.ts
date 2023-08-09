@@ -85,7 +85,7 @@ class ErrorHandlerMiddleware {
       if (error.name === 'TokenExpiredError')
         error = ErrorHandlerMiddleware.handleJWTExpiredError();
 
-      ErrorHandlerMiddleware.sendErrorProd(error, res);
+      ErrorHandlerMiddleware.sendErrorProd(error as AppError, res);
     }
   }
 }

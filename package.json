@@ -8,7 +8,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
-    "start:prod": "NODE_ENV_PROD=production concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
     "build": "rimraf ./dist && tsc",
     "push": "npx prisma db push",
     "studio": "npx prisma studio"
@@ -67,6 +66,7 @@
     "@types/node": "^20.3.2",
     "@types/nodemailer": "^6.4.8",
     "concurrently": "^8.2.0",
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.22",
     "typescript": "^5.1.6"
   }
