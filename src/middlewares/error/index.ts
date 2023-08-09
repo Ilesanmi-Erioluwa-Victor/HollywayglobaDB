@@ -66,14 +66,14 @@ class ErrorHandlerMiddleware {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
-    if (ENV.MODE.DEVELOPMENT === 'development') {
+    if (ENV.MODE.DEVELOPMENT) {
 
       ErrorHandlerMiddleware.sendErrorDev(err as AppError, res);
 
     
     }
 
-    else if (ENV.MODE.PRODUCTION === 'production') {
+    else if (ENV.MODE.PRODUCTION) {
       let error = { ...err };
 
       if (error.name === 'CastError')
