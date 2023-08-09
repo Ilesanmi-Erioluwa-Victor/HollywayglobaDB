@@ -43,10 +43,10 @@ app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
+
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
 });
-
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   ErrorHandlerMiddleware.sendErrorDev(err, res);
 });
