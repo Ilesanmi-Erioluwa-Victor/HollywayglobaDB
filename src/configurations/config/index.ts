@@ -10,8 +10,7 @@ const NODEMAILER_USERNAME = process.env.NODEMAILER_USERNAME;
 const CLOUDIANRY_CLOUD_NAME = process.env.CLOUDIANRY_CLOUD_NAME;
 const CLOUDIANRY_API_KEY = process.env.CLOUDIANRY_API_KEY;
 const CLOUDIANRY_API_SECRET = process.env.CLOUDIANRY_API_SECRET;
-const NODE_ENV= process.env.NODE_ENV
-
+const NODE_ENV = process.env.NODE_ENV;
 
 export const ENV = {
   JWT: {
@@ -29,6 +28,9 @@ export const ENV = {
   CLOUDIANRY: {
     NAME: CLOUDIANRY_CLOUD_NAME,
     KEY: CLOUDIANRY_API_KEY,
-    SECRET: CLOUDIANRY_API_SECRET
-  }
+    SECRET: CLOUDIANRY_API_SECRET,
+  },
+  MODE: {
+    DEVELOPMENT: NODE_ENV,
+  },
 };
