@@ -66,7 +66,13 @@ export const editProductM = async (id : string, data : editProductI) => {
     data: {
       title: data.title,
       slug : data.slug,
-      
+       description: data.description,
+  price: data.price,
+  quantity: number;
+  // images: string[];
+  stock: number;
+  brand: any;
+  colors:
       }
     
   })
