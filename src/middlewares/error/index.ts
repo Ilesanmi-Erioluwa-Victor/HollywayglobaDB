@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import AppError from '../../utils';
+import { ENV } from '../../configurations/config';
 
 interface ErrorWithStatusCode extends Error {
   statusCode?: number;
@@ -64,7 +65,7 @@ class ErrorHandlerMiddleware {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
-    if (process.env.NODE_ENV === 'development') {
+    if (ENV.MODE.DEVELOPMENT === 'development') {
       ErrorHandlerMiddleware.sendErrorDev(err as AppError, res);
 
     
