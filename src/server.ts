@@ -9,7 +9,7 @@ import userRoute from './modules/User/user.controller';
 import productRoute from './modules/Admin/product.controller';
 import AppError from './utils';
 import ErrorHandlerMiddleware from './middlewares/error';
-import SanitizeInputMiddleware from './middlewares/sanitize';
+import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { ENV } from './configurations/config';
 import { customTime } from './interfaces/custom';
 

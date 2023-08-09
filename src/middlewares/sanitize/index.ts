@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import xss from 'xss';
 
-class SanitizeInputMiddleware {
+export  class SanitizeInputMiddleware {
   static sanitizeInput(req: Request, res: Response, next: NextFunction): void {
     req.body = SanitizeInputMiddleware.sanitizeObject(req.body);
     req.query = SanitizeInputMiddleware.sanitizeObject(req.query);
@@ -22,4 +22,4 @@ class SanitizeInputMiddleware {
   }
 }
 
-export default SanitizeInputMiddleware;
+
