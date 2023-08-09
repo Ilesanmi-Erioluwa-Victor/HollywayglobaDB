@@ -1,6 +1,6 @@
 import express from 'express';
 import { AuthMiddleWare, adminRole } from '../../middlewares/auth/authToken';
-import { createProduct, deleteProductAdmin, getProductAdmin, getProductsAdmin } from './services/product.service';
+import { createProduct, deleteProductAdmin, getProductAdmin, getProductsAdmin,editProductAdmin } from './services/product.service';
 
 const route = express.Router();
 route.post('/admin/:id/product', AuthMiddleWare, adminRole, createProduct);
@@ -11,5 +11,12 @@ route.delete(
   AuthMiddleWare,
   adminRole,
   deleteProductAdmin
+);
+
+route.put(
+  '/admin/:adminId/product/:productId',
+  AuthMiddleWare,
+  adminRole,
+  editProductAdmin
 );
 export default route;
