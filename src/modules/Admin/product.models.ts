@@ -65,6 +65,7 @@ export const editProductM = async (id : string, data : editProductI) => {
     },
     data: {
       title: data.title,
+      slug : data.slug,
       
       }
     

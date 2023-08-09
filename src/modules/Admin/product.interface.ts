@@ -22,6 +22,5 @@ export interface editProductI {
   stock: number;
   brand: any;
   colors: string[];
-  categoryId: string;
-  adminId: string;
+
 }
