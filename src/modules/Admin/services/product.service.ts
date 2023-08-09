@@ -129,7 +129,7 @@ export const editProductAdmin: RequestHandler = catchAsync(
       const product = await editProductM(productId,req.body);
       res.json({
         status: 'Success',
-        message: 'You have successfully deleted this product',
+        message: 'You have successfully updated this product',
       });
     } catch (error: any) {
       if (!error.statusCode) {
