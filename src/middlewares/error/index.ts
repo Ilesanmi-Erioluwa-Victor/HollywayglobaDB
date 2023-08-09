@@ -66,27 +66,26 @@ class ErrorHandlerMiddleware {
     err.status = err.status || 'error';
 
     if (ENV.MODE.DEVELOPMENT === 'development') {
+
       ErrorHandlerMiddleware.sendErrorDev(err as AppError, res);
 
     
     }
 
-    // Handle Prisma Client Error
-   
-    // else if (process.env.NODE_ENV === 'production') {
-    //   let error = { ...err };
+    else if (process.env.NODE_ENV === 'production') {
+      let error = { ...err };
 
-    //   if (error.name === 'CastError')
-    //     error = ErrorHandlerMiddleware.handleCastErrorDB(error);
-    //   if (error.name === 'ValidationError')
-    //     error = ErrorHandlerMiddleware.handleValidationErrorDB(error);
-    //   if (error.name === 'JsonWebTokenError')
-    //     error = ErrorHandlerMiddleware.handleJWTError();
-    //   if (error.name === 'TokenExpiredError')
-    //     error = ErrorHandlerMiddleware.handleJWTExpiredError();
+      if (error.name === 'CastError')
+        error = ErrorHandlerMiddleware.handleCastErrorDB(error);
+      if (error.name === 'ValidationError')
+        error = ErrorHandlerMiddleware.handleValidationErrorDB(error);
+      if (error.name === 'JsonWebTokenError')
+        error = ErrorHandlerMiddleware.handleJWTError();
+      if (error.name === 'TokenExpiredError')
+        error = ErrorHandlerMiddleware.handleJWTExpiredError();
 
-    //   ErrorHandlerMiddleware.sendErrorProd(error, res);
-    // }
+      ErrorHandlerMiddleware.sendErrorProd(error, res);
+    }
   }
 }
 
