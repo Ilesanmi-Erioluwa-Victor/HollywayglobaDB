@@ -10,6 +10,7 @@ interface ErrorWithStatusCode extends Error {
 }
 
 class ErrorHandlerMiddleware {
+
   static handleCastErrorDB(err: any): AppError {
     const message = `Invalid ${err.path}: ${err.value}.`;
     return new AppError(message, 400);
@@ -72,7 +73,7 @@ class ErrorHandlerMiddleware {
     
     }
 
-    else if (process.env.NODE_ENV === 'production') {
+    else if (ENV.MODE.PRODUCTION === 'production') {
       let error = { ...err };
 
       if (error.name === 'CastError')

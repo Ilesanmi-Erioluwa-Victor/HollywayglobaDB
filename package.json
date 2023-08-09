@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
-    "start:prod": "NODE_ENV=production concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
+    "start:prod": "NODE_ENV_PROD=production concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
     "build": "rimraf ./dist && tsc",
     "push": "npx prisma db push",
     "studio": "npx prisma studio"
