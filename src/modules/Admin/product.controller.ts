@@ -1,4 +1,5 @@
 import express from 'express';
+import multer from "multer"
 import { AuthMiddleWare, adminRole } from '../../middlewares/auth/authToken';
 import {
   createProduct,
@@ -7,17 +8,20 @@ import {
   getProductsAdmin,
   editProductAdmin,
 } from './services/product.service';
-import {
-  profileImage,
-  profileImageResize,
-} from '../../middlewares/image/resizeImage';
+// import {
+//   profileImage,
+//   profileImageResize,
+// } from '../../middlewares/image/resizeImage';
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const route = express.Router();
 route.post(
   '/admin/:id/product',
   AuthMiddleWare,
-  profileImage.array('images', 5),
-  profileImageResize,
+  upload.array('images', 5),
+  // profileImageResize,
   adminRole,
   createProduct
 );

@@ -12,14 +12,14 @@ export const findProductIdM = async (id: string) => {
   return product;
 };
 
-export const createProductM = async (productI: createProductI) => {
+export const createProductM = async (productI: createProductI, data: string[]) => {
   const {
     title,
     slug,
     description,
     price,
     quantity,
-    // images,
+    images,
     stock,
     colors,
     brand,
@@ -34,7 +34,7 @@ export const createProductM = async (productI: createProductI) => {
       price,
       quantity,
       brand,
-      // images,
+      images : data,
       stock,
       colors,
       categoryId,

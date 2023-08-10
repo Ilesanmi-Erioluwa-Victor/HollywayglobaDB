@@ -1,8 +1,8 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { Multer } from 'multer';
+import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 import AppError from '../../../utils';
-import { CustomRequest } from '../../../interfaces/custom';
+import { ENV } from '../../../configurations/config';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import {
   createProductM,
@@ -11,8 +11,15 @@ import {
   getProductsM,
   editProductM,
 } from '../product.models';
-import path from "path";
+import path from 'path';
 import { cloudinaryUploadImage } from '../../../configurations/cloudinary';
+import sharp from 'sharp';
+
+cloudinary.config({
+  cloud_name: ENV.CLOUDIANRY.NAME,
+  api_key: ENV.CLOUDIANRY.KEY,
+  api_secret: ENV.CLOUDIANRY.SECRET,
+});
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -21,41 +28,55 @@ export const createProduct: RequestHandler = catchAsync(
     if (!id)
       next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
 
-    if (!req?.files)
+    if (!req.files)
       next(
         new AppError(
           'Sorry, please select an image to be uploaded',
           StatusCodes.BAD_REQUEST
         )
       );
-    let urls = [];
-    const imageFiles = req.files as Express.Multer.File[]; 
-    for (const image of imageFiles) {
-      const { originalname } = image;
-      // const localPath = `${path.join(__dirname)}/uploads/${image?.originalname}`;
-      const upload: any = await cloudinaryUploadImage(originalname, 'Products');
-      console.log(image)
-      // urls.push(upload)
-      // console.log(">>>urls", urls)
-    }
 
-    // const localPath = `src/uploads/${imageFiles?.filename}`;
     try {
-      const {
-        title,
-        slug,
-        description,
-        price,
-        quantity,
-        brand,
-        stock,
-        colors,
-        sold,
-        categoryId,
-        adminId,
-      } = req.body;
+      // const {
+      //   title,
+      //   slug,
+      //   description,
+      //   price,
+      //   quantity,
+      //   brand,
+      //   stock,
+      //   colors,
+      //   sold,
+      //   categoryId,
+      //   adminId,
+      // } = req.body;
+      const imagePromises: Promise<string | undefined>[] = req.files.map(
+        async (file: Express.Multer.File) => {
+          // Resize image to 2MB using Sharp
+          const resizedImage = await sharp(file.buffer)
+            .resize({ fit: 'inside', width: 2000, height: 2000 })
+            .toBuffer();
 
-      const createProduct = await createProductM(req.body);
+          return new Promise<string | undefined>((resolve) => {
+            cloudinary.uploader
+              .upload_stream((error, result: UploadApiResponse) => {
+                if (error) {
+                  console.error(error);
+                  resolve(undefined);
+                } else {
+                  cloudinaryUploadImage(result.url as string, 'Products');
+                  // console.log(result.url);
+                  resolve(result.url);
+                }
+              })
+              .end(resizedImage);
+          });
+        }
+      );
+
+      const imageUrls: any = await Promise.all(imagePromises);
+
+      const createProduct = await createProductM(req.body, imageUrls);
       res.json({
         status: 'Success',
         data: createProduct,

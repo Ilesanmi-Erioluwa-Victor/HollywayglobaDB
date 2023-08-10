@@ -78,15 +78,15 @@ model Address {
 model Product {
   id              String            @id @default(auto()) @map("_id") @db.ObjectId
   title           String
-  slug            String[]
+  slug            String?
   description     String
-  price           Int
+  price           Int?
   category        Category          @relation(fields: [categoryId], references: [id])
-  quantity        Int
-  // images          String[]
+  quantity        Int?
+  images          String[]
   brand           Brand             @default(FOOD)
-  stock           Int               @default(0)
-  colors          String[]
+  stock           Int?               @default(0)
+  colors          String?
   reviews         Review[]
   ProductWishList ProductWishList[]
   categoryId      String            @db.ObjectId
