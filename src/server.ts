@@ -48,10 +48,10 @@ app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
-const option = {
+const options = {
   
 }
-const docs = swaggerJsdoc(option)
+const docs = swaggerJsdoc(options)
 app.use(
   "/api-docs",
   swaggerUiExpress.serve,
