@@ -51,7 +51,7 @@ app.use(SanitizeInputMiddleware.sanitizeInput);
 app.use(
   "/api-docs",
   swaggerUiExpress.serve,
-  
+  swaggerUiExpress.setup()
 )
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
