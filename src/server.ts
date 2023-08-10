@@ -48,7 +48,9 @@ app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
-
+app.use(
+  
+)
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
 });
