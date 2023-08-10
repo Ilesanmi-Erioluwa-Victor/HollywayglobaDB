@@ -22,6 +22,22 @@ export const profileImage = multer({
   },
 });
 
+// export const productImageResize = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   if (!req.files) return next();
+//   req.files.filename = `user-${Date.now()}-${req.file.originalname}`;
+
+//   await sharp(req.file.buffer)
+//     .resize(250, 250)
+//     .toFormat('jpeg')
+//     .jpeg({ quality: 90 })
+//     .toFile(path.join(`src/uploads/${req.file.filename}`));
+//   next();
+// };
+
 export const profileImageResize = async (
   req: Request,
   res: Response,

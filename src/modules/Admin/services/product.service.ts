@@ -9,8 +9,10 @@ import {
   deleteProductM,
   findProductIdM,
   getProductsM,
-  editProductM
+  editProductM,
 } from '../product.models';
+import path from "path";
+import { cloudinaryUploadImage } from '../../../configurations/cloudinary';
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -18,19 +20,25 @@ export const createProduct: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     if (!id)
       next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
-   
-   if (!req?.files)
+
+    if (!req?.files)
       next(
         new AppError(
           'Sorry, please select an image to be uploaded',
           StatusCodes.BAD_REQUEST
         )
       );
-    const imageFiles = req?.files as Express.Multer.File[];
-    const imageUrls: string[] = imageFiles.map(
-      (file: Express.Multer.File) => file.path
-    );
-    console.log(imageUrls)
+    let urls = [];
+    const imageFiles = req.files as Express.Multer.File[]; 
+    for (const image of imageFiles) {
+      const { originalname } = image;
+      // const localPath = `${path.join(__dirname)}/uploads/${image?.originalname}`;
+      const upload: any = await cloudinaryUploadImage(originalname, 'Products');
+      console.log(image)
+      // urls.push(upload)
+      // console.log(">>>urls", urls)
+    }
+
     // const localPath = `src/uploads/${imageFiles?.filename}`;
     try {
       const {
@@ -46,7 +54,7 @@ export const createProduct: RequestHandler = catchAsync(
         categoryId,
         adminId,
       } = req.body;
-      
+
       const createProduct = await createProductM(req.body);
       res.json({
         status: 'Success',
@@ -120,7 +128,7 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
       const product = await deleteProductM(productId);
       res.json({
         status: 'Success',
-        message : "You have successfully deleted this product"
+        message: 'You have successfully deleted this product',
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -141,7 +149,7 @@ export const editProductAdmin: RequestHandler = catchAsync(
     if (!productId)
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
     try {
-      const product = await editProductM(productId,req.body);
+      const product = await editProductM(productId, req.body);
       res.json({
         status: 'Success',
         message: 'You have successfully updated this product',

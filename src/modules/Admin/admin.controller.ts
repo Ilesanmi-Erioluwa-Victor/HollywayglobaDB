@@ -5,7 +5,6 @@ import {
   adminSignup,
   loginAdmin,
   getUsersAdmin,
-  getProductsAdmin,
 } from './services/admin.auth.service';
 import {
   createCategory,
@@ -14,6 +13,8 @@ import {
   findCategory,
   getCategories,
 } from './services/admin.category.service';
+
+import {  getProductsAdmin } from "./services/product.service"
 
 const route = express.Router();
 route.post('/sign_up', adminSignup);
