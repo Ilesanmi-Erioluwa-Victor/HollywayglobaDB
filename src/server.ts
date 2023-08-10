@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import swaggerJsdoc from "swagger-jsdoc"
+import swaggerUiExpress from "swagger-ui-express"
 
 import adminRoute from './modules/Admin/admin.controller';
 import userRoute from './modules/User/user.controller';
