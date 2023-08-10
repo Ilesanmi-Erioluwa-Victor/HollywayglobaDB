@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
+import swaggerJsdoc from "swagger-jsdoc"
 
 import adminRoute from './modules/Admin/admin.controller';
 import userRoute from './modules/User/user.controller';
