@@ -1,5 +1,6 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { Multer } from 'multer';
 import AppError from '../../../utils';
 import { CustomRequest } from '../../../interfaces/custom';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
@@ -17,6 +18,20 @@ export const createProduct: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     if (!id)
       next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
+   
+   if (!req?.files)
+      next(
+        new AppError(
+          'Sorry, please select an image to be uploaded',
+          StatusCodes.BAD_REQUEST
+        )
+      );
+    const imageFiles = req?.files as Express.Multer.File[];
+    const imageUrls: string[] = imageFiles.map(
+      (file: Express.Multer.File) => file.path
+    );
+    console.log(imageUrls)
+    // const localPath = `src/uploads/${imageFiles?.filename}`;
     try {
       const {
         title,
@@ -24,7 +39,6 @@ export const createProduct: RequestHandler = catchAsync(
         description,
         price,
         quantity,
-        // images,
         brand,
         stock,
         colors,
@@ -32,6 +46,7 @@ export const createProduct: RequestHandler = catchAsync(
         categoryId,
         adminId,
       } = req.body;
+      
       const createProduct = await createProductM(req.body);
       res.json({
         status: 'Success',

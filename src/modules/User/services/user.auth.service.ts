@@ -192,7 +192,9 @@ export const accountVerification: RequestHandler = catchAsync(
     const { token, id } = req.params;
     ValidateMongoDbId(id);
     if (!id)
-      next(new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST));
+      next(
+        new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
+      );
 
     if (!token)
       next(
