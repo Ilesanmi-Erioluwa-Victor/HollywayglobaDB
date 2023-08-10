@@ -49,6 +49,8 @@ app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 app.use(
+  "/api-docs",
+  swaggerUiExpress.serve,
   
 )
 app.all('*', (req, res, next) => {
