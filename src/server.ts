@@ -43,9 +43,9 @@ app.use((req: customTime, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use('/api/v1/admin', adminRoute);
-
 app.use('/api/v1/user', userRoute);
+
+app.use('/api/v1/admin', adminRoute);
 
 app.use('/api/v1/products', productRoute);
 

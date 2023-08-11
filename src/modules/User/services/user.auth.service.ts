@@ -34,62 +34,6 @@ import { cloudinaryUploadImage } from '../../../configurations/cloudinary';
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-/**
- * @swagger
- * /create-user:
- *   post:
- *     summary: Create a new user
- *     description: Creates a new user with the provided information.
- *     tags:
- *       - Users
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               firstName:
- *                 type: string
- *               lastName:
- *                 type: string
- *               password:
- *                 type: string
- *               email:
- *                 type: string
- *               mobile:
- *                 type: string
- *     responses:
- *       '201':
- *         description: User successfully created
- *         content:
- *           application/json:
- *             example:
- *               message: You have successfully created your account, log in now
- *               status: success
- *       '400':
- *         description: Missing or invalid credentials
- *         content:
- *           application/json:
- *             example:
- *               message: Missing credentials, please provide all required information
- *               status: error
- *       '409':
- *         description: User with the provided email already exists
- *         content:
- *           application/json:
- *             example:
- *               message: You are already a member, kindly login to your account
- *               status: error
- *       '500':
- *         description: Internal server error
- *         content:
- *           application/json:
- *             example:
- *               message: An internal server error occurred
- *               status: error
- */
-
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
       if (!firstName || !lastName || !password || !email || !mobile)
