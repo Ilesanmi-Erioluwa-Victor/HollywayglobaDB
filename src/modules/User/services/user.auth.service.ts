@@ -34,6 +34,15 @@ import { cloudinaryUploadImage } from '../../../configurations/cloudinary';
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    /*
+          #swagger.consumes = ['multipart/form-data']  
+          #swagger.parameters['singleFile'] = {
+              in: 'formData',
+              type: 'file',
+              required: 'true',
+              description: 'Some description...',
+        } */
+
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
       if (!firstName || !lastName || !password || !email || !mobile)
@@ -337,7 +346,7 @@ export const uploadProfile: RequestHandler = catchAsync(
     try {
       const localPath = `src/uploads/${image.filename}`;
       const upload: any = await cloudinaryUploadImage(localPath, 'users');
-      console.log(upload)
+      console.log(upload);
       const user = await userProfilePictureUpdateM(id, upload.url);
       fs.unlinkSync(localPath);
       res.json({

@@ -11,7 +11,7 @@
     "build": "rimraf ./dist && tsc",
     "push": "npx prisma db push",
     "studio": "npx prisma studio",
-    "swagger": "ts-node ./configurations/swagger.ts"
+    "swagger": "ts-node ./src/configurations/swagger.ts"
   },
   "prisma": {
     "schema": "src/prisma/schema.prisma"
