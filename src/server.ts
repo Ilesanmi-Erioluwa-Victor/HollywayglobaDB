@@ -23,18 +23,10 @@ app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/images', express.static('images'));
-
-// app.use(express.static(__dirname));
-
-// app.use('*.css', (req, res, next) => {
-//     res.set('Content-Type', 'text/css');
-//     next();
-// });
-
 app.use(express.json({ limit: '10kb' }));
 
 app.use(helmet());
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -51,10 +43,6 @@ app.use((req: customTime, res: Response, next: NextFunction) => {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/public'));
-});
-
 app.use('/api/v1/admin', adminRoute);
 
 app.use('/api/v1/user', userRoute);
@@ -62,7 +50,7 @@ app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
-
+// TODO Still facing weird bug here
 app.use(
   '/api-docs',
   swaggerUiExpress.serve,
