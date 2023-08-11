@@ -20,10 +20,15 @@ import { customTime } from './interfaces/custom';
 const app: Application = express();
 
 app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use('/images', express.static('images'));
+
 app.use(express.static('public'));
+
 app.use(express.json({ limit: '10kb' }));
+
 app.use(helmet());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,19 +45,29 @@ app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();
   next();
 });
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/public'));
 });
 
 app.use('/api/v1/admin', adminRoute);
+
 app.use('/api/v1/user', userRoute);
+
 app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
-app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerFile));
+
+app.use(
+  '/api-docs',
+  swaggerUiExpress.serve,
+  swaggerUiExpress.setup(swaggerFile)
+);
+
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
 });
+
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   ErrorHandlerMiddleware.sendErrorDev(err, res);
 });
