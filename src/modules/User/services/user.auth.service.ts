@@ -30,7 +30,9 @@ import {
 } from '../models';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
-import { cloudinaryUploadImage } from '../../../configurations/cloudinary';
+import { CloudinaryUploader } from '../../../configurations/cloudinary';
+
+const uploader = new CloudinaryUploader();
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -358,10 +360,13 @@ export const uploadProfile: RequestHandler = catchAsync(
     const image: any = req.file;
     try {
       const localPath = `src/uploads/${image.filename}`;
-      const upload: any = await cloudinaryUploadImage(localPath, 'users');
-      console.log(upload);
+
+      const upload: any = await uploader.uploadImage(localPath, 'users');
+
       const user = await userProfilePictureUpdateM(id, upload.url);
+
       fs.unlinkSync(localPath);
+      
       res.json({
         status: 'Success',
         message: 'You have successfully updated your image',
