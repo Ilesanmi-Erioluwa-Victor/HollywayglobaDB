@@ -10,7 +10,8 @@
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
     "build": "rimraf ./dist && tsc",
     "push": "npx prisma db push",
-    "studio": "npx prisma studio"
+    "studio": "npx prisma studio",
+    "swagger": "ts-node ./configurations/swagger.ts"
   },
   "prisma": {
     "schema": "src/prisma/schema.prisma"
@@ -74,6 +75,10 @@
     "cross-env": "^7.0.3",
     "nodemon": "^2.0.22",
     "swagger-autogen": "^2.23.5",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.7",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.6"
   }
 }
