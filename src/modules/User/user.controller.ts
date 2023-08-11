@@ -23,15 +23,7 @@ import {
 } from '../../middlewares/image/resizeImage';
 const route = express.Router();
 
-    /**
-     * @swagger
-     * /api/products:
-     *   get:
-     *     summary: Get a list of products
-     *     responses:
-     *       200:
-     *         description: A list of products
-     */
+
 route.post('/signup', createUser);
 route.post('/login', loginUser);
 route.post(

@@ -18,16 +18,6 @@
     "application/json"
   ],
   "paths": {
-    "/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/v1/admin/sign_up": {
       "post": {
         "description": "",
@@ -270,17 +260,7 @@
     "/api/v1/user/signup": {
       "post": {
         "description": "",
-        "consumes": [
-          "multipart/form-data"
-        ],
         "parameters": [
-          {
-            "name": "singleFile",
-            "in": "formData",
-            "type": "file",
-            "required": true,
-            "description": "Some description..."
-          },
           {
             "name": "body",
             "in": "body",
