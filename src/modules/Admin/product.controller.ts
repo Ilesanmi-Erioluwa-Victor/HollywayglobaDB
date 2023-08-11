@@ -42,4 +42,12 @@ route.put(
   adminRole,
   editProductAdmin
 );
+
+route.put(
+  '/admin/:id/product/:productId',
+  AuthMiddleWare,
+  upload.array('images', 5),
+  adminRole,
+  editProductAdmin
+);
 export default route;
