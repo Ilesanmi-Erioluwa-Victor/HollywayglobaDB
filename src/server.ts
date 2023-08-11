@@ -49,8 +49,7 @@ app.use('/api/v1/user', userRoute);
 app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
-const docs = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(docs));
+app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerFile));
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
 });
