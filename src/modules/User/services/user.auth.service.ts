@@ -34,8 +34,8 @@ import { cloudinaryUploadImage } from '../../../configurations/cloudinary';
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        /*
+
+    /*
         // #swagger.tags = ['Users']
 
         // #swagger.description = `This is the sign up endpoint 
@@ -43,6 +43,8 @@ export const createUser: RequestHandler = catchAsync(
          and store it on Database`
          
         */
+
+    try {
       const { firstName, lastName, password, email, mobile } = req.body;
       if (!firstName || !lastName || !password || !email || !mobile)
         return next(
@@ -79,7 +81,9 @@ export const createUser: RequestHandler = catchAsync(
 export const loginUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
       
-    /* #swagger.responses[200] = {
+    /*
+     #swagger.tags = ['Users']
+    #swagger.responses[200] = {
             description: 'User successfully obtained.',
             schema: {
                 name: 'Jhon ',
