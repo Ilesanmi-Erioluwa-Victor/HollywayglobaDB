@@ -21,7 +21,6 @@ route.post(
   '/admin/:id/product',
   AuthMiddleWare,
   upload.array('images', 5),
-  // profileImageResize,
   adminRole,
   createProduct
 );

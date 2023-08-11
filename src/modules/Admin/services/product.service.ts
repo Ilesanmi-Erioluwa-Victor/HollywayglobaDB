@@ -95,14 +95,20 @@ export const getProductsAdmin: RequestHandler = catchAsync(
 export const getProductAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id, productId } = req?.params;
+
     ValidateMongoDbId(id);
     ValidateMongoDbId(productId);
+
     if (!id)
       next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
     if (!productId)
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+
     try {
       const product = await findProductIdM(productId);
+
+      if(!product) 
+      next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
       res.json({
         status: 'Success',
         data: product,
@@ -152,7 +158,7 @@ export const editProductAdmin: RequestHandler = catchAsync(
 
     if (!productId)
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
-    
+
     try {
       const product = await editProductM(productId, req.body);
       res.json({
