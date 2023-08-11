@@ -20,7 +20,10 @@
   "paths": {
     "/api/v1/user/signup": {
       "post": {
-        "description": "",
+        "tags": [
+          "Users"
+        ],
+        "description": "This is the sign up endpoint \r  for signing up users and extracting their infos\r  and store it on Database",
         "parameters": [
           {
             "name": "body",
@@ -64,10 +67,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "email": {
+                "description": {
                   "example": "any"
                 },
-                "password": {
+                "schema": {
                   "example": "any"
                 }
               }
@@ -76,7 +79,27 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "User successfully obtained.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Jhon "
+                },
+                "age": {
+                  "type": "number",
+                  "example": 29
+                },
+                "about": {
+                  "type": "string",
+                  "example": ""
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
