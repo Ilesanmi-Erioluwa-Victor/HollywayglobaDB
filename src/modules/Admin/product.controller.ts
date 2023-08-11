@@ -8,6 +8,7 @@ import {
   getProductsAdmin,
   editProductAdmin,
   editProductImagesAdmin,
+  TopTenProducts,
 } from './services/product.service';
 
 const storage = multer.memoryStorage();
@@ -51,4 +52,6 @@ route.post(
   adminRole,
   editProductImagesAdmin
 );
+
+route.get("/top-10-cheap-products", TopTenProducts)
 export default route;

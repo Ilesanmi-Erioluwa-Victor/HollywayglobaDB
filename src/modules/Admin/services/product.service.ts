@@ -227,3 +227,17 @@ export const editProductImagesAdmin: RequestHandler = catchAsync(
     }
   }
 );
+
+export const TopTenProducts: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log(req.query)
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
