@@ -4,12 +4,13 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
-import swaggerJsdoc from "swagger-jsdoc"
-import swaggerUiExpress from "swagger-ui-express"
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 import adminRoute from './modules/Admin/admin.controller';
 import userRoute from './modules/User/user.controller';
 import productRoute from './modules/Admin/product.controller';
+import * as swaggerDocument from './swagger.json';
 import AppError from './utils';
 import ErrorHandlerMiddleware from './middlewares/error';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
@@ -49,14 +50,23 @@ app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 const options = {
-  
-}
-const docs = swaggerJsdoc(options)
-app.use(
-  "/api-docs",
-  swaggerUiExpress.serve,
-  swaggerUiExpress.setup()
-)
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'REST API for Swagger Documentation',
+      version: '1.0.0',
+    },
+    schemes: ['http', 'https'],
+    servers: [
+      {
+        url: 'http://localhost:8080/',
+      },
+    ],
+  },
+  apis: ['/*.ts'],
+};
+const docs = swaggerJsdoc(options);
+app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(docs));
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
 });
