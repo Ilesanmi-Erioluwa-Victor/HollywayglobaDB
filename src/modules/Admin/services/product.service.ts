@@ -55,9 +55,7 @@ export const createProduct: RequestHandler = catchAsync(
         status: 'Success',
         data: createProduct,
       });
-
     } catch (error: any) {
-
       if (!error.statusCode) {
         error.statusCode = 500;
       }
@@ -68,7 +66,6 @@ export const createProduct: RequestHandler = catchAsync(
 
 export const getProductsAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
     const { id } = req?.params;
 
     ValidateMongoDbId(id);
@@ -79,9 +76,9 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     try {
       const products = await getProductsM();
 
-       if(!products) 
+      if (!products)
         next(new AppError('No products record found', StatusCodes.BAD_REQUEST));
-      
+
       res.json({
         length: products.length,
         status: 'Success',
@@ -111,9 +108,9 @@ export const getProductAdmin: RequestHandler = catchAsync(
     try {
       const product = await findProductIdM(productId);
 
-      if(!product) 
+      if (!product)
         next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
-      
+
       res.json({
         status: 'Success',
         data: product,
@@ -139,7 +136,7 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
 
     if (!productId)
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
-    
+
     try {
       const product = await deleteProductM(productId);
       res.json({
@@ -157,12 +154,12 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
 
 export const editProductAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { adminId, productId } = req?.params;
+    const { id, productId } = req?.params;
 
-    ValidateMongoDbId(adminId);
+    ValidateMongoDbId(id);
     ValidateMongoDbId(productId);
 
-    if (!adminId)
+    if (!id)
       next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
 
     if (!productId)
@@ -171,8 +168,8 @@ export const editProductAdmin: RequestHandler = catchAsync(
     try {
       const product = await editProductM(productId, req.body);
 
-       if(!product) 
-      next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+      if (!product)
+        next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
 
       res.json({
         status: 'Success',

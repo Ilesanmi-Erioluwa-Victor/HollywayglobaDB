@@ -37,7 +37,7 @@ route.delete(
 );
 
 route.put(
-  '/admin/:adminId/product/:productId',
+  '/admin/:id/product/:productId',
   AuthMiddleWare,
   adminRole,
   editProductAdmin

@@ -93,6 +93,7 @@ export const adminRole = catchAsync(
       ValidateMongoDbId(authId as string);
       ValidateMongoDbId(adminId);
 
+      console.log(">>>authid : ", authId, ">>> : ", adminId)
       const admin = await findAdminIdM(adminId);
       if (!admin)
         next(new AppError('Sorry, No user found', StatusCodes.BAD_REQUEST));
