@@ -12,7 +12,10 @@ export const findProductIdM = async (id: string) => {
   return product;
 };
 
-export const createProductM = async (productI: createProductI, data: string[]) => {
+export const createProductM = async (
+  productI: createProductI,
+  data: string[]
+) => {
   const {
     title,
     slug,
@@ -34,7 +37,7 @@ export const createProductM = async (productI: createProductI, data: string[]) =
       price,
       quantity,
       brand,
-      images : data,
+      images: data,
       stock,
       colors,
       categoryId,
@@ -73,6 +76,18 @@ export const editProductM = async (id: string, data: editProductI) => {
       stock: data.stock,
       brand: data.brand,
       colors: data.colors,
+    },
+  });
+  return product;
+};
+
+export const editProductImagesM = async (id: string, data: string[]) => {
+  const product = await prisma.product.update({
+    where: {
+      id,
+    },
+    data: {
+      images: data,
     },
   });
   return product;
