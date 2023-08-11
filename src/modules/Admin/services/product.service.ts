@@ -215,7 +215,7 @@ export const editProductImagesAdmin: RequestHandler = catchAsync(
 
       res.json({
         status: 'Success',
-        message: 'You have successfully updated this product',
+        message: 'You have successfully updated this product images',
       });
     } catch (error: any) {
       if (!error.statusCode) {
