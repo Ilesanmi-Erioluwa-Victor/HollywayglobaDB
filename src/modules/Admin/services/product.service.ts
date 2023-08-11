@@ -166,7 +166,7 @@ export const editProductAdmin: RequestHandler = catchAsync(
     if (!productId)
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
 
-      if (!req.files)
+    if (!req.files)
       next(
         new AppError(
           'Sorry, please select an image to be uploaded',
@@ -207,8 +207,10 @@ export const editProductImagesAdmin: RequestHandler = catchAsync(
       next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
 
     try {
-      const imageUrls: any = await uploader.processImages(req?.files as any);
-      const product = await editProductImagesM(productId, imageUrls);
+      const product = await editProductImagesM(
+        productId,
+        await uploader.processImages(req?.files as any)
+      );
 
       if (!product)
         next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
