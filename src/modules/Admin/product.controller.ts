@@ -44,7 +44,7 @@ route.put(
   editProductAdmin
 );
 
-route.put(
+route.post(
   '/admin/:id/product/:productId',
   AuthMiddleWare,
   upload.array('images', 5),
