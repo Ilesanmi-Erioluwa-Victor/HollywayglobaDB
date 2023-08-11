@@ -50,29 +50,29 @@ export const createProduct: RequestHandler = catchAsync(
       //   categoryId,
       //   adminId,
       // } = req.body;
-      const imagePromises: Promise<string | undefined>[] = req.files.map(
-        async (file: Express.Multer.File) => {
-          // Resize image to 2MB using Sharp
-          const resizedImage = await sharp(file.buffer)
-            .resize({ fit: 'inside', width: 2000, height: 2000 })
-            .toBuffer();
+ const imagePromises: Promise<string | undefined>[] = (
+   req.files as Express.Multer.File[]
+ ).map(async (file: Express.Multer.File) => {
+   // Resize image to 2MB using Sharp
+   const resizedImage = await sharp(file.buffer)
+     .resize({ fit: 'inside', width: 2000, height: 2000 })
+     .toBuffer();
 
-          return new Promise<string | undefined>((resolve) => {
-            cloudinary.uploader
-              .upload_stream((error, result: UploadApiResponse) => {
-                if (error) {
-                  console.error(error);
-                  resolve(undefined);
-                } else {
-                  cloudinaryUploadImage(result.url as string, 'Products');
-                  // console.log(result.url);
-                  resolve(result.url);
-                }
-              })
-              .end(resizedImage);
-          });
-        }
-      );
+   return new Promise<string | undefined>((resolve) => {
+     cloudinary.uploader
+       .upload_stream((error, result: UploadApiResponse) => {
+         if (error) {
+           console.error(error);
+           resolve(undefined);
+         } else {
+           cloudinaryUploadImage(result.url as string, 'Products');
+           resolve(result.url);
+         }
+       })
+       .end(resizedImage);
+   });
+ });
+
 
       const imageUrls: any = await Promise.all(imagePromises);
 

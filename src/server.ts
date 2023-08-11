@@ -25,12 +25,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/images', express.static('images'));
 
-app.use(express.static(__dirname));
+// app.use(express.static(__dirname));
 
-app.use('*.css', (req, res, next) => {
-    res.set('Content-Type', 'text/css');
-    next();
-});
+// app.use('*.css', (req, res, next) => {
+//     res.set('Content-Type', 'text/css');
+//     next();
+// });
 
 app.use(express.json({ limit: '10kb' }));
 
@@ -80,7 +80,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 const startConnection = async () => {
   try {
     app.listen(ENV.PORT.PORT || 5000, () => {
-      console.log(`App running on port ${ENV.PORT.PORT || 8080}`);
+      console.log(`App running on port ${ENV.PORT.PORT || 5000}`);
     });
   } catch (error: any) {
     console.log(error.message);
