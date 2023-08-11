@@ -15,3 +15,5 @@ const endpointFile = [
   '../modules/Admin/admin.controller.ts',
   '../modules/Admin/product.controller.ts',
 ];
+
+swaggerAutogen(outputFile, endpointFile, doc);
