@@ -8,10 +8,6 @@ import {
   getProductsAdmin,
   editProductAdmin,
 } from './services/product.service';
-// import {
-//   profileImage,
-//   profileImageResize,
-// } from '../../middlewares/image/resizeImage';
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -25,12 +21,14 @@ route.post(
   createProduct
 );
 route.get('/admin/:id/products', AuthMiddleWare, adminRole, getProductsAdmin);
+   
 route.get(
   '/admin/:id/product/:productId',
   AuthMiddleWare,
   adminRole,
   getProductAdmin
 );
+
 route.delete(
   '/admin/:id/product/:productId',
   AuthMiddleWare,
