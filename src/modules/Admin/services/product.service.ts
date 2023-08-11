@@ -1,6 +1,8 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
+import sharp from 'sharp';
+import path from 'path';
+
 import AppError from '../../../utils';
 import { ENV } from '../../../configurations/config';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
@@ -11,15 +13,10 @@ import {
   getProductsM,
   editProductM,
 } from '../product.models';
-import path from 'path';
-import { cloudinaryUploadImage } from '../../../configurations/cloudinary';
-import sharp from 'sharp';
 
-cloudinary.config({
-  cloud_name: ENV.CLOUDIANRY.NAME,
-  api_key: ENV.CLOUDIANRY.KEY,
-  api_secret: ENV.CLOUDIANRY.SECRET,
-});
+import { ImageProcessor } from '../../../configurations/cloudinary';
+
+const uploader = new ImageProcessor()
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

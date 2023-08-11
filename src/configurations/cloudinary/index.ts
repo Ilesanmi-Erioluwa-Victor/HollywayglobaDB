@@ -1,8 +1,9 @@
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 import { ENV } from '../config';
+import sharp from 'sharp';
 import multer from 'multer';
 
-export class CloudinaryUploader {
+class CloudinaryUploader {
   constructor() {
     cloudinary.config({
       cloud_name: ENV.CLOUDIANRY.NAME,
@@ -25,3 +26,40 @@ export class CloudinaryUploader {
   }
 }
 
+class ImageProcessor {
+  private uploader: CloudinaryUploader;
+
+  constructor() {
+    this.uploader = new CloudinaryUploader();
+  }
+
+  async processImages(files: Express.Multer.File[]): Promise<string[]> {
+    const imagePromises: Promise<string | undefined>[] = files.map(
+      async (file: Express.Multer.File) => {
+        // Resize image to 2MB using Sharp
+        const resizedImage = await sharp(file.buffer)
+          .resize({ fit: 'inside', width: 2000, height: 2000 })
+          .toBuffer();
+
+        return new Promise<string | undefined>((resolve) => {
+          cloudinary.uploader
+            .upload_stream((error, result: UploadApiResponse) => {
+              if (error) {
+                console.error(error);
+                resolve(undefined);
+              } else {
+                this.uploader.uploadImage(result.url as string, 'Products');
+                resolve(result.url);
+              }
+            })
+            .end(resizedImage);
+        });
+      }
+    );
+
+    const imageUrls: (string | undefined)[] = await Promise.all(imagePromises);
+    return imageUrls.filter((url) => url !== undefined) as string[];
+  }
+}
+
+export { CloudinaryUploader, ImageProcessor };
