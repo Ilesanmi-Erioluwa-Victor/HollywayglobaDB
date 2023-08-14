@@ -25,10 +25,9 @@ class APIFeatures {
         (match) => `$${match}`
       );
 
-      this.query = this.query.find(JSON.parse(queryStr));
-
     const prismaQuery: Prisma.ProductWhereInput = {
-      // Construct your Prisma query based on queryObj
+      name: queryObj.name,
+      category: queryObj.category,
     };
 
     this.query.where = prismaQuery;
