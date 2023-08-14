@@ -17,7 +17,8 @@ class APIFeatures {
   filter(): this {
     const queryObj = { ...this.queryString };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach((el: any) => delete queryObj[el]);
+    excludedFields.forEach((el) => delete queryObj[el as keyof QueryString]);
+
 
     // Adapt the query to your Prisma model's query structure
     const prismaQuery: Prisma.ProductWhereInput = {
