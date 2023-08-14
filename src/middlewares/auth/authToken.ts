@@ -21,7 +21,7 @@ export const AuthMiddleWare = catchAsync(
       ) {
         token = req?.headers?.authorization.split(' ')[1];
         if (!`${ENV.JWT.SECRET}`) {
-          new AppError('SERVER JWT PASSWORD NOT SET', StatusCodes.BAD_REQUEST);
+          new AppError('SERVER JWT PASSWORD NOT SET', StatusCodes.NOT_FOUND);
         }
         if (token) {
           const decoded = jwt.verify(token, `${ENV.JWT.SECRET}`) as {

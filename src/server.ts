@@ -4,7 +4,6 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
-// import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 
 import adminRoute from './modules/Admin/admin.controller';
@@ -16,6 +15,7 @@ import ErrorHandlerMiddleware from './middlewares/error';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { ENV } from './configurations/config';
 import { customTime } from './interfaces/custom';
+import { _404 } from './middlewares/error/_404Page';
 
 const app: Application = express();
 
@@ -57,8 +57,8 @@ app.use(
   swaggerUiExpress.setup(swaggerFile)
 );
 
-app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!!`, 404));
+app.all('*', (req: Request, res: Response, next: NextFunction) => {
+  _404.notFound(req, res, next);
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
