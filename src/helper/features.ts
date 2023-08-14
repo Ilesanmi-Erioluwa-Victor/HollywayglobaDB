@@ -26,7 +26,7 @@ class APIFeatures {
       );
 
     const prismaQuery: Prisma.ProductWhereInput = {
-      name: queryObj.name,
+      page: queryObj.page,
       category: queryObj.category,
     };
 
