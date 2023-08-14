@@ -27,8 +27,7 @@ class APIFeatures {
 
   //   const prismaQuery: Prisma.ProductWhereInput = {
   //     AND: [
-  //       { title: queryObj.title },
-  //       { category: queryObj.category },
+        
   //       { price: queryObj.price },
   //       {}
   //     ],
@@ -44,6 +43,8 @@ class APIFeatures {
       // Adapt and set the orderBy option of the Prisma query
       this.query.orderBy = {
         // Construct your Prisma orderBy object based on this.queryString.sort
+        price: "asc",
+        category : ""
       };
     } else {
       // Default sorting
