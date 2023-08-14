@@ -33,9 +33,14 @@ class APIFeatures<T> {
     if (this.queryString.sort) {
       const sortBy = this.queryString.sort.split(',').join(' ');
       this.query = prisma.product.findMany({
-        orderBy: {
-          yourFieldName: sortBy,
-        },
+        orderBy: [
+          {
+            title: 'asc',
+          },
+          {
+            category: sortBy,
+          },
+        ],
       });
     } else {
       this.query = prisma.product.findMany({
