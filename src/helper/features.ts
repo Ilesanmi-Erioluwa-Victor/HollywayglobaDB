@@ -1,85 +1,87 @@
-import { Prisma } from '@prisma/client';
+import { Model, Prisma } from '@prisma/client';
+import { prisma } from '../configurations/db';
 
-type QueryString = {
-  page?: string;
-  sort?: string;
-  limit?: string;
-  fields?: string;
-  title?: string;
-  category?: string[];
-  price?: number;
-  // Add more query parameters if needed
+type QueryParams = {
+  [key: string]: string;
 };
 
-class APIFeatures {
-  constructor(
-    private query: Prisma.ProductFindManyArgs,
-    private queryString: QueryString
-  ) {}
+class APIFeatures<T> {
+  query: Model<T>;
+  queryString: QueryParams;
 
-  // filter(): this {
-  //   const queryObj = { ...this.queryString };
-  //   const excludedFields = ['page', 'sort', 'limit', 'fields'];
-  //   excludedFields.forEach((el) => delete queryObj[el as keyof QueryString]);
+  constructor(query: Model<T>, queryString: QueryParams) {
+    this.query = query;
+    this.queryString = queryString;
+  }
 
-  //   let queryStr = JSON.stringify(queryObj);
-  //   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+  filter(): this {
+    const queryObj = { ...this.queryString };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
 
-  //   const prismaQuery: Prisma.ProductWhereInput = {
-  //     AND: [
-        
-  //       { price: queryObj.price },
-  //       {}
-  //     ],
-  //   };
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-  //   this.query.where = prismaQuery;
+    this.query = prisma.product.findMany({
+      where: JSON.parse(queryStr),
+    });
 
-  //   return this;
-  // }
+    return this;
+  }
 
-  sort(): this {
+  sort() {
     if (this.queryString.sort) {
-      // Adapt and set the orderBy option of the Prisma query
-      this.query.orderBy = {
-        // Construct your Prisma orderBy object based on this.queryString.sort
-        price: "asc",
-        category : ""
-      };
+      const sortBy = this.queryString.sort.split(',').join(' ');
+      this.query = prisma.product.findMany({
+        orderBy: {
+          yourFieldName: sortBy,
+        },
+      });
     } else {
-      // Default sorting
-      this.query.orderBy = {
-        createdAt: 'asc',
-      };
+      this.query = prisma.product.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
     }
 
     return this;
   }
 
-  limitFields(): this {
+  limitFields() {
     if (this.queryString.fields) {
-      this.query.select = {
-        // Construct your Prisma select fields based on this.queryString.fields
-      };
+      const fields = this.queryString.fields.split(',').join(' ');
+      this.query = prisma.product.findMany({
+        select: {
+          yourFieldName: true,
+        },
+      });
+    } else {
+      this.query = prisma.product.findMany({
+        select: {
+          __v: false,
+        },
+      });
     }
 
     return this;
   }
 
   paginate(): this {
-    const page = this.queryString.page ? parseInt(this.queryString.page) : 1;
-    const limit = this.queryString.limit
-      ? parseInt(this.queryString.limit)
-      : 100;
-    const skip = (page - 1) * limit;
+       const page = parseInt(this.queryString.page || '1', 10);
+       const limit = parseInt(this.queryString.limit || '100', 10);
+       const skip = (page - 1) * limit;
 
-    // Adapt the skip and take options of the Prisma query
-    this.query.skip = skip;
-    this.query.take = limit;
+    this.query = prisma.product.findMany({
+      skip,
+      take: limit,
+    });
 
     return this;
   }
 }
+
+
 
 // Usage example:
 // const prisma = new PrismaClient(); // Create your Prisma client instance
