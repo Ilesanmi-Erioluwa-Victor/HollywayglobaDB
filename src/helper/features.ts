@@ -6,7 +6,7 @@ type QueryString = {
   limit?: string;
   fields?: string;
   title?: string;
-  category?: string;
+  category?: string[];
   price?: number;
   // Add more query parameters if needed
 };
@@ -17,26 +17,27 @@ class APIFeatures {
     private queryString: QueryString
   ) {}
 
-  filter(): this {
-    const queryObj = { ...this.queryString };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach((el) => delete queryObj[el as keyof QueryString]);
+  // filter(): this {
+  //   const queryObj = { ...this.queryString };
+  //   const excludedFields = ['page', 'sort', 'limit', 'fields'];
+  //   excludedFields.forEach((el) => delete queryObj[el as keyof QueryString]);
 
-    let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+  //   let queryStr = JSON.stringify(queryObj);
+  //   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    const prismaQuery: Prisma.ProductWhereInput = {
-      AND: [
-        { title: queryObj.title },
-        { category: queryObj.category },
-        { price: queryObj.price },
-      ],
-    };
+  //   const prismaQuery: Prisma.ProductWhereInput = {
+  //     AND: [
+  //       { title: queryObj.title },
+  //       { category: queryObj.category },
+  //       { price: queryObj.price },
+  //       {}
+  //     ],
+  //   };
 
-    this.query.where = prismaQuery;
+  //   this.query.where = prismaQuery;
 
-    return this;
-  }
+  //   return this;
+  // }
 
   sort(): this {
     if (this.queryString.sort) {
