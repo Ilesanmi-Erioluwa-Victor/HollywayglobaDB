@@ -5,6 +5,9 @@ type QueryString = {
   sort?: string;
   limit?: string;
   fields?: string;
+  title?: string;
+  category?: string;
+  price?: number;
   // Add more query parameters if needed
 };
 
@@ -19,15 +22,15 @@ class APIFeatures {
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el as keyof QueryString]);
 
-      let queryStr = JSON.stringify(queryObj);
-      queryStr = queryStr.replace(
-        /\b(gte|gt|lte|lt)\b/g,
-        (match) => `$${match}`
-      );
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
     const prismaQuery: Prisma.ProductWhereInput = {
-      page: queryObj.page,
-      category: queryObj.category,
+      AND: [
+        { title: queryObj.title },
+        { category: queryObj.category },
+        { price: queryObj.price },
+      ],
     };
 
     this.query.where = prismaQuery;
@@ -53,7 +56,6 @@ class APIFeatures {
 
   limitFields(): this {
     if (this.queryString.fields) {
-      // Adapt the select option of the Prisma query
       this.query.select = {
         // Construct your Prisma select fields based on this.queryString.fields
       };
