@@ -19,8 +19,14 @@ class APIFeatures {
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el as keyof QueryString]);
 
+      let queryStr = JSON.stringify(queryObj);
+      queryStr = queryStr.replace(
+        /\b(gte|gt|lte|lt)\b/g,
+        (match) => `$${match}`
+      );
 
-    // Adapt the query to your Prisma model's query structure
+      this.query = this.query.find(JSON.parse(queryStr));
+
     const prismaQuery: Prisma.ProductWhereInput = {
       // Construct your Prisma query based on queryObj
     };
