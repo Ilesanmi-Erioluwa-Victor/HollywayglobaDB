@@ -11,6 +11,7 @@ import {
   uploadProfile,
   createAddress,
   editAddress,
+  addToWishlist,
 } from './services/user.auth.service';
 import {
   AuthMiddleWare,
@@ -23,7 +24,6 @@ import {
 } from '../../middlewares/image/resizeImage';
 const route = express.Router();
 
-
 route.post('/signup', createUser);
 
 route.post('/login', loginUser);
@@ -33,6 +33,13 @@ route.post(
   AuthMiddleWare,
   isUserVerified,
   createAddress
+);
+
+route.post(
+  '/:id/add-to-wishlist',
+  AuthMiddleWare,
+  isUserVerified,
+  addToWishlist
 );
 
 route.put('/:id/address/edit', AuthMiddleWare, isUserVerified, editAddress);
