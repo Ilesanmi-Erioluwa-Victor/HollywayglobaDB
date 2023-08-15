@@ -29,29 +29,28 @@ export const addToWishlist: RequestHandler = catchAsync(
         productId
       );
 
-      if (existingWishlistItemCart) {
-        const updateWishItemQuantity = await updateExistItemCartQuantityM(
-          existingWishlistItemCart,
-          quantity
-        );
+        // if (existingWishlistItemCart) {
+        //   const updateWishItemQuantity = await updateExistItemCartQuantityM(
+        //     existingWishlistItemCart,
+        //     quantity
+        //   );
 
-        res.json({
-          message:
-            'Product quantity incremented in wishlist, because, product already in cart',
-          data: updateWishItemQuantity,
-        });
-      } else {
-        const userWishlistItem = await userWishListCartM(
-          userId as string,
-          productId,
-          quantity
-        );
+        //   res.json({
+        //     message:
+        //       'Product quantity incremented in wishlist, because, product already in cart',
+        //     data: updateWishItemQuantity,
+        //   });
+        // }
+      const userWishlistItem = await userWishListCartM(
+        userId as string,
+        productId,
+        quantity
+      );
 
-        res.json({
-          message: 'Product added to wishlist',
-          data: userWishlistItem,
-        });
-      }
+      res.json({
+        message: 'Product added to wishlist',
+        data: userWishlistItem,
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;

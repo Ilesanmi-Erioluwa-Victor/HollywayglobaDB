@@ -18,14 +18,15 @@ export const updateExistItemCartQuantityM = async (
   },
   quantity: number
 ) => {
-  const cartItem = await prisma.productWishList.update({
+    const cartItem = await prisma.productWishList.update({
+        
     where: { id: existingWishlistItemCart.id },
     data: { quantity: existingWishlistItemCart.quantity + quantity },
     select: {
       id: true,
       quantity: true,
-      createdAt: false,
-      updatedAt: false,
+      createdAt: true,
+      updatedAt: true,
       product: {
         select: {
           title: true,
