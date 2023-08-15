@@ -27,6 +27,7 @@ import {
   createAddressM,
   updateAddressM,
   findUserWithAddressM,
+  userWishListM,
 } from '../models';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
@@ -447,7 +448,8 @@ export const addToWishlist: RequestHandler = async (
       next(
         new AppError('Missing required information', StatusCodes.BAD_REQUEST)
       );
-    const userWishlistItem = await 
+    
+    const userWishlistItem = await userWishListM(userId as string, productId, quantity);
 
     res
       .status(201)
