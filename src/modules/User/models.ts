@@ -224,6 +224,17 @@ export const userWishListM = async (
       product: { connect: { id: productId } },
       quantity: quantity,
     },
+    select: {
+      id: true,
+      quantity: true,
+      createdAt: true,
+      updatedAt: true,
+      product: {
+        select: {
+          title: true,
+        },
+      },
+    },
   });
 
   return wishList;
