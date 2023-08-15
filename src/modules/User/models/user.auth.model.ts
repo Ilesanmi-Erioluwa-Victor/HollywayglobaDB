@@ -1,10 +1,10 @@
-import { prisma } from '../../configurations/db';
+import { prisma } from '../../../configurations/db';
 import {
   hashedPassword,
   generateToken,
   createAccountVerificationToken,
-} from '../../helper/utils';
-import { address, signupUser } from './user.interface';
+} from '../../../helper/utils';
+import { address, signupUser } from '../user.interface';
 
 export const createUserM = async (user: signupUser) => {
   const { firstName, lastName, email, mobile, password } = user;
