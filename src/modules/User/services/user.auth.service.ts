@@ -36,16 +36,6 @@ const uploader = new CloudinaryUploader();
 
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
-    /*
-        // #swagger.tags = ['Users']
-
-        // #swagger.description = `This is the sign up endpoint 
-        for signing up users and extracting their infos
-         and store it on Database`
-         
-        */
-
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
       if (!firstName || !lastName || !password || !email || !mobile)
