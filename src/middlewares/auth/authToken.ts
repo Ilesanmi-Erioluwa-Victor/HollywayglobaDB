@@ -7,7 +7,7 @@ import { prisma } from '../../configurations/db';
 import { ValidateMongoDbId } from '../../helper/utils';
 import { ENV } from '../../configurations/config';
 import { CustomRequest } from '../../interfaces/custom';
-import { findUserMId } from '../../modules/User/models';
+import { findUserMId } from '../../modules/User/models/user.auth.model';
 import { findAdminIdM } from '../../modules/Admin/models';
 
 export const AuthMiddleWare = catchAsync(

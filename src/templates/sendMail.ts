@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import { prisma } from '../configurations/db';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { ENV } from '../configurations/config';
-import { findUserMId } from '../modules/User/models';
+import { findUserMId } from '../modules/User/models/user.auth.model';
 import { findAdminIdM } from '../modules/Admin/models';
 interface User {
   id: string;
