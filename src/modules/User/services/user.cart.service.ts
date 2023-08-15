@@ -85,10 +85,8 @@ export const incrementCartItems: RequestHandler = async (
   const { productId } = req.body;
 
   try {
-      if (!productId || !userId) 
-         next(
-          new AppError('Missing required information', StatusCodes.BAD_REQUEST)
-        );
+    if (!productId || !userId)
+      next(new AppError('Invalid params or query', StatusCodes.BAD_REQUEST));
 
     const existingCartItem = await await existItemCartM(
       userId as string,
