@@ -24,11 +24,17 @@ export const updateExistItemCartQuantityM = async (
     select: {
       id: true,
       quantity: true,
-      createdAt: true,
-      updatedAt: true,
+      createdAt: false,
+      updatedAt: false,
       product: {
         select: {
           title: true,
+          price: true,
+          colors: true,
+          description: true,
+          brand: true,
+          slug: true,
+          images: true,
         },
       },
     },
