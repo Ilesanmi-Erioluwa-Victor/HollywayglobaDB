@@ -8,8 +8,7 @@ import { CustomRequest } from '../../../interfaces/custom';
 import { userWishListCartM, existItemCartM } from '../models/user.cart.model';
 
 export const addToWishlist: RequestHandler = catchAsync(
-    async (req: CustomRequest, res: Response, next: NextFunction) => {
-        
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
     const userId = req.authId;
     ValidateMongoDbId(userId as string);
 
@@ -20,6 +19,11 @@ export const addToWishlist: RequestHandler = catchAsync(
         next(
           new AppError('Missing required information', StatusCodes.BAD_REQUEST)
         );
+
+      const existingWishlistItemCart = await existItemCartM(
+        userId as string,
+        productId
+      );
 
       const userWishlistItem = await userWishListCartM(
         userId as string,
