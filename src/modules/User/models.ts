@@ -232,6 +232,9 @@ export const userWishListM = async (
       product: {
         select: {
           title: true,
+          price: true,
+          colors: true,
+          description: true
         },
       },
     },
