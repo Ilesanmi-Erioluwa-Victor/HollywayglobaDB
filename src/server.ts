@@ -7,7 +7,7 @@ import path from 'path';
 import swaggerUiExpress from 'swagger-ui-express';
 
 import adminRoute from './modules/Admin/admin.controller';
-import userRoute from './modules/User/user.controller';
+import userRoute from './modules/User/routes/user.routes';
 import productRoute from './modules/Admin/product.controller';
 import swaggerFile from './swagger-output.json';
 import AppError from './utils';

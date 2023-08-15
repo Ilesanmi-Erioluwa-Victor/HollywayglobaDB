@@ -12,16 +12,16 @@ import {
   createAddress,
   editAddress,
   addToWishlist,
-} from './services/user.auth.service';
+} from '../services/user.auth.service';
 import {
   AuthMiddleWare,
   isUserVerified,
-} from '../../middlewares/auth/authToken';
+} from '../../../middlewares/auth/authToken';
 // import { upload } from '../../helper/utils';
 import {
   profileImage,
   profileImageResize,
-} from '../../middlewares/image/resizeImage';
+} from '../../../middlewares/image/resizeImage';
 const route = express.Router();
 
 route.post('/signup', createUser);
