@@ -1,6 +1,13 @@
 import { prisma } from '../../../configurations/db';
 
-export const existItemM = async();
+export const existItemM = async (userId: string, productId: string) => {
+  const existItem = await prisma.productWishList.findFirst({
+    where: {
+      userId: userId,
+      productId: productId,
+    },
+  });
+};
 
 export const userWishListM = async (
   userId: string,
