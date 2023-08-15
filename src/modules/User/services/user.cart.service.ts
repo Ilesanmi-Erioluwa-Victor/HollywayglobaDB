@@ -35,9 +35,9 @@ export const addToWishlist: RequestHandler = catchAsync(
           quantity
         );
 
-          const updatedTotalAmount =
-            existingWishlistItemCart.product.price *
-            updateWishItemQuantity.quantity;
+        const updatedTotalAmount =
+          existingWishlistItemCart.product.price *
+          updateWishItemQuantity.quantity;
 
         res.json({
           message:
@@ -47,18 +47,24 @@ export const addToWishlist: RequestHandler = catchAsync(
             totalAmount: updatedTotalAmount,
           },
         });
+      } else {
+        const userWishlistItem = await userWishListCartM(
+          userId as string,
+          productId,
+          quantity
+        );
+
+        const newTotalAmount =
+          userWishlistItem.product.price * userWishlistItem.quantity;
+
+        res.json({
+          message: 'Product added to wishlist',
+          data: {
+            ...userWishlistItem,
+            totalAmount: newTotalAmount,
+          },
+        });
       }
-
-      const userWishlistItem = await userWishListCartM(
-        userId as string,
-        productId,
-        quantity
-      );
-
-      res.json({
-        message: 'Product added to wishlist',
-        data: userWishlistItem,
-      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -67,7 +73,6 @@ export const addToWishlist: RequestHandler = catchAsync(
     }
   }
 );
-
 
 export const incrementCartItems: RequestHandler = async (
   req: Request,
@@ -115,4 +120,3 @@ export const incrementCartItems: RequestHandler = async (
     res.status(500).json({ message: 'Internal server error' });
   }
 };
-
