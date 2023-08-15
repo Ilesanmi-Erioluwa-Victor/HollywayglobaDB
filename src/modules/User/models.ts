@@ -214,4 +214,13 @@ export const findUserWithAddressM = async (id: string) => {
 };
 
 
-export const userWishListM = async()
+export const userWishListM = async () => {
+ const wishList = await prisma.productWishList.create({
+    data: {
+      user: { connect: { id: userId } },
+      product: { connect: { id: productId } },
+      quantity: quantity,
+    },
+  });
+  
+}

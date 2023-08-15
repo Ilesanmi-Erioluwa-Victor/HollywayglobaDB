@@ -447,13 +447,7 @@ export const addToWishlist: RequestHandler = async (
       next(
         new AppError('Missing required information', StatusCodes.BAD_REQUEST)
       );
-    const userWishlistItem = await prisma.userWishlist.create({
-      data: {
-        user: { connect: { id: userId } },
-        product: { connect: { id: productId } },
-        quantity: quantity,
-      },
-    });
+    const userWishlistItem = await 
 
     res
       .status(201)
