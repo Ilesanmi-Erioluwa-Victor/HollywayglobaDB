@@ -75,24 +75,25 @@ export const addToWishlist: RequestHandler = catchAsync(
 );
 
 export const incrementCartItems: RequestHandler = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.authId;
+  ValidateMongoDbId(userId as string);
+
+  const { productId } = req.body;
+
   try {
-    const productId = req.query.productId as string;
-    const userId = req.params.userId as string;
+      if (!productId || !userId) 
+         next(
+          new AppError('Missing required information', StatusCodes.BAD_REQUEST)
+        );
 
-    if (!productId || !userId) {
-      return res.status(422).json({ message: 'Invalid params or query id' });
-    }
-
-    const existingCartItem = await prisma.productWishList.findFirst({
-      where: {
-        userId: userId,
-        productId: productId,
-      },
-    });
+    const existingCartItem = await await existItemCartM(
+      userId as string,
+      productId
+    );
 
     if (!existingCartItem) {
       return res.status(404).json({ message: 'CartItem not found' });
