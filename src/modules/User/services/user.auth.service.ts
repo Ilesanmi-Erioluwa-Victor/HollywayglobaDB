@@ -27,7 +27,7 @@ import {
   updateAddressM,
   findUserWithAddressM,
   userWishListM,
-} from '../models';
+} from '../models/user.auth.model';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
 import { CloudinaryUploader } from '../../../configurations/cloudinary';
