@@ -5,6 +5,8 @@ import AppError from '../../../utils';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
 
+import { userWishListM } from '../models/user.cart.model';
+
 export const addToWishlist: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const userId = req.authId;

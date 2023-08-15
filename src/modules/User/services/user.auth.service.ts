@@ -26,7 +26,6 @@ import {
   createAddressM,
   updateAddressM,
   findUserWithAddressM,
-  userWishListM,
 } from '../models/user.auth.model';
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
 import { loginUserI } from '../user.interface';
