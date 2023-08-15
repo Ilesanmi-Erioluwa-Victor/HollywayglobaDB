@@ -2,12 +2,12 @@ export interface createProductI {
   title: string;
   slug?: string;
   description: string;
-  price?: number;
-  quantity?: number;
+  price: number;
+  quantity: number;
   images: string[];
-  stock?: number;
+  stock: number;
   brand: any;
-  colors?: string;
+  colors: string;
   categoryId: string;
   adminId: string;
 }
