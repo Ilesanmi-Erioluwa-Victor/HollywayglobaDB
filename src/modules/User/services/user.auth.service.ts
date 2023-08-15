@@ -432,3 +432,27 @@ export const editAddress: RequestHandler = catchAsync(
     }
   }
 );
+
+export const addToWishlist: RequestHandler = async (req: CustomRequest, res : Response, next : NextFunction) => {
+  try {
+    const userId = req.user.id; // Assuming you have the user ID from authentication
+    const { productId, quantity } = req.body;
+
+    if (!userId || !productId || !quantity) {
+      return res.status(400).json({ message: 'Missing required information' });
+    }
+
+    const userWishlistItem = await prisma.userWishlist.create({
+      data: {
+        user: { connect: { id: userId } },
+        product: { connect: { id: productId } },
+        quantity: quantity,
+      },
+    });
+
+    res.status(201).json({ message: 'Product added to wishlist', data: userWishlistItem });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
