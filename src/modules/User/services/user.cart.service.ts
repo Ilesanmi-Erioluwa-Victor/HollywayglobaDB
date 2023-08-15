@@ -5,7 +5,7 @@ import AppError from '../../../utils';
 import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
 
-import { userWishListCartM, existItemCartM } from '../models/user.cart.model';
+import { userWishListCartM, existItemCartM, updateExistItemCartQuantityM } from '../models/user.cart.model';
 
 export const addToWishlist: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -23,13 +23,19 @@ export const addToWishlist: RequestHandler = catchAsync(
       const existingWishlistItemCart = await existItemCartM(
         userId as string,
         productId
-      );
+        );
+        
+        if (existingWishlistItemCart) {
+         const updatewishItemQuantity = await updateExistItemCartQuantityM(
+           existingWishlistItemCart, quantity
+         );
+        }
 
-      const userWishlistItem = await userWishListCartM(
-        userId as string,
-        productId,
-        quantity
-      );
+          const userWishlistItem = await userWishListCartM(
+            userId as string,
+            productId,
+            quantity
+          );
 
       res.json({
         message: 'Product added to wishlist',

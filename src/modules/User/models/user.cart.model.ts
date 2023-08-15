@@ -7,8 +7,34 @@ export const existItemCartM = async (userId: string, productId: string) => {
       productId: productId,
     },
   });
-    
-    return existItem
+
+  return existItem;
+};
+
+export const updateExistItemCartQuantityM = async (
+  existingWishlistItemCart: {
+    id: string;
+    quantity: number;
+  },
+  quantity: number
+) => {
+  const cartItem = await prisma.productWishList.update({
+    where: { id: existingWishlistItemCart.id },
+    data: { quantity: existingWishlistItemCart.quantity + quantity },
+    select: {
+      id: true,
+      quantity: true,
+      createdAt: true,
+      updatedAt: true,
+      product: {
+        select: {
+          title: true,
+        },
+      },
+    },
+  });
+
+  return cartItem;
 };
 
 export const userWishListCartM = async (
