@@ -234,7 +234,10 @@ export const userWishListM = async (
           title: true,
           price: true,
           colors: true,
-          description: true
+          description: true,
+          brand: true,
+          slug: true,
+          images : true
         },
       },
     },
