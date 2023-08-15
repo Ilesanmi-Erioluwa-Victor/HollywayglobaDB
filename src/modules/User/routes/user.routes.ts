@@ -11,17 +11,20 @@ import {
   uploadProfile,
   createAddress,
   editAddress,
-  addToWishlist,
 } from '../services/user.auth.service';
+
+import { addToWishlist } from '../services/user.cart.service';
+
 import {
   AuthMiddleWare,
   isUserVerified,
 } from '../../../middlewares/auth/authToken';
-// import { upload } from '../../helper/utils';
+
 import {
   profileImage,
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
+
 const route = express.Router();
 
 route.post('/signup', createUser);
