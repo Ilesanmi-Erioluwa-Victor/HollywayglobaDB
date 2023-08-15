@@ -375,6 +375,7 @@ export const createAddress: RequestHandler = catchAsync(
     const { id } = req.params;
     ValidateMongoDbId(id);
     if (!id) new AppError('Invalid ID', StatusCodes.FORBIDDEN);
+
     const {
       deliveryAddress,
       additionalInfo,
@@ -383,6 +384,7 @@ export const createAddress: RequestHandler = catchAsync(
       phone,
       additionalPhone,
     } = req.body;
+
     // TODO, I want to add JOI as validator
     try {
       const user = await createAddressM(req.body, id);
@@ -448,14 +450,18 @@ export const addToWishlist: RequestHandler = async (
       next(
         new AppError('Missing required information', StatusCodes.BAD_REQUEST)
       );
-    
-    const userWishlistItem = await userWishListM(userId as string, productId, quantity);
 
-    res
-      .status(201)
-      .json({ message: 'Product added to wishlist', data: userWishlistItem });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    const userWishlistItem = await userWishListM(
+      userId as string,
+      productId,
+      quantity
+    );
+
+    res.json({ message: 'Product added to wishlist', data: userWishlistItem });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
