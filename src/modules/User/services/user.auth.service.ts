@@ -72,7 +72,6 @@ export const createUser: RequestHandler = catchAsync(
 
 export const loginUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-      
     /*
      #swagger.tags = ['Users']
     #swagger.responses[200] = {
@@ -83,7 +82,7 @@ export const loginUser: RequestHandler = catchAsync(
                 about: ''
             }
     } */
-      
+
     const { email, password } = req.body;
     try {
       const user: loginUserI | any = await findUserMEmail(email);
@@ -356,7 +355,7 @@ export const uploadProfile: RequestHandler = catchAsync(
       const user = await userProfilePictureUpdateM(id, upload.url);
 
       fs.unlinkSync(localPath);
-      
+
       res.json({
         status: 'Success',
         message: 'You have successfully updated your image',
@@ -433,9 +432,14 @@ export const editAddress: RequestHandler = catchAsync(
   }
 );
 
-export const addToWishlist: RequestHandler = async (req: CustomRequest, res : Response, next : NextFunction) => {
+export const addToWishlist: RequestHandler = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.authId;
+  ValidateMongoDbId(userId);
   try {
-    const userId = req.user.id; // Assuming you have the user ID from authentication
     const { productId, quantity } = req.body;
 
     if (!userId || !productId || !quantity) {
@@ -450,7 +454,9 @@ export const addToWishlist: RequestHandler = async (req: CustomRequest, res : Re
       },
     });
 
-    res.status(201).json({ message: 'Product added to wishlist', data: userWishlistItem });
+    res
+      .status(201)
+      .json({ message: 'Product added to wishlist', data: userWishlistItem });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
