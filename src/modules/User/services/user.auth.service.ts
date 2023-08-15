@@ -2,7 +2,6 @@ import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import fs from 'fs';
-import path from 'path';
 import AppError from '../../../utils';
 import {
   catchAsync,
