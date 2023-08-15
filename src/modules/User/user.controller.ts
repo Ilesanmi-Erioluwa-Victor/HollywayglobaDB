@@ -36,7 +36,7 @@ route.post(
 );
 
 route.post(
-  '/:id/add-to-wishlist',
+  '/:id/product/add-to-wishlist',
   AuthMiddleWare,
   isUserVerified,
   addToWishlist
