@@ -128,6 +128,7 @@ model ProductWishList {
   user       User    @relation(fields: [userId], references: [id])
   wishListId String  @db.ObjectId
   userId     String  @db.ObjectId
+  quantity    Int
 }
 
 model PasswordResetToken {
