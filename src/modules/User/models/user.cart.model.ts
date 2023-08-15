@@ -7,6 +7,8 @@ export const existItemM = async (userId: string, productId: string) => {
       productId: productId,
     },
   });
+    
+    return existItem
 };
 
 export const userWishListM = async (
