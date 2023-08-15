@@ -438,7 +438,7 @@ export const addToWishlist: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = req.authId;
-  ValidateMongoDbId(userId);
+  ValidateMongoDbId(userId as string);
   try {
     const { productId, quantity } = req.body;
 
