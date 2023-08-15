@@ -1,3 +1,5 @@
+import { prisma } from '../../../configurations/db';
+
 export const userWishListM = async (
   userId: string,
   productId: string,
