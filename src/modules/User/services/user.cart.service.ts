@@ -35,10 +35,17 @@ export const addToWishlist: RequestHandler = catchAsync(
           quantity
         );
 
+          const updatedTotalAmount =
+            existingWishlistItemCart.product.price *
+            updateWishItemQuantity.quantity;
+
         res.json({
           message:
             'Product quantity incremented in wishlist, because, product already in cart',
-          data: updateWishItemQuantity,
+          data: {
+            ...updateWishItemQuantity,
+            totalAmount: updatedTotalAmount,
+          },
         });
       }
 
@@ -62,4 +69,50 @@ export const addToWishlist: RequestHandler = catchAsync(
 );
 
 
-export const 
+export const incrementCartItems: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const productId = req.query.productId as string;
+    const userId = req.params.userId as string;
+
+    if (!productId || !userId) {
+      return res.status(422).json({ message: 'Invalid params or query id' });
+    }
+
+    const existingCartItem = await prisma.productWishList.findFirst({
+      where: {
+        userId: userId,
+        productId: productId,
+      },
+    });
+
+    if (!existingCartItem) {
+      return res.status(404).json({ message: 'CartItem not found' });
+    }
+
+    const newAmount =
+      existingCartItem.product.price + existingCartItem.totalAmount;
+
+    await prisma.productWishList.update({
+      where: {
+        userId_productId: {
+          userId: userId,
+          productId: productId,
+        },
+      },
+      data: {
+        productCount: existingCartItem.productCount + 1,
+        totalAmount: newAmount,
+      },
+    });
+
+    res.status(200).json({ message: 'Incremented successfully by 1' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
