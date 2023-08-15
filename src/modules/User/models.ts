@@ -225,4 +225,6 @@ export const userWishListM = async (
       quantity: quantity,
     },
   });
+
+  return wishList;
 };
