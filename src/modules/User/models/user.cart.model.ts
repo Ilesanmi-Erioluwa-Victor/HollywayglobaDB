@@ -111,7 +111,6 @@ export const updateExistItemCartQuantityM = async (
           lastName: true,
           email: true,
           address: true,
-          password: false,
         },
       },
       product: {
