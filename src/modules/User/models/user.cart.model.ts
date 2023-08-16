@@ -1,4 +1,5 @@
 import { prisma } from '../../../configurations/db';
+import { ProductWishListResult } from '../user.interface';
 
 // export const productWishListIdM = async (id: string) => {
 //   const wishList = await prisma.productWishList.findUnique({
@@ -86,14 +87,13 @@ export const updateExistItemCartQuantityM = async (
   productId: string,
   totalAmount: number,
   price: number
-) => {
+): Promise<ProductWishListResult | any> => {
   const item = await prisma.productWishList.update({
     where: {
       id,
       userId: userId,
       productId: productId,
     },
-
     data: {
       quantity: {
         increment: 1,
@@ -101,8 +101,9 @@ export const updateExistItemCartQuantityM = async (
       totalAmount: totalAmount + price,
     },
     select: {
-      createdAt: false,
-      updatedAt: false,
+      id: true,
+      quantity: true,
+      totalAmount: true,
       user: {
         select: {
           id: true,
@@ -110,6 +111,7 @@ export const updateExistItemCartQuantityM = async (
           lastName: true,
           email: true,
           address: true,
+          password: false,
         },
       },
       product: {
@@ -124,9 +126,6 @@ export const updateExistItemCartQuantityM = async (
         },
       },
     },
-    // include: {
-
-    // },
   });
 
   return item;
