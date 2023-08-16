@@ -51,14 +51,15 @@ export const addToWishlist: RequestHandler = async (
       return;
     }
 
-    const product = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
-      select: {
-        price: true,
-      },
-    });
+    const product = await findProductIdM(productId);
+    // prisma.product.findUnique({
+    //   where: {
+    //     id: productId,
+    //   },
+    //   select: {
+    //     price: true,
+    //   },
+    // });
 
     if (!product) {
       next(new AppError('Product not found', StatusCodes.NOT_FOUND));
