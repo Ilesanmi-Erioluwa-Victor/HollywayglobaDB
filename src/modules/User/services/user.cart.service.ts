@@ -35,23 +35,6 @@ export const addToWishlist: RequestHandler = async (
 
     const existingWishlistItemCart = await existItemCartM(userId, productId);
 
-    if (existingWishlistItemCart) {
-      const updateWishItemQuantity = await updateExistItemCartQuantityM(
-        existingWishlistItemCart?.id,
-        userId,
-        productId,
-        existingWishlistItemCart?.totalAmount,
-        existingWishlistItemCart?.product?.price
-      );
-
-      res.json({
-        message:
-          'Product quantity incremented in wishlist, because, product already in cart',
-        data: updateWishItemQuantity,
-      });
-      return;
-    }
-
     const product = await findProductIdM(productId);
 
     if (!product) {
@@ -59,21 +42,26 @@ export const addToWishlist: RequestHandler = async (
       return;
     }
 
-    const totalAmount = product.price * quantity;
+    if (!existingWishlistItemCart) {
+      const totalAmount = product.price * quantity;
 
-    const userWishlistItem = await userWishListCartM(
-      userId,
-      productId,
-      quantity,
-      totalAmount
-    );
+      const userWishlistItem = await userWishListCartM(
+        userId,
+        productId,
+        quantity,
+        totalAmount
+      );
 
-    console.log('******** ', userWishlistItem);
-
-    res.json({
-      message: 'Product added to wishlist',
-      data: userWishlistItem,
-    });
+      res.json({
+        message: 'Product added to wishlist',
+        data: userWishlistItem,
+      });
+      return;
+    } else {
+      next(
+        new AppError('Item added already, increment only', StatusCodes.CONFLICT)
+      );
+    }
   } catch (error: any) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -97,12 +85,6 @@ export const incrementCartItems: RequestHandler = async (
       next(new AppError('Invalid params or query', StatusCodes.NOT_FOUND));
 
     const existingCartItem = await existItemCartM(userId as string, productId);
-
-    console.log(
-      '********* default exiistingCartItem ',
-      existingCartItem?.totalAmount,
-      existingCartItem?.quantity
-    );
 
     if (!existingCartItem)
       next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
@@ -161,7 +143,16 @@ export const decreaseCartItems: RequestHandler = async (
     const price = product?.price || 0;
     const totalAmount: number | any = existingCartItem?.totalAmount;
 
-    const newAmount = price - totalAmount;
+    const newAmount = totalAmount - price;
+
+    if (price <= 0 || totalAmount <= 0) {
+      return next(
+        new AppError(
+          "You can't have negative cart figure, increase your cart items",
+          StatusCodes.FORBIDDEN
+        )
+      );
+    }
 
     const decreaseItem = await decreaseCartItemM(
       existingCartItem?.id as string,
