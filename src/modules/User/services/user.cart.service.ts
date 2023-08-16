@@ -32,13 +32,7 @@ export const addToWishlist: RequestHandler = async (
       return;
     }
 
-    const existingWishlistItemCart = await prisma.productWishList.findFirst({
-      where: {
-        userId: userId,
-        productId: productId,
-      },
-    });
-
+    const existingWishlistItemCart = await existItemCartM(userId, productId);
     if (existingWishlistItemCart) {
       const updateWishItemQuantity = await prisma.productWishList.update({
         where: {
