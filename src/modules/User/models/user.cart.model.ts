@@ -1,5 +1,8 @@
 import { prisma } from '../../../configurations/db';
-import { ProductWishListResult } from '../user.interface';
+import {
+  ProductWishListResult,
+  ProductWishListIncrease,
+} from '../user.interface';
 
 // export const productWishListIdM = async (id: string) => {
 //   const wishList = await prisma.productWishList.findUnique({
