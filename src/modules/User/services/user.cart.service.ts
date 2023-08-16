@@ -13,7 +13,7 @@ import {
   increaseCartItemM,
 } from '../models/user.cart.model';
 
-import { findProductIdM } from '../../Admin/product.models';
+import { findProductIdM } from '../../Admin/models/product.models';
 
 export const addToWishlist: RequestHandler = async (
   req: CustomRequest,

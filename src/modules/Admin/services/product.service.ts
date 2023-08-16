@@ -13,7 +13,7 @@ import {
   getProductsM,
   editProductM,
   editProductImagesM,
-} from '../product.models';
+} from '../models/product.models';
 
 import { ImageProcessor } from '../../../configurations/cloudinary';
 
@@ -231,7 +231,7 @@ export const editProductImagesAdmin: RequestHandler = catchAsync(
 export const TopTenProducts: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log()
+      console.log();
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -240,4 +240,3 @@ export const TopTenProducts: RequestHandler = catchAsync(
     }
   }
 );
-

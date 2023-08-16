@@ -1,10 +1,10 @@
-import { categoryI, signupAdmin } from './admin.interface';
-import { prisma } from '../../configurations/db';
+import { categoryI, signupAdmin } from '../interfaces/admin.interface';
+import { prisma } from '../../../configurations/db';
 import {
   hashedPassword,
   generateToken,
   createAccountVerificationTokenAdmin,
-} from '../../helper/utils';
+} from '../../../helper/utils';
 
 export const findAdminIdM = async (id: string) => {
   const adminId = await prisma.admin.findUnique({
@@ -83,12 +83,12 @@ export const accountVerificationUpdatedAdminM = async (
   return admin;
 };
 
-export const createCategoryM = async (body : categoryI, adminId: string) => {
+export const createCategoryM = async (body: categoryI, adminId: string) => {
   const category = await prisma.category.create({
     data: {
-    name : body.name,
-    adminId
-  }
+      name: body.name,
+      adminId,
+    },
   });
 
   return category;
@@ -97,10 +97,10 @@ export const createCategoryM = async (body : categoryI, adminId: string) => {
 export const editCategoryM = async (id: string, name: string) => {
   const category = await prisma.category.update({
     where: {
-      id
+      id,
     },
     data: {
-      name: name
+      name: name,
     },
   });
   return category;
@@ -110,7 +110,7 @@ export const deleteCategoryM = async (id: string) => {
   const category = await prisma.category.delete({
     where: {
       id,
-    }
+    },
   });
   return category;
 };
@@ -119,7 +119,7 @@ export const findCategoryIdM = async (id: string) => {
   const category = await prisma.category.findUnique({
     where: {
       id,
-    }
+    },
   });
   return category;
 };

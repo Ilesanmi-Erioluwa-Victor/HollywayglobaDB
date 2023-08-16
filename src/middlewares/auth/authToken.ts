@@ -8,7 +8,7 @@ import { ValidateMongoDbId } from '../../helper/utils';
 import { ENV } from '../../configurations/config';
 import { CustomRequest } from '../../interfaces/custom';
 import { findUserMId } from '../../modules/User/models/user.auth.model';
-import { findAdminIdM } from '../../modules/Admin/models';
+import { findAdminIdM } from '../../modules/Admin/models/models';
 
 export const AuthMiddleWare = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -92,7 +92,7 @@ export const adminRole = catchAsync(
 
       ValidateMongoDbId(authId as string);
       ValidateMongoDbId(adminId);
-      
+
       const admin = await findAdminIdM(adminId);
       if (!admin)
         next(new AppError('Sorry, No user found', StatusCodes.BAD_REQUEST));

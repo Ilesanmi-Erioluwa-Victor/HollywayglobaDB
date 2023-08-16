@@ -14,9 +14,9 @@ import {
   createAdminM,
   findAdminEmailM,
   getUsersAdminM,
-} from '../models';
+} from '../models/models';
 import { sendMailAdmin } from '../../../templates/sendMail';
-import { loginAdminI } from '../admin.interface';
+import { loginAdminI } from '../interfaces/admin.interface';
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -114,7 +114,6 @@ export const getUsersAdmin: RequestHandler = catchAsync(
     }
   }
 );
-
 
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

@@ -1,7 +1,7 @@
-import { data } from './../../data';
-import { categoryI, signupAdmin } from './admin.interface';
-import { prisma } from '../../configurations/db';
-import { createProductI, editProductI } from './product.interface';
+import { data } from '../../../data';
+import { categoryI, signupAdmin } from '../interfaces/admin.interface';
+import { prisma } from '../../../configurations/db';
+import { createProductI, editProductI } from '../interfaces/product.interface';
 
 export const findProductIdM = async (id: string) => {
   const product = await prisma.product.findUnique({

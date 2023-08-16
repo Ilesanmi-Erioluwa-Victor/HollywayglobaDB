@@ -9,7 +9,7 @@ import {
   editCategoryM,
   findCategoryIdM,
   findCategoriesM,
-} from '../models';
+} from '../models/models';
 
 export const createCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

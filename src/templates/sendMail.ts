@@ -3,7 +3,7 @@ import { prisma } from '../configurations/db';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { ENV } from '../configurations/config';
 import { findUserMId } from '../modules/User/models/user.auth.model';
-import { findAdminIdM } from '../modules/Admin/models';
+import { findAdminIdM } from '../modules/Admin/models/models';
 interface User {
   id: string;
   firstName: string;
@@ -31,8 +31,8 @@ export const sendMail = async (
 
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
+          'host'
+        )}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
        `;
 
   const mailOptions = {
@@ -57,7 +57,7 @@ export const sendUserToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  const user = await findUserMId(data?.userId as string)
+  const user = await findUserMId(data?.userId as string);
 
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
@@ -70,10 +70,8 @@ export const sendUserToken = async (
 
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/user/reset_password/${
-    data?.token
-  }>Click here to reset your password..</a>
+          'host'
+        )}/api/v1/user/reset_password/${data?.token}>Click here to reset your password..</a>
        `;
 
   const mailOptions = {
@@ -91,7 +89,7 @@ interface Admin {
   id: string;
   name: string;
   email: string;
-  accountVerificationToken : any
+  accountVerificationToken: any;
 }
 
 export const sendMailAdmin = async (
@@ -100,7 +98,7 @@ export const sendMailAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { accountVerificationToken, name, email, id} = data;
+  const { accountVerificationToken, name, email, id } = data;
   const transport = nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
@@ -112,8 +110,8 @@ export const sendMailAdmin = async (
 
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/admin/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
+          'host'
+        )}/api/v1/admin/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
        `;
 
   const mailOptions = {
@@ -139,7 +137,7 @@ export const sendAdminToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(data)
+  console.log(data);
   const admin = await findAdminIdM(data?.id as string);
 
   const transport = nodemailer.createTransport({
@@ -153,10 +151,8 @@ export const sendAdminToken = async (
 
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/admin/reset_password/${
-    data?.token
-  }>Click here to reset your password..</a>
+          'host'
+        )}/api/v1/admin/reset_password/${data?.token}>Click here to reset your password..</a>
        `;
 
   const mailOptions = {
