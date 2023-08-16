@@ -60,6 +60,8 @@ export const addToWishlist: RequestHandler = catchAsync(
         const newTotalAmount =
           userWishlistItem.product.price * userWishlistItem.quantity;
 
+        console.log(">>>> totalAmount from addToWishList ", newTotalAmount)
+
         res.json({
           message: 'Product added to wishlist',
           data: {
@@ -102,8 +104,9 @@ export const incrementCartItems: RequestHandler = async (
       next(new AppError('Product not found', StatusCodes.NOT_FOUND));
 
     const price = product?.price || 0;
-    const totalAmount = existingCartItem?.totalAmount || 0;
+    const totalAmount: number | any = existingCartItem?.totalAmount;
 
+    console.log('>>>> from increase controller ', totalAmount);
     const newAmount = price + totalAmount;
 
     const increaseItem = await increaseCartItem(
