@@ -108,7 +108,7 @@ export const incrementCartItems: RequestHandler = async (
     const newAmount = price + totalAmount;
 
     const increaseItem = await increaseCartItem(
-      id as string,
+      existingCartItem?.id as string,
       userId as string,
       productId,
       existingCartItem?.quantity as number,
