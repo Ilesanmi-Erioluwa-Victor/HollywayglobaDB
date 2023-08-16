@@ -67,6 +67,8 @@ export const addToWishlist: RequestHandler = async (
       totalAmount
     );
 
+    console.log('******** ', userWishlistItem);
+
     res.json({
       message: 'Product added to wishlist',
       data: userWishlistItem,

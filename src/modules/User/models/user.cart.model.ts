@@ -24,9 +24,15 @@ export const existItemCartM = async (userId: string, productId: string) => {
     include: {
       product: {
         select: {
-          price: true,
           title: true,
-          quantity: true,
+          price: true,
+          colors: true,
+          description: true,
+          brand: true,
+          slug: true,
+          images: true,
+          createdAt: false,
+          updatedAt: false,
         },
       },
     },
@@ -48,11 +54,15 @@ export const userWishListCartM = async (
       quantity,
       totalAmount,
     },
-    select: {
-      id: true,
-      quantity: true,
-      createdAt: false,
-      updatedAt: false,
+    include: {
+      user: {
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true,
+          address: true,
+        },
+      },
       product: {
         select: {
           title: true,
@@ -83,18 +93,44 @@ export const updateExistItemCartQuantityM = async (
       userId: userId,
       productId: productId,
     },
+
     data: {
       quantity: {
         increment: 1,
       },
       totalAmount: totalAmount + price,
     },
+    select: {
+      createdAt: false,
+      updatedAt: false,
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          address: true,
+        },
+      },
+      product: {
+        select: {
+          title: true,
+          price: true,
+          colors: true,
+          description: true,
+          brand: true,
+          slug: true,
+          images: true,
+        },
+      },
+    },
+    // include: {
+
+    // },
   });
 
   return item;
 };
-
-
 
 export const increaseCartItem = async (
   id: string,
