@@ -9,6 +9,7 @@ import {
   userWishListCartM,
   existItemCartM,
   updateExistItemCartQuantityM,
+  increaseCartItem,
 } from '../models/user.cart.model';
 
 import { findProductIdM } from '../../Admin/product.models';
@@ -101,10 +102,18 @@ export const incrementCartItems: RequestHandler = async (
       next(new AppError('Product not found', StatusCodes.NOT_FOUND));
 
     const price = product?.price || 0;
+    const id = product?.id;
     const totalAmount = existingCartItem?.totalAmount || 0;
 
     const newAmount = price + totalAmount;
 
+    const increaseItem = await increaseCartItem(
+      id as string,
+      userId as string,
+      productId,
+      existingCartItem?.quantity as number,
+      newAmount
+    );
 
     res.status(200).json({ message: 'Incremented successfully by 1' });
   } catch (error) {

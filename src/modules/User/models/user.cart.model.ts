@@ -80,6 +80,7 @@ export const userWishListCartM = async (
 };
 
 export const increaseCartItem = async (
+  id: string,
   userId: string,
   productId: string,
   quantity: number,
@@ -87,8 +88,9 @@ export const increaseCartItem = async (
 ) => {
   const increaseItem = await prisma.productWishList.update({
     where: {
-      id: userId,
-      productId: productId,
+      id,
+      userId,
+      productId,
     },
     data: {
       quantity: quantity + 1,
