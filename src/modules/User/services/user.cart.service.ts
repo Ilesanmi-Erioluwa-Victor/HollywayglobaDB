@@ -100,6 +100,11 @@ export const incrementCartItems: RequestHandler = async (
     if (!product)
       next(new AppError('Product not found', StatusCodes.NOT_FOUND));
 
+    const price = product?.price || 0;
+    const totalAmount = existingCartItem?.totalAmount || 0;
+
+    const newAmount = price + totalAmount;
+
     await prisma.productWishList.update({
       where: {
         userId_productId: {
