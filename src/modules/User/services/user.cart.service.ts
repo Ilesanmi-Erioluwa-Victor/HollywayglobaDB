@@ -42,6 +42,11 @@ export const addToWishlist: RequestHandler = catchAsync(
           existingWishlistItemCart.product.price *
           updateWishItemQuantity.quantity;
 
+        console.log(
+          '>>>>updatedtotalAmount from addToWishList ',
+          updatedTotalAmount
+        );
+
         res.json({
           message:
             'Product quantity incremented in wishlist, because, product already in cart',
@@ -50,26 +55,25 @@ export const addToWishlist: RequestHandler = catchAsync(
             totalAmount: updatedTotalAmount,
           },
         });
-      } else {
-        const userWishlistItem = await userWishListCartM(
-          userId as string,
-          productId,
-          quantity
-        );
-
-        const newTotalAmount =
-          userWishlistItem.product.price * userWishlistItem.quantity;
-
-        console.log(">>>> totalAmount from addToWishList ", newTotalAmount)
-
-        res.json({
-          message: 'Product added to wishlist',
-          data: {
-            ...userWishlistItem,
-            totalAmount: newTotalAmount,
-          },
-        });
       }
+      const userWishlistItem = await userWishListCartM(
+        userId as string,
+        productId,
+        quantity
+      );
+
+      const newTotalAmount =
+        userWishlistItem.product.price * userWishlistItem.quantity;
+
+      console.log('>>>> new totalAmount from addToWishList ', newTotalAmount);
+
+      res.json({
+        message: 'Product added to wishlist',
+        data: {
+          ...userWishlistItem,
+          totalAmount: newTotalAmount,
+        },
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -95,6 +99,12 @@ export const incrementCartItems: RequestHandler = async (
 
     const existingCartItem = await existItemCartM(userId as string, productId);
 
+    console.log(
+      '********* default exiistingCartItem ',
+      existingCartItem?.totalAmount,
+      existingCartItem?.quantity
+    );
+
     if (!existingCartItem)
       next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
 
@@ -106,7 +116,12 @@ export const incrementCartItems: RequestHandler = async (
     const price = product?.price || 0;
     const totalAmount: number | any = existingCartItem?.totalAmount;
 
-    console.log('>>>> from increase controller ', totalAmount);
+    console.log(
+      '>>>> after increasing increase controller: totalAmount =  ',
+      totalAmount,
+      existingCartItem?.totalAmount,
+      existingCartItem?.quantity
+    );
     const newAmount = price + totalAmount;
 
     const increaseItem = await increaseCartItem(

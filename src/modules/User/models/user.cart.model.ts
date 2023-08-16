@@ -64,13 +64,15 @@ export const updateExistItemCartQuantityM = async (
 export const userWishListCartM = async (
   userId: string,
   productId: string,
-  quantity: number
+  quantity: number,
+  totalAmount: number
 ) => {
   const wishList = await prisma.productWishList.create({
     data: {
       user: { connect: { id: userId } },
       product: { connect: { id: productId } },
-      quantity: quantity,
+      quantity,
+      totalAmount,
     },
     select: {
       id: true,
