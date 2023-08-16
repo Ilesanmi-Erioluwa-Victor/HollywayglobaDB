@@ -57,3 +57,9 @@ export interface ProductWishListResult {
     images: string[];
   };
 }
+
+export interface ProductWishListIncrease {
+  id: string;
+  quantity: number;
+  totalAmount: number;
+}
