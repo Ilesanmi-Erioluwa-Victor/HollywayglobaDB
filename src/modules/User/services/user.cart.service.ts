@@ -114,12 +114,6 @@ export const incrementCartItems: RequestHandler = async (
     const price = product?.price || 0;
     const totalAmount: number | any = existingCartItem?.totalAmount;
 
-    console.log(
-      '>>>> after increasing increase controller: totalAmount =  ',
-      totalAmount,
-      existingCartItem?.totalAmount,
-      existingCartItem?.quantity
-    );
     const newAmount = price + totalAmount;
 
     const increaseItem = await increaseCartItem(

@@ -45,7 +45,7 @@ export interface ProductWishListResult {
     firstName: string;
     lastName: string;
     email: string;
-    address: string[];
+    address: any;
   };
   product: {
     title: string;
