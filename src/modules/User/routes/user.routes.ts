@@ -45,6 +45,13 @@ route.post(
   addToWishlist
 );
 
+route.put(
+  '/:id/product/increaseCart',
+  AuthMiddleWare,
+  isUserVerified,
+  addToWishlist
+);
+
 route.put('/:id/address/edit', AuthMiddleWare, isUserVerified, editAddress);
 
 route.post('/forgetPassword', forgetPasswordToken);
