@@ -95,4 +95,6 @@ export const increaseCartItem = async (
       totalAmount: newAmount,
     },
   });
+
+  return increaseItem;
 };
