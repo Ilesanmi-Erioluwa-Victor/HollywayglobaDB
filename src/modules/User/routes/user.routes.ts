@@ -15,6 +15,7 @@ import {
 
 import {
   addToWishlist,
+  decreaseCartItems,
   incrementCartItems,
 } from '../services/user.cart.service';
 
@@ -53,6 +54,13 @@ route.put(
   AuthMiddleWare,
   isUserVerified,
   incrementCartItems
+);
+
+route.put(
+  '/:id/product/decreaseCart',
+  AuthMiddleWare,
+  isUserVerified,
+  decreaseCartItems
 );
 
 route.put('/:id/address/edit', AuthMiddleWare, isUserVerified, editAddress);
