@@ -11,6 +11,9 @@ import {
   updateExistItemCartQuantityM,
 } from '../models/user.cart.model';
 
+import { findProductIdM } from '../../Admin/product.models';
+
+
 export const addToWishlist: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const userId = req.authId;
