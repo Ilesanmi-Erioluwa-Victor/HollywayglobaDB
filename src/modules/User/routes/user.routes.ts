@@ -13,7 +13,10 @@ import {
   editAddress,
 } from '../services/user.auth.service';
 
-import { addToWishlist } from '../services/user.cart.service';
+import {
+  addToWishlist,
+  incrementCartItems,
+} from '../services/user.cart.service';
 
 import {
   AuthMiddleWare,
@@ -49,7 +52,7 @@ route.put(
   '/:id/product/increaseCart',
   AuthMiddleWare,
   isUserVerified,
-  addToWishlist
+  incrementCartItems
 );
 
 route.put('/:id/address/edit', AuthMiddleWare, isUserVerified, editAddress);

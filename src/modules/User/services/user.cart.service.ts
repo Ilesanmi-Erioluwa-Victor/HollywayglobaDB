@@ -102,7 +102,6 @@ export const incrementCartItems: RequestHandler = async (
       next(new AppError('Product not found', StatusCodes.NOT_FOUND));
 
     const price = product?.price || 0;
-    const id = product?.id;
     const totalAmount = existingCartItem?.totalAmount || 0;
 
     const newAmount = price + totalAmount;
@@ -115,7 +114,7 @@ export const incrementCartItems: RequestHandler = async (
       newAmount
     );
 
-    res.json({ message: 'Incremented successfully by 1' });
+    res.json({ message: 'Incremented successfully by 1', increaseItem });
   } catch (error: any) {
     if (!error.statusCode) {
       error.statusCode = 500;
