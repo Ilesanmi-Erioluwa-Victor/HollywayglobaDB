@@ -96,8 +96,7 @@ export const incrementCartItems: RequestHandler = async (
     if (!existingCartItem)
       next(new AppError('Cart not found', StatusCodes.BAD_REQUEST));
 
-    const newAmount =
-      existingCartItem?.product?.price + existingCartItem?.totalAmount;
+    const product = await findProductIdM(productId)
 
     await prisma.productWishList.update({
       where: {
