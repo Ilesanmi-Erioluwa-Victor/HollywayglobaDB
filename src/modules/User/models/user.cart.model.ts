@@ -52,7 +52,7 @@ export const updateExistItemCartQuantityM = async (
       quantity: {
         increment: 1,
       },
-      totalAmount: totalAmount + existingWishlistItemCart.product.price,
+      totalAmount: totalAmount + price,
     },
   });
 
