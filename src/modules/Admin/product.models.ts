@@ -8,6 +8,9 @@ export const findProductIdM = async (id: string) => {
     where: {
       id,
     },
+    select: {
+      price: true,
+    },
   });
   return product;
 };
