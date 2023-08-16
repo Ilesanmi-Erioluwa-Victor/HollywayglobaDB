@@ -68,32 +68,35 @@ export const addToWishlist: RequestHandler = async (
 
     const totalAmount = product.price * quantity;
 
-    const userWishlistItem = await prisma.productWishList.create({
-      data: {
-        user: { connect: { id: userId } },
-        product: { connect: { id: productId } },
-        quantity,
-        totalAmount,
-      },
-      select: {
-        id: true,
-        quantity: true,
-        createdAt: false,
-        updatedAt: false,
-        product: {
-          select: {
-            title: true,
-            price: true,
-            colors: true,
-            description: true,
-            brand: true,
-            slug: true,
-            images: true,
-          },
-        },
-      },
-    });
+    const userWishlistItem = await userWishListCartM(userId, productId, quantity,totalAmount)
 
+    // prisma.productWishList.create({
+    //   data: {
+    //     user: { connect: { id: userId } },
+    //     product: { connect: { id: productId } },
+    //     quantity,
+    //     totalAmount,
+    //   },
+    //   select: {
+    //     id: true,
+    //     quantity: true,
+    //     createdAt: false,
+    //     updatedAt: false,
+    //     product: {
+    //       select: {
+    //         title: true,
+    //         price: true,
+    //         colors: true,
+    //         description: true,
+    //         brand: true,
+    //         slug: true,
+    //         images: true,
+    //       },
+    //     },
+    //   },
+    // });
+
+    
     res.json({
       message: 'Product added to wishlist',
       data: userWishlistItem,
