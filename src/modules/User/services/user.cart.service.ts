@@ -150,12 +150,6 @@ export const decreaseCartItems: RequestHandler = async (
 
     const existingCartItem = await existItemCartM(userId as string, productId);
 
-    console.log(
-      '********* default exiistingCartItem ',
-      existingCartItem?.totalAmount,
-      existingCartItem?.quantity
-    );
-
     if (!existingCartItem)
       next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
 
