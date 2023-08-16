@@ -1,5 +1,19 @@
 import { prisma } from '../../../configurations/db';
 
+export const productWishListIdM = async (id: string) => {
+  const wishList = await prisma.productWishList.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      user: true,
+      product: true,
+      productId: true,
+      quantity : true
+    }
+  });
+};
+
 export const existItemCartM = async (userId: string, productId: string) => {
   const existItem = await prisma.productWishList.findFirst({
     where: {
@@ -88,7 +102,7 @@ export const increaseCartItem = async (
 ) => {
   const increaseItem = await prisma.productWishList.update({
     where: {
-      id,
+      // id,
       userId,
       productId,
     },
