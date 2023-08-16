@@ -115,9 +115,11 @@ export const incrementCartItems: RequestHandler = async (
       newAmount
     );
 
-    res.status(200).json({ message: 'Incremented successfully by 1' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.json({ message: 'Incremented successfully by 1' });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
