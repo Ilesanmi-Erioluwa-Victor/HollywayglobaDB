@@ -13,7 +13,6 @@ import {
 
 import { findProductIdM } from '../../Admin/product.models';
 
-
 export const addToWishlist: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const userId = req.authId;
@@ -89,14 +88,17 @@ export const incrementCartItems: RequestHandler = async (
 
   try {
     if (!productId || !userId)
-      next(new AppError('Invalid params or query', StatusCodes.BAD_REQUEST));
+      next(new AppError('Invalid params or query', StatusCodes.NOT_FOUND));
 
     const existingCartItem = await existItemCartM(userId as string, productId);
 
     if (!existingCartItem)
-      next(new AppError('Cart not found', StatusCodes.BAD_REQUEST));
+      next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
 
-    const product = await findProductIdM(productId)
+    const product = await findProductIdM(productId);
+
+    if (!product)
+      next(new AppError('Product not found', StatusCodes.NOT_FOUND));
 
     await prisma.productWishList.update({
       where: {
