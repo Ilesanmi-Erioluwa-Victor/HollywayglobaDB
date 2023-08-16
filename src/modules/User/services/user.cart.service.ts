@@ -105,18 +105,6 @@ export const incrementCartItems: RequestHandler = async (
 
     const newAmount = price + totalAmount;
 
-    await prisma.productWishList.update({
-      where: {
-        userId_productId: {
-          userId: userId,
-          productId: productId,
-        },
-      },
-      data: {
-        productCount: existingCartItem.productCount + 1,
-        totalAmount: newAmount,
-      },
-    });
 
     res.status(200).json({ message: 'Incremented successfully by 1' });
   } catch (error) {
