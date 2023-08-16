@@ -10,6 +10,12 @@ export const findProductIdM = async (id: string) => {
     },
     select: {
       price: true,
+      id: true,
+      images: true,
+      title: true,
+      slug: true,
+      colors: true,
+      quantity: true,
     },
   });
   return product;
