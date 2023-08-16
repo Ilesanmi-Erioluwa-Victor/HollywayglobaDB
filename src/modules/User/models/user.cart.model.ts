@@ -134,7 +134,7 @@ export const updateExistItemCartQuantityM = async (
   return item;
 };
 
-export const increaseCartItem = async (
+export const increaseCartItemM = async (
   id: string,
   userId: string,
   productId: string,
@@ -165,7 +165,7 @@ export const increaseCartItem = async (
   return increaseItem;
 };
 
-export const decreaseCartItem = async (
+export const decreaseCartItemM = async (
   id: string,
   userId: string,
   productId: string,

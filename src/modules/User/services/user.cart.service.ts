@@ -9,7 +9,8 @@ import {
   userWishListCartM,
   existItemCartM,
   updateExistItemCartQuantityM,
-  increaseCartItem,
+  decreaseCartItemM,
+  increaseCartItemM,
 } from '../models/user.cart.model';
 
 import { findProductIdM } from '../../Admin/product.models';
@@ -116,7 +117,7 @@ export const incrementCartItems: RequestHandler = async (
 
     const newAmount = price + totalAmount;
 
-    const increaseItem = await increaseCartItem(
+    const increaseItem = await increaseCartItemM(
       existingCartItem?.id as string,
       userId as string,
       productId,
@@ -168,7 +169,7 @@ export const decreaseCartItems: RequestHandler = async (
 
     const newAmount = price - totalAmount;
 
-    const decreaseItem = await increaseCartItem(
+    const decreaseItem = await decreaseCartItemM(
       existingCartItem?.id as string,
       userId as string,
       productId,
