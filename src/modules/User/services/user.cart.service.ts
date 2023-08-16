@@ -132,3 +132,55 @@ export const incrementCartItems: RequestHandler = async (
     next(error);
   }
 };
+
+export const decreaseCartItems: RequestHandler = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.authId;
+  ValidateMongoDbId(userId as string);
+
+  const { productId } = req.body;
+
+  try {
+    if (!productId || !userId)
+      next(new AppError('Invalid params or query', StatusCodes.NOT_FOUND));
+
+    const existingCartItem = await existItemCartM(userId as string, productId);
+
+    console.log(
+      '********* default exiistingCartItem ',
+      existingCartItem?.totalAmount,
+      existingCartItem?.quantity
+    );
+
+    if (!existingCartItem)
+      next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
+
+    const product = await findProductIdM(productId);
+
+    if (!product)
+      next(new AppError('Product not found', StatusCodes.NOT_FOUND));
+
+    const price = product?.price || 0;
+    const totalAmount: number | any = existingCartItem?.totalAmount;
+
+    const newAmount = price - totalAmount;
+
+    const decreaseItem = await increaseCartItem(
+      existingCartItem?.id as string,
+      userId as string,
+      productId,
+      existingCartItem?.quantity as number,
+      newAmount
+    );
+
+    res.json({ message: 'decrease successfully by 1', decreaseItem });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};

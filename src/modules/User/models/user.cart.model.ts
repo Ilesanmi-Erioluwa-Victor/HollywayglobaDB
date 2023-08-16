@@ -164,3 +164,34 @@ export const increaseCartItem = async (
 
   return increaseItem;
 };
+
+export const decreaseCartItem = async (
+  id: string,
+  userId: string,
+  productId: string,
+  quantity: number,
+  newAmount: number
+): Promise<ProductWishListIncrease | null> => {
+  const decreaseItem = await prisma.productWishList.update({
+    where: {
+      id,
+      userId,
+      productId,
+    },
+    data: {
+      quantity: quantity - 1,
+      totalAmount: newAmount,
+    },
+    select: {
+      createdAt: false,
+      updatedAt: false,
+      productId: false,
+      userId: false,
+      id: true,
+      quantity: true,
+      totalAmount: true,
+    },
+  });
+
+  return decreaseItem;
+};
