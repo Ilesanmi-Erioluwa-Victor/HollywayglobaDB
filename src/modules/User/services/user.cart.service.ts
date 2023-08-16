@@ -33,6 +33,7 @@ export const addToWishlist: RequestHandler = async (
     }
 
     const existingWishlistItemCart = await existItemCartM(userId, productId);
+
     if (existingWishlistItemCart) {
       const updateWishItemQuantity = await updateExistItemCartQuantityM(
         existingWishlistItemCart?.id,
@@ -41,22 +42,6 @@ export const addToWishlist: RequestHandler = async (
         existingWishlistItemCart?.totalAmount,
         existingWishlistItemCart?.product?.price
       );
-      // const updateWishItemQuantity = await prisma.productWishList.update({
-      //   where: {
-      //     userId_productId: {
-      //       userId: userId,
-      //       productId: productId,
-      //     },
-      //   },
-      //   data: {
-      //     quantity: {
-      //       increment: 1,
-      //     },
-      //     totalAmount:
-      //       existingWishlistItemCart.totalAmount +
-      //       existingWishlistItemCart.product.price,
-      //   },
-      // });
 
       res.json({
         message:
