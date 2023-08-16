@@ -14,74 +14,110 @@ import {
 
 import { findProductIdM } from '../../Admin/product.models';
 
-export const addToWishlist: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const userId = req.authId;
-    ValidateMongoDbId(userId as string);
+export const addToWishlist: RequestHandler = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.authId;
+  ValidateMongoDbId(userId as string);
 
-    const { productId, quantity } = req.body;
+  const { productId, quantity } = req.body;
 
-    try {
-      if (!userId || !productId || !quantity)
-        next(
-          new AppError('Missing required information', StatusCodes.BAD_REQUEST)
-        );
-
-      const existingWishlistItemCart = await existItemCartM(
-        userId as string,
-        productId
+  try {
+    if (!userId || !productId || !quantity) {
+      next(
+        new AppError('Missing required information', StatusCodes.BAD_REQUEST)
       );
+      return;
+    }
 
-      if (existingWishlistItemCart) {
-        const updateWishItemQuantity = await updateExistItemCartQuantityM(
-          existingWishlistItemCart,
-          quantity
-        );
+    const existingWishlistItemCart = await prisma.productWishList.findFirst({
+      where: {
+        userId: userId,
+        productId: productId,
+      },
+    });
 
-        const updatedTotalAmount =
-          existingWishlistItemCart.product.price *
-          updateWishItemQuantity.quantity;
-
-        console.log(
-          '>>>>updatedtotalAmount from addToWishList ',
-          updatedTotalAmount
-        );
-
-        res.json({
-          message:
-            'Product quantity incremented in wishlist, because, product already in cart',
-          data: {
-            ...updateWishItemQuantity,
-            totalAmount: updatedTotalAmount,
+    if (existingWishlistItemCart) {
+      const updateWishItemQuantity = await prisma.productWishList.update({
+        where: {
+          userId_productId: {
+            userId: userId,
+            productId: productId,
           },
-        });
-      }
-      const userWishlistItem = await userWishListCartM(
-        userId as string,
-        productId,
-        quantity
-      );
-
-      const newTotalAmount =
-        userWishlistItem.product.price * userWishlistItem.quantity;
-
-      console.log('>>>> new totalAmount from addToWishList ', newTotalAmount);
-
-      res.json({
-        message: 'Product added to wishlist',
+        },
         data: {
-          ...userWishlistItem,
-          totalAmount: newTotalAmount,
+          quantity: {
+            increment: 1,
+          },
+          totalAmount:
+            existingWishlistItemCart.totalAmount +
+            existingWishlistItemCart.product.price,
         },
       });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
+
+      res.json({
+        message:
+          'Product quantity incremented in wishlist, because, product already in cart',
+        data: updateWishItemQuantity,
+      });
+      return;
     }
+
+    const product = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+      select: {
+        price: true,
+      },
+    });
+
+    if (!product) {
+      next(new AppError('Product not found', StatusCodes.NOT_FOUND));
+      return;
+    }
+
+    const totalAmount = product.price * quantity;
+
+    const userWishlistItem = await prisma.productWishList.create({
+      data: {
+        user: { connect: { id: userId } },
+        product: { connect: { id: productId } },
+        quantity,
+        totalAmount,
+      },
+      select: {
+        id: true,
+        quantity: true,
+        createdAt: false,
+        updatedAt: false,
+        product: {
+          select: {
+            title: true,
+            price: true,
+            colors: true,
+            description: true,
+            brand: true,
+            slug: true,
+            images: true,
+          },
+        },
+      },
+    });
+
+    res.json({
+      message: 'Product added to wishlist',
+      data: userWishlistItem,
+    });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
-);
+};
 
 export const incrementCartItems: RequestHandler = async (
   req: CustomRequest,
