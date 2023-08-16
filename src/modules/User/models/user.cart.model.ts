@@ -6,6 +6,9 @@ export const existItemCartM = async (userId: string, productId: string) => {
       userId: userId,
       productId: productId,
     },
+     include: {
+      product: true,
+    },
   });
 
   return existItem;

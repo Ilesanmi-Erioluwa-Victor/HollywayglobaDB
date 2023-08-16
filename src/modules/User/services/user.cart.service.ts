@@ -88,17 +88,13 @@ export const incrementCartItems: RequestHandler = async (
     if (!productId || !userId)
       next(new AppError('Invalid params or query', StatusCodes.BAD_REQUEST));
 
-    const existingCartItem = await await existItemCartM(
-      userId as string,
-      productId
-    );
+    const existingCartItem = await existItemCartM(userId as string, productId);
 
-    if (!existingCartItem) {
-      return res.status(404).json({ message: 'CartItem not found' });
-    }
+    if (!existingCartItem)
+      next(new AppError('Cart not found', StatusCodes.BAD_REQUEST));
 
     const newAmount =
-      existingCartItem.product.price + existingCartItem.totalAmount;
+      existingCartItem?.product?.price + existingCartItem?.totalAmount;
 
     await prisma.productWishList.update({
       where: {
