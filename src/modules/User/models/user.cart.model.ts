@@ -150,6 +150,15 @@ export const increaseCartItem = async (
       quantity: quantity + 1,
       totalAmount: newAmount,
     },
+    select: {
+      createdAt: false,
+      updatedAt: false,
+      productId: false,
+      userId: false,
+      id: true,
+      quantity: true,
+      totalAmount: true,
+    },
   });
 
   return increaseItem;
