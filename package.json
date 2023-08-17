@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm run build",
+    "postinstall": "npm run build npx basetag link",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
