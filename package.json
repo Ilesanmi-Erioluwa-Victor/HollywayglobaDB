@@ -12,6 +12,10 @@
     "push": "npx prisma db push",
     "studio": "npx prisma studio"
   },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=6.0.0"
+  },
   "prisma": {
     "schema": "src/prisma/schema.prisma"
   },
