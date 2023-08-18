@@ -3,14 +3,10 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import path from 'path';
-import swaggerUiExpress from 'swagger-ui-express';
 
 import adminRoute from './modules/Admin/routes/admin.routes';
 import userRoute from './modules/User/routes/user.routes';
 import productRoute from './modules/Admin/routes/admin.routes';
-import swaggerFile from './swagger-output.json';
-import AppError from './utils';
 import ErrorHandlerMiddleware from './middlewares/error';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { ENV } from './configurations/config';
@@ -51,11 +47,6 @@ app.use('/api/v1/products', productRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 // TODO Still facing weird bug here
-app.use(
-  '/api-docs',
-  swaggerUiExpress.serve,
-  swaggerUiExpress.setup(swaggerFile)
-);
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   _404.notFound(req, res, next);
