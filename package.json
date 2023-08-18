@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npx prisma generate && npx prisma db push && tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
