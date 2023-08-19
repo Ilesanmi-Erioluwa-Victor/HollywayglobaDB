@@ -22,24 +22,25 @@ class Utils {
       new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
   }
 
-  static async accountVerificationTokenUser(
-    userId: string,
-    account: string
-  ) {
+  static async accountVerificationTokenUser(userId: string, account: string) {
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
 
     let accountType = account;
-    
-    const user = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        accountVerificationToken: verificationToken,
-        accountVerificationTokenExpires: tokenExpiration,
-      },
-    });
 
-    return user;
+    switch (accountType) {
+      case 'user':
+        const user = await prisma.user.update({
+          where: { id: userId },
+          data: {
+            accountVerificationToken: verificationToken,
+            accountVerificationTokenExpires: tokenExpiration,
+          },
+        });
+        return user;
+    }
+
+   
   }
 }
 
