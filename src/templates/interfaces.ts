@@ -17,3 +17,9 @@ export interface AdminI {
   email: string;
   accountVerificationToken: string;
 }
+
+export interface adminInfoI {
+  email?: string;
+  token: string;
+  id?: string;
+}

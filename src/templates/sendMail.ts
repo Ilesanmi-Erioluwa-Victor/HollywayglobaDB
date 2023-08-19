@@ -112,11 +112,7 @@ export const sendMailAdmin = async (
   await transport.sendMail(mailOptions);
 };
 
-interface adminInfo {
-  email?: string;
-  token: string;
-  id?: string;
-}
+
 
 export const sendAdminToken = async (
   data: adminInfo,
