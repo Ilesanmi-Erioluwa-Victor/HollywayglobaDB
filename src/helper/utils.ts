@@ -81,6 +81,10 @@ export class Utils {
     password: string,
     userPassword: string
   ): Promise<boolean> {
-    return bcrypt.compare(password, userPassword);
+    if (await bcrypt.compare(password, userPassword)) {
+      return await bcrypt.compare(password, userPassword);
+    } else {
+      return false;
+    }
   }
 }
