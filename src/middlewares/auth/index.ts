@@ -53,6 +53,50 @@ export class Auth {
       }
     }
   );
+
+  static VerifiedUser = catchAsync(
+    async (req: CustomRequest, res: Response, next: NextFunction) => {
+
+      const authId = req?.authId;
+
+      const userId = req?.params?.id;
+
+      if (!authId)
+        next(
+          new AppError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST)
+        );
+      
+      if (!userId) {
+        next(new AppError('Sorry, invalid ID', StatusCodes.BAD_REQUEST));
+      }
+      
+      ValidateMongoDbId(authId as string);
+
+      try {
+        const user = await findUserMId(authId as string);
+        if (user?.id.toString() !== authId?.toString())
+          next(
+            new AppError(
+              'Sorry, this ID does not match',
+              StatusCodes.BAD_REQUEST
+            )
+          );
+
+        if (!user?.isAccountVerified)
+          new AppError(
+            'Sorry, your account is not verified, please check your email and verify your email',
+            StatusCodes.BAD_REQUEST
+          );
+
+        next();
+      } catch (error: any) {
+        if (!error.statusCode) {
+          error.statusCode = 500;
+        }
+        next(error);
+      }
+    }
+  );
 }
 
 export const AuthMiddleWare = catchAsync(
@@ -104,7 +148,6 @@ export const isUserVerified = catchAsync(
       next(new AppError('Sorry, invalid ID', StatusCodes.BAD_REQUEST));
     }
     ValidateMongoDbId(authId as string);
-    // ValidateMongoDbId(userId);
 
     try {
       const user = await findUserMId(authId as string);
