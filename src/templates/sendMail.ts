@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+
 import { prisma } from '../configurations/db';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { ENV } from '../configurations/config';
@@ -53,8 +54,8 @@ export const sendUserToken = async (
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
     auth: {
-      user: `${ENV.NODEMAILER.USERNAME}`,
-      pass: `${ENV.NODEMAILER.PASSWORD}`,
+      user: ENV.NODEMAILER.USERNAME,
+      pass: ENV.NODEMAILER.PASSWORD,
     },
   });
 
