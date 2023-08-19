@@ -59,6 +59,19 @@ class Utils {
 
     return resetToken;
   }
+
+  static async generateToken(id: string): Promise<string> {
+    if (!ENV.JWT.SECRET)
+      new AppError(
+        'JWT_KEY is required in environment',
+        StatusCodes.BAD_REQUEST
+      );
+
+    const token = jwt.sign({ id }, ENV.JWT.SECRET as string, {
+      expiresIn: ENV.JWT.EXPIRES,
+    });
+    return token;
+  }
 }
 
 export const catchAsync = (fn: any) => {
