@@ -9,8 +9,6 @@ import {
   forgetPasswordToken,
   resetPassword,
   uploadProfile,
-  createAddress,
-  editAddress,
 } from '../services/user.auth.service';
 
 import {
@@ -18,6 +16,8 @@ import {
   decreaseCartItems,
   incrementCartItems,
 } from '../services/user.cart.service';
+
+import { createAddress, editAddress } from '../services/user.address.service';
 
 import { Auth } from '../../../middlewares/auth';
 
@@ -27,6 +27,7 @@ import {
 } from '../../../middlewares/image/resizeImage';
 
 const { Token, VerifiedUser } = Auth;
+
 const route = express.Router();
 
 route.post('/signup', createUser);

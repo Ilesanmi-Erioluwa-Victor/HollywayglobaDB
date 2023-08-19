@@ -4,44 +4,46 @@ import { Utils } from '../../../helper/utils';
 
 const { accountVerificationToken, generateToken, hashedPassword } = Utils;
 
-export const findAdminIdM = async (id: string) => {
-  const adminId = await prisma.admin.findUnique({
-    where: {
-      id,
-    },
-  });
-  return adminId;
-};
+export class adminQueries {
+  static async findAdminIdM(id: string) {
+    const adminId = await prisma.admin.findUnique({
+      where: {
+        id,
+      },
+    });
+    return adminId;
+  }
 
-export const findAdminEmailM = async (email: string) => {
-  const userEmail = await prisma.admin.findUnique({
-    where: {
-      email,
-    },
-  });
+  static async findAdminEmailM(email: string) {
+    const userEmail = await prisma.admin.findUnique({
+      where: {
+        email,
+      },
+    });
 
-  return userEmail;
-};
+    return userEmail;
+  }
 
-export const createAdminM = async (admin: signupAdmin) => {
-  const { name, email, password } = admin;
-  const createAdmin = await prisma.admin.create({
-    data: {
-      name,
-      email,
-      password: await hashedPassword(password),
-    },
-  });
+  static async createAdminM(admin: signupAdmin) {
+    const { name, email, password } = admin;
+    const createAdmin = await prisma.admin.create({
+      data: {
+        name,
+        email,
+        password: await hashedPassword(password),
+      },
+    });
 
-  generateToken(createAdmin?.id as string);
-  const tokenAdmin = await accountVerificationToken('admin', createAdmin?.id);
-  return tokenAdmin;
-};
+    generateToken(createAdmin?.id as string);
+    const tokenAdmin = await accountVerificationToken('admin', createAdmin?.id);
+    return tokenAdmin;
+  }
 
-export const getUsersAdminM = async () => {
-  const users = await prisma.user.findMany();
-  return users;
-};
+  static async getUsersAdminM() {
+    const users = await prisma.user.findMany();
+    return users;
+  }
+}
 
 export const accountVerificationAdminM = async (
   id: string,

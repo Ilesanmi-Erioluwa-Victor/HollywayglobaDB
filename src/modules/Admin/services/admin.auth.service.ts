@@ -12,7 +12,7 @@ import {
   createAdminM,
   findAdminEmailM,
   getUsersAdminM,
-} from '../models/models';
+} from '../models/admin.models';
 import { sendMailAdmin } from '../../../templates/sendMail';
 import { loginAdminI } from '../interfaces/admin.interface';
 

@@ -13,7 +13,7 @@ import {
   editCategoryM,
   findCategoryIdM,
   findCategoriesM,
-} from '../models/models';
+} from '../models/admin.models';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 

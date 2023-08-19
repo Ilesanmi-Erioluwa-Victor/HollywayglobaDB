@@ -1,14 +1,17 @@
 import fs from 'fs';
 
-import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import AppError from '../../../utils';
+
 import { Utils } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
-import {
+
+import { userQueries } from '../models/user.auth.model';
+
+const {
   findUserMEmail,
   createUserM,
   findUserMId,
@@ -21,12 +24,12 @@ import {
   resetPasswordUpdateM,
   resetPasswordTokenDeleteM,
   userProfilePictureUpdateM,
-  createAddressM,
-  updateAddressM,
-  findUserWithAddressM,
-} from '../models/user.auth.model';
+} = userQueries;
+
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
+
 import { loginUserI } from '../user.interface';
+
 import { CloudinaryUploader } from '../../../configurations/cloudinary';
 
 const uploader = new CloudinaryUploader();
@@ -116,7 +119,7 @@ export const loginUser: RequestHandler = catchAsync(
   }
 );
 
-export const getUser: any = catchAsync(
+export const getUser: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
@@ -132,7 +135,7 @@ export const getUser: any = catchAsync(
   }
 );
 
-export const updateUser: any = catchAsync(
+export const updateUser: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
@@ -169,7 +172,7 @@ export const updateUser: any = catchAsync(
   }
 );
 
-export const updatePassword: any = catchAsync(
+export const updatePassword: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     const { password } = req.body;
@@ -194,7 +197,7 @@ export const updatePassword: any = catchAsync(
   }
 );
 
-export const accountVerification: any = catchAsync(
+export const accountVerification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
     ValidateMongoDbId(id);
@@ -239,7 +242,7 @@ export const accountVerification: any = catchAsync(
   }
 );
 
-export const forgetPasswordToken = catchAsync(
+export const forgetPasswordToken: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
 
@@ -280,7 +283,7 @@ export const forgetPasswordToken = catchAsync(
   }
 );
 
-export const resetPassword = catchAsync(
+export const resetPassword: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req?.params;
     const { password } = req.body;
@@ -328,7 +331,7 @@ export const resetPassword = catchAsync(
   }
 );
 
-export const uploadProfile: any = catchAsync(
+export const uploadProfile: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     ValidateMongoDbId(id);
@@ -353,71 +356,6 @@ export const uploadProfile: any = catchAsync(
       res.json({
         status: 'Success',
         message: 'You have successfully updated your image',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
-
-export const createAddress: any = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    ValidateMongoDbId(id);
-    if (!id) new AppError('Invalid ID', StatusCodes.FORBIDDEN);
-
-    const {
-      deliveryAddress,
-      additionalInfo,
-      region,
-      city,
-      phone,
-      additionalPhone,
-    } = req.body;
-
-    // TODO, I want to add JOI as validator
-    try {
-      const user = await createAddressM(req.body, id);
-      res.json({
-        deliveryAddress: user.deliveryAddress,
-        additionalInfo: user.additionalInfo,
-        region: user.region,
-        city: user.city,
-        phone: user.phone,
-        additionalPhone: user.additionalPhone,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
-
-// TODO a bug to fix here..
-export const editAddress: any = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    ValidateMongoDbId(id);
-    if (!id) new AppError('Invalid ID', StatusCodes.BAD_REQUEST);
-    try {
-      const userWithAddress = await findUserWithAddressM(id);
-      const userWithAddressId = userWithAddress?.address[0].id;
-      const userAddress = await updateAddressM(
-        userWithAddressId as string,
-        req.body
-      );
-      res.json({
-        deliveryAddress: userAddress.deliveryAddress,
-        additionalInfo: userAddress.additionalInfo,
-        region: userAddress.region,
-        city: userAddress.city,
-        phone: userAddress.phone,
-        additionalPhone: userAddress.additionalPhone,
       });
     } catch (error: any) {
       if (!error.statusCode) {

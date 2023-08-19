@@ -31,7 +31,7 @@ import {
   TopTenProducts,
 } from '../services/product.service';
 
-const { Token, VerifiedUser, Admin } = Auth;
+const { Token, Admin } = Auth;
 
 const route = express.Router();
 

@@ -13,9 +13,9 @@ import {
   getProductsM,
   editProductM,
   editProductImagesM,
-} from '../models/product.models';
+} from '../models/admin.product.models';
 
-const {catchAsync, ValidateMongoDbId } = Utils
+const { catchAsync, ValidateMongoDbId } = Utils;
 
 import { ImageProcessor } from '../../../configurations/cloudinary';
 
