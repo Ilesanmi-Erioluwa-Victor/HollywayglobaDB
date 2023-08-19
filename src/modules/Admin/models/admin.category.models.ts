@@ -13,21 +13,21 @@ export class categoryQueries {
 
     return category;
   }
+
+  static async editCategoryM(id: string, name: string) {
+    const category = await prisma.category.update({
+      where: {
+        id,
+      },
+      data: {
+        name: name,
+      },
+    });
+    return category;
+  }
 }
 
 export const;
-
-export const editCategoryM = async (id: string, name: string) => {
-  const category = await prisma.category.update({
-    where: {
-      id,
-    },
-    data: {
-      name: name,
-    },
-  });
-  return category;
-};
 
 export const deleteCategoryM = async (id: string) => {
   const category = await prisma.category.delete({
