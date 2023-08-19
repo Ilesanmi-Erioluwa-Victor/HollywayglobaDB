@@ -138,42 +138,39 @@ export class Queries {
     return user;
   }
 
+  static async resetPasswordUpdateM(id: string, password: string) {
+    const user = await prisma.user.update({
+      where: { id },
+      data: {
+        password: await hashedPassword(password),
+      },
+    });
 
+    return user;
+  }
+
+  static async resetPasswordTokenDeleteM(id: string) {
+    const user = await prisma.passwordResetToken.delete({
+      where: { id },
+    });
+
+    return user;
+  }
+
+  static async userProfilePictureUpdateM(id: string, profilePhoto: string) {
+    const user = await prisma.user.update({
+      where: { id },
+      data: {
+        profilePhoto: profilePhoto,
+      },
+    });
+
+    return user;
+  }
+
+  
 }
 
-
-export const resetPasswordUpdateM = async (id: string, password: string) => {
-  const user = await prisma.user.update({
-    where: { id },
-    data: {
-      password: await hashedPassword(password),
-    },
-  });
-
-  return user;
-};
-
-export const resetPasswordTokenDeleteM = async (id: string) => {
-  const user = await prisma.passwordResetToken.delete({
-    where: { id },
-  });
-
-  return user;
-};
-
-export const userProfilePictureUpdateM = async (
-  id: string,
-  profilePhoto: string
-) => {
-  const user = await prisma.user.update({
-    where: { id },
-    data: {
-      profilePhoto: profilePhoto,
-    },
-  });
-
-  return user;
-};
 
 export const createAddressM = async (address: address, userId: string) => {
   const userAddress = await prisma.address.create({
