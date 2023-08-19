@@ -66,8 +66,8 @@ export class Utils {
         StatusCodes.BAD_REQUEST
       );
 
-    const token = jwt.sign({ id }, `${ENV.JWT.SECRET}`, {
-      expiresIn: `${ENV.JWT.EXPIRES}`,
+    const token = jwt.sign({ id }, ENV.JWT.SECRET as string, {
+      expiresIn: ENV.JWT.EXPIRES,
     });
     return token;
   }
