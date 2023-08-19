@@ -11,6 +11,7 @@ import ErrorHandlerMiddleware from './middlewares/error';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { customTime } from './interfaces/custom';
 import { _404 } from './middlewares/error/_404Page';
+import { ENV } from './configurations/config';
 
 const app: Application = express();
 
@@ -54,3 +55,5 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   ErrorHandlerMiddleware.sendErrorDev(err, res);
 });
+
+export default app
