@@ -2,8 +2,7 @@
 
 
 import { ENV } from './configurations/config';
-import { customTime } from './interfaces/custom';
-import { _404 } from './middlewares/error/_404Page';
+
 
 const app: Application = express();
 
