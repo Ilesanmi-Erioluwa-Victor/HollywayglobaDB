@@ -38,14 +38,12 @@ export class adminQueries {
     const tokenAdmin = await accountVerificationToken('admin', createAdmin?.id);
     return tokenAdmin;
   }
+
+  static async getUsersAdminM() {
+    const users = await prisma.user.findMany();
+    return users;
+  }
 }
-
-export const;
-
-export const getUsersAdminM = async () => {
-  const users = await prisma.user.findMany();
-  return users;
-};
 
 export const accountVerificationAdminM = async (
   id: string,
