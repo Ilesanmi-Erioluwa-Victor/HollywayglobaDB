@@ -6,7 +6,7 @@ import { signupUser } from '../user.interface';
 
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
-export class Queries {
+export class userQueries {
   static async createUserM(user: signupUser) {
     const { firstName, lastName, email, mobile, password } = user;
     const createUser = await prisma.user.create({
