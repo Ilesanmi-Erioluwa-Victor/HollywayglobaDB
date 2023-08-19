@@ -14,12 +14,10 @@ const { findUserMId } = userQueries;
 
 const { findAdminIdM } = adminQueries;
 
-UserI
+
 
 export class Email {
-  static sendMail(data, res, res, next) {
-
-  }
+  static sendMail(type : string, data: UserI, req : Request, res: Response, next : NextFunction) {}
 }
 
 export const sendMail = async (
