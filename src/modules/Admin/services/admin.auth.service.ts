@@ -10,7 +10,7 @@ import { CustomRequest } from '../../../interfaces/custom';
 
 import { adminQueries } from '../models/admin.models';
 
-import { sendMailAdmin } from '../../../templates/sendMail';
+import { Email } from '../../../templates';
 
 import { loginAdminI } from '../interfaces/admin.interface';
 
@@ -21,6 +21,8 @@ const {
   findAdminEmailM,
   getUsersAdminM,
 } = adminQueries;
+
+const { sendMail, sendMailToken } = Email;
 
 const { catchAsync, generateToken, ValidateMongoDbId, comparePassword } = Utils;
 
@@ -44,7 +46,7 @@ export const adminSignup: RequestHandler = catchAsync(
           )
         );
       const admin: any = await createAdminM(req.body);
-      sendMailAdmin(admin, req, res, next);
+      sendMail('admin', admin, req, res, next);
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
