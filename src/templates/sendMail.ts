@@ -166,4 +166,21 @@ export class Email {
         return await mail.sendMailAcc('admin', data, req, res, next);
     }
   }
+
+  static async sendMailToken(
+    type: string,
+    data: any,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const mail = new Email();
+    switch (type) {
+      case 'user':
+        return await mail.sendMailToken('user', data, req, res, next);
+
+      case 'admin':
+        return await mail.sendMailToken('admin', data, req, res, next);
+    }
+  }
 }
