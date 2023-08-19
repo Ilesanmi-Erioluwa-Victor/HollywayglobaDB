@@ -77,12 +77,7 @@ export const sendUserToken = async (
   await transport.sendMail(mailOptions);
 };
 
-interface Admin {
-  id: string;
-  name: string;
-  email: string;
-  accountVerificationToken: any;
-}
+
 
 export const sendMailAdmin = async (
   data: Admin,

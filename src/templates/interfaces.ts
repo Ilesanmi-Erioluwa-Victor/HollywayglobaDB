@@ -11,3 +11,9 @@ export interface userInfoI {
   token: string;
   userId?: string;
 }
+export interface AdminI {
+  id: string;
+  name: string;
+  email: string;
+  accountVerificationToken: string;
+}
