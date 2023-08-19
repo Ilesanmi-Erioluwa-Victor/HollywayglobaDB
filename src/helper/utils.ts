@@ -9,7 +9,6 @@ import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
 
 class Utils {
-  
   static async catchAsync(fn: any) {
     return (req: Request, res: Response, next: NextFunction) => {
       fn(req, res, next).catch((err: any) => next(err));
@@ -22,6 +21,8 @@ class Utils {
     if (!isValidId)
       new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
   }
+
+  static async accountVerificationTokenUser(userId: string) {}
 }
 
 export const catchAsync = (fn: any) => {
