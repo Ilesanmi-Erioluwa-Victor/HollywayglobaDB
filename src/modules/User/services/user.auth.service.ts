@@ -87,7 +87,7 @@ export const loginUser: RequestHandler = catchAsync(
         );
       if (await comparePassword(password, user?.password)) {
         if (!user.isAccountVerified) {
-          new AppError(
+          throw new AppError(
             'Verify your account in your gmail before you can log in',
             StatusCodes.BAD_REQUEST
           );
@@ -102,7 +102,7 @@ export const loginUser: RequestHandler = catchAsync(
           token: await generateToken(user?.id),
         });
       } else {
-        new AppError(
+        throw new AppError(
           'Login Failed, invalid credentials',
           StatusCodes.UNAUTHORIZED
         );
