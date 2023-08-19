@@ -168,25 +168,11 @@ export class Queries {
     return user;
   }
 
-  
+
 }
 
 
-export const createAddressM = async (address: address, userId: string) => {
-  const userAddress = await prisma.address.create({
-    data: {
-      deliveryAddress: address.deliveryAddress,
-      additionalInfo: address.additionalInfo,
-      region: address.region,
-      city: address.city,
-      phone: address.phone,
-      additionalPhone: address.additionalPhone,
-      user: { connect: { id: userId } },
-    },
-  });
-  return userAddress;
-};
-
+export const 
 export const updateAddressM = async (id: string, data: address) => {
   const user = await prisma.address.update({
     where: {
