@@ -7,7 +7,10 @@ import AppError from '../utils';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
-// import multer from "multer"
+
+class Utils {
+  
+}
 
 export const catchAsync = (fn: any) => {
   return (req: Request, res: Response, next: NextFunction) => {
