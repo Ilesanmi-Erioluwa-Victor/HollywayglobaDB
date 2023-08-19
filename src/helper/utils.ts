@@ -9,11 +9,17 @@ import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
 
 class Utils {
-  
   static async catchAsync(fn: any) {
     return (req: Request, res: Response, next: NextFunction) => {
       fn(req, res, next).catch((err: any) => next(err));
     };
+  }
+
+  static async ValidateMongoDbId(id: string) {
+    const isValidId = mongoose.Types.ObjectId.isValid(id);
+
+    if (!isValidId)
+      new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
   }
 }
 
@@ -23,12 +29,7 @@ export const catchAsync = (fn: any) => {
   };
 };
 
-export const ValidateMongoDbId = (id: string) => {
-  const isValidId = mongoose.Types.ObjectId.isValid(id);
-
-  if (!isValidId)
-    new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
-};
+export const ValidateMongoDbId = (id: string) => {};
 
 export const createAccountVerificationToken = async (userId: any) => {
   const verificationToken = crypto.randomBytes(32).toString('hex');
