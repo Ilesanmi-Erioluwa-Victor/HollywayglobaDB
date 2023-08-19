@@ -2,16 +2,20 @@ import { categoryI } from '../interfaces/admin.interface';
 
 import { prisma } from '../../../configurations/db';
 
-export const createCategoryM = async (body: categoryI, adminId: string) => {
-  const category = await prisma.category.create({
-    data: {
-      name: body.name,
-      adminId,
-    },
-  });
+export class categoryQueries {
+  static async createCategoryM(body: categoryI, adminId: string) {
+    const category = await prisma.category.create({
+      data: {
+        name: body.name,
+        adminId,
+      },
+    });
 
-  return category;
-};
+    return category;
+  }
+}
+
+export const;
 
 export const editCategoryM = async (id: string, name: string) => {
   const category = await prisma.category.update({
