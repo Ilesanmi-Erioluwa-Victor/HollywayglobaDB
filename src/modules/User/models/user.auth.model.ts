@@ -6,6 +6,26 @@ import { address, signupUser } from '../user.interface';
 
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
+export class Queries {
+  
+  static async createUserM(user: signupUser) {
+    const { firstName, lastName, email, mobile, password } = user;
+    const createUser = await prisma.user.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        mobile,
+        password: await hashedPassword(password),
+      },
+    });
+
+    generateToken(createUser?.id as string);
+    const tokenUser = await accountVerificationToken('user', createUser?.id);
+    return tokenUser;
+  }
+}
+
 export const createUserM = async (user: signupUser) => {
   const { firstName, lastName, email, mobile, password } = user;
   const createUser = await prisma.user.create({
