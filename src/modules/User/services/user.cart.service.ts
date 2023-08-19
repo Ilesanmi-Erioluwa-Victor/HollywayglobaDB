@@ -1,4 +1,4 @@
-import { RequestHandler, NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import AppError from '../../../utils';
@@ -13,12 +13,7 @@ import {
   increaseCartItemM,
 } from '../models/user.cart.model';
 
-const {
-  catchAsync,
-  generateToken,
-  ValidateMongoDbId,
-  generatePasswordResetToken,
-} = Utils;
+const { catchAsync, ValidateMongoDbId } = Utils;
 
 import { findProductIdM } from '../../Admin/models/product.models';
 
@@ -125,57 +120,58 @@ export const incrementCartItems = catchAsync(
   }
 );
 
-export const decreaseCartItems: RequestHandler = async (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const userId = req.authId;
-  ValidateMongoDbId(userId as string);
+export const decreaseCartItems = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const userId = req.authId;
+    ValidateMongoDbId(userId as string);
 
-  const { productId } = req.body;
+    const { productId } = req.body;
 
-  try {
-    if (!productId || !userId)
-      next(new AppError('Invalid params or query', StatusCodes.NOT_FOUND));
+    try {
+      if (!productId || !userId)
+        next(new AppError('Invalid params or query', StatusCodes.NOT_FOUND));
 
-    const existingCartItem = await existItemCartM(userId as string, productId);
-
-    if (!existingCartItem)
-      next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
-
-    const product = await findProductIdM(productId);
-
-    if (!product)
-      next(new AppError('Product not found', StatusCodes.NOT_FOUND));
-
-    const price = product?.price || 0;
-    const totalAmount: number | any = existingCartItem?.totalAmount;
-
-    const newAmount = totalAmount - price;
-
-    if (price <= 0 || totalAmount <= 0) {
-      return next(
-        new AppError(
-          "You can't have negative cart figure, increase your cart items",
-          StatusCodes.FORBIDDEN
-        )
+      const existingCartItem = await existItemCartM(
+        userId as string,
+        productId
       );
-    }
 
-    const decreaseItem = await decreaseCartItemM(
-      existingCartItem?.id as string,
-      userId as string,
-      productId,
-      existingCartItem?.quantity as number,
-      newAmount
-    );
+      if (!existingCartItem)
+        next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
 
-    res.json({ message: 'decrease successfully by 1', decreaseItem });
-  } catch (error: any) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
+      const product = await findProductIdM(productId);
+
+      if (!product)
+        next(new AppError('Product not found', StatusCodes.NOT_FOUND));
+
+      const price = product?.price || 0;
+      const totalAmount: number | any = existingCartItem?.totalAmount;
+
+      const newAmount = totalAmount - price;
+
+      if (price <= 0 || totalAmount <= 0) {
+        return next(
+          new AppError(
+            "You can't have negative cart figure, increase your cart items",
+            StatusCodes.FORBIDDEN
+          )
+        );
+      }
+
+      const decreaseItem = await decreaseCartItemM(
+        existingCartItem?.id as string,
+        userId as string,
+        productId,
+        existingCartItem?.quantity as number,
+        newAmount
+      );
+
+      res.json({ message: 'decrease successfully by 1', decreaseItem });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     }
-    next(error);
   }
-};
+);
