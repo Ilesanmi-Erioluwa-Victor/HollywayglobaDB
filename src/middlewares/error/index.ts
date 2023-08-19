@@ -7,6 +7,7 @@ interface ErrorWithStatusCode extends Error {
   status?: string;
   isOperational?: boolean;
   code?: number;
+  Error_name?: string;
 }
 
 class ErrorHandlerMiddleware {
