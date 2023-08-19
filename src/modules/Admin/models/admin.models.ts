@@ -4,14 +4,17 @@ import { Utils } from '../../../helper/utils';
 
 const { accountVerificationToken, generateToken, hashedPassword } = Utils;
 
-export const findAdminIdM = async (id: string) => {
-  const adminId = await prisma.admin.findUnique({
-    where: {
-      id,
-    },
-  });
-  return adminId;
-};
+export class adminQueries {
+  static async findAdminIdM(id: string) {
+    const adminId = await prisma.admin.findUnique({
+      where: {
+        id,
+      },
+    });
+    return adminId;
+  }
+}
+
 
 export const findAdminEmailM = async (email: string) => {
   const userEmail = await prisma.admin.findUnique({
