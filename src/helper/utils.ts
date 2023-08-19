@@ -22,25 +22,32 @@ class Utils {
       new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
   }
 
-  static async accountVerificationTokenUser(userId: string, account: string) {
+  static async accountVerificationTokenUser(accountType: string, id: string) {
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
-
-    let accountType = account;
 
     switch (accountType) {
       case 'user':
         const user = await prisma.user.update({
-          where: { id: userId },
+          where: { id: id },
           data: {
             accountVerificationToken: verificationToken,
             accountVerificationTokenExpires: tokenExpiration,
           },
         });
+        console.log('You just signed up now, welcome...');
         return user;
-    }
 
-   
+      case 'admin':
+        const admin = await prisma.admin.update({
+          where: { id: id },
+          data: {
+            accountVerificationToken: verificationToken,
+            accountVerificationTokenExpires: tokenExpiration,
+          },
+        });
+        return admin;
+    }
   }
 }
 
@@ -65,18 +72,7 @@ export const createAccountVerificationToken = async (userId: any) => {
   return user;
 };
 
-export const createAccountVerificationTokenAdmin = async (adminId: any) => {
-  const verificationToken = crypto.randomBytes(32).toString('hex');
-  const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
-  const admin = await prisma.admin.update({
-    where: { id: adminId },
-    data: {
-      accountVerificationToken: verificationToken,
-      accountVerificationTokenExpires: tokenExpiration,
-    },
-  });
-  return admin;
-};
+export const createAccountVerificationTokenAdmin = async (adminId: any) => {};
 
 export function generatePasswordResetToken(): string {
   const resetToken = crypto.randomBytes(32).toString('hex');
