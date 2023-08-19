@@ -61,27 +61,29 @@ export class adminQueries {
 
     return admin;
   }
+
+  static async accountVerificationUpdatedAdminM(
+    id: string,
+    isAccountVerified: boolean,
+    accountVerificationToken: string,
+    accountVerificationTokenExpires: any
+  ) {
+    const admin = await prisma.admin.update({
+      where: {
+        id,
+      },
+      data: {
+        isAccountVerified,
+        accountVerificationToken,
+        accountVerificationTokenExpires,
+      },
+    });
+
+    return admin;
+  }
 }
 
-export const accountVerificationUpdatedAdminM = async (
-  id: string,
-  isAccountVerified: boolean,
-  accountVerificationToken: string,
-  accountVerificationTokenExpires: any
-) => {
-  const admin = await prisma.admin.update({
-    where: {
-      id,
-    },
-    data: {
-      isAccountVerified,
-      accountVerificationToken,
-      accountVerificationTokenExpires,
-    },
-  });
-
-  return admin;
-};
+export const;
 
 export const createCategoryM = async (body: categoryI, adminId: string) => {
   const category = await prisma.category.create({
