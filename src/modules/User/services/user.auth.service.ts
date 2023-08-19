@@ -4,11 +4,14 @@ import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import AppError from '../../../utils';
+
 import { Utils } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
 
-import {
+import { userQueries } from '../models/user.auth.model';
+
+const {
   findUserMEmail,
   createUserM,
   findUserMId,
@@ -21,12 +24,12 @@ import {
   resetPasswordUpdateM,
   resetPasswordTokenDeleteM,
   userProfilePictureUpdateM,
-  createAddressM,
-  updateAddressM,
-  findUserWithAddressM,
-} from '../models/user.auth.model';
+} = userQueries;
+
 import { sendMail, sendUserToken } from '../../../templates/sendMail';
+
 import { loginUserI } from '../user.interface';
+
 import { CloudinaryUploader } from '../../../configurations/cloudinary';
 
 const uploader = new CloudinaryUploader();

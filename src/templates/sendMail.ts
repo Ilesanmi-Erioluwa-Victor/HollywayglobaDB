@@ -3,7 +3,7 @@ import { prisma } from '../configurations/db';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { ENV } from '../configurations/config';
 import { findUserMId } from '../modules/User/models/user.auth.model';
-import { findAdminIdM } from '../modules/Admin/models/models';
+import { findAdminIdM } from '../modules/Admin/models/admin.models';
 interface User {
   id: string;
   firstName: string;
@@ -31,8 +31,8 @@ export const sendMail = async (
 
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
-          'host'
-        )}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
+    'host'
+  )}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
        `;
 
   const mailOptions = {
@@ -70,8 +70,10 @@ export const sendUserToken = async (
 
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
-          'host'
-        )}/api/v1/user/reset_password/${data?.token}>Click here to reset your password..</a>
+    'host'
+  )}/api/v1/user/reset_password/${
+    data?.token
+  }>Click here to reset your password..</a>
        `;
 
   const mailOptions = {
@@ -110,8 +112,8 @@ export const sendMailAdmin = async (
 
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
-          'host'
-        )}/api/v1/admin/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
+    'host'
+  )}/api/v1/admin/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
        `;
 
   const mailOptions = {
@@ -151,8 +153,10 @@ export const sendAdminToken = async (
 
   const resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
-          'host'
-        )}/api/v1/admin/reset_password/${data?.token}>Click here to reset your password..</a>
+    'host'
+  )}/api/v1/admin/reset_password/${
+    data?.token
+  }>Click here to reset your password..</a>
        `;
 
   const mailOptions = {
