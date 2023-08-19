@@ -7,15 +7,18 @@ import AppError from '../../../utils';
 import { Utils } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
-import {
+
+import { categoryQueries } from '../models/admin.category.models';
+
+const { catchAsync, ValidateMongoDbId } = Utils;
+
+const {
   createCategoryM,
   deleteCategoryM,
   editCategoryM,
   findCategoryIdM,
   findCategoriesM,
-} from '../models/admin.models';
-
-const { catchAsync, ValidateMongoDbId } = Utils;
+} = categoryQueries;
 
 export const createCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
