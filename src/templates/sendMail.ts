@@ -1,11 +1,16 @@
 import nodemailer from 'nodemailer';
 
-import { prisma } from '../configurations/db';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
-import { ENV } from '../configurations/config';
-import { findUserMId } from '../modules/User/models/user.auth.model';
-import { findAdminIdM } from '../modules/Admin/models/admin.models';
 
+import { ENV } from '../configurations/config';
+
+import { userQueries } from '../modules/User/models/user.auth.model';
+
+import { adminQueries } from '../modules/Admin/models/admin.models';
+
+const { findUserMId } = userQueries;
+
+const { findAdminIdM } = adminQueries;
 
 export const sendMail = async (
   data: User,
@@ -40,7 +45,6 @@ export const sendMail = async (
 
   await transport.sendMail(mailOptions);
 };
-
 
 export const sendUserToken = async (
   data: userInfo,
@@ -78,8 +82,6 @@ export const sendUserToken = async (
   await transport.sendMail(mailOptions);
 };
 
-
-
 export const sendMailAdmin = async (
   data: Admin,
   req: Request,
@@ -91,8 +93,8 @@ export const sendMailAdmin = async (
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
     auth: {
-      user: `${ENV.NODEMAILER.USERNAME}`,
-      pass: `${ENV.NODEMAILER.PASSWORD}`,
+      user: ENV.NODEMAILER.USERNAME,
+      pass: ENV.NODEMAILER.PASSWORD,
     },
   });
 
@@ -113,8 +115,6 @@ export const sendMailAdmin = async (
   await transport.sendMail(mailOptions);
 };
 
-
-
 export const sendAdminToken = async (
   data: adminInfo,
   req: Request,
@@ -128,8 +128,8 @@ export const sendAdminToken = async (
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
     auth: {
-      user: `${ENV.NODEMAILER.USERNAME}`,
-      pass: `${ENV.NODEMAILER.PASSWORD}`,
+      user: ENV.NODEMAILER.USERNAME,
+      pass: ENV.NODEMAILER.PASSWORD,
     },
   });
 
