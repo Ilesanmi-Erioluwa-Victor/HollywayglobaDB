@@ -25,27 +25,25 @@ export class categoryQueries {
     });
     return category;
   }
+
+  static async deleteCategoryM(id: string) {
+    const category = await prisma.category.delete({
+      where: {
+        id,
+      },
+    });
+    return category;
+  }
+
+  static async findCategoryIdM(id: string) {
+    const category = await prisma.category.findUnique({
+      where: {
+        id,
+      },
+    });
+    return category;
+  }
 }
-
-export const;
-
-export const deleteCategoryM = async (id: string) => {
-  const category = await prisma.category.delete({
-    where: {
-      id,
-    },
-  });
-  return category;
-};
-
-export const findCategoryIdM = async (id: string) => {
-  const category = await prisma.category.findUnique({
-    where: {
-      id,
-    },
-  });
-  return category;
-};
 
 export const findCategoriesM = async () => {
   const category = await prisma.category.findMany();
