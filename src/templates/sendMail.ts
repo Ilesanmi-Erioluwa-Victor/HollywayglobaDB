@@ -39,9 +39,8 @@ export class Email {
         });
 
         resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/user/${
-          data?.id
-        }/verify_account/${data?.accountVerificationToken}>Click to verify..</a>
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/user/${data?.id
+          }/verify_account/${data?.accountVerificationToken}>Click to verify..</a>
        `;
         mailOptions = {
           from: 'HollwayGlobalIncLimited@gmail.com',
@@ -64,9 +63,8 @@ export class Email {
         });
 
         resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/admin/${
-          data?.id
-        }/verify_account/${data?.accountVerificationToken}>Click to verify..</a>
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/admin/${data?.id
+          }/verify_account/${data?.accountVerificationToken}>Click to verify..</a>
        `;
 
         mailOptions = {
@@ -81,11 +79,44 @@ export class Email {
     }
   }
 
-  private sendMailToken(type: string, data: any, req:Request, res : Response, next:NextFunction) {
-     let resetUrl;
-     let transport;
-     let mailOptions;
+  private async sendMailToken(type: string, data: any, req: Request, res: Response, next: NextFunction) {
+    let resetUrl;
+    let transport;
+    let mailOptions;
+
+    switch (type) {
+      case "user":
+        
+      case "admin":
+        transport = nodemailer.createTransport({
+          host: 'sandbox.smtp.mailtrap.io',
+          port: 2525,
+          auth: {
+            user: ENV.NODEMAILER.USERNAME,
+            pass: ENV.NODEMAILER.PASSWORD,
+          },
+        });
+
+         resetUrl = `Kindly use this link to verify your account...
+        <a href= ${req.protocol}://${req.get(
+          'host'
+        )}/api/v1/admin/reset_password/${data?.token
+          }>Click here to reset your password..</a>
+       `;
+
+         mailOptions = {
+          from: 'HollwayGlobalIncLimited@gmail.com',
+          to: `${data?.email}`,
+          subject: 'Password Reset Token',
+          text: `Your password reset token 😉 `,
+          html: resetUrl,
+        };
+
+        return await transport.sendMail(mailOptions);
+    }
+    
   }
+
 
   static async sendMail(
     type: string,
