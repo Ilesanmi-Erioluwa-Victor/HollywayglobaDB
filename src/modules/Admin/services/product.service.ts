@@ -28,7 +28,7 @@ export const createProduct: RequestHandler = catchAsync(
     if (!id)
       next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
 
-    if (!req.files)
+    if (!req.files || req.files.length === 0)
       next(
         new AppError(
           'Sorry, please select an image to be uploaded',
