@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+
 import AppError from '../../../utils';
 
 import { Utils } from '../../../helper/utils';
@@ -21,7 +22,7 @@ const {
   getUsersAdminM,
 } = adminQueries;
 
-const { catchAsync, generateToken, ValidateMongoDbId } = Utils;
+const { catchAsync, generateToken, ValidateMongoDbId, comparePassword } = Utils;
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -70,7 +71,7 @@ export const loginAdmin: RequestHandler = catchAsync(
             StatusCodes.BAD_REQUEST
           )
         );
-      if (await bcrypt.compare(password, admin?.password)) {
+      if (await comparePassword(password, admin?.password)) {
         if (!admin.isAccountVerified) {
           new AppError(
             'Verify your account in your gmail before you can log in',
