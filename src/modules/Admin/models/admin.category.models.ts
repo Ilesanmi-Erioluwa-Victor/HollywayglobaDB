@@ -43,9 +43,9 @@ export class categoryQueries {
     });
     return category;
   }
-}
 
-export const findCategoriesM = async () => {
-  const category = await prisma.category.findMany();
-  return category;
-};
+  static async findCategoriesM() {
+    const category = await prisma.category.findMany();
+    return category;
+  }
+}
