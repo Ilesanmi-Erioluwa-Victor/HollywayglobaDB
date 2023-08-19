@@ -15,14 +15,14 @@ export class Utils {
     };
   }
 
-  static ValidateMongoDbId = (id: string) => {
+  static ValidateMongoDbId(id: string): void {
     const isValidId = mongoose.Types.ObjectId.isValid(id);
 
     if (!isValidId)
       new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
-  };
+  }
 
-  static accountVerificationToken = async (accountType: string, id: string) => {
+  static async accountVerificationToken(accountType: string, id: string) {
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
 
@@ -35,7 +35,6 @@ export class Utils {
             accountVerificationTokenExpires: tokenExpiration,
           },
         });
-        console.log('You just signed up now, welcome...');
         return user;
 
       case 'admin':
@@ -46,20 +45,19 @@ export class Utils {
             accountVerificationTokenExpires: tokenExpiration,
           },
         });
-        console.log('Hello from admin');
         return admin;
     }
-  };
+  }
 
-  static generatePasswordResetToken = () => {
+  static async generatePasswordResetToken(): Promise<string> {
     const resetToken = crypto.randomBytes(32).toString('hex');
     const expirationTime = new Date();
     expirationTime.setHours(expirationTime.getHours() + 1);
 
     return resetToken;
-  };
+  }
 
-  static async generateToken(id: string) {
+  static async generateToken(id: string): Promise<string> {
     if (!ENV.JWT.SECRET)
       new AppError(
         'JWT_KEY is required in environment',
@@ -72,9 +70,9 @@ export class Utils {
     return token;
   }
 
-  static hashedPassword = async (password: string) => {
+  static async hashedPassword(password: string): Promise<string> {
     const salt: string = await bcrypt.genSalt(10);
     const hashedPassword: string = await bcrypt.hash(password, salt);
     return hashedPassword;
-  };
+  }
 }
