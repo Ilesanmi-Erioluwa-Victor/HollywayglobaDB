@@ -76,4 +76,8 @@ export class Utils {
     const hashedPassword: string = await bcrypt.hash(password, salt);
     return hashedPassword;
   }
+
+  static async comparePassword() {
+
+  }
 }
