@@ -6,15 +6,20 @@ import AppError from '../../../utils';
 import { Utils } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
-import {
+
+import { adminQueries } from '../models/admin.models';
+
+import { sendMailAdmin } from '../../../templates/sendMail';
+
+import { loginAdminI } from '../interfaces/admin.interface';
+
+const {
   accountVerificationAdminM,
   accountVerificationUpdatedAdminM,
   createAdminM,
   findAdminEmailM,
   getUsersAdminM,
-} from '../models/admin.models';
-import { sendMailAdmin } from '../../../templates/sendMail';
-import { loginAdminI } from '../interfaces/admin.interface';
+} = adminQueries;
 
 const { catchAsync, generateToken, ValidateMongoDbId } = Utils;
 
