@@ -9,13 +9,15 @@ import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
 
 class Utils {
-  static async catchAsync(fn: any) {
+  static async catchAsync(
+    fn: any
+  ): Promise<(req: Request, res: Response, next: NextFunction) => void> {
     return (req: Request, res: Response, next: NextFunction) => {
       fn(req, res, next).catch((err: any) => next(err));
     };
   }
 
-  static async ValidateMongoDbId(id: string) {
+  static async ValidateMongoDbId(id: string): Promise<void> {
     const isValidId = mongoose.Types.ObjectId.isValid(id);
 
     if (!isValidId)
@@ -48,6 +50,14 @@ class Utils {
         });
         return admin;
     }
+  }
+
+  static async generatePasswordResetToken(): Promise<string> {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const expirationTime = new Date();
+    expirationTime.setHours(expirationTime.getHours() + 1);
+
+    return resetToken;
   }
 }
 
