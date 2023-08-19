@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 import bcrypt from 'bcryptjs';
-import {  NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import AppError from '../../../utils';
@@ -59,7 +59,7 @@ export const createUser = catchAsync(
           )
         );
 
-      const user = await createUserM(req.body);
+      const user: any = await createUserM(req.body);
       sendMail(user, req, res, next);
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
