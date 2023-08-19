@@ -1,11 +1,11 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
+
 import { StatusCodes } from 'http-status-codes';
-import sharp from 'sharp';
-import path from 'path';
 
 import AppError from '../../../utils';
-import { ENV } from '../../../configurations/config';
-import { catchAsync, ValidateMongoDbId } from '../../../helper/utils';
+
+import { Utils } from '../../../helper/utils';
+
 import {
   createProductM,
   deleteProductM,
@@ -14,6 +14,8 @@ import {
   editProductM,
   editProductImagesM,
 } from '../models/product.models';
+
+const {catchAsync, ValidateMongoDbId } = Utils
 
 import { ImageProcessor } from '../../../configurations/cloudinary';
 

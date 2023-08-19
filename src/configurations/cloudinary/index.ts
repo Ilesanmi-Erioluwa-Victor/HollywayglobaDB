@@ -24,6 +24,8 @@ class CloudinaryUploader {
       return undefined;
     }
   }
+
+  
 }
 
 class ImageProcessor {
@@ -36,7 +38,6 @@ class ImageProcessor {
   async processImages(files: Express.Multer.File[]): Promise<string[]> {
     const imagePromises: Promise<string | undefined>[] = files.map(
       async (file: Express.Multer.File) => {
-        // Resize image to 2MB using Sharp
         const resizedImage = await sharp(file.buffer)
           .resize({ fit: 'inside', width: 2000, height: 2000 })
           .toBuffer();

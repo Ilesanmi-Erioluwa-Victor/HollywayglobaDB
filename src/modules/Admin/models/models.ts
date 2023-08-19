@@ -1,10 +1,8 @@
 import { categoryI, signupAdmin } from '../interfaces/admin.interface';
 import { prisma } from '../../../configurations/db';
-import {
-  hashedPassword,
-  generateToken,
-  createAccountVerificationTokenAdmin,
-} from '../../../helper/utils';
+import { Utils } from '../../../helper/utils';
+
+const { accountVerificationToken, generateToken, hashedPassword } = Utils;
 
 export const findAdminIdM = async (id: string) => {
   const adminId = await prisma.admin.findUnique({
@@ -36,7 +34,7 @@ export const createAdminM = async (admin: signupAdmin) => {
   });
 
   generateToken(createAdmin?.id as string);
-  const tokenAdmin = await createAccountVerificationTokenAdmin(createAdmin?.id);
+  const tokenAdmin = await accountVerificationToken('admin', createAdmin?.id);
   return tokenAdmin;
 };
 

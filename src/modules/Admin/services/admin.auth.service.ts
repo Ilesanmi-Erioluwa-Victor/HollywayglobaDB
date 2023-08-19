@@ -2,11 +2,9 @@ import bcrypt from 'bcryptjs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../utils';
-import {
-  catchAsync,
-  ValidateMongoDbId,
-  generateToken,
-} from '../../../helper/utils';
+
+import { Utils } from '../../../helper/utils';
+
 import { CustomRequest } from '../../../interfaces/custom';
 import {
   accountVerificationAdminM,
@@ -17,6 +15,8 @@ import {
 } from '../models/models';
 import { sendMailAdmin } from '../../../templates/sendMail';
 import { loginAdminI } from '../interfaces/admin.interface';
+
+const { catchAsync, generateToken, ValidateMongoDbId } = Utils;
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -37,7 +37,7 @@ export const adminSignup: RequestHandler = catchAsync(
             StatusCodes.CONFLICT
           )
         );
-      const admin = await createAdminM(req.body);
+      const admin: any = await createAdminM(req.body);
       sendMailAdmin(admin, req, res, next);
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
@@ -77,7 +77,7 @@ export const loginAdmin: RequestHandler = catchAsync(
           id: admin?.id,
           name: admin?.name,
           email: admin?.email,
-          token: generateToken(admin?.id),
+          token: await generateToken(admin?.id),
         });
       } else {
         new AppError(
