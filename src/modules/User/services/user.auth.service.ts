@@ -74,7 +74,7 @@ export const createUser: RequestHandler = catchAsync(
   }
 );
 
-export const loginUser: any = catchAsync(
+export const loginUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
@@ -98,7 +98,7 @@ export const loginUser: any = catchAsync(
           lastName: user.lastName,
           email: user.email,
           profilePhoto: user.profilePhoto,
-          token: generateToken(user?.id),
+          token: await generateToken(user?.id),
         });
       } else {
         new AppError(

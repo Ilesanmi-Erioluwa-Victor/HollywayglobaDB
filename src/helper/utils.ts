@@ -1,4 +1,4 @@
-import {RequestHandler, Request, Response, NextFunction } from 'express';
+import { RequestHandler, Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -9,7 +9,7 @@ import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
 
 export class Utils {
-  static catchAsync(fn: any): RequestHandler{
+  static catchAsync(fn: any): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
       fn(req, res, next).catch((err: any) => next(err));
     };
@@ -59,18 +59,18 @@ export class Utils {
     return resetToken;
   };
 
-  static generateToken = async (id: string) => {
+  static async generateToken(id: string) {
     if (!ENV.JWT.SECRET)
       new AppError(
         'JWT_KEY is required in environment',
         StatusCodes.BAD_REQUEST
       );
 
-    const token = jwt.sign({ id }, ENV.JWT.SECRET as string, {
-      expiresIn: ENV.JWT.EXPIRES,
+    const token = jwt.sign({ id }, `${ENV.JWT.SECRET}`, {
+      expiresIn: `${ENV.JWT.EXPIRES}`,
     });
     return token;
-  };
+  }
 
   static hashedPassword = async (password: string) => {
     const salt: string = await bcrypt.genSalt(10);

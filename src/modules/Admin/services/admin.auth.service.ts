@@ -77,7 +77,7 @@ export const loginAdmin: RequestHandler = catchAsync(
           id: admin?.id,
           name: admin?.name,
           email: admin?.email,
-          token: generateToken(admin?.id),
+          token: await generateToken(admin?.id),
         });
       } else {
         new AppError(
