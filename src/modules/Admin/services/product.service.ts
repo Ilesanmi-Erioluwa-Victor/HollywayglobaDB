@@ -1,10 +1,8 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
+
 import { StatusCodes } from 'http-status-codes';
-import sharp from 'sharp';
-import path from 'path';
 
 import AppError from '../../../utils';
-import { ENV } from '../../../configurations/config';
 
 import { Utils } from '../../../helper/utils';
 
