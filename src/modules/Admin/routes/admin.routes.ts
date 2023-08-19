@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { AuthMiddleWare, adminRole } from '../../../middlewares/auth/authToken';
+import { AuthMiddleWare, adminRole } from '../../../middlewares/auth';
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

@@ -19,10 +19,7 @@ import {
   incrementCartItems,
 } from '../services/user.cart.service';
 
-import {
-  AuthMiddleWare,
-  isUserVerified,
-} from '../../../middlewares/auth/authToken';
+import { AuthMiddleWare, isUserVerified } from '../../../middlewares/auth';
 
 import {
   profileImage,
