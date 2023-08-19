@@ -43,25 +43,25 @@ export class adminQueries {
     const users = await prisma.user.findMany();
     return users;
   }
-}
 
-export const accountVerificationAdminM = async (
-  id: string,
-  accountVerificationToken: string,
-  time: Date
-) => {
-  const admin = await prisma.admin.findUnique({
-    where: {
-      id,
-      accountVerificationToken,
-      accountVerificationTokenExpires: {
-        gt: time,
+  static async accountVerificationAdminM(
+    id: string,
+    accountVerificationToken: string,
+    time: Date
+  ) {
+    const admin = await prisma.admin.findUnique({
+      where: {
+        id,
+        accountVerificationToken,
+        accountVerificationTokenExpires: {
+          gt: time,
+        },
       },
-    },
-  });
+    });
 
-  return admin;
-};
+    return admin;
+  }
+}
 
 export const accountVerificationUpdatedAdminM = async (
   id: string,
