@@ -14,12 +14,83 @@ const { findUserMId } = userQueries;
 
 const { findAdminIdM } = adminQueries;
 
-
-
 export class Email {
-  static sendMail(type: string, data: any, req: Request, res: Response, next: NextFunction) {
+  private async Send(type: string, data: any, req: Request, res: Response) {
+    let resetUrl;
+    let transport;
+    let mailOptions;
+
     switch (type) {
-      case "user" : 
+      case 'user':
+        const { accountVerificationToken, firstName, lastName, email, id } =
+          data;
+        transport = nodemailer.createTransport({
+          host: 'sandbox.smtp.mailtrap.io',
+          port: 2525,
+          auth: {
+            user: ENV.NODEMAILER.USERNAME,
+            pass: ENV.NODEMAILER.PASSWORD,
+          },
+        });
+
+        resetUrl = `Kindly use this link to verify your account...
+        <a href= ${req.protocol}://${req.get(
+          'host'
+        )}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
+       `;
+        mailOptions = {
+          from: 'HollwayGlobalIncLimited@gmail.com',
+          to: `${email}`,
+          subject: 'Account Verification ',
+          text: `Hey ${lastName} - ${firstName}, Please verify your account by clicking the link below: 😉 `,
+          html: resetUrl,
+        };
+
+        return await transport.sendMail(mailOptions);
+    }
+  }
+
+  static async sendMail(
+    type: string,
+    data: any,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    switch (type) {
+      case 'user':
+        const { accountVerificationToken, firstName, lastName, email, id } =
+          data;
+        const;
+
+        const;
+
+      case 'admin':
+        const { accountVerificationToken, name, email, id } = data;
+        const transport = nodemailer.createTransport({
+          host: 'sandbox.smtp.mailtrap.io',
+          port: 2525,
+          auth: {
+            user: ENV.NODEMAILER.USERNAME,
+            pass: ENV.NODEMAILER.PASSWORD,
+          },
+        });
+
+        const resetUrl = `Kindly use this link to verify your account...
+        <a href= ${req.protocol}://${req.get(
+          'host'
+        )}/api/v1/admin/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
+       `;
+
+        const mailOptions = {
+          from: 'HollwayGlobalIncLimited@gmail.com',
+          to: `${email}`,
+          subject: 'Account Verification ',
+          text: `Hey ${name}, Please verify your account by clicking the link below: 😉 `,
+          html: resetUrl,
+        };
+
+        return await transport.sendMail(mailOptions);
     }
   }
 }
@@ -31,31 +102,28 @@ export const sendMail = async (
   next: NextFunction
 ) => {
   // const user = await prisma.user.findUnique({})
-  const { accountVerificationToken, firstName, lastName, email, id } = data;
-  const transport = nodemailer.createTransport({
-    host: 'sandbox.smtp.mailtrap.io',
-    port: 2525,
-    auth: {
-      user: ENV.NODEMAILER.USERNAME,
-      pass: ENV.NODEMAILER.PASSWORD,
-    },
-  });
-
-  const resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
-       `;
-
-  const mailOptions = {
-    from: 'HollwayGlobalIncLimited@gmail.com',
-    to: `${email}`,
-    subject: 'Account Verification ',
-    text: `Hey ${lastName} - ${firstName}, Please verify your account by clicking the link below: 😉 `,
-    html: resetUrl,
-  };
-
-  await transport.sendMail(mailOptions);
+  // const { accountVerificationToken, firstName, lastName, email, id } = data;
+  // const transport = nodemailer.createTransport({
+  //   host: 'sandbox.smtp.mailtrap.io',
+  //   port: 2525,
+  //   auth: {
+  //     user: ENV.NODEMAILER.USERNAME,
+  //     pass: ENV.NODEMAILER.PASSWORD,
+  //   },
+  // });
+  // const resetUrl = `Kindly use this link to verify your account...
+  //       <a href= ${req.protocol}://${req.get(
+  //   'host'
+  // )}/api/v1/user/${id}/verify_account/${accountVerificationToken}>Click to verify..</a>
+  //      `;
+  // const mailOptions = {
+  //   from: 'HollwayGlobalIncLimited@gmail.com',
+  //   to: `${email}`,
+  //   subject: 'Account Verification ',
+  //   text: `Hey ${lastName} - ${firstName}, Please verify your account by clicking the link below: 😉 `,
+  //   html: resetUrl,
+  // };
+  // await transport.sendMail(mailOptions);
 };
 
 export const sendUserToken = async (
