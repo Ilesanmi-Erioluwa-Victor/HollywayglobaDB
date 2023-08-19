@@ -15,6 +15,7 @@ const { findUserMId } = userQueries;
 const { findAdminIdM } = adminQueries;
 
 export class Email {
+  
   private async sendMailAcc(
     type: string,
     data: any,
@@ -78,6 +79,12 @@ export class Email {
 
         return await transport.sendMail(mailOptions);
     }
+  }
+
+  private sendMailToken(type: string, data: any, req:Request, res : Response, next:NextFunction) {
+     let resetUrl;
+     let transport;
+     let mailOptions;
   }
 
   static async sendMail(
