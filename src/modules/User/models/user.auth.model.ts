@@ -63,115 +63,58 @@ export class Queries {
     return user;
   }
 
-  
+  static async updateUserPasswordM(id: string, password: string) {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        password: await hashedPassword(password),
+      },
+    });
+
+    return user;
+  }
+
+  static async accountVerificationM(
+    id: string,
+    accountVerificationToken: string,
+    time: Date
+  ) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+        accountVerificationToken,
+        accountVerificationTokenExpires: {
+          gt: time,
+        },
+      },
+    });
+
+    return user;
+  }
+
+  static async accountVerificationUpdatedM(
+    id: string,
+    isAccountVerified: boolean,
+    accountVerificationToken: string,
+    accountVerificationTokenExpires: any
+  ) {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        isAccountVerified,
+        accountVerificationToken,
+        accountVerificationTokenExpires,
+      },
+    });
+
+    return user;
+  }
 }
 
-export const createUserM = async (user: signupUser) => {
-  const { firstName, lastName, email, mobile, password } = user;
-  const createUser = await prisma.user.create({
-    data: {
-      firstName,
-      lastName,
-      email,
-      mobile,
-      password: await hashedPassword(password),
-    },
-  });
-
-  generateToken(createUser?.id as string);
-  const tokenUser = await accountVerificationToken('user', createUser?.id);
-  return tokenUser;
-};
-
-export const findUserMId = async (id: string) => {
-  const userId = await prisma.user.findUnique({
-    where: {
-      id,
-    },
-  });
-  return userId;
-};
-
-export const findUserMEmail = async (email: string) => {
-  const userEmail = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-
-  return userEmail;
-};
-
-export const updateUserM = async (
-  id: string,
-  firstName: string,
-  lastName: string,
-  email: string
-) => {
-  const user = await prisma.user.update({
-    where: {
-      id,
-    },
-    data: {
-      firstName,
-      lastName,
-      email,
-    },
-  });
-
-  return user;
-};
-
-export const updateUserPasswordM = async (id: string, password: string) => {
-  const user = await prisma.user.update({
-    where: {
-      id,
-    },
-    data: {
-      password: await hashedPassword(password),
-    },
-  });
-
-  return user;
-};
-
-export const accountVerificationM = async (
-  id: string,
-  accountVerificationToken: string,
-  time: Date
-) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      id,
-      accountVerificationToken,
-      accountVerificationTokenExpires: {
-        gt: time,
-      },
-    },
-  });
-
-  return user;
-};
-
-export const accountVerificationUpdatedM = async (
-  id: string,
-  isAccountVerified: boolean,
-  accountVerificationToken: string,
-  accountVerificationTokenExpires: any
-) => {
-  const user = await prisma.user.update({
-    where: {
-      id,
-    },
-    data: {
-      isAccountVerified,
-      accountVerificationToken,
-      accountVerificationTokenExpires,
-    },
-  });
-
-  return user;
-};
 
 export const forgetPasswordTokenM = async (
   token: string,
