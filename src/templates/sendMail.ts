@@ -4,13 +4,7 @@ import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { ENV } from '../configurations/config';
 import { findUserMId } from '../modules/User/models/user.auth.model';
 import { findAdminIdM } from '../modules/Admin/models/admin.models';
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  accountVerificationToken: any;
-}
+
 
 export const sendMail = async (
   data: User,
