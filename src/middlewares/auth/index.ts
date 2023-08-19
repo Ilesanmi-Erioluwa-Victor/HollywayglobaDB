@@ -5,12 +5,20 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../utils';
 
 import { ENV } from '../../configurations/config';
+
 import { CustomRequest } from '../../interfaces/custom';
-import { findUserMId } from '../../modules/User/models/user.auth.model';
-import { findAdminIdM } from '../../modules/Admin/models/admin.models';
+
+import { userQueries } from '../../modules/User/models/user.auth.model';
+
+import { adminQueries } from '../../modules/Admin/models/admin.models';
+
 import { Utils } from '../../helper/utils';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
+
+const { findUserMId } = userQueries;
+
+const { findAdminIdM } = adminQueries;
 
 export class Auth {
   static Token = catchAsync(
