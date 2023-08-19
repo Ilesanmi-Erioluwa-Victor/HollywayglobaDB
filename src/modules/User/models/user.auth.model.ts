@@ -33,6 +33,36 @@ export class Queries {
     return userId;
   }
 
+  static async findUserMEmail(email: string) {
+    const userEmail = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    return userEmail;
+  }
+
+  static async updateUserM(
+    id: string,
+    firstName: string,
+    lastName: string,
+    email: string
+  ) {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        firstName,
+        lastName,
+        email,
+      },
+    });
+
+    return user;
+  }
+
   
 }
 
