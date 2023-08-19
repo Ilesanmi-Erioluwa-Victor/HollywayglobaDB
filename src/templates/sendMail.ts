@@ -17,7 +17,11 @@ const { findAdminIdM } = adminQueries;
 
 
 export class Email {
-  static sendMail(type : string, data: UserI, req : Request, res: Response, next : NextFunction) {}
+  static sendMail(type: string, data: any, req: Request, res: Response, next: NextFunction) {
+    switch (type) {
+      case "user" : 
+    }
+  }
 }
 
 export const sendMail = async (
@@ -32,8 +36,8 @@ export const sendMail = async (
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
     auth: {
-      user: `${ENV.NODEMAILER.USERNAME}`,
-      pass: `${ENV.NODEMAILER.PASSWORD}`,
+      user: ENV.NODEMAILER.USERNAME,
+      pass: ENV.NODEMAILER.PASSWORD,
     },
   });
 
