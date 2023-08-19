@@ -19,70 +19,48 @@ import {
   incrementCartItems,
 } from '../services/user.cart.service';
 
-import {
-  AuthMiddleWare,
-  isUserVerified,
-} from '../../../middlewares/auth/authToken';
+import { Auth } from '../../../middlewares/auth';
 
 import {
   profileImage,
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
 
+const { Token, VerifiedUser } = Auth;
 const route = express.Router();
 
 route.post('/signup', createUser);
 
 route.post('/login', loginUser);
 
-route.post(
-  '/:id/address/create',
-  AuthMiddleWare,
-  isUserVerified,
-  createAddress
-);
+route.post('/:id/address/create', Token, VerifiedUser, createAddress);
 
-route.post(
-  '/:id/product/add-to-wishlist',
-  AuthMiddleWare,
-  isUserVerified,
-  addToWishlist
-);
+route.post('/:id/product/add-to-wishlist', Token, VerifiedUser, addToWishlist);
 
-route.put(
-  '/:id/product/increaseCart',
-  AuthMiddleWare,
-  isUserVerified,
-  incrementCartItems
-);
+route.put('/:id/product/increaseCart', Token, VerifiedUser, incrementCartItems);
 
-route.put(
-  '/:id/product/decreaseCart',
-  AuthMiddleWare,
-  isUserVerified,
-  decreaseCartItems
-);
+route.put('/:id/product/decreaseCart', Token, VerifiedUser, decreaseCartItems);
 
-route.put('/:id/address/edit', AuthMiddleWare, isUserVerified, editAddress);
+route.put('/:id/address/edit', Token, VerifiedUser, editAddress);
 
 route.post('/forgetPassword', forgetPasswordToken);
 
 route.put('/resetPassword/:token', resetPassword);
 
-route.get('/:id', AuthMiddleWare, isUserVerified, getUser);
+route.get('/:id', Token, VerifiedUser, getUser);
 
-route.put('/updateProfile/:id', AuthMiddleWare, isUserVerified, updateUser);
+route.put('/updateProfile/:id', Token, VerifiedUser, updateUser);
 
 route.post(
   '/:id/uploadImage',
-  AuthMiddleWare,
+  Token,
   profileImage.single('image'),
   profileImageResize,
-  isUserVerified,
+  VerifiedUser,
   uploadProfile
 );
 
-route.put('/password/:id', AuthMiddleWare, isUserVerified, updatePassword);
+route.put('/password/:id', Token, VerifiedUser, updatePassword);
 
 route.put('/:id/verify_account/:token', accountVerification);
 

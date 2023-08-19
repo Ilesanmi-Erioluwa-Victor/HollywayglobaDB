@@ -76,4 +76,12 @@ export class Utils {
     const hashedPassword: string = await bcrypt.hash(password, salt);
     return hashedPassword;
   }
+
+  static async comparePassword(
+    password: string,
+    userPassword: string
+  ): Promise<boolean> {
+    const isMatch = await bcrypt.compare(password, userPassword);
+    return isMatch;
+  }
 }

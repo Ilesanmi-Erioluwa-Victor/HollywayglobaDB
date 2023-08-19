@@ -36,6 +36,7 @@ const {
   generateToken,
   ValidateMongoDbId,
   generatePasswordResetToken,
+  comparePassword,
 } = Utils;
 
 export const createUser: RequestHandler = catchAsync(
@@ -84,9 +85,9 @@ export const loginUser: RequestHandler = catchAsync(
         next(
           new AppError('No user found with this email', StatusCodes.BAD_REQUEST)
         );
-      if (await bcrypt.compare(password, user?.password)) {
+      if (await comparePassword(password, user?.password)) {
         if (!user.isAccountVerified) {
-          new AppError(
+          throw new AppError(
             'Verify your account in your gmail before you can log in',
             StatusCodes.BAD_REQUEST
           );
@@ -101,7 +102,7 @@ export const loginUser: RequestHandler = catchAsync(
           token: await generateToken(user?.id),
         });
       } else {
-        new AppError(
+        throw new AppError(
           'Login Failed, invalid credentials',
           StatusCodes.UNAUTHORIZED
         );

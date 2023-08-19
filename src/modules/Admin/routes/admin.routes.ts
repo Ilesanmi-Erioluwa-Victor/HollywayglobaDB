@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
-import { AuthMiddleWare, adminRole } from '../../../middlewares/auth/authToken';
+
+import { Auth } from '../../../middlewares/auth';
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -30,6 +31,8 @@ import {
   TopTenProducts,
 } from '../services/product.service';
 
+const { Token, VerifiedUser, Admin } = Auth;
+
 const route = express.Router();
 
 route.post('/sign_up', adminSignup);
@@ -38,60 +41,40 @@ route.post('/login', loginAdmin);
 
 route.put('/:id/verify_account/:token', accountVerificationAdmin);
 
-route.get('/:id/users', AuthMiddleWare, adminRole, getUsersAdmin);
+route.get('/:id/users', Token, Admin, getUsersAdmin);
 
-// route.get('/:id/products', AuthMiddleWare, adminRole, getProductsAdmin);
+// route.get('/:id/products', Token, Admin, getProductsAdmin);
 
-route.post('/:id/category', AuthMiddleWare, adminRole, createCategory);
+route.post('/:id/category', Token, Admin, createCategory);
 
-route.get('/:id/category/:categoryId', AuthMiddleWare, adminRole, findCategory);
+route.get('/:id/category/:categoryId', Token, Admin, findCategory);
 
-route.put('/:id/category/:categoryId', AuthMiddleWare, adminRole, editCategory);
+route.put('/:id/category/:categoryId', Token, Admin, editCategory);
 
-route.get('/categories', AuthMiddleWare, getCategories);
+route.get('/categories', Token, getCategories);
 
-route.delete(
-  '/:id/category/:categoryId',
-  AuthMiddleWare,
-  adminRole,
-  deleteCategory
-);
+route.delete('/:id/category/:categoryId', Token, Admin, deleteCategory);
 
 route.post(
   '/admin/:id/product',
-  AuthMiddleWare,
+  Token,
   upload.array('images', 5),
-  adminRole,
+  Admin,
   createProduct
 );
-route.get('/admin/:id/products', AuthMiddleWare, adminRole, getProductsAdmin);
+route.get('/admin/:id/products', Token, Admin, getProductsAdmin);
 
-route.get(
-  '/admin/:id/product/:productId',
-  AuthMiddleWare,
-  adminRole,
-  getProductAdmin
-);
+route.get('/admin/:id/product/:productId', Token, Admin, getProductAdmin);
 
-route.delete(
-  '/admin/:id/product/:productId',
-  AuthMiddleWare,
-  adminRole,
-  deleteProductAdmin
-);
+route.delete('/admin/:id/product/:productId', Token, Admin, deleteProductAdmin);
 
-route.put(
-  '/admin/:id/product/:productId',
-  AuthMiddleWare,
-  adminRole,
-  editProductAdmin
-);
+route.put('/admin/:id/product/:productId', Token, Admin, editProductAdmin);
 
 route.post(
   '/admin/:id/product/:productId',
-  AuthMiddleWare,
+  Token,
   upload.array('images', 5),
-  adminRole,
+  Admin,
   editProductImagesAdmin
 );
 

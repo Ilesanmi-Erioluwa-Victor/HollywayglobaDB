@@ -7,10 +7,10 @@ interface ErrorWithStatusCode extends Error {
   status?: string;
   isOperational?: boolean;
   code?: number;
+  Error_name?: string;
 }
 
 class ErrorHandlerMiddleware {
-
   static handleCastErrorDB(err: any): AppError {
     const message = `Invalid ${err.path}: ${err.value}.`;
     return new AppError(message, 400);
@@ -30,7 +30,6 @@ class ErrorHandlerMiddleware {
   static handleJWTExpiredError(): AppError {
     return new AppError('Your token has expired! Please log in again.', 401);
   }
-
 
   static sendErrorDev(err: AppError, res: Response): void {
     res.status(err.statusCode).json({
@@ -67,13 +66,8 @@ class ErrorHandlerMiddleware {
     err.status = err.status || 'error';
 
     if (ENV.MODE.DEVELOPMENT) {
-
       ErrorHandlerMiddleware.sendErrorDev(err as AppError, res);
-
-    
-    }
-
-    else if (ENV.MODE.PRODUCTION) {
+    } else if (ENV.MODE.PRODUCTION) {
       let error = { ...err };
 
       if (error.name === 'CastError')
