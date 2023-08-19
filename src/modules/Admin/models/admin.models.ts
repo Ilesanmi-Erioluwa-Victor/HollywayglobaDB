@@ -23,23 +23,24 @@ export class adminQueries {
 
     return userEmail;
   }
+
+  static async createAdminM(admin: signupAdmin) {
+    const { name, email, password } = admin;
+    const createAdmin = await prisma.admin.create({
+      data: {
+        name,
+        email,
+        password: await hashedPassword(password),
+      },
+    });
+
+    generateToken(createAdmin?.id as string);
+    const tokenAdmin = await accountVerificationToken('admin', createAdmin?.id);
+    return tokenAdmin;
+  }
 }
 
-
-export const createAdminM = async (admin: signupAdmin) => {
-  const { name, email, password } = admin;
-  const createAdmin = await prisma.admin.create({
-    data: {
-      name,
-      email,
-      password: await hashedPassword(password),
-    },
-  });
-
-  generateToken(createAdmin?.id as string);
-  const tokenAdmin = await accountVerificationToken('admin', createAdmin?.id);
-  return tokenAdmin;
-};
+export const;
 
 export const getUsersAdminM = async () => {
   const users = await prisma.user.findMany();
