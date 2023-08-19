@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer';
 
+import { UserI } from './interfaces';
+
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 
 import { ENV } from '../configurations/config';
@@ -11,6 +13,14 @@ import { adminQueries } from '../modules/Admin/models/admin.models';
 const { findUserMId } = userQueries;
 
 const { findAdminIdM } = adminQueries;
+
+UserI
+
+export class Email {
+  static sendMail(data, res, res, next) {
+
+  }
+}
 
 export const sendMail = async (
   data: User,
