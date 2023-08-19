@@ -2,11 +2,16 @@ import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import AppError from '../../../utils';
+
 import { Utils } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
 
+import { addressQueries } from '../models/user.address.model';
+
 const { catchAsync, ValidateMongoDbId } = Utils;
+
+const { createAddressM, findUserWithAddressM, updateAddressM } = addressQueries;
 
 export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {

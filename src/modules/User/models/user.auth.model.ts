@@ -2,7 +2,7 @@ import { prisma } from '../../../configurations/db';
 
 import { Utils } from '../../../helper/utils';
 
-import { address, signupUser } from '../user.interface';
+import { signupUser } from '../user.interface';
 
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
@@ -167,36 +167,4 @@ export class Queries {
 
     return user;
   }
-
-
 }
-
-
-export const 
-export const updateAddressM = async (id: string, data: address) => {
-  const user = await prisma.address.update({
-    where: {
-      id,
-    },
-    data: {
-      deliveryAddress: data.deliveryAddress,
-      additionalInfo: data.additionalInfo,
-      region: data.region,
-      city: data.city,
-      phone: data.phone,
-      additionalPhone: data.additionalPhone,
-    },
-  });
-
-  return user;
-};
-
-export const findUserWithAddressM = async (id: string) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      id,
-    },
-    include: { address: true },
-  });
-  return user;
-};
