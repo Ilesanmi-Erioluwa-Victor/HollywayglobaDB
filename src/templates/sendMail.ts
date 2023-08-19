@@ -40,11 +40,7 @@ export const sendMail = async (
   await transport.sendMail(mailOptions);
 };
 
-interface userInfo {
-  email?: string;
-  token: string;
-  userId?: string;
-}
+
 export const sendUserToken = async (
   data: userInfo,
   req: Request,

@@ -5,3 +5,9 @@ export interface UserI {
   email: string;
   accountVerificationToken: string;
 }
+
+export interface userInfoI {
+  email?: string;
+  token: string;
+  userId?: string;
+}
