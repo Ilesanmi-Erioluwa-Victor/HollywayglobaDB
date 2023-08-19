@@ -1,14 +1,12 @@
-import bcrypt from 'bcryptjs';
-import { RequestHandler, NextFunction, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import fs from 'fs';
+
+import bcrypt from 'bcryptjs';
+import {  NextFunction, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+
 import AppError from '../../../utils';
-import {
-  catchAsync,
-  ValidateMongoDbId,
-  generateToken,
-  generatePasswordResetToken,
-} from '../../../helper/utils';
+import { Utils } from '../../../helper/utils';
+
 import { CustomRequest } from '../../../interfaces/custom';
 import {
   findUserMEmail,
@@ -33,7 +31,14 @@ import { CloudinaryUploader } from '../../../configurations/cloudinary';
 
 const uploader = new CloudinaryUploader();
 
-export const createUser: RequestHandler = catchAsync(
+const {
+  catchAsync,
+  generateToken,
+  ValidateMongoDbId,
+  generatePasswordResetToken,
+} = Utils;
+
+export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
@@ -69,19 +74,8 @@ export const createUser: RequestHandler = catchAsync(
   }
 );
 
-export const loginUser: RequestHandler = catchAsync(
+export const loginUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    /*
-     #swagger.tags = ['Users']
-    #swagger.responses[200] = {
-            description: 'User successfully obtained.',
-            schema: {
-                name: 'Jhon ',
-                age: 29,
-                about: ''
-            }
-    } */
-
     const { email, password } = req.body;
     try {
       const user: loginUserI | any = await findUserMEmail(email);
@@ -121,7 +115,7 @@ export const loginUser: RequestHandler = catchAsync(
   }
 );
 
-export const getUser: RequestHandler = catchAsync(
+export const getUser = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
@@ -199,7 +193,7 @@ export const updatePassword = catchAsync(
   }
 );
 
-export const accountVerification: RequestHandler = catchAsync(
+export const accountVerification = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
     ValidateMongoDbId(id);
@@ -244,7 +238,7 @@ export const accountVerification: RequestHandler = catchAsync(
   }
 );
 
-export const forgetPasswordToken: RequestHandler = catchAsync(
+export const forgetPasswordToken = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
 
@@ -266,7 +260,7 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
       expirationTime.setHours(expirationTime.getHours() + 1);
 
       const passwordReset = await forgetPasswordTokenM(
-        resetToken,
+        await resetToken,
         expirationTime,
         user?.id as string
       );
@@ -285,7 +279,7 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
   }
 );
 
-export const resetPassword: RequestHandler = catchAsync(
+export const resetPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req?.params;
     const { password } = req.body;
@@ -333,7 +327,7 @@ export const resetPassword: RequestHandler = catchAsync(
   }
 );
 
-export const uploadProfile: RequestHandler = catchAsync(
+export const uploadProfile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     ValidateMongoDbId(id);
@@ -368,7 +362,7 @@ export const uploadProfile: RequestHandler = catchAsync(
   }
 );
 
-export const createAddress: RequestHandler = catchAsync(
+export const createAddress = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
@@ -404,7 +398,7 @@ export const createAddress: RequestHandler = catchAsync(
 );
 
 // TODO a bug to fix here..
-export const editAddress: RequestHandler = catchAsync(
+export const editAddress = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
@@ -432,4 +426,3 @@ export const editAddress: RequestHandler = catchAsync(
     }
   }
 );
-
