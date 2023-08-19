@@ -15,7 +15,7 @@ const { findUserMId } = userQueries;
 const { findAdminIdM } = adminQueries;
 
 export class Email {
-  private async sendMail(
+  private async sendMailAcc(
     type: string,
     data: any,
     req: Request,
@@ -87,12 +87,13 @@ export class Email {
     res: Response,
     next: NextFunction
   ) {
+    const mail = new Email();
     switch (type) {
       case 'user':
-       sen
+        return await mail.sendMailAcc('user', data, req, res, next);
 
       case 'admin':
-        
+        return await mail.sendMailAcc('admin', data, req, res, next);
     }
   }
 }
