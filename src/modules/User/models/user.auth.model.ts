@@ -7,7 +7,6 @@ import { address, signupUser } from '../user.interface';
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
 export class Queries {
-  
   static async createUserM(user: signupUser) {
     const { firstName, lastName, email, mobile, password } = user;
     const createUser = await prisma.user.create({
@@ -24,6 +23,17 @@ export class Queries {
     const tokenUser = await accountVerificationToken('user', createUser?.id);
     return tokenUser;
   }
+
+  static async findUserMId(id: string) {
+    const userId = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return userId;
+  }
+
+  
 }
 
 export const createUserM = async (user: signupUser) => {
