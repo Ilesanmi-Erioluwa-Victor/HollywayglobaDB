@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 import bcrypt from 'bcryptjs';
-import { NextFunction, Request, Response } from 'express';
+import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import AppError from '../../../utils';
@@ -38,7 +38,7 @@ const {
   generatePasswordResetToken,
 } = Utils;
 
-export const createUser: any = catchAsync(
+export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firstName, lastName, password, email, mobile } = req.body;

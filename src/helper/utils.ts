@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import {RequestHandler, Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -9,20 +9,20 @@ import { prisma } from '../configurations/db';
 import { ENV } from '../configurations/config';
 
 export class Utils {
-  catchAsync = async (fn: any) => {
+  static catchAsync(fn: any): RequestHandler{
     return (req: Request, res: Response, next: NextFunction) => {
       fn(req, res, next).catch((err: any) => next(err));
     };
-  };
+  }
 
-  ValidateMongoDbId = (id: string) => {
+  static ValidateMongoDbId = (id: string) => {
     const isValidId = mongoose.Types.ObjectId.isValid(id);
 
     if (!isValidId)
       new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
   };
 
-  accountVerificationToken = async (accountType: string, id: string) => {
+  static accountVerificationToken = async (accountType: string, id: string) => {
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const tokenExpiration = new Date(Date.now() + 30 * 60 * 1000);
 
@@ -51,7 +51,7 @@ export class Utils {
     }
   };
 
-  generatePasswordResetToken = () => {
+  static generatePasswordResetToken = () => {
     const resetToken = crypto.randomBytes(32).toString('hex');
     const expirationTime = new Date();
     expirationTime.setHours(expirationTime.getHours() + 1);
@@ -59,7 +59,7 @@ export class Utils {
     return resetToken;
   };
 
-  generateToken = async (id: string) => {
+  static generateToken = async (id: string) => {
     if (!ENV.JWT.SECRET)
       new AppError(
         'JWT_KEY is required in environment',
@@ -72,7 +72,7 @@ export class Utils {
     return token;
   };
 
-  hashedPassword = async (password: string) => {
+  static hashedPassword = async (password: string) => {
     const salt: string = await bcrypt.genSalt(10);
     const hashedPassword: string = await bcrypt.hash(password, salt);
     return hashedPassword;

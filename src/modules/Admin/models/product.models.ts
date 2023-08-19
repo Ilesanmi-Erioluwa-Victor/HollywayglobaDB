@@ -1,4 +1,3 @@
-import { data } from '../../../data';
 import { categoryI, signupAdmin } from '../interfaces/admin.interface';
 import { prisma } from '../../../configurations/db';
 import { createProductI, editProductI } from '../interfaces/product.interface';
