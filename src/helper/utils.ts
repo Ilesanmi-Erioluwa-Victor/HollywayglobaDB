@@ -10,6 +10,11 @@ import { ENV } from '../configurations/config';
 
 class Utils {
   
+  static async catchAsync(fn: any) {
+    return (req: Request, res: Response, next: NextFunction) => {
+      fn(req, res, next).catch((err: any) => next(err));
+    };
+  }
 }
 
 export const catchAsync = (fn: any) => {
