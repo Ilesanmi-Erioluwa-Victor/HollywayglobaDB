@@ -38,7 +38,7 @@ const {
   generatePasswordResetToken,
 } = Utils;
 
-export const createUser = catchAsync(
+export const createUser: any = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
@@ -74,7 +74,7 @@ export const createUser = catchAsync(
   }
 );
 
-export const loginUser = catchAsync(
+export const loginUser: any = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
@@ -115,7 +115,7 @@ export const loginUser = catchAsync(
   }
 );
 
-export const getUser = catchAsync(
+export const getUser: any = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
@@ -131,7 +131,7 @@ export const getUser = catchAsync(
   }
 );
 
-export const updateUser = catchAsync(
+export const updateUser: any = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
@@ -168,7 +168,7 @@ export const updateUser = catchAsync(
   }
 );
 
-export const updatePassword = catchAsync(
+export const updatePassword: any = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     const { password } = req.body;
@@ -193,7 +193,7 @@ export const updatePassword = catchAsync(
   }
 );
 
-export const accountVerification = catchAsync(
+export const accountVerification: any = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
     ValidateMongoDbId(id);
@@ -327,7 +327,7 @@ export const resetPassword = catchAsync(
   }
 );
 
-export const uploadProfile = catchAsync(
+export const uploadProfile: any = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     ValidateMongoDbId(id);
@@ -362,7 +362,7 @@ export const uploadProfile = catchAsync(
   }
 );
 
-export const createAddress = catchAsync(
+export const createAddress: any = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
@@ -398,7 +398,7 @@ export const createAddress = catchAsync(
 );
 
 // TODO a bug to fix here..
-export const editAddress = catchAsync(
+export const editAddress: any = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);

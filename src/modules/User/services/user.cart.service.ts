@@ -17,7 +17,7 @@ const { catchAsync, ValidateMongoDbId } = Utils;
 
 import { findProductIdM } from '../../Admin/models/product.models';
 
-export const addToWishlist = catchAsync(
+export const addToWishlist = 
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const userId = req.authId;
     ValidateMongoDbId(userId as string);
@@ -71,9 +71,9 @@ export const addToWishlist = catchAsync(
       next(error);
     }
   }
-);
+;
 
-export const incrementCartItems = catchAsync(
+export const incrementCartItems = 
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const userId = req.authId;
     ValidateMongoDbId(userId as string);
@@ -118,7 +118,7 @@ export const incrementCartItems = catchAsync(
       next(error);
     }
   }
-);
+;
 
 export const decreaseCartItems = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
