@@ -13,18 +13,18 @@ export class adminQueries {
     });
     return adminId;
   }
+
+  static async findAdminEmailM(email: string) {
+    const userEmail = await prisma.admin.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    return userEmail;
+  }
 }
 
-
-export const findAdminEmailM = async (email: string) => {
-  const userEmail = await prisma.admin.findUnique({
-    where: {
-      email,
-    },
-  });
-
-  return userEmail;
-};
 
 export const createAdminM = async (admin: signupAdmin) => {
   const { name, email, password } = admin;
