@@ -77,7 +77,10 @@ export class Utils {
     return hashedPassword;
   }
 
-  static async comparePassword() {
-
+  static async comparePassword(
+    password: string,
+    userPassword: string
+  ): Promise<boolean> {
+    return bcrypt.compare(password, userPassword);
   }
 }
