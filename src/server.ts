@@ -12,6 +12,6 @@ class Server {
   }
 }
 
-
+Server.Connection();
 
 export default new Server();
