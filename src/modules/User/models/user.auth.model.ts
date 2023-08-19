@@ -1,10 +1,10 @@
 import { prisma } from '../../../configurations/db';
-import {
-  hashedPassword,
-  generateToken,
-  createAccountVerificationToken,
-} from '../../../helper/utils';
+
+import { Utils } from '../../../helper/utils';
+
 import { address, signupUser } from '../user.interface';
+
+const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
 export const createUserM = async (user: signupUser) => {
   const { firstName, lastName, email, mobile, password } = user;
@@ -19,7 +19,7 @@ export const createUserM = async (user: signupUser) => {
   });
 
   generateToken(createUser?.id as string);
-  const tokenUser = await createAccountVerificationToken(createUser?.id);
+  const tokenUser = await accountVerificationToken('user', createUser?.id);
   return tokenUser;
 };
 
