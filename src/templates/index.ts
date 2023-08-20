@@ -4,7 +4,7 @@ import { UserI } from './interfaces';
 
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 
-import { ENV } from '../configurations/config';
+import { ENV } from '../configurations/env';
 
 import { userQueries } from '../modules/User/models/user.auth.model';
 

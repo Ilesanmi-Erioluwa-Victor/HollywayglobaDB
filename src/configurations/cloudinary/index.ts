@@ -1,5 +1,5 @@
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
-import { ENV } from '../config';
+import { ENV } from '../env';
 import sharp from 'sharp';
 import multer from 'multer';
 
@@ -24,8 +24,6 @@ class CloudinaryUploader {
       return undefined;
     }
   }
-
-  
 }
 
 class ImageProcessor {

@@ -14,7 +14,7 @@ import AppError from '../utils';
 
 import { prisma } from '../configurations/db';
 
-import { ENV } from '../configurations/config';
+import { ENV } from '../configurations/env';
 
 export class Utils {
   static catchAsync(fn: any): RequestHandler {
