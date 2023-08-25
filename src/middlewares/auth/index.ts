@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import AppError from '../../utils';
 
-import { ENV } from '../../configurations/config';
+import { ENV } from '../../configurations/env';
 
 import { CustomRequest } from '../../interfaces/custom';
 

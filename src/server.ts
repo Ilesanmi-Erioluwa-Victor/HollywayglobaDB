@@ -1,4 +1,4 @@
-import { ENV } from './configurations/config';
+import { ENV } from './configurations/env';
 import app from './app';
 class Server {
   static async Connection(): Promise<void> {

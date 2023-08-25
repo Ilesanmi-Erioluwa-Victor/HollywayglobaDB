@@ -1,13 +1,20 @@
 import { RequestHandler, Request, Response, NextFunction } from 'express';
+
 import crypto from 'crypto';
+
+import { StatusCodes } from 'http-status-codes';
+
 import bcrypt from 'bcryptjs';
+
 import jwt from 'jsonwebtoken';
+
 import mongoose from 'mongoose';
 
 import AppError from '../utils';
-import { StatusCodes } from 'http-status-codes';
+
 import { prisma } from '../configurations/db';
-import { ENV } from '../configurations/config';
+
+import { ENV } from '../configurations/env';
 
 export class Utils {
   static catchAsync(fn: any): RequestHandler {

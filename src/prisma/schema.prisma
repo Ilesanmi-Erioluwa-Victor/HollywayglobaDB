@@ -60,7 +60,7 @@ model User {
   v                               Int?                 @map("__v")
   passwordresettoken              PasswordResetToken[]
   payment                         Payment?
-  ProductWishList                 ProductWishList[]
+  cart                            Cart[]
 }
 
 model Address {
@@ -76,24 +76,24 @@ model Address {
 }
 
 model Product {
-  id              String            @id @default(auto()) @map("_id") @db.ObjectId
-  title           String
-  slug            String?
-  description     String
-  price           Int               @default(1500)
-  category        Category          @relation(fields: [categoryId], references: [id])
-  quantity        Int               @default(100)
-  images          String[]
-  brand           Brand             @default(FOOD)
-  stock           Int               @default(0)
-  colors          String            @default("white")
-  reviews         Review[]
-  ProductWishList ProductWishList[]
-  categoryId      String            @db.ObjectId
-  admin           Admin             @relation(fields: [adminId], references: [id])
-  adminId         String            @db.ObjectId
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String?
+  description String
+  price       Int      @default(1500)
+  category    Category @relation(fields: [categoryId], references: [id])
+  quantity    Int      @default(100)
+  images      String[]
+  brand       Brand    @default(FOOD)
+  stock       Int      @default(0)
+  colors      String   @default("white")
+  reviews     Review[]
+  cart        Cart[]
+  categoryId  String   @db.ObjectId
+  admin       Admin    @relation(fields: [adminId], references: [id])
+  adminId     String   @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 enum Brand {
@@ -121,7 +121,7 @@ model Review {
   updatedAt DateTime @updatedAt
 }
 
-model ProductWishList {
+model Cart {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   product     Product  @relation(fields: [productId], references: [id])
   productId   String   @db.ObjectId

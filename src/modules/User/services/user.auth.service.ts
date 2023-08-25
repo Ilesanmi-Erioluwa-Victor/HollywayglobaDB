@@ -26,11 +26,13 @@ const {
   userProfilePictureUpdateM,
 } = userQueries;
 
-import { sendMail, sendUserToken } from '../../../templates/sendMail';
+import { Email } from '../../../templates';
 
 import { loginUserI } from '../user.interface';
 
 import { CloudinaryUploader } from '../../../configurations/cloudinary';
+
+const { sendMail, sendMailToken } = Email;
 
 const uploader = new CloudinaryUploader();
 
@@ -64,7 +66,7 @@ export const createUser: RequestHandler = catchAsync(
         );
 
       const user: any = await createUserM(req.body);
-      sendMail(user, req, res, next);
+      sendMail('user', user, req, res, next);
       res.status(StatusCodes.CREATED).json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
@@ -269,7 +271,7 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
         user?.id as string
       );
 
-      await sendUserToken(passwordReset, req, res, next);
+      await sendMailToken('user', passwordReset, req, res, next);
       res.json({
         message: `A reset token has been sent to your gmail`,
         status: 'success',
