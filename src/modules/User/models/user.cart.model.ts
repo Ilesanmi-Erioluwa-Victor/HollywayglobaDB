@@ -20,7 +20,7 @@ import {
 // };
 
 export const existItemCartM = async (userId: string, productId: string) => {
-  const existItem = await prisma.productWishList.findFirst({
+  const existItem = await prisma.cart.findFirst({
     where: {
       userId: userId,
       productId: productId,
@@ -51,7 +51,7 @@ export const userWishListCartM = async (
   quantity: number,
   totalAmount: number
 ) => {
-  const wishList = await prisma.productWishList.create({
+  const wishList = await prisma.cart.create({
     data: {
       user: { connect: { id: userId } },
       product: { connect: { id: productId } },
@@ -92,7 +92,7 @@ export const updateExistItemCartQuantityM = async (
   totalAmount: number,
   price: number
 ): Promise<ProductWishListResult | any> => {
-  const item = await prisma.productWishList.update({
+  const item = await prisma.cart.update({
     where: {
       id,
       userId: userId,
@@ -141,7 +141,7 @@ export const increaseCartItemM = async (
   quantity: number,
   newAmount: number
 ): Promise<ProductWishListIncrease | null> => {
-  const increaseItem = await prisma.productWishList.update({
+  const increaseItem = await prisma.cart.update({
     where: {
       id,
       userId,
@@ -172,7 +172,7 @@ export const decreaseCartItemM = async (
   quantity: number,
   newAmount: number
 ): Promise<ProductWishListIncrease | null> => {
-  const decreaseItem = await prisma.productWishList.update({
+  const decreaseItem = await prisma.cart.update({
     where: {
       id,
       userId,
