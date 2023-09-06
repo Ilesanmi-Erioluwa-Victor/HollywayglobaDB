@@ -7,7 +7,7 @@ import morgan from 'morgan';
 import adminRoute from './modules/Admin/routes/admin.routes';
 import userRoute from './modules/User/routes/user.routes';
 import productRoute from './modules/Admin/routes/admin.routes';
-import ErrorHandlerMiddleware from './middlewares/error';
+import { requestErrorTypings } from './types';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { customTime } from './interfaces/custom';
 import { _404 } from './middlewares/error/_404Page';
@@ -52,8 +52,18 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
   _404.notFound(req, res, next);
 });
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  ErrorHandlerMiddleware.sendErrorDev(err, res);
-});
+app.use(
+  (
+    error: requestErrorTypings,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    console.log(error.message);
+    const status = error.statusCode || 500;
+    const message = error.message;
+    res.status(status).json({ message });
+  }
+);
 
 export default app;
