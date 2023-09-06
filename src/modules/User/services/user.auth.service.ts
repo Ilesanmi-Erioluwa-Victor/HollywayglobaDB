@@ -3,7 +3,7 @@ import fs from 'fs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { throwError } from 'middlewares/error';
+import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 
@@ -65,7 +65,7 @@ export const createUser: RequestHandler = catchAsync(
 
       const user: any = await createUserM(req.body);
       sendMail('user', user, req, res, next);
-      res.status(StatusCodes.CREATED).json({
+      res.json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
       });
@@ -97,12 +97,17 @@ export const loginUser: RequestHandler = catchAsync(
         }
 
         res.json({
-          id: user?.id,
+          status: "success",
+          message : "login successfully",
+          data: {
+           id: user?.id,
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
           profilePhoto: user.profilePhoto,
-          token: await generateToken(user?.id),
+          token: await generateToken(user?.id),  
+          }
+          
         });
       } else {
         throwError(
