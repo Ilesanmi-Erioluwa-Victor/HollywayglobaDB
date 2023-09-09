@@ -32,12 +32,15 @@ export const createAddress: RequestHandler = catchAsync(
     try {
       const user = await createAddressM(req.body, id);
       res.json({
-        deliveryAddress: user.deliveryAddress,
-        additionalInfo: user.additionalInfo,
-        region: user.region,
-        city: user.city,
-        phone: user.phone,
-        additionalPhone: user.additionalPhone,
+        status: 'success',
+        data: {
+          deliveryAddress: user.deliveryAddress,
+          additionalInfo: user.additionalInfo,
+          region: user.region,
+          city: user.city,
+          phone: user.phone,
+          additionalPhone: user.additionalPhone,
+        },
       });
     } catch (error: any) {
       if (!error.statusCode) {
