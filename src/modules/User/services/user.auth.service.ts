@@ -97,17 +97,12 @@ export const loginUser: RequestHandler = catchAsync(
         }
 
         res.json({
-          status: "success",
-          message : "login successfully",
+          status: 'success',
+          message: 'login successfully',
           data: {
-           id: user?.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          profilePhoto: user.profilePhoto,
-          token: await generateToken(user?.id),  
-          }
-          
+            id: user?.id,
+            token: await generateToken(user?.id),
+          },
         });
       } else {
         throwError(
@@ -130,7 +125,16 @@ export const getUser: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     try {
       const user = await findUserMId(id);
-      res.json(user);
+      res.json({
+        active: user?.active,
+        email: user?.email,
+        firstName: user?.firstName,
+        id: user?.id,
+        isAccountVerified: user?.isAccountVerified,
+        lastName: user?.lastName,
+        mobile: user?.mobile,
+        profilePhoto: user?.profilePhoto,
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
