@@ -1,0 +1,17 @@
+DATABASE_URL=mongodb+srv://Hollywayglobal:Makinwajunior1452@cluster0.tciz7ra.mongodb.net/Hollywayglobal?retryWrites=true&w=majority
+DATABASE_URL_DEV=mongodb+srv://Hollywayglobal:Makinwajunior1452@cluster0.tciz7ra.mongodb.net/HollywayglobalDevelop?retryWrites=true&w=majority
+JWT_SECRET_KEY=jkjiujhnbnbbmbhgkhg
+JWT_EXPIRES_IN=30d
+PORT=8080
+NODEMAILER_PASS=fd3bf8ced447a6
+NODEMAILER_USERNAME=69b3b8602ccc41
+CLOUDIANRY_CLOUD_NAME=dprzlxu1r
+CLOUDIANRY_API_KEY=361586443266711
+CLOUDIANRY_API_SECRET=aXq5aTssEhLax6gGP2vPygjpmtg
+CLOUDINARY_UPLOAD_PATH=Hollyway
+CLOUDIANRY_URL_ENV=
+CLOUDINARY_URL=cloudinary://361586443266711:aXq5aTssEhLax6gGP2vPygjpmtg@dprzlxu1r
+NODE_ENV_DEV=development
+NODE_ENV_PROD=production
+
+
