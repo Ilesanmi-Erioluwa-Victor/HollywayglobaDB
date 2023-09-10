@@ -1,7 +1,7 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import AppError from '../../../utils';
+import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 
@@ -17,7 +17,7 @@ export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) new AppError('Invalid ID', StatusCodes.FORBIDDEN);
+    if (!id) throwError('Invalid ID', StatusCodes.FORBIDDEN);
 
     const {
       deliveryAddress,
@@ -32,12 +32,15 @@ export const createAddress: RequestHandler = catchAsync(
     try {
       const user = await createAddressM(req.body, id);
       res.json({
-        deliveryAddress: user.deliveryAddress,
-        additionalInfo: user.additionalInfo,
-        region: user.region,
-        city: user.city,
-        phone: user.phone,
-        additionalPhone: user.additionalPhone,
+        status: 'success',
+        data: {
+          deliveryAddress: user.deliveryAddress,
+          additionalInfo: user.additionalInfo,
+          region: user.region,
+          city: user.city,
+          phone: user.phone,
+          additionalPhone: user.additionalPhone,
+        },
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -53,7 +56,7 @@ export const editAddress: any = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) new AppError('Invalid ID', StatusCodes.BAD_REQUEST);
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
       const userWithAddress = await findUserWithAddressM(id);
       const userWithAddressId = userWithAddress?.address[0].id;

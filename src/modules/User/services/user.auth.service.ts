@@ -3,7 +3,7 @@ import fs from 'fs';
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import AppError from '../../../utils';
+import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 
@@ -48,26 +48,24 @@ export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firstName, lastName, password, email, mobile } = req.body;
-      if (!firstName || !lastName || !password || !email || !mobile)
-        return next(
-          new AppError(
-            'Missing credentials, please provide all required information',
-            StatusCodes.BAD_REQUEST
-          )
+      if (!firstName || !lastName || !password || !email || !mobile) {
+        throwError(
+          'Missing credentials, please provide all required information',
+          StatusCodes.BAD_REQUEST
         );
+      }
 
       const existEmail = await findUserMEmail(email);
-      if (existEmail)
-        next(
-          new AppError(
-            'You are already a member, kindly login to your account',
-            StatusCodes.CONFLICT
-          )
+      if (existEmail) {
+        throwError(
+          'You are already a member, kindly login to your account',
+          StatusCodes.CONFLICT
         );
+      }
 
       const user: any = await createUserM(req.body);
       sendMail('user', user, req, res, next);
-      res.status(StatusCodes.CREATED).json({
+      res.json({
         message: 'You have successfully created your account, log in now',
         status: 'success',
       });
@@ -86,28 +84,28 @@ export const loginUser: RequestHandler = catchAsync(
     try {
       const user: loginUserI | any = await findUserMEmail(email);
 
-      if (!user)
-        next(
-          new AppError('No user found with this email', StatusCodes.BAD_REQUEST)
-        );
+      if (!user) {
+        throwError('No user found with this email', StatusCodes.BAD_REQUEST);
+      }
+
       if (await comparePassword(password, user?.password)) {
         if (!user.isAccountVerified) {
-          throw new AppError(
+          throwError(
             'Verify your account in your gmail before you can log in',
             StatusCodes.BAD_REQUEST
           );
         }
 
         res.json({
-          id: user?.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          profilePhoto: user.profilePhoto,
-          token: await generateToken(user?.id),
+          status: 'success',
+          message: 'login successfully',
+          data: {
+            id: user?.id,
+            token: await generateToken(user?.id),
+          },
         });
       } else {
-        throw new AppError(
+        throwError(
           'Login Failed, invalid credentials',
           StatusCodes.UNAUTHORIZED
         );
@@ -127,7 +125,16 @@ export const getUser: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     try {
       const user = await findUserMId(id);
-      res.json(user);
+      res.json({
+        active: user?.active,
+        email: user?.email,
+        firstName: user?.firstName,
+        id: user?.id,
+        isAccountVerified: user?.isAccountVerified,
+        lastName: user?.lastName,
+        mobile: user?.mobile,
+        profilePhoto: user?.profilePhoto,
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -147,7 +154,7 @@ export const updateUser: RequestHandler = catchAsync(
       (field) => !allowedFields.includes(field)
     );
     if (unexpectedFields.length > 0) {
-      new AppError(
+      throwError(
         `Unexpected fields: ${unexpectedFields.join(
           ', '
         )}, Sorry it's not part of the parameter`,
@@ -181,7 +188,7 @@ export const updatePassword: RequestHandler = catchAsync(
     try {
       ValidateMongoDbId(id);
       if (!password)
-        new AppError(
+        throwError(
           'Please, provide password before you can change your current password',
           StatusCodes.BAD_REQUEST
         );
@@ -203,28 +210,19 @@ export const accountVerification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, id } = req.params;
     ValidateMongoDbId(id);
-    if (!id)
-      next(
-        new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
-      );
+    if (!id) throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST);
 
     if (!token)
-      next(
-        new AppError(
-          'Sorry, this token is not valid, try again',
-          StatusCodes.BAD_REQUEST
-        )
+      throwError(
+        'Sorry, this token is not valid, try again',
+        StatusCodes.BAD_REQUEST
       );
     try {
       const user = await accountVerificationM(id, token, new Date());
 
-      if (!user)
-        next(
-          new AppError(
-            'Sorry, no user found, try again',
-            StatusCodes.BAD_REQUEST
-          )
-        );
+      if (!user) {
+        throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST);
+      }
       const updaterUser = await accountVerificationUpdatedM(
         user?.id as string,
         true,
@@ -249,13 +247,13 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
     const { email } = req.body;
 
     if (!email)
-      new AppError(
+      throwError(
         'Please, provide email for you to reset your password',
         StatusCodes.BAD_REQUEST
       );
     const user = await findUserMEmail(email);
     if (!user)
-      new AppError(
+      throwError(
         'No user found with provided email.., try again',
         StatusCodes.NOT_FOUND
       );
@@ -291,24 +289,20 @@ export const resetPassword: RequestHandler = catchAsync(
     const { password } = req.body;
 
     if (!token)
-      next(
-        new AppError(
-          'Sorry, invalid token or something went wrong',
-          StatusCodes.BAD_GATEWAY
-        )
+      throwError(
+        'Sorry, invalid token or something went wrong',
+        StatusCodes.BAD_GATEWAY
       );
 
     if (!password)
-      next(
-        new AppError(
-          'Please, provide password for reset!!!',
-          StatusCodes.BAD_REQUEST
-        )
+      throwError(
+        'Please, provide password for reset!!!',
+        StatusCodes.BAD_REQUEST
       );
     try {
       const resetTokenData = await resetPasswordM(token);
       if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
-        new AppError('Invalid or expired token', StatusCodes.NOT_FOUND);
+        throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
       }
 
       const user = await resetPasswordUpdateM(
@@ -338,11 +332,9 @@ export const uploadProfile: RequestHandler = catchAsync(
     const id = req.params.id;
     ValidateMongoDbId(id);
     if (!req?.file)
-      next(
-        new AppError(
-          'Sorry, please select an image to be uploaded',
-          StatusCodes.BAD_REQUEST
-        )
+      throwError(
+        'Sorry, please select an image to be uploaded',
+        StatusCodes.BAD_REQUEST
       );
 
     const image: any = req.file;
