@@ -80,3 +80,25 @@ export const editAddress: any = catchAsync(
     }
   }
 );
+
+
+export const getAddresses = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    ValidateMongoDbId(id);
+    if (!id) throwError("Invalid ID", StatusCodes.BAD_REQUEST);
+    try {
+      const userWithAddress = await findUserWithAddressM(id);
+      res.json({
+        status: "success",
+        message: "ok",
+        data : userWithAddress
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
