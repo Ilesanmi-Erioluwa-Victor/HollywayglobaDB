@@ -1,6 +1,6 @@
-import { prisma } from '../../../configurations/db';
+import { prisma } from "../../../configurations/db";
 
-import { address } from '../user.interface';
+import { address } from "../user.interface";
 
 export class addressQueries {
   static async createAddressM(address: address, userId: string) {
@@ -46,5 +46,12 @@ export class addressQueries {
     return user;
   }
 
-
+  static async findUserWithAddressAndDeleteM(addressId: string) {
+    const address = await prisma.address.delete({
+      where: {
+        id: addressId,
+      },
+    });
+    return address;
+  }
 }
