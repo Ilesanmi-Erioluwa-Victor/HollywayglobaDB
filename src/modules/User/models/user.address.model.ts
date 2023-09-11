@@ -50,6 +50,9 @@ export class addressQueries {
       where: {
         userId: userId,
       },
+      orderBy: {
+        createdAt: 'asc',
+      },
       select: {
         id: true,
         deliveryAddress: true,
