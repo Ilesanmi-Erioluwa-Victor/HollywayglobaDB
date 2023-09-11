@@ -39,7 +39,7 @@ route.post('/signup', createUser);
 
 route.post('/login', loginUser);
 
-route.post('/:id/address/create', Token, VerifiedUser, createAddress);
+route.post('/:id/address', Token, VerifiedUser, createAddress);
 
 route.post('/:id/product/add-to-wishlist', Token, VerifiedUser, addToWishlist);
 
