@@ -9,28 +9,19 @@ import { CustomRequest } from '../../../interfaces/custom';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
-
 export const createReview: RequestHandler = catchAsync(
-    async (req: CustomRequest, res: Response, next: NextFunction) => {
-        
-        const { userId, productId } = req.params;
-        
-        ValidateMongoDbId(userId);
-        
-        ValidateMongoDbId(productId);
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { userId, productId } = req.params;
 
-        if (!userId) throwError('No user found', StatusCodes.NOT_FOUND);
-        
-          if (!userId) throwError('No product found', StatusCodes.NOT_FOUND);
+    ValidateMongoDbId(userId);
 
-    const {
-      deliveryAddress,
-      additionalInfo,
-      region,
-      city,
-      phone,
-      additionalPhone,
-    } = req.body;
+    ValidateMongoDbId(productId);
+
+    if (!userId) throwError('No user found', StatusCodes.NOT_FOUND);
+
+    if (!userId) throwError('No product found', StatusCodes.NOT_FOUND);
+
+    const { text, rating } = req.body;
 
     // TODO, I want to add JOI as validator
     try {
