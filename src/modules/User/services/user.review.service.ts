@@ -71,3 +71,33 @@ export const getReview: RequestHandler = catchAsync(
     }
   }
 );
+
+export const editReview: RequestHandler = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id, productId, reviewId } = req.params;
+
+    ValidateMongoDbId(id);
+
+    ValidateMongoDbId(productId);
+
+    if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
+
+    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
+
+    if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
+
+    try {
+      const review = await getReviewM(reviewId);
+      res.json({
+        status: 'success',
+        message: 'ok',
+        data: review,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);

@@ -71,4 +71,13 @@ export class reviewQueries {
     });
     return review;
   }
+
+  static async updateReviewM(id: string, data: review) {
+    const updatedAddress = await prisma.review.update({
+      where: { id: id },
+      data: data,
+    });
+
+    return updatedAddress;
+  }
 }
