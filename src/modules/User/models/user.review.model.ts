@@ -36,6 +36,7 @@ export class reviewQueries {
             accountVerificationTokenExpires: false,
             accountVerificationToken: false,
             isAccountVerified: false,
+            mobile: false,
             active: false,
             role: false,
             isBlocked: false,
