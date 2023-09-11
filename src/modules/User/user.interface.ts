@@ -36,6 +36,11 @@ export interface address {
   additionalPhone?: string;
 }
 
+export interface review {
+  text: string;
+  rating: number;
+}
+
 export interface ProductWishListResult {
   id: string;
   quantity: number;
