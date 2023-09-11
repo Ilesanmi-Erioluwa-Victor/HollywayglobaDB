@@ -141,7 +141,10 @@ export const deleteAddresses = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id, addressId } = req.params;
     ValidateMongoDbId(id);
+    ValidateMongoDbId(addressId);
+
     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+    if (!addressId) throwError('No address found', StatusCodes.NOT_FOUND);
     try {
       const user = await findUserMId(id);
       const address = await findUserWithAddressAndDeleteM(addressId);
