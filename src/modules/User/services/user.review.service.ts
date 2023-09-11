@@ -77,7 +77,7 @@ export const getReview: RequestHandler = catchAsync(
   }
 );
 
-export const editAddress = catchAsync(
+export const editReview = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id, productId, reviewId } = req.params;
 
