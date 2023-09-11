@@ -5,8 +5,13 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 import adminRoute from './modules/Admin/routes/admin.routes';
+
 import userRoute from './modules/User/routes/user.routes';
+
 import productRoute from './modules/Admin/routes/admin.routes';
+
+import reviewRoute from "./modules/User/routes/review.routes"
+
 import { requestErrorTypings } from './types';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { customTime } from './interfaces/custom';
@@ -44,6 +49,8 @@ app.use('/api/v1/user', userRoute);
 app.use('/api/v1/admin', adminRoute);
 
 app.use('/api/v1/products', productRoute);
+
+app.use('/api/v1/reviews', reviewRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 // TODO Still facing weird bug here
