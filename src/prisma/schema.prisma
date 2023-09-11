@@ -61,6 +61,7 @@ model User {
   passwordresettoken              PasswordResetToken[]
   payment                         Payment?
   cart                            Cart[]
+  Review                          Review[]
 }
 
 model Address {
@@ -116,8 +117,10 @@ enum Brand {
 model Review {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String
-  rating    Float // Rating value (e.g., 4.5)
+  rating    Float
+  user      User     @relation(fields: [userId], references: [id])
   productId String   @db.ObjectId
+  userId    String   @db.ObjectId
   product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
