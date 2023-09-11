@@ -32,6 +32,8 @@ export class reviewQueries {
             firstName: true,
             lastName: true,
             createdAt: false,
+            updatedAt: false,
+            v: false,
           },
         },
         product: true,
