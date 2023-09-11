@@ -31,6 +31,7 @@ export class reviewQueries {
           select: {
             firstName: true,
             lastName: true,
+            email: true,
             createdAt: false,
             updatedAt: false,
             accountVerificationTokenExpires: false,
@@ -39,6 +40,7 @@ export class reviewQueries {
             mobile: false,
             active: false,
             role: false,
+            id: false,
             isBlocked: false,
             password: false,
             v: false,
