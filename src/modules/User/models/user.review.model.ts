@@ -21,23 +21,15 @@ export class reviewQueries {
     return review;
   }
 
-  static async getReviewM(
-    userId: string,
-    productId: string,
-    reviewId : string
-  ) {
+  static async getReviewM(reviewId: string) {
     const review = await prisma.review.findUnique({
       where: {
-        id: reviewId
-      }
-      // data: {
-      //   text: reviewData.text,
-      //   rating: reviewData.rating,
-      //   user: { connect: { id: userId } },
-      //   product: {
-      //     connect: { id: productId },
-      //   },
-      // },
+        id: reviewId,
+      },
+      include: {
+        user: true,
+        product: true,
+      },
     });
     return review;
   }

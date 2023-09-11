@@ -57,7 +57,7 @@ export const getReview: RequestHandler = catchAsync(
     if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
 
     try {
-      const review = await getReviewM(id, productId, reviewId);
+      const review = await getReviewM(reviewId);
       res.json({
         status: 'success',
         message: 'ok',
