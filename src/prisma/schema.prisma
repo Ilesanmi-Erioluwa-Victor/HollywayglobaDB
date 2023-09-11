@@ -50,7 +50,7 @@ model User {
   isBlocked                       Boolean              @default(false)
   address                         Address[]
   role                            String?              @default("user")
-  reviews                         Review
+  reviews                         Review[]
   active                          Boolean              @default(true)
   profilePhoto                    String               @default("https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png")
   isAccountVerified               Boolean              @default(false)
@@ -90,7 +90,7 @@ model Product {
   brand       Brand    @default(FOOD)
   stock       Int      @default(0)
   colors      String   @default("white")
-  reviews     Review 
+  reviews     Review[] 
   cart        Cart[]
   categoryId  String   @db.ObjectId
   admin       Admin    @relation(fields: [adminId], references: [id])
