@@ -11,12 +11,17 @@ import { addressQueries } from '../models/user.address.model';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
-import { userQueries} from "../../User/models/user.auth.model"
+import { userQueries } from '../../User/models/user.auth.model';
 
-const { findUserMId} = userQueries
+const { findUserMId } = userQueries;
 
-const { createAddressM, findUserWithAddressM, updateAddressM, findUserWithAddressAndDeleteM } =
-  addressQueries;
+const {
+  createAddressM,
+  findAddressesByUserId,
+  findUserWithAddressM,
+  updateAddressM,
+  findUserWithAddressAndDeleteM,
+} = addressQueries;
 
 export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -86,19 +91,18 @@ export const editAddress: any = catchAsync(
   }
 );
 
-
 export const getAddresses = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError("Invalid ID", StatusCodes.BAD_REQUEST);
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
-      const userWithAddress = await findUserWithAddressM(id);
+      const addresses = await findAddressesByUserId(id);
       res.json({
-        // length: userWithAddress,
-        status: "success",
-        message: "ok",
-        data : userWithAddress
+        length: addresses?.length,
+        status: 'success',
+        message: 'ok',
+        data: addresses,
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -109,18 +113,17 @@ export const getAddresses = catchAsync(
   }
 );
 
-
 export const deleteAddresses = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id, addressId } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError("Invalid ID", StatusCodes.BAD_REQUEST);
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
       const user = await findUserMId(id);
       const address = await findUserWithAddressAndDeleteM(addressId);
       res.json({
-        status: "success",
-        message: "address deleted"
+        status: 'success',
+        message: 'address deleted',
       });
     } catch (error: any) {
       if (!error.statusCode) {

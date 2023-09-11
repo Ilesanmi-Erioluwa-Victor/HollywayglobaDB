@@ -46,6 +46,16 @@ export class addressQueries {
     return user;
   }
 
+  static async findAddressesByUserId(userId: string) {
+    const addresses = await prisma.address.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+
+    return addresses;
+  }
+
   static async findUserWithAddressAndDeleteM(addressId: string) {
     const address = await prisma.address.delete({
       where: {
