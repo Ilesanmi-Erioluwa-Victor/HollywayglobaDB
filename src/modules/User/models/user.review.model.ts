@@ -26,7 +26,10 @@ export class reviewQueries {
       where: {
         id: reviewId,
       },
-      include: {
+
+      select: {
+        text: true,
+        rating: true,
         user: {
           select: {
             firstName: true,
