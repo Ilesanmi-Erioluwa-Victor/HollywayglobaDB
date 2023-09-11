@@ -27,14 +27,13 @@ export class addressQueries {
     return updatedAddress;
   }
 
-  static async findUserWithAddressM(id: string) {
-    const user = await prisma.user.findUnique({
+  static async countUserAddresses(userId: string) {
+    const count = await prisma.address.count({
       where: {
-        id,
+        userId: userId,
       },
-      include: { address: true },
     });
-    return user;
+    return count;
   }
 
   static async findAddressM(id: string) {

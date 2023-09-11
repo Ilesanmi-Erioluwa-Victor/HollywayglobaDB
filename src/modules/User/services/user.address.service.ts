@@ -18,7 +18,7 @@ const { findUserMId } = userQueries;
 const {
   createAddressM,
   findAddressesByUserId,
-  findUserWithAddressM,
+ countUserAddresses,
   updateAddressM,
   findUserWithAddressAndDeleteM,
   findAddressM,
@@ -28,7 +28,7 @@ export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.FORBIDDEN);
+    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
 
     const {
       deliveryAddress,
@@ -41,6 +41,15 @@ export const createAddress: RequestHandler = catchAsync(
 
     // TODO, I want to add JOI as validator
     try {
+      const addressCount = await countUserAddresses(id);
+
+       if (addressCount >= 4) {
+         return res.status(StatusCodes.FORBIDDEN).json({
+           status: 'error',
+           message: 'Maximum number of addresses reached.',
+         });
+      }
+      
       const user = await createAddressM(req.body, id);
       res.json({
         status: 'success',
