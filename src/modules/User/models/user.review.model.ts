@@ -27,7 +27,13 @@ export class reviewQueries {
         id: reviewId,
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            createdAt: false,
+          },
+        },
         product: true,
       },
     });
