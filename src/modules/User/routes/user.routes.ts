@@ -15,7 +15,6 @@ import {
   addToWishlist,
   decreaseCartItems,
   incrementCartItems,
-
 } from '../services/user.cart.service';
 
 import {
@@ -23,7 +22,7 @@ import {
   editAddress,
   getAddresses,
   deleteAddresses,
-} from "../services/user.address.service";
+} from '../services/user.address.service';
 
 import { Auth } from '../../../middlewares/auth';
 
@@ -40,7 +39,7 @@ route.post('/signup', createUser);
 
 route.post('/login', loginUser);
 
-route.post('/:id/address/create', Token, VerifiedUser, createAddress);
+route.post('/:id/address', Token, VerifiedUser, createAddress);
 
 route.post('/:id/product/add-to-wishlist', Token, VerifiedUser, addToWishlist);
 
@@ -48,11 +47,11 @@ route.put('/:id/product/increaseCart', Token, VerifiedUser, incrementCartItems);
 
 route.put('/:id/product/decreaseCart', Token, VerifiedUser, decreaseCartItems);
 
-route.put('/:id/address/edit', Token, VerifiedUser, editAddress);
+route.put('/:id/address/:addressId', Token, VerifiedUser, editAddress);
 
-route.get("/:id/address", Token, VerifiedUser, getAddresses);
+route.get('/:id/address', Token, VerifiedUser, getAddresses);
 
-route.get("/:id/address/:addressId", Token, VerifiedUser, deleteAddresses);
+route.delete('/:id/address/:addressId', Token, VerifiedUser, deleteAddresses);
 
 route.post('/forgetPassword', forgetPasswordToken);
 
