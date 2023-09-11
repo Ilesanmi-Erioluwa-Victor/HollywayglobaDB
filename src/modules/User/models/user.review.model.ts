@@ -30,6 +30,7 @@ export class reviewQueries {
       select: {
         text: true,
         rating: true,
+        id: true,
         user: {
           select: {
             firstName: true,
