@@ -64,7 +64,7 @@ export const createAddress: RequestHandler = catchAsync(
 // TODO a bug to fix here..
 export const editAddress: any = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+    const { id, addressId } = req.params;
     ValidateMongoDbId(id);
     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {

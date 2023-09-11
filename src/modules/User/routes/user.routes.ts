@@ -47,7 +47,7 @@ route.put('/:id/product/increaseCart', Token, VerifiedUser, incrementCartItems);
 
 route.put('/:id/product/decreaseCart', Token, VerifiedUser, decreaseCartItems);
 
-route.put('/:id/address/edit', Token, VerifiedUser, editAddress);
+route.put('/:id/address/:addressId', Token, VerifiedUser, editAddress);
 
 route.get('/:id/address', Token, VerifiedUser, getAddresses);
 
