@@ -21,6 +21,7 @@ const {
   findUserWithAddressM,
   updateAddressM,
   findUserWithAddressAndDeleteM,
+  findAddressM,
 } = addressQueries;
 
 export const createAddress: RequestHandler = catchAsync(
@@ -61,12 +62,14 @@ export const createAddress: RequestHandler = catchAsync(
   }
 );
 
-// TODO a bug to fix here..
-export const editAddress: any = catchAsync(
+export const editAddress = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id, addressId } = req.params;
+
     ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+    ValidateMongoDbId(addressId);
+    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+    if (!addressId) throwError('No address found', StatusCodes.NOT_FOUND);
     try {
       const userWithAddress = await findUserWithAddressM(id);
       const userWithAddressId = userWithAddress?.address[0].id;

@@ -1,6 +1,6 @@
-import { prisma } from "../../../configurations/db";
+import { prisma } from '../../../configurations/db';
 
-import { address } from "../user.interface";
+import { address } from '../user.interface';
 
 export class addressQueries {
   static async createAddressM(address: address, userId: string) {
@@ -19,21 +19,12 @@ export class addressQueries {
   }
 
   static async updateAddressM(id: string, data: address) {
-    const user = await prisma.address.update({
-      where: {
-        id,
-      },
-      data: {
-        deliveryAddress: data.deliveryAddress,
-        additionalInfo: data.additionalInfo,
-        region: data.region,
-        city: data.city,
-        phone: data.phone,
-        additionalPhone: data.additionalPhone,
-      },
+    const updatedAddress = await prisma.address.update({
+      where: { id: id },
+      data: data,
     });
 
-    return user;
+    return updatedAddress;
   }
 
   static async findUserWithAddressM(id: string) {
@@ -44,6 +35,15 @@ export class addressQueries {
       include: { address: true },
     });
     return user;
+  }
+
+  static async findAddressM(id: string) {
+    const address = await prisma.address.findUnique({
+      where: {
+        id,
+      },
+    });
+    return address;
   }
 
   static async findAddressesByUserId(userId: string) {
