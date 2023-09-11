@@ -90,6 +90,7 @@ export const getAddresses = catchAsync(
     try {
       const userWithAddress = await findUserWithAddressM(id);
       res.json({
+        // length: userWithAddress,
         status: "success",
         message: "ok",
         data : userWithAddress
