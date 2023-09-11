@@ -18,7 +18,7 @@ const { findUserMId } = userQueries;
 const {
   createAddressM,
   findAddressesByUserId,
- countUserAddresses,
+  countUserAddresses,
   updateAddressM,
   findUserWithAddressAndDeleteM,
   findAddressM,
@@ -43,13 +43,13 @@ export const createAddress: RequestHandler = catchAsync(
     try {
       const addressCount = await countUserAddresses(id);
 
-       if (addressCount >= 4) {
-         return res.status(StatusCodes.FORBIDDEN).json({
-           status: 'error',
-           message: 'Maximum number of addresses reached.',
-         });
+      if (addressCount >= 4) {
+        return res.status(StatusCodes.FORBIDDEN).json({
+          status: 'error',
+          message: 'Maximum number of addresses reached.',
+        });
       }
-      
+
       const user = await createAddressM(req.body, id);
       res.json({
         status: 'success',
@@ -78,6 +78,7 @@ export const editAddress = catchAsync(
     ValidateMongoDbId(id);
     ValidateMongoDbId(addressId);
     if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+
     if (!addressId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
 
     try {
@@ -91,6 +92,13 @@ export const editAddress = catchAsync(
         addressId as string,
         req.body
       );
+
+      if (!updatedAddress)
+        throwError(
+          'Sorry, something went wrong, try again',
+          StatusCodes.BAD_REQUEST
+        );
+
       res.json({
         status: 'success',
         message: 'ok',
@@ -111,6 +119,9 @@ export const getAddresses = catchAsync(
     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
       const addresses = await findAddressesByUserId(id);
+
+      if (!addresses) throwError('No addresses found', StatusCodes.NOT_FOUND);
+
       res.json({
         length: addresses?.length,
         status: 'success',
@@ -134,6 +145,11 @@ export const deleteAddresses = catchAsync(
     try {
       const user = await findUserMId(id);
       const address = await findUserWithAddressAndDeleteM(addressId);
+
+      if (!user) throwError('No user found', StatusCodes.NOT_FOUND);
+
+      if (!address) throwError('No address found', StatusCodes.NOT_FOUND);
+
       res.json({
         status: 'success',
         message: 'address deleted',
