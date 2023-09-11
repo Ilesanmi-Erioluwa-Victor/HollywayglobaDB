@@ -13,7 +13,9 @@ export class reviewQueries {
         text: reviewData.text,
         rating: reviewData.rating,
         user: { connect: { id: userId } },
-        product: { connect: { id: productId } },
+        product: {
+          connect: { id: productId },
+        },
       },
     });
     return review;

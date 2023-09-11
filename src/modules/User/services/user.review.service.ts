@@ -9,42 +9,28 @@ import { CustomRequest } from '../../../interfaces/custom';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
+import { reviewQueries } from './../models/user.review.model';
+
+const { createReviewM } = reviewQueries;
+
 export const createReview: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { userId, productId } = req.params;
+    const { id, productId } = req.params;
 
-    ValidateMongoDbId(userId);
+    ValidateMongoDbId(id);
 
     ValidateMongoDbId(productId);
 
-    if (!userId) throwError('No user found', StatusCodes.NOT_FOUND);
+    if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
 
-    if (!userId) throwError('No product found', StatusCodes.NOT_FOUND);
+    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
 
     const { text, rating } = req.body;
-
-    // TODO, I want to add JOI as validator
     try {
-      const addressCount = await countUserAddresses(id);
-
-      if (addressCount >= 4) {
-        return res.status(StatusCodes.FORBIDDEN).json({
-          status: 'error',
-          message: 'Maximum number of addresses reached.',
-        });
-      }
-
-      const user = await createAddressM(req.body, id);
+      const review = await createReviewM(req.body, id, productId);
       res.json({
         status: 'success',
-        data: {
-          deliveryAddress: user.deliveryAddress,
-          additionalInfo: user.additionalInfo,
-          region: user.region,
-          city: user.city,
-          phone: user.phone,
-          additionalPhone: user.additionalPhone,
-        },
+        data: review,
       });
     } catch (error: any) {
       if (!error.statusCode) {
