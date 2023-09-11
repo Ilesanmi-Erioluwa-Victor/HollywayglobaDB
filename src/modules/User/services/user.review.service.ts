@@ -10,11 +10,18 @@ import { CustomRequest } from '../../../interfaces/custom';
 const { catchAsync, ValidateMongoDbId } = Utils;
 
 
-export const createAddress: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+export const createReview: RequestHandler = catchAsync(
+    async (req: CustomRequest, res: Response, next: NextFunction) => {
+        
+        const { userId, productId } = req.params;
+        
+        ValidateMongoDbId(userId);
+        
+        ValidateMongoDbId(productId);
+
+        if (!userId) throwError('No user found', StatusCodes.NOT_FOUND);
+        
+          if (!userId) throwError('No product found', StatusCodes.NOT_FOUND);
 
     const {
       deliveryAddress,
