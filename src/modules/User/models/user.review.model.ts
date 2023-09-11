@@ -49,6 +49,8 @@ export class reviewQueries {
         product: {
           select: {
             id: false,
+            title: true,
+            brand: true,
             description: false,
             price: false,
             quantity: false,
@@ -57,6 +59,8 @@ export class reviewQueries {
             adminId: false,
             colors: false,
             categoryId: false,
+            createdAt: false,
+            updatedAt: false,
           },
         },
       },
