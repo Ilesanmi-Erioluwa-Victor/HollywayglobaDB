@@ -71,19 +71,13 @@ export const editAddress = catchAsync(
     if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
     if (!addressId) throwError('No address found', StatusCodes.NOT_FOUND);
     try {
-      const userWithAddress = await findUserWithAddressM(id);
-      const userWithAddressId = userWithAddress?.address[0].id;
-      const userAddress = await updateAddressM(
-        userWithAddressId as string,
+      const updatedAddress = await updateAddressM(
+        addressId as string,
         req.body
       );
       res.json({
-        deliveryAddress: userAddress.deliveryAddress,
-        additionalInfo: userAddress.additionalInfo,
-        region: userAddress.region,
-        city: userAddress.city,
-        phone: userAddress.phone,
-        additionalPhone: userAddress.additionalPhone,
+        status: 'success',
+        message: 'ok',
       });
     } catch (error: any) {
       if (!error.statusCode) {
