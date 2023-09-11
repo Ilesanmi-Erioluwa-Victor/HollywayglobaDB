@@ -21,7 +21,16 @@ export class reviewQueries {
     return review;
   }
 
-  static async getReviewM(reviewId: string) {
+  static async findReviewIdM(id: string) {
+    const review = await prisma.review.findUnique({
+      where: {
+        id,
+      },
+    });
+    return review;
+  }
+
+  static async getReviewWithUserDetailsM(reviewId: string) {
     const review = await prisma.review.findUnique({
       where: {
         id: reviewId,
@@ -72,12 +81,12 @@ export class reviewQueries {
     return review;
   }
 
-  static async updateReviewM(id: string, data: review) {
-    const updatedAddress = await prisma.review.update({
-      where: { id: id },
+  static async updateReviewM(reviewId: string, data: review) {
+    const updatedReview = await prisma.review.update({
+      where: { id: reviewId },
       data: data,
     });
 
-    return updatedAddress;
+    return updatedReview;
   }
 }

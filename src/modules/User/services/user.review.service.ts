@@ -11,7 +11,12 @@ const { catchAsync, ValidateMongoDbId } = Utils;
 
 import { reviewQueries } from './../models/user.review.model';
 
-const { createReviewM, getReviewM } = reviewQueries;
+const {
+  createReviewM,
+  getReviewWithUserDetailsM,
+  updateReviewM,
+  findReviewIdM,
+} = reviewQueries;
 
 export const createReview: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -57,7 +62,7 @@ export const getReview: RequestHandler = catchAsync(
     if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
 
     try {
-      const review = await getReviewM(reviewId);
+      const review = await getReviewWithUserDetailsM(reviewId);
       res.json({
         status: 'success',
         message: 'ok',
@@ -72,26 +77,36 @@ export const getReview: RequestHandler = catchAsync(
   }
 );
 
-export const editReview: RequestHandler = catchAsync(
+export const editAddress = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id, productId, reviewId } = req.params;
 
     ValidateMongoDbId(id);
-
     ValidateMongoDbId(productId);
+    ValidateMongoDbId(reviewId);
+    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
 
-    if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
+    if (!productId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
 
-    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
-
-    if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
+    if (!reviewId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
 
     try {
-      const review = await getReviewM(reviewId);
+      const existingReview = await findReviewIdM(reviewId);
+
+      if (!existingReview) throwError('No Review found', StatusCodes.NOT_FOUND);
+
+      const updatedReview = await updateReviewM(reviewId as string, req.body);
+
+      if (!updatedReview)
+        throwError(
+          'Sorry, something went wrong, try again',
+          StatusCodes.BAD_REQUEST
+        );
+
       res.json({
         status: 'success',
         message: 'ok',
-        data: review,
+        data: updatedReview,
       });
     } catch (error: any) {
       if (!error.statusCode) {
