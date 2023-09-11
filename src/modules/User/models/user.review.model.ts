@@ -50,6 +50,13 @@ export class reviewQueries {
           select: {
             id: false,
             description: false,
+            price: false,
+            quantity: false,
+            images: false,
+            stock: false,
+            adminId: false,
+            colors: false,
+            categoryId: false,
           },
         },
       },
