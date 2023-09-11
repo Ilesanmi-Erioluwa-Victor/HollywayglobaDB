@@ -46,7 +46,12 @@ export class reviewQueries {
             v: false,
           },
         },
-        product: true,
+        product: {
+          select: {
+            id: false,
+            description: false,
+          },
+        },
       },
     });
     return review;
