@@ -15,9 +15,10 @@ import {
   addToWishlist,
   decreaseCartItems,
   incrementCartItems,
+
 } from '../services/user.cart.service';
 
-import { createAddress, editAddress } from '../services/user.address.service';
+import { createAddress, editAddress, getAddresses } from '../services/user.address.service';
 
 import { Auth } from '../../../middlewares/auth';
 
@@ -43,6 +44,8 @@ route.put('/:id/product/increaseCart', Token, VerifiedUser, incrementCartItems);
 route.put('/:id/product/decreaseCart', Token, VerifiedUser, decreaseCartItems);
 
 route.put('/:id/address/edit', Token, VerifiedUser, editAddress);
+
+route.get("/:id/address", Token, VerifiedUser, getAddresses);
 
 route.post('/forgetPassword', forgetPasswordToken);
 
