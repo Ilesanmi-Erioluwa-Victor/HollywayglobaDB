@@ -69,8 +69,15 @@ export const editAddress = catchAsync(
     ValidateMongoDbId(id);
     ValidateMongoDbId(addressId);
     if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
-    if (!addressId) throwError('No address found', StatusCodes.NOT_FOUND);
+    if (!addressId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+
     try {
+      const existingAddress = await findAddressM(addressId);
+      addressId;
+
+      if (!existingAddress)
+        throwError('No address found', StatusCodes.NOT_FOUND);
+
       const updatedAddress = await updateAddressM(
         addressId as string,
         req.body

@@ -4,7 +4,7 @@ import { address } from '../user.interface';
 
 export class addressQueries {
   static async createAddressM(address: address, userId: string) {
-    const userAddress = await prisma.address.create({
+    const Address = await prisma.address.create({
       data: {
         deliveryAddress: address.deliveryAddress,
         additionalInfo: address.additionalInfo,
@@ -15,7 +15,7 @@ export class addressQueries {
         user: { connect: { id: userId } },
       },
     });
-    return userAddress;
+    return Address;
   }
 
   static async updateAddressM(id: string, data: address) {
