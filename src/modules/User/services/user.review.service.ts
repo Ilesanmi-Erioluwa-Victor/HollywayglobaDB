@@ -11,7 +11,7 @@ const { catchAsync, ValidateMongoDbId } = Utils;
 
 import { reviewQueries } from './../models/user.review.model';
 
-const { createReviewM } = reviewQueries;
+const { createReviewM, getReviewM } = reviewQueries;
 
 export const createReview: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -30,7 +30,7 @@ export const createReview: RequestHandler = catchAsync(
       const review = await createReviewM(req.body, id, productId);
       res.json({
         status: 'success',
-        message : "ok",
+        message: 'ok',
         data: review,
       });
     } catch (error: any) {
@@ -44,7 +44,7 @@ export const createReview: RequestHandler = catchAsync(
 
 export const getReview: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id, productId } = req.params;
+    const { id, productId, reviewId } = req.params;
 
     ValidateMongoDbId(id);
 
@@ -54,9 +54,10 @@ export const getReview: RequestHandler = catchAsync(
 
     if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
 
-    const { text, rating } = req.body;
+    if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
+
     try {
-      const review = await createReviewM(req.body, id, productId);
+      const review = await getReviewM(id, productId, reviewId);
       res.json({
         status: 'success',
         message: 'ok',
