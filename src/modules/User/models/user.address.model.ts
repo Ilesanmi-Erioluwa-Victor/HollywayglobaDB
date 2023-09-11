@@ -50,6 +50,16 @@ export class addressQueries {
       where: {
         userId: userId,
       },
+      select: {
+        id: true,
+        deliveryAddress: true,
+        additionalInfo: true,
+        region: true,
+        city: true,
+        phone: true,
+        additionalPhone: true,
+        userId: false,
+      },
     });
 
     return addresses;
