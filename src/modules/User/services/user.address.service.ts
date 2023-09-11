@@ -11,7 +11,12 @@ import { addressQueries } from '../models/user.address.model';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
-const { createAddressM, findUserWithAddressM, updateAddressM } = addressQueries;
+import { userQueries} from "../../User/models/user.auth.model"
+
+const { findUserMId} = userQueries
+
+const { createAddressM, findUserWithAddressM, updateAddressM, findUserWithAddressAndDeleteM } =
+  addressQueries;
 
 export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -107,15 +112,15 @@ export const getAddresses = catchAsync(
 
 export const deleteAddresses = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+    const { id, addressId } = req.params;
     ValidateMongoDbId(id);
     if (!id) throwError("Invalid ID", StatusCodes.BAD_REQUEST);
     try {
-      const userWithAddress = await findUserWithAddressM(id);
+      const user = await findUserMId(id);
+      const address = await findUserWithAddressAndDeleteM(addressId);
       res.json({
         status: "success",
-        message: "ok",
-        data: userWithAddress,
+        message: "address deleted"
       });
     } catch (error: any) {
       if (!error.statusCode) {
