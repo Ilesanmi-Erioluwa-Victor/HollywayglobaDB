@@ -3,6 +3,7 @@ import { prisma } from '../../../configurations/db';
 import { review } from '../user.interface';
 
 export class reviewQueries {
+  
   static async createReviewM(
     reviewData: review,
     userId: string,
