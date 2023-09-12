@@ -41,4 +41,6 @@ route.get(
   getReviews
 );
 
+route.delete('/:id/review/:reviewId', Token, VerifiedUser, getReviews);
+
 export default route;

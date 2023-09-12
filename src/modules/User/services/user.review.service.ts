@@ -21,6 +21,7 @@ const {
   updateReviewM,
   findReviewIdM,
   getReviewsM,
+  deleteReviewIdM,
 } = reviewQueries;
 
 export const createReview: RequestHandler = catchAsync(
@@ -159,7 +160,7 @@ export const deleteReview: RequestHandler = catchAsync(
     if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
 
     try {
-      const review = await getReviewWithUserDetailsM(reviewId);
+      const review = await deleteReviewIdM(reviewId);
       res.json({
         status: 'success',
         message: 'ok',
