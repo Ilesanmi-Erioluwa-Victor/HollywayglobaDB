@@ -8,6 +8,7 @@ import {
   createReview,
   getReview,
   editReview,
+  getReviews,
 } from '../services/user.review.service';
 
 const route = express.Router();
@@ -27,17 +28,17 @@ route.get(
 );
 
 route.put(
-  '/user/:id/product/:productId/review/:reviewId',
+  '/:id/product/:productId/review/:reviewId',
   Token,
   VerifiedUser,
   editReview
 );
 
-route.put(
+route.get(
   '/:id/product/:productId/review/:reviewId',
   Token,
   VerifiedUser,
-  editReview
+  getReviews
 );
 
 export default route;

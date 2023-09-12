@@ -121,30 +121,29 @@ export const editReview = catchAsync(
   }
 );
 
-// export const deleteReview = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id, productId, reviewId } = req.params;
-//     ValidateMongoDbId(id);
-//     ValidateMongoDbId(productId);
-//      ValidateMongoDbId(reviewId);
+export const getReviews = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id, productId, reviewId } = req.params;
+    ValidateMongoDbId(id);
+    ValidateMongoDbId(productId);
+    ValidateMongoDbId(reviewId);
 
-//     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
-//     if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
-//      if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
-//     try {
-//       const user = await findUserMId(id);
-//       const review= await findUserWithAddressAndDeleteM(addressId);
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
+    if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
+    try {
+      const user = await findUserMId(id);
+      const review = await findUserWithAddressAndDeleteM(addressId);
 
-
-//       res.json({
-//         status: 'success',
-//         message: 'review deleted',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+      res.json({
+        status: 'success',
+        message: 'review deleted',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
