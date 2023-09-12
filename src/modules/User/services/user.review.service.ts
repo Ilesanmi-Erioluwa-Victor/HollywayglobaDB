@@ -147,15 +147,13 @@ export const getReviews = catchAsync(
 
 export const deleteReview: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id, productId, reviewId } = req.params;
+    const { id, reviewId } = req.params;
 
     ValidateMongoDbId(id);
 
-    ValidateMongoDbId(productId);
+    ValidateMongoDbId(reviewId);
 
     if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
-
-    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
 
     if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
 
@@ -163,8 +161,7 @@ export const deleteReview: RequestHandler = catchAsync(
       const review = await deleteReviewIdM(reviewId);
       res.json({
         status: 'success',
-        message: 'ok',
-        data: review,
+        message: 'review deleted',
       });
     } catch (error: any) {
       if (!error.statusCode) {

@@ -9,6 +9,7 @@ import {
   getReview,
   editReview,
   getReviews,
+  deleteReview,
 } from '../services/user.review.service';
 
 const route = express.Router();
@@ -41,6 +42,6 @@ route.get(
   getReviews
 );
 
-route.delete('/:id/review/:reviewId', Token, VerifiedUser, getReviews);
+route.delete('/:id/review/:reviewId', Token, VerifiedUser, deleteReview);
 
 export default route;
