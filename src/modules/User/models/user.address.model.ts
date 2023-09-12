@@ -1,10 +1,10 @@
-import { prisma } from "../../../configurations/db";
+import { prisma } from '../../../configurations/db';
 
-import { address } from "../user.interface";
+import { address } from '../user.interface';
 
 export class addressQueries {
   static async createAddressM(address: address, userId: string) {
-    const userAddress = await prisma.address.create({
+    const Address = await prisma.address.create({
       data: {
         deliveryAddress: address.deliveryAddress,
         additionalInfo: address.additionalInfo,
@@ -15,35 +15,57 @@ export class addressQueries {
         user: { connect: { id: userId } },
       },
     });
-    return userAddress;
+    return Address;
   }
 
   static async updateAddressM(id: string, data: address) {
-    const user = await prisma.address.update({
-      where: {
-        id,
-      },
-      data: {
-        deliveryAddress: data.deliveryAddress,
-        additionalInfo: data.additionalInfo,
-        region: data.region,
-        city: data.city,
-        phone: data.phone,
-        additionalPhone: data.additionalPhone,
-      },
+    const updatedAddress = await prisma.address.update({
+      where: { id: id },
+      data: data,
     });
 
-    return user;
+    return updatedAddress;
   }
 
-  static async findUserWithAddressM(id: string) {
-    const user = await prisma.user.findUnique({
+  static async countUserAddresses(userId: string) {
+    const count = await prisma.address.count({
+      where: {
+        userId: userId,
+      },
+    });
+    return count;
+  }
+
+  static async findAddressM(id: string) {
+    const address = await prisma.address.findUnique({
       where: {
         id,
       },
-      include: { address: true },
     });
-    return user;
+    return address;
+  }
+
+  static async findAddressesByUserId(userId: string) {
+    const addresses = await prisma.address.findMany({
+      where: {
+        userId: userId,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+      select: {
+        id: true,
+        deliveryAddress: true,
+        additionalInfo: true,
+        region: true,
+        city: true,
+        phone: true,
+        additionalPhone: true,
+        userId: false,
+      },
+    });
+
+    return addresses;
   }
 
   static async findUserWithAddressAndDeleteM(addressId: string) {

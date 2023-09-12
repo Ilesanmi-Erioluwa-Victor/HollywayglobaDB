@@ -11,18 +11,24 @@ import { addressQueries } from '../models/user.address.model';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
-import { userQueries} from "../../User/models/user.auth.model"
+import { userQueries } from '../../User/models/user.auth.model';
 
-const { findUserMId} = userQueries
+const { findUserMId } = userQueries;
 
-const { createAddressM, findUserWithAddressM, updateAddressM, findUserWithAddressAndDeleteM } =
-  addressQueries;
+const {
+  createAddressM,
+  findAddressesByUserId,
+  countUserAddresses,
+  updateAddressM,
+  findUserWithAddressAndDeleteM,
+  findAddressM,
+} = addressQueries;
 
 export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.FORBIDDEN);
+    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
 
     const {
       deliveryAddress,
@@ -35,6 +41,15 @@ export const createAddress: RequestHandler = catchAsync(
 
     // TODO, I want to add JOI as validator
     try {
+      const addressCount = await countUserAddresses(id);
+
+      if (addressCount >= 4) {
+        return res.status(StatusCodes.FORBIDDEN).json({
+          status: 'error',
+          message: 'Maximum number of addresses reached.',
+        });
+      }
+
       const user = await createAddressM(req.body, id);
       res.json({
         status: 'success',
@@ -56,26 +71,37 @@ export const createAddress: RequestHandler = catchAsync(
   }
 );
 
-// TODO a bug to fix here..
-export const editAddress: any = catchAsync(
+export const editAddress = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+    const { id, addressId } = req.params;
+
     ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+    ValidateMongoDbId(addressId);
+    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+
+    if (!addressId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+
     try {
-      const userWithAddress = await findUserWithAddressM(id);
-      const userWithAddressId = userWithAddress?.address[0].id;
-      const userAddress = await updateAddressM(
-        userWithAddressId as string,
+      const existingAddress = await findAddressM(addressId);
+      addressId;
+
+      if (!existingAddress)
+        throwError('No address found', StatusCodes.NOT_FOUND);
+
+      const updatedAddress = await updateAddressM(
+        addressId as string,
         req.body
       );
+
+      if (!updatedAddress)
+        throwError(
+          'Sorry, something went wrong, try again',
+          StatusCodes.BAD_REQUEST
+        );
+
       res.json({
-        deliveryAddress: userAddress.deliveryAddress,
-        additionalInfo: userAddress.additionalInfo,
-        region: userAddress.region,
-        city: userAddress.city,
-        phone: userAddress.phone,
-        additionalPhone: userAddress.additionalPhone,
+        status: 'success',
+        message: 'ok',
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -85,20 +111,22 @@ export const editAddress: any = catchAsync(
     }
   }
 );
-
 
 export const getAddresses = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError("Invalid ID", StatusCodes.BAD_REQUEST);
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
     try {
-      const userWithAddress = await findUserWithAddressM(id);
+      const addresses = await findAddressesByUserId(id);
+
+      if (!addresses) throwError('No addresses found', StatusCodes.NOT_FOUND);
+
       res.json({
-        // length: userWithAddress,
-        status: "success",
-        message: "ok",
-        data : userWithAddress
+        length: addresses?.length,
+        status: 'success',
+        message: 'ok',
+        data: addresses,
       });
     } catch (error: any) {
       if (!error.statusCode) {
@@ -109,18 +137,25 @@ export const getAddresses = catchAsync(
   }
 );
 
-
 export const deleteAddresses = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id, addressId } = req.params;
     ValidateMongoDbId(id);
-    if (!id) throwError("Invalid ID", StatusCodes.BAD_REQUEST);
+    ValidateMongoDbId(addressId);
+
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+    if (!addressId) throwError('No address found', StatusCodes.NOT_FOUND);
     try {
       const user = await findUserMId(id);
       const address = await findUserWithAddressAndDeleteM(addressId);
+
+      if (!user) throwError('No user found', StatusCodes.NOT_FOUND);
+
+      if (!address) throwError('No address found', StatusCodes.NOT_FOUND);
+
       res.json({
-        status: "success",
-        message: "address deleted"
+        status: 'success',
+        message: 'address deleted',
       });
     } catch (error: any) {
       if (!error.statusCode) {
