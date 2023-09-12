@@ -122,18 +122,15 @@ export const editReview = catchAsync(
 
 export const getReviews = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id, productId, reviewId } = req.params;
+    const { id } = req.params;
     ValidateMongoDbId(id);
-    ValidateMongoDbId(productId);
-    ValidateMongoDbId(reviewId);
 
     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
-    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
-    if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
     try {
       const reviews = await getReviewsM(id);
 
       res.json({
+        length: reviews.length,
         status: 'success',
         message: 'ok',
         data: reviews,

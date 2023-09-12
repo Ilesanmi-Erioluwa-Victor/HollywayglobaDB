@@ -35,7 +35,7 @@ route.put(
 );
 
 route.get(
-  '/:id/product/:productId/review',
+  '/:id/reviews',
   Token,
   VerifiedUser,
   getReviews
