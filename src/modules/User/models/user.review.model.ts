@@ -113,7 +113,7 @@ export class reviewQueries {
   }
 
   static async deleteReviewIdM(id: string) {
-    const review = await prisma.review.findUnique({
+    const review = await prisma.review.delete({
       where: {
         id,
       },
