@@ -73,6 +73,14 @@ model User {
   v                               Int?                 @map("__v")
 }
 
+model PasswordResetToken {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  token          String   @unique @default("")
+  expirationTime DateTime
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id])
+}
+
 model Product {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   title       String
@@ -171,14 +179,6 @@ model OrderItem {
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
   unitPrice Float
-}
-
-model PasswordResetToken {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  token          String   @unique @default("")
-  expirationTime DateTime
-  userId         String   @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id])
 }
 
 model Payment {
