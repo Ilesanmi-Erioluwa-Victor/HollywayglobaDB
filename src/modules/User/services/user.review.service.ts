@@ -1,6 +1,10 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
+import { userQueries } from '../../User/models/user.auth.model';
+
+const { findUserMId } = userQueries;
+
 import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
@@ -28,7 +32,7 @@ export const createReview: RequestHandler = catchAsync(
 
     if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
 
-    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
+
 
     const { text, rating } = req.body;
     try {
@@ -116,3 +120,31 @@ export const editReview = catchAsync(
     }
   }
 );
+
+// export const deleteReview = catchAsync(
+//   async (req: CustomRequest, res: Response, next: NextFunction) => {
+//     const { id, productId, reviewId } = req.params;
+//     ValidateMongoDbId(id);
+//     ValidateMongoDbId(productId);
+//      ValidateMongoDbId(reviewId);
+
+//     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+//     if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
+//      if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
+//     try {
+//       const user = await findUserMId(id);
+//       const review= await findUserWithAddressAndDeleteM(addressId);
+
+
+//       res.json({
+//         status: 'success',
+//         message: 'review deleted',
+//       });
+//     } catch (error: any) {
+//       if (!error.statusCode) {
+//         error.statusCode = 500;
+//       }
+//       next(error);
+//     }
+//   }
+// );

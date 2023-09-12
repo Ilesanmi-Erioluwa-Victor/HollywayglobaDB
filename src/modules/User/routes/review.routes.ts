@@ -33,4 +33,11 @@ route.put(
   editReview
 );
 
+route.put(
+  '/user/:id/product/:productId/review/:reviewId',
+  Token,
+  VerifiedUser,
+  editReview
+);
+
 export default route;
