@@ -20,6 +20,7 @@ const {
   getReviewWithUserDetailsM,
   updateReviewM,
   findReviewIdM,
+  getReviewsM
 } = reviewQueries;
 
 export const createReview: RequestHandler = catchAsync(

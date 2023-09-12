@@ -89,4 +89,27 @@ export class reviewQueries {
 
     return updatedReview;
   }
+
+  static async getReviewsM(userId : string) {
+      const reviews = await prisma.review.findMany({
+        where: {
+          userId: userId,
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+        // select: {
+        //   id: true,
+        //   deliveryAddress: true,
+        //   additionalInfo: true,
+        //   region: true,
+        //   city: true,
+        //   phone: true,
+        //   additionalPhone: true,
+        //   userId: false,
+        // },
+      });
+
+      return reviews;
+  }
 }
