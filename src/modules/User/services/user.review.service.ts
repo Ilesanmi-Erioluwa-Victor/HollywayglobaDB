@@ -20,7 +20,7 @@ const {
   getReviewWithUserDetailsM,
   updateReviewM,
   findReviewIdM,
-  getReviewsM
+  getReviewsM,
 } = reviewQueries;
 
 export const createReview: RequestHandler = catchAsync(
@@ -32,8 +32,6 @@ export const createReview: RequestHandler = catchAsync(
     ValidateMongoDbId(productId);
 
     if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
-
-
 
     const { text, rating } = req.body;
     try {
@@ -133,12 +131,12 @@ export const getReviews = catchAsync(
     if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
     if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
     try {
-      const user = await findUserMId(id);
-      const review = await findUserWithAddressAndDeleteM(addressId);
+      const reviews = await getReviewsM(id);
 
       res.json({
         status: 'success',
-        message: 'review deleted',
+        message: 'ok',
+        data: reviews,
       });
     } catch (error: any) {
       if (!error.statusCode) {
