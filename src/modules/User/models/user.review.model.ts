@@ -90,26 +90,25 @@ export class reviewQueries {
     return updatedReview;
   }
 
-  static async getReviewsM(userId : string) {
-      const reviews = await prisma.review.findMany({
-        where: {
-          userId: userId,
-        },
-        orderBy: {
-          createdAt: 'asc',
-        },
-        // select: {
-        //   id: true,
-        //   deliveryAddress: true,
-        //   additionalInfo: true,
-        //   region: true,
-        //   city: true,
-        //   phone: true,
-        //   additionalPhone: true,
-        //   userId: false,
-        // },
-      });
+  static async getReviewsM(userId: string) {
+    const reviews = await prisma.review.findMany({
+      where: {
+        userId: userId,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+      select: {
+        id: true,
+        text: true,
+        rating: true,
+        createdAt: false,
+        updatedAt: false,
+        productId: false,
+        userId: false,
+      },
+    });
 
-      return reviews;
+    return reviews;
   }
 }
