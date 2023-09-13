@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { Utils } from '../../../helper/utils';
@@ -22,25 +22,26 @@ import { throwError } from '../../../middlewares/error';
 import { findProductIdM } from '../../Admin/models/admin.product.models';
 
 export const createCart = async (
-  req: CustomRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const userId = req.authId;
-  ValidateMongoDbId(userId as string);
+  const id = req.params.id;
+
+  ValidateMongoDbId(id as string);
 
   const { productId, quantity } = req.body;
 
   try {
-    if (!userId || !productId || !quantity) {
+    if (!id || !productId || !quantity) {
       throwError('Missing required information', StatusCodes.BAD_REQUEST);
       return;
     }
 
-    let cart = await existCartM(userId);
+    let cart = await existCartM(id);
 
     if (!cart) {
-      cart = await createCartM(userId);
+      cart = await createCartM(id);
     }
 
     const existingCartItem = cart.items.find(
@@ -55,6 +56,7 @@ export const createCart = async (
     res.json({
       status: 'success',
       message: 'You have successfully added item to Cart',
+      data: cart,
     });
   } catch (error: any) {
     if (!error.statusCode) {
@@ -63,6 +65,22 @@ export const createCart = async (
     next(error);
   }
 };
+
+export const getCart = async () => {
+  const { userId } = req.params;
+
+  const cart = await prisma.cart.findUnique({
+    where: { userId },
+    include: { items: { include: { product: true } } },
+  });
+
+  if (!cart) {
+    res.status(404).json({ error: 'Cart not found' });
+    return;
+  }
+
+  res.json({ cart });
+}
 
 export const incrementCartItems = async (
   req: CustomRequest,
