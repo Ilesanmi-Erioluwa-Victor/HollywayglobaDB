@@ -4,20 +4,14 @@ import {
   ProductWishListIncrease,
 } from '../user.interface';
 
-// export const productWishListIdM = async (id: string) => {
-//   const wishList = await prisma.productWishList.findUnique({
-//     where: {
-//       id,
-//     },
-//     select: {
-//       user: true,
-//       product: true,
-//       productId: true,
-//       quantity: true,
-//       totalAmount: true,
-//     },
-//   });
-// };
+export const createCart = async (userId: string) => {
+  const cart = await prisma.cart.create({
+    data: {
+      userId,
+    },
+    include: { items: { include: { product: true } } },
+  });
+};
 
 export const existCartM = async (userId: string) => {
   const cart = await prisma.cart.findFirst({
