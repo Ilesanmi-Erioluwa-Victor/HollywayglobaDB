@@ -26,6 +26,17 @@ export const existCartM = async (userId: string) => {
   return cart;
 };
 
+export const getCartM = async (userId: string) => {
+  const cart = await prisma.cart.findUnique({
+    where: {
+      id: userId,
+    },
+    include: { items: { include: { product: true } } },
+  });
+
+  return cart;
+};
+
 export const updateCartItemM = async (
   existingCartItem: { id: string; quantity: number },
   quantity: number
@@ -37,17 +48,21 @@ export const updateCartItemM = async (
   return cartItem;
 };
 
-export const createCartItemM = async (cart:{id : string}, productId : string, quantity : number) => {
+export const createCartItemM = async (
+  cart: { id: string },
+  productId: string,
+  quantity: number
+) => {
   const cartItem = await prisma.cartItem.create({
     data: {
       cartId: cart.id,
       productId,
-      quantity
-  }
-  })
+      quantity,
+    },
+  });
 
   return cartItem;
-}
+};
 
 // TODO a bug to fix in Promise<ProductWishListResult | any> ought to be null
 export const updateExistItemCartQuantityM = async (

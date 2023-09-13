@@ -9,6 +9,7 @@ import {
   updateCartItemM,
   createCartM,
   createCartItemM,
+  getCartM,
   existCartM,
   updateExistItemCartQuantityM,
   decreaseCartItemM,
@@ -66,21 +67,22 @@ export const createCart = async (
   }
 };
 
-export const getCart = async () => {
-  const { userId } = req.params;
+export const getCart = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
 
-  const cart = await prisma.cart.findUnique({
-    where: { userId },
-    include: { items: { include: { product: true } } },
-  });
+  const cart = await getCartM(id);
 
   if (!cart) {
-    res.status(404).json({ error: 'Cart not found' });
+    throwError('No cart found', StatusCodes.NOT_FOUND);
     return;
   }
 
-  res.json({ cart });
-}
+  res.json({ status: 'success', message: 'ok', data: cart });
+};
 
 export const incrementCartItems = async (
   req: CustomRequest,
