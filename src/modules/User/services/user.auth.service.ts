@@ -47,15 +47,7 @@ const {
 export const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { firstName, lastName, password, email, mobile } = req.body;
-      if (!firstName || !lastName || !password || !email || !mobile) {
-        throwError(
-          'Missing credentials, please provide all required information',
-          StatusCodes.BAD_REQUEST
-        );
-      }
-
-      const existEmail = await findUserMEmail(email);
+      const existEmail = await findUserMEmail(req.body.email);
       if (existEmail) {
         throwError(
           'You are already a member, kindly login to your account',

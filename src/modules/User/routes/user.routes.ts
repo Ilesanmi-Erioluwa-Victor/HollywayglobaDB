@@ -34,7 +34,7 @@ const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
-route.post('/signup', createUserValidation, createUser);
+route.post('/signup', createUserValidation, validate, createUser);
 
 route.post('/login', loginUser);
 
