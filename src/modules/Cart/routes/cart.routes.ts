@@ -13,7 +13,7 @@ const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
-route.post('/add-to-cart/:id', Token, VerifiedUser, createCart);
+route.post('/add/:id', Token, VerifiedUser, createCart);
 
 route.get("/:id", getCart)
 
