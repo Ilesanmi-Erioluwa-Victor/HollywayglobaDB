@@ -32,7 +32,6 @@ export const createCart = async (
   try {
     if (!userId || !productId || !quantity) {
       throwError('Missing required information', StatusCodes.BAD_REQUEST);
-
       return;
     }
 
