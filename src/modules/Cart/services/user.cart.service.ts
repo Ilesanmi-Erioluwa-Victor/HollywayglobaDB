@@ -17,7 +17,7 @@ const { catchAsync, ValidateMongoDbId } = Utils;
 
 import { findProductIdM } from '../../Admin/models/admin.product.models';
 
-export const addToWishlist = async (
+export const createCart = async (
   req: CustomRequest,
   res: Response,
   next: NextFunction
