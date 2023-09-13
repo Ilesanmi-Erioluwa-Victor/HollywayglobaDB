@@ -66,11 +66,11 @@ model User {
   accountVerificationTokenExpires DateTime?            @default(now())
   passwordresettoken              PasswordResetToken[]
   payment                         Payment?
-  cart                            Cart?
   orders                          Order[]
   createdAt                       DateTime             @default(now())
   updatedAt                       DateTime             @updatedAt
   v                               Int?                 @map("__v")
+  Cart                            Cart[]
 }
 
 model PasswordResetToken {
@@ -145,10 +145,10 @@ enum Brand {
 }
 
 model Cart {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String     @unique @db.ObjectId
-  user      User       @relation(fields: [userId], references: [id])
-  items     CartItem[]
+  id     String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId String     @db.ObjectId
+  user   User       @relation(fields: [userId], references: [id])
+  items  CartItem[]
 }
 
 model CartItem {
