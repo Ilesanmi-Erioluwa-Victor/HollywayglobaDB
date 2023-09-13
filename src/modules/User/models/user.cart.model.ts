@@ -4,7 +4,7 @@ import {
   ProductWishListIncrease,
 } from '../user.interface';
 
-export const createCart = async (userId: string) => {
+export const createCartM = async (userId: string) => {
   const cart = await prisma.cart.create({
     data: {
       userId,

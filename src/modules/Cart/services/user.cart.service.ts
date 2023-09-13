@@ -7,6 +7,7 @@ import { CustomRequest } from '../../../interfaces/custom';
 
 import {
   userWishListCartM,
+  createCartM,
   existCartM,
   updateExistItemCartQuantityM,
   decreaseCartItemM,
@@ -37,30 +38,15 @@ export const createCart = async (
 
     let cart = await existCartM(userId);
 
-    const product = await findProductIdM(productId);
+    // const product = await findProductIdM(productId);
 
-    if (!product) {
-      throwError('Product not found', StatusCodes.NOT_FOUND);
-      return;
-    }
+    // if (!product) {
+    //   throwError('Product not found', StatusCodes.NOT_FOUND);
+    //   return;
+    // }
 
-    if (!existingWishlistItemCart) {
-      const totalAmount = product.price * quantity;
-
-      const userWishlistItem = await userWishListCartM(
-        userId,
-        productId,
-        quantity,
-        totalAmount
-      );
-
-      res.json({
-        message: 'Product added to wishlist',
-        data: userWishlistItem,
-      });
-      return;
-    } else {
-      throwError('Item added already, increment only', StatusCodes.CONFLICT);
+    if (!cart) {
+      cart = await createCartM(userId);
     }
   } catch (error: any) {
     if (!error.statusCode) {
