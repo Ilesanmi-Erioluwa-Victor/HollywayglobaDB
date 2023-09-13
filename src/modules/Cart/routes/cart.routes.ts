@@ -4,9 +4,9 @@ import { Auth } from '../../../middlewares/auth';
 
 import {
   createCart,
-  decreaseCartItems,
+//   decreaseCartItems,
   getCart,
-  incrementCartItems,
+//   incrementCartItems,
 } from '../services/user.cart.service';
 
 const { Token, VerifiedUser } = Auth;
@@ -17,6 +17,6 @@ route.post('/add/:id', Token, VerifiedUser, createCart);
 
 route.get("/:id", getCart)
 
-route.put('/increaseCart/:id', Token, VerifiedUser, incrementCartItems);
+// route.put('/increaseCart/:id', Token, VerifiedUser, incrementCartItems);
 
-route.put('/decreaseCart/:id', Token, VerifiedUser, decreaseCartItems);
+// route.put('/decreaseCart/:id', Token, VerifiedUser, decreaseCartItems);
