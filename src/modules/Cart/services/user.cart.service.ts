@@ -1,8 +1,8 @@
 import { NextFunction, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import AppError from '../../../utils';
 import { Utils } from '../../../helper/utils';
+
 import { CustomRequest } from '../../../interfaces/custom';
 
 import {
@@ -83,17 +83,16 @@ export const incrementCartItems = async (
 
   try {
     if (!productId || !userId)
-      next(new AppError('Invalid params or query', StatusCodes.NOT_FOUND));
+      throwError('Invalid params or query', StatusCodes.NOT_FOUND);
 
     const existingCartItem = await existItemCartM(userId as string, productId);
 
     if (!existingCartItem)
-      next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
+      throwError('cartItem not found', StatusCodes.NOT_FOUND);
 
     const product = await findProductIdM(productId);
 
-    if (!product)
-      next(new AppError('Product not found', StatusCodes.NOT_FOUND));
+    if (!product) throwError('Product not found', StatusCodes.NOT_FOUND);
 
     const price = product?.price || 0;
     const totalAmount: number | any = existingCartItem?.totalAmount;
@@ -126,7 +125,7 @@ export const decreaseCartItems = catchAsync(
 
     try {
       if (!productId || !userId)
-        next(new AppError('Invalid params or query', StatusCodes.NOT_FOUND));
+        throwError('Invalid params or query', StatusCodes.NOT_FOUND);
 
       const existingCartItem = await existItemCartM(
         userId as string,
@@ -134,12 +133,11 @@ export const decreaseCartItems = catchAsync(
       );
 
       if (!existingCartItem)
-        next(new AppError('cartItem not found', StatusCodes.NOT_FOUND));
+        throwError('cartItem not found', StatusCodes.NOT_FOUND);
 
       const product = await findProductIdM(productId);
 
-      if (!product)
-        next(new AppError('Product not found', StatusCodes.NOT_FOUND));
+      if (!product) throwError('Product not found', StatusCodes.NOT_FOUND);
 
       const price = product?.price || 0;
       const totalAmount: number | any = existingCartItem?.totalAmount;
@@ -147,11 +145,9 @@ export const decreaseCartItems = catchAsync(
       const newAmount = totalAmount - price;
 
       if (price <= 0 || totalAmount <= 0) {
-        return next(
-          new AppError(
-            "You can't have negative cart figure, increase your cart items",
-            StatusCodes.FORBIDDEN
-          )
+        return throwError(
+          "You can't have negative cart figure, increase your cart items",
+          StatusCodes.FORBIDDEN
         );
       }
 
