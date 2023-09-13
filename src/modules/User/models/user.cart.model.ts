@@ -37,6 +37,18 @@ export const updateCartItemM = async (
   return cartItem;
 };
 
+export const createCartItemM = async (cart:{id : string}, productId : string, quantity : number) => {
+  const cartItem = await prisma.cartItem.create({
+    data: {
+      cartId: cart.id,
+      productId,
+      quantity
+  }
+  })
+
+  return cartItem;
+}
+
 // TODO a bug to fix in Promise<ProductWishListResult | any> ought to be null
 export const updateExistItemCartQuantityM = async (
   id: string,

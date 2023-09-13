@@ -8,6 +8,7 @@ import { CustomRequest } from '../../../interfaces/custom';
 import {
   updateCartItemM,
   createCartM,
+  createCartItemM,
   existCartM,
   updateExistItemCartQuantityM,
   decreaseCartItemM,
@@ -41,13 +42,20 @@ export const createCart = async (
     if (!cart) {
       cart = await createCartM(userId);
     }
-    
-    const existingCartItem = cart.items.find((item) => item.productId === productId);
+
+    const existingCartItem = cart.items.find(
+      (item) => item.productId === productId
+    );
     if (existingCartItem) {
-    await updateCartItemM(existingCartItem, quantity);
+      await updateCartItemM(existingCartItem, quantity);
     } else {
-      
-  }
+      await createCartItemM(cart, productId, quantity);
+    }
+
+    res.json({
+      status: 'success',
+      message: 'You have successfully added item to Cart',
+    });
   } catch (error: any) {
     if (!error.statusCode) {
       error.statusCode = 500;
