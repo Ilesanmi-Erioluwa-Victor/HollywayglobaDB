@@ -11,12 +11,14 @@ export const createCart = async (userId: string) => {
     },
     include: { items: { include: { product: true } } },
   });
+
+  return cart;
 };
 
 export const existCartM = async (userId: string) => {
   const cart = await prisma.cart.findFirst({
     where: {
-      userId: userId
+      userId: userId,
     },
     include: { items: { include: { product: true } } },
   });
