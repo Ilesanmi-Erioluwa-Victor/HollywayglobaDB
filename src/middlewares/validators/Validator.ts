@@ -8,9 +8,20 @@ export class customValidator {
         .notEmpty()
         .isString()
         .withMessage('firstName is required'),
-      body('lastName').isEmail().withMessage('lastName is required'),
+      body('lastName')
+        .notEmpty()
+        .isString()
+        .withMessage('lastName is required'),
+      body('email').isEmail().withMessage('Email is required'),
       body('password').notEmpty().withMessage('Password is required'),
       body('mobile').notEmpty().withMessage('Phone number is required'),
+    ];
+  }
+
+  static loginUserValidation() {
+    return [
+      body('email').isEmail().withMessage('Please, provide email'),
+      body('password').notEmpty().withMessage('Please, provide password'),
     ];
   }
 }
