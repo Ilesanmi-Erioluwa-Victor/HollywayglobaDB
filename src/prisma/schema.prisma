@@ -91,7 +91,7 @@ model Product {
   quantity    Int        @default(100)
   images      String[]
   brand       Brand      @default(FOOD)
-  stock       Int        @default(0)
+  stock       Int        @default(1)
   colors      String     @default("white")
   reviews     Review[]
   cart        Cart[]

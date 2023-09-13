@@ -25,21 +25,7 @@ export const existItemCartM = async (userId: string, productId: string) => {
       userId: userId,
       productId: productId,
     },
-    include: {
-      product: {
-        select: {
-          title: true,
-          price: true,
-          colors: true,
-          description: true,
-          brand: true,
-          slug: true,
-          images: true,
-          createdAt: false,
-          updatedAt: false,
-        },
-      },
-    },
+    include: { items: { include: { product: true } } },
   });
 
   return existItem;
