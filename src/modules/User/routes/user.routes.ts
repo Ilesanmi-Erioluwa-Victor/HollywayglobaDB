@@ -1,4 +1,5 @@
 import express from 'express';
+
 import {
   createUser,
   getUser,
@@ -10,12 +11,6 @@ import {
   resetPassword,
   uploadProfile,
 } from '../services/user.auth.service';
-
-import {
-  addToWishlist,
-  decreaseCartItems,
-  incrementCartItems,
-} from '../services/user.cart.service';
 
 import {
   createAddress,
@@ -40,12 +35,6 @@ route.post('/signup', createUser);
 route.post('/login', loginUser);
 
 route.post('/:id/address', Token, VerifiedUser, createAddress);
-
-route.post('/:id/product/add-to-wishlist', Token, VerifiedUser, addToWishlist);
-
-route.put('/:id/product/increaseCart', Token, VerifiedUser, incrementCartItems);
-
-route.put('/:id/product/decreaseCart', Token, VerifiedUser, decreaseCartItems);
 
 route.put('/:id/address/:addressId', Token, VerifiedUser, editAddress);
 

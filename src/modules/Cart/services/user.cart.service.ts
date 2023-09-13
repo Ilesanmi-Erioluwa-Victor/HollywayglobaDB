@@ -11,7 +11,7 @@ import {
   updateExistItemCartQuantityM,
   decreaseCartItemM,
   increaseCartItemM,
-} from '../models/user.cart.model';
+} from '../../User/models/user.cart.model';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
