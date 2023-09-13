@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { customValidator } from 'middlewares/validators/Validator';
+import { customValidator } from '../../../middlewares/validators/Validator';
 
 const { createUserValidation, loginUserValidation, validate } = customValidator;
 
