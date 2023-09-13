@@ -15,6 +15,8 @@ import {
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
+import { throwError } from '../../../middlewares/error';
+
 import { findProductIdM } from '../../Admin/models/admin.product.models';
 
 export const createCart = async (
@@ -29,9 +31,8 @@ export const createCart = async (
 
   try {
     if (!userId || !productId || !quantity) {
-      next(
-        new AppError('Missing required information', StatusCodes.BAD_REQUEST)
-      );
+      throwError('Missing required information', StatusCodes.BAD_REQUEST);
+
       return;
     }
 
@@ -40,7 +41,7 @@ export const createCart = async (
     const product = await findProductIdM(productId);
 
     if (!product) {
-      next(new AppError('Product not found', StatusCodes.NOT_FOUND));
+      throwError('Product not found', StatusCodes.NOT_FOUND);
       return;
     }
 
@@ -60,9 +61,7 @@ export const createCart = async (
       });
       return;
     } else {
-      next(
-        new AppError('Item added already, increment only', StatusCodes.CONFLICT)
-      );
+      throwError('Item added already, increment only', StatusCodes.CONFLICT);
     }
   } catch (error: any) {
     if (!error.statusCode) {
