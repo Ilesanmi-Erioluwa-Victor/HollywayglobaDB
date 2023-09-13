@@ -56,6 +56,8 @@ app.use('/api/v1/products', productRoute);
 
 app.use('/api/v1/reviews', reviewRoute);
 
+app.use('/api/v1/cart', cartRoute);
+
 app.use(SanitizeInputMiddleware.sanitizeInput);
 // TODO Still facing weird bug here
 
