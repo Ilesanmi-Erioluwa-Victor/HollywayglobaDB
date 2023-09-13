@@ -19,16 +19,15 @@ import {
 //   });
 // };
 
-export const existItemCartM = async (userId: string, productId: string) => {
-  const existItem = await prisma.cart.findFirst({
+export const existCartM = async (userId: string) => {
+  const cart = await prisma.cart.findFirst({
     where: {
-      userId: userId,
-      productId: productId,
+      userId: userId
     },
     include: { items: { include: { product: true } } },
   });
 
-  return existItem;
+  return cart;
 };
 
 export const userWishListCartM = async (

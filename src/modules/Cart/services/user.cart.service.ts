@@ -7,7 +7,7 @@ import { CustomRequest } from '../../../interfaces/custom';
 
 import {
   userWishListCartM,
-  existItemCartM,
+  existCartM,
   updateExistItemCartQuantityM,
   decreaseCartItemM,
   increaseCartItemM,
@@ -35,7 +35,7 @@ export const createCart = async (
       return;
     }
 
-    const existingWishlistItemCart = await existItemCartM(userId, productId);
+    let cart = await existCartM(userId);
 
     const product = await findProductIdM(productId);
 
