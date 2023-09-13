@@ -6,7 +6,7 @@ import { Utils } from '../../../helper/utils';
 import { CustomRequest } from '../../../interfaces/custom';
 
 import {
-  userWishListCartM,
+  updateCartItemM,
   createCartM,
   existCartM,
   updateExistItemCartQuantityM,
@@ -43,7 +43,11 @@ export const createCart = async (
     }
     
     const existingCartItem = cart.items.find((item) => item.productId === productId);
-
+    if (existingCartItem) {
+    await updateCartItemM(existingCartItem, quantity);
+    } else {
+      
+  }
   } catch (error: any) {
     if (!error.statusCode) {
       error.statusCode = 500;
