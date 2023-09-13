@@ -38,16 +38,12 @@ export const createCart = async (
 
     let cart = await existCartM(userId);
 
-    // const product = await findProductIdM(productId);
-
-    // if (!product) {
-    //   throwError('Product not found', StatusCodes.NOT_FOUND);
-    //   return;
-    // }
-
     if (!cart) {
       cart = await createCartM(userId);
     }
+    
+    const existingCartItem = cart.items.find((item) => item.productId === productId);
+
   } catch (error: any) {
     if (!error.statusCode) {
       error.statusCode = 500;
