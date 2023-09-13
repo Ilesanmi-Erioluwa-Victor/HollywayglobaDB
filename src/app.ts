@@ -14,7 +14,7 @@ import reviewRoute from './modules/User/routes/review.routes';
 
 import orderRoute from './modules/User/routes/review.routes';
 
-import cartRoute from './modules/User/routes/review.routes';
+import cartRoute from './modules/Cart/routes/cart.routes';
 
 import { requestErrorTypings } from './types';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';

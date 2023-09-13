@@ -20,3 +20,4 @@ route.get("/:id", getCart)
 // route.put('/increaseCart/:id', Token, VerifiedUser, incrementCartItems);
 
 // route.put('/decreaseCart/:id', Token, VerifiedUser, decreaseCartItems);
+export default route
