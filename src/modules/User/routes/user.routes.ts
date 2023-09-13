@@ -1,5 +1,4 @@
 import express from 'express';
-import {check} from "express-validator"
 
 import {
   createUser,
@@ -31,7 +30,7 @@ const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
-route.post('/signup',check("email").isEmail(), createUser);
+route.post('/signup', createUser);
 
 route.post('/login', loginUser);
 
