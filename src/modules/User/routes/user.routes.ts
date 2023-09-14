@@ -2,7 +2,8 @@ import express from 'express';
 
 import { customValidator } from '../../../middlewares/validators/Validator';
 
-const { createUserValidation, loginUserValidation, validateBody } = customValidator;
+const { createUserValidation, loginUserValidation, validateBody } =
+  customValidator;
 
 import {
   createUser,
@@ -36,7 +37,7 @@ const route = express.Router();
 
 route.post('/signup', validateBody(createUserValidation()), createUser);
 
-route.post('/login', loginUser);
+route.post('/login', validateBody(loginUserValidation()), loginUser);
 
 route.post('/:id/address', Token, VerifiedUser, createAddress);
 
