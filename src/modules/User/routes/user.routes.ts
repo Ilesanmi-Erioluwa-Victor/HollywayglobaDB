@@ -2,8 +2,13 @@ import express from 'express';
 
 import { customValidator } from '../../../middlewares/validators/Validator';
 
-const { createUserValidation, loginUserValidation, validateBody } =
+import { userValidator } from "../../../middlewares/validators/user/user.validate"
+
+const { createUserValidation, loginUserValidation} = userValidator
+
+const { validateBody } =
   customValidator;
+
 
 import {
   createUser,
