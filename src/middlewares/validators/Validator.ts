@@ -12,7 +12,9 @@ export class customValidator {
     });
   }
 
-  static loginUserValidation() {}
+  static loginUserValidation() {
+    
+  }
 
   static validateBody = (validations: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
