@@ -19,9 +19,9 @@ export class userValidator {
     });
   }
 
-  static getUserValidation() {
+  static forgetPasswordValidation() {
     return Joi.object({
-      id: Joi.string().required(),
+      email: Joi.string().email().required(),
     });
   }
 }

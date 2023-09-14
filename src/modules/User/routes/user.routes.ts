@@ -4,7 +4,7 @@ import { customValidator } from '../../../middlewares/validators/Validator';
 
 import { userValidator } from '../../../middlewares/validators/user/user.validate';
 
-const { createUserValidation, loginUserValidation, getUserValidation } =
+const { createUserValidation, loginUserValidation, forgetPasswordValidation } =
   userValidator;
 
 const { validateBody, validateReq } = customValidator;
@@ -51,17 +51,15 @@ route.get('/:id/address', Token, VerifiedUser, getAddresses);
 
 route.delete('/:id/address/:addressId', Token, VerifiedUser, deleteAddresses);
 
-route.post('/forgetPassword', forgetPasswordToken);
+route.post(
+  '/forgetPassword',
+  validateBody(forgetPasswordValidation()),
+  forgetPasswordToken
+);
 
 route.put('/resetPassword/:token', resetPassword);
 
-route.get(
-  '/:id',
-  Token,
-  VerifiedUser,
-  validateReq(getUserValidation()),
-  getUser
-);
+route.get('/:id', Token, VerifiedUser, getUser);
 
 route.put('/updateProfile/:id', Token, VerifiedUser, updateUser);
 
