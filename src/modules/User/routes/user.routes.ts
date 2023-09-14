@@ -6,8 +6,7 @@ import { userValidator } from "../../../middlewares/validators/user/user.validat
 
 const { createUserValidation, loginUserValidation} = userValidator
 
-const { validateBody } =
-  customValidator;
+const { validateBody } = customValidator;
 
 
 import {
