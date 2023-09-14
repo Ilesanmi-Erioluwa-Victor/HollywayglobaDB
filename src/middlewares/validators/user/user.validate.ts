@@ -18,4 +18,10 @@ export class userValidator {
       password: Joi.string().required(),
     });
   }
+
+  static getUserValidation() {
+    return Joi.object({
+      id: Joi.string().required(),
+    });
+  }
 }

@@ -2,12 +2,12 @@ import express from 'express';
 
 import { customValidator } from '../../../middlewares/validators/Validator';
 
-import { userValidator } from "../../../middlewares/validators/user/user.validate"
+import { userValidator } from '../../../middlewares/validators/user/user.validate';
 
-const { createUserValidation, loginUserValidation} = userValidator
+const { createUserValidation, loginUserValidation, getUserValidation } =
+  userValidator;
 
-const { validateBody } = customValidator;
-
+const { validateBody, validateReq } = customValidator;
 
 import {
   createUser,
@@ -55,7 +55,13 @@ route.post('/forgetPassword', forgetPasswordToken);
 
 route.put('/resetPassword/:token', resetPassword);
 
-route.get('/:id', Token, VerifiedUser, getUser);
+route.get(
+  '/:id',
+  Token,
+  VerifiedUser,
+  validateReq(getUserValidation()),
+  getUser
+);
 
 route.put('/updateProfile/:id', Token, VerifiedUser, updateUser);
 
