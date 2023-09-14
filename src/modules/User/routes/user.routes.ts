@@ -4,8 +4,12 @@ import { customValidator } from '../../../middlewares/validators/Validator';
 
 import { userValidator } from '../../../middlewares/validators/user/user.validate';
 
-const { createUserValidation, loginUserValidation, forgetPasswordValidation } =
-  userValidator;
+const {
+  createUserValidation,
+  loginUserValidation,
+  forgetPasswordValidation,
+  resetforgetPasswordValidation,
+} = userValidator;
 
 const { validateBody, validateReq } = customValidator;
 
@@ -57,7 +61,11 @@ route.post(
   forgetPasswordToken
 );
 
-route.put('/resetPassword/:token', resetPassword);
+route.put(
+  '/resetPassword/:token',
+  validateBody(resetforgetPasswordValidation()),
+  resetPassword
+);
 
 route.get('/:id', Token, VerifiedUser, getUser);
 

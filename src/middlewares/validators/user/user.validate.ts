@@ -24,4 +24,10 @@ export class userValidator {
       email: Joi.string().email().required(),
     });
   }
+
+  static resetforgetPasswordValidation() {
+    return Joi.object({
+      password: Joi.string().email().required(),
+    });
+  }
 }
