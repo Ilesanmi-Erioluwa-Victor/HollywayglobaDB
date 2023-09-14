@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 const Joi = require('joi');
 
 export class customValidator {
-  static validateBody = (validations: any) => {
+  static validate = (validations: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
       const { error } = validations.validate(req);
       if (error) {

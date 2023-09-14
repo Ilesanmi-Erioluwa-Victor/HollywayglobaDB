@@ -11,7 +11,7 @@ const {
   resetforgetPasswordValidation,
 } = userValidator;
 
-const { validateBody, validateReq } = customValidator;
+const { validate } = customValidator;
 
 import {
   createUser,
@@ -43,9 +43,9 @@ const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
-route.post('/signup', validateBody(createUserValidation()), createUser);
+route.post('/signup', validate(createUserValidation()), createUser);
 
-route.post('/login', validateBody(loginUserValidation()), loginUser);
+route.post('/login', validate(loginUserValidation()), loginUser);
 
 route.post('/:id/address', Token, VerifiedUser, createAddress);
 
@@ -57,13 +57,13 @@ route.delete('/:id/address/:addressId', Token, VerifiedUser, deleteAddresses);
 
 route.post(
   '/forgetPassword',
-  validateBody(forgetPasswordValidation()),
+  validate(forgetPasswordValidation()),
   forgetPasswordToken
 );
 
 route.put(
   '/resetPassword/:token',
-  validateBody(resetforgetPasswordValidation()),
+  validate(resetforgetPasswordValidation()),
   resetPassword
 );
 
