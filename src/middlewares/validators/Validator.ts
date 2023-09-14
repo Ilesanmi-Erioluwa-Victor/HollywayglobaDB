@@ -1,53 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
-import { ParamsDictionary } from 'express-serve-static-core';
-import { body, validationResult } from 'express-validator';
-import { ParsedQs } from 'qs';
+const Joi = require('joi');
 
 export class customValidator {
   static createUserValidation() {
-    return [
-      body('firstName')
-        .notEmpty()
-        .isString()
-        .withMessage('firstName is required'),
-      body('lastName')
-        .notEmpty()
-        .isString()
-        .withMessage('lastName is required'),
-      body('email').isEmail().withMessage('Email is required'),
-      body('password').notEmpty().withMessage('Password is required'),
-      body('mobile').notEmpty().withMessage('Phone number is required'),
-    ];
+    return Joi.object({
+      lastName: Joi.string().required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+      firstName: Joi.string().required(),
+      mobile: Joi.string().required(),
+    });
   }
 
-  static loginUserValidation() {
-    return [
-      body('email').isEmail().withMessage('Please, provide email'),
-      body('password').notEmpty().withMessage('Please, provide password'),
-    ];
-  }
+  static loginUserValidation() {}
 
-  static validate = (validations: any[]) => {
+  static validateBody = (validations: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-      await Promise.all(
-        validations.map(
-          (validation: {
-            run: (
-              arg0: Request<
-                ParamsDictionary,
-                any,
-                any,
-                ParsedQs,
-                Record<string, any>
-              >
-            ) => any;
-          }) => validation.run(req)
-        )
-      );
-
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+      const { error } = validations.validate(req.body);
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
       }
       next();
     };
