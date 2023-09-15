@@ -44,25 +44,6 @@ async function getPaginatedProducts(
       where['brand'] = brand;
     }
 
-    // let productsQuery = prisma.product.findMany({
-    //   where: {
-    //     AND: [
-    //       {
-    //         title: {
-    //           contains: search as string,
-    //           mode: 'insensitive',
-    //         },
-    //       },
-
-    //     ],
-    //   },
-    //   take: limit,
-    //   skip: startIndex,
-    //   orderBy: {
-    //     id: 'desc',
-    //   },
-    // });
-
     const totalCount = await prisma.product.count({ where }); // Apply the where condition
     const totalPage = Math.ceil(totalCount / limit);
     const currentPage = page || 0;
