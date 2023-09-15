@@ -6,16 +6,17 @@ export class productQueries {
       take: 10,
       orderBy: {
         price: 'asc',
-        },
-        select: {
-            reviews: {select:{id: true, rating: true, text: true}},
-            id: true,
-            images: true,
-            title: true,
-            price: true,
-            stock: true,
-
-      }
+      },
+      select: {
+        reviews: { select: { id: true, rating: true, text: true } },
+        id: true,
+        images: true,
+        title: true,
+        price: true,
+        stock: true,
+        colors: true,
+        brand: true,
+      },
     });
     return product;
   }
