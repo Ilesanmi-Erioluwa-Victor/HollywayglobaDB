@@ -6,19 +6,18 @@ import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 
+import { productQueries } from '../models/product.model';
+
+const { TopCheapProduct } = productQueries;
+
 const { catchAsync, ValidateMongoDbId } = Utils;
 
 export const TopTenProducts: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-    const topTenCheapestProducts = await prisma.product.findMany({
-      take: 10, // Limit to the top ten products
-      orderBy: {
-        price: 'asc', // Order by price in ascending order (cheapest first)
-      },
-    });
+      const topTenCheapestProducts = await TopCheapProduct();
 
-    res.status(200).json(topTenCheapestProducts);
+      res.status(200).json(topTenCheapestProducts);
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
