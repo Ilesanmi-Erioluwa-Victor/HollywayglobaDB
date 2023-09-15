@@ -8,7 +8,7 @@ import adminRoute from './modules/Admin/routes/admin.routes';
 
 import userRoute from './modules/User/routes/user.routes';
 
-import productRoute from './modules/Admin/routes/admin.routes';
+import productRoute from './modules/Product/routes/product.routes';
 
 import reviewRoute from './modules/User/routes/review.routes';
 
