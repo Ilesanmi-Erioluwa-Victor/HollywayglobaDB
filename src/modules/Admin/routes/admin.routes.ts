@@ -78,6 +78,6 @@ route.post(
   editProductImagesAdmin
 );
 
-route.get('/top-10-cheap-products', TopTenProducts);
+
 
 export default route;
