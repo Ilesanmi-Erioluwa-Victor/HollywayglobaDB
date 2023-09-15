@@ -55,8 +55,62 @@ export const createProductM = async (
   return product;
 };
 
-export const getProductsM = async () => {
-  const product = await prisma.product.findMany();
+export const getProductsM = async (
+  limit: number,
+  startIndex: number,
+  where: any
+) => {
+  const product = await prisma.product.findMany({
+    take: limit,
+    skip: startIndex,
+    orderBy: {
+      id: 'desc',
+    },
+    where,
+    select: {
+      id: true,
+      slug: true,
+      description: true,
+      price: true,
+      title: true,
+      quantity: true,
+      images: true,
+      brand: true,
+      stock: true,
+      colors: true,
+      reviews: {
+        select: {
+          id: true,
+          text: true,
+          rating: true,
+          user: { select: { firstName: true, lastName: true, id: true } },
+          product: {
+            select: { title: true, id: true, slug: true, description: true },
+          },
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          admin: {
+            select: {
+              name: true,
+              email: true,
+              role: true,
+            },
+          },
+        },
+      },
+      CartItem: false,
+      OrderItem: false,
+      updatedAt: false,
+      createdAt: false,
+      adminId: false,
+      admin: { select: { name: true, email: true, role: true } },
+      categoryId: false,
+    },
+  });
   return product;
 };
 
