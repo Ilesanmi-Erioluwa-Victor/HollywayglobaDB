@@ -89,4 +89,35 @@ export class reviewQueries {
 
     return updatedReview;
   }
+
+  static async getReviewsM(userId: string) {
+    const reviews = await prisma.review.findMany({
+      where: {
+        userId: userId,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+      select: {
+        id: true,
+        text: true,
+        rating: true,
+        createdAt: false,
+        updatedAt: false,
+        productId: false,
+        userId: false,
+      },
+    });
+
+    return reviews;
+  }
+
+  static async deleteReviewIdM(id: string) {
+    const review = await prisma.review.delete({
+      where: {
+        id,
+      },
+    });
+    return review;
+  }
 }

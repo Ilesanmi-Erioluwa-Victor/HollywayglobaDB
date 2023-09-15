@@ -1,4 +1,18 @@
 import express from 'express';
+
+import { customValidator } from '../../../middlewares/validators/Validator';
+
+import { userValidator } from '../../../middlewares/validators/user/user.validate';
+
+const {
+  createUserValidation,
+  loginUserValidation,
+  forgetPasswordValidation,
+  resetforgetPasswordValidation,
+} = userValidator;
+
+const { validate } = customValidator;
+
 import {
   createUser,
   getUser,
@@ -10,12 +24,6 @@ import {
   resetPassword,
   uploadProfile,
 } from '../services/user.auth.service';
-
-import {
-  addToWishlist,
-  decreaseCartItems,
-  incrementCartItems,
-} from '../services/user.cart.service';
 
 import {
   createAddress,
@@ -35,17 +43,11 @@ const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
-route.post('/signup', createUser);
+route.post('/signup', validate(createUserValidation()), createUser);
 
-route.post('/login', loginUser);
+route.post('/login', validate(loginUserValidation()), loginUser);
 
 route.post('/:id/address', Token, VerifiedUser, createAddress);
-
-route.post('/:id/product/add-to-wishlist', Token, VerifiedUser, addToWishlist);
-
-route.put('/:id/product/increaseCart', Token, VerifiedUser, incrementCartItems);
-
-route.put('/:id/product/decreaseCart', Token, VerifiedUser, decreaseCartItems);
 
 route.put('/:id/address/:addressId', Token, VerifiedUser, editAddress);
 
@@ -53,9 +55,17 @@ route.get('/:id/address', Token, VerifiedUser, getAddresses);
 
 route.delete('/:id/address/:addressId', Token, VerifiedUser, deleteAddresses);
 
-route.post('/forgetPassword', forgetPasswordToken);
+route.post(
+  '/forgetPassword',
+  validate(forgetPasswordValidation()),
+  forgetPasswordToken
+);
 
-route.put('/resetPassword/:token', resetPassword);
+route.put(
+  '/resetPassword/:token',
+  validate(resetforgetPasswordValidation()),
+  resetPassword
+);
 
 route.get('/:id', Token, VerifiedUser, getUser);
 

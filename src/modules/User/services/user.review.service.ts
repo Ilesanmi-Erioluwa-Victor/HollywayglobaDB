@@ -1,6 +1,10 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
+import { userQueries } from '../../User/models/user.auth.model';
+
+const { findUserMId } = userQueries;
+
 import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
@@ -16,6 +20,8 @@ const {
   getReviewWithUserDetailsM,
   updateReviewM,
   findReviewIdM,
+  getReviewsM,
+  deleteReviewIdM,
 } = reviewQueries;
 
 export const createReview: RequestHandler = catchAsync(
@@ -27,8 +33,6 @@ export const createReview: RequestHandler = catchAsync(
     ValidateMongoDbId(productId);
 
     if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
-
-    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
 
     const { text, rating } = req.body;
     try {
@@ -107,6 +111,57 @@ export const editReview = catchAsync(
         status: 'success',
         message: 'ok',
         data: updatedReview,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
+export const getReviews = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    ValidateMongoDbId(id);
+
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+    try {
+      const reviews = await getReviewsM(id);
+
+      res.json({
+        length: reviews.length,
+        status: 'success',
+        message: 'ok',
+        data: reviews,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
+
+export const deleteReview: RequestHandler = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id, reviewId } = req.params;
+
+    ValidateMongoDbId(id);
+
+    ValidateMongoDbId(reviewId);
+
+    if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
+
+    if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
+
+    try {
+      const review = await deleteReviewIdM(reviewId);
+      res.json({
+        status: 'success',
+        message: 'review deleted',
       });
     } catch (error: any) {
       if (!error.statusCode) {

@@ -22,6 +22,8 @@ const NODE_ENV_DEV = process.env.NODE_ENV_DEV;
 
 const NODE_ENV_PROD = process.env.NODE_ENV_PROD;
 
+const MAILCHIMP_API_KEY = process.env.MAILCHIMP_API_KEY
+
 export const ENV = {
   JWT: {
     SECRET: JWT_SECRET_KEY,
@@ -43,5 +45,9 @@ export const ENV = {
   MODE: {
     DEVELOPMENT: NODE_ENV_DEV,
     PRODUCTION: NODE_ENV_PROD,
+  },
+
+  MAILCHIMP: {
+    API_KEY: MAILCHIMP_API_KEY,
   },
 };
