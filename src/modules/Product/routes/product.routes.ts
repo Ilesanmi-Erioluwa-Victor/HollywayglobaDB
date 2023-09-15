@@ -4,11 +4,11 @@ import { Auth } from '../../../middlewares/auth';
 
 const { Token, VerifiedUser } = Auth;
 
-import { TopTenProducts } from '../services/product.service';
+import { TopTenProducts, Products } from '../services/product.service';
 
 const route = express.Router();
 
-route.get("",)
+route.get('', Token, VerifiedUser, Products);
 
 route.get('/top-10-cheap-products', TopTenProducts);
 
