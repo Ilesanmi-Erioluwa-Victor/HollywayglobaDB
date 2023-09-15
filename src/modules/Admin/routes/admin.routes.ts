@@ -28,7 +28,6 @@ import {
   getProductsAdmin,
   editProductAdmin,
   editProductImagesAdmin,
-  TopTenProducts,
 } from '../services/product.service';
 
 const { Token, Admin } = Auth;
