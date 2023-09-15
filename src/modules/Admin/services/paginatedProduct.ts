@@ -55,6 +55,13 @@ async function getPaginatedProducts(
         };
       }
 
+      if(category){
+        where['category'] = {
+          contains: search as string,
+          mode: 'insensitive',
+        };
+      }
+
     // let productsQuery = prisma.product.findMany({
     //   where: {
     //     AND: [

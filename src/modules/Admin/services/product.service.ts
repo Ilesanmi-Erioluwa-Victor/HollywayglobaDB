@@ -71,7 +71,11 @@ export const createProduct: RequestHandler = catchAsync(
 );
 
 export const getProductsAdmin: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request,
+    res: { paginatedResult: any } & Response,
+    next: NextFunction
+  ) => {
     const { id } = req?.params;
 
     ValidateMongoDbId(id);
@@ -79,6 +83,7 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     if (!id)
       next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
     try {
+      await getPaginatedProducts(req, res, next);
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
