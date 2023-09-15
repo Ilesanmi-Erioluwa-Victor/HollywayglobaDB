@@ -6,7 +6,12 @@ export class productQueries {
       take: 10,
       orderBy: {
         price: 'asc',
-      },
+        },
+        select: {
+            reviews: true,
+            id: true,
+            images: true,
+      }
     });
     return product;
   }
