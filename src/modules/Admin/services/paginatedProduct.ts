@@ -12,33 +12,11 @@ async function getPaginatedProducts(
     const query = req.query;
     const page = parseInt(query.page as string) || 1;
     const limit = parseInt(query.limit as string) || 2;
-    const last_page = req.query.last_page;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const search = req.query.q as string;
     const price = parseFloat(query.price as string);
     const category = req.query.category as string;
-    const result: {
-      totalCount: number;
-      totalPage: number;
-      currentPage: number;
-      next: any;
-      paginateData: any;
-      currentCountPerPage: any;
-      range: any;
-      previous: any;
-      last: any;
-    } = {
-      totalCount: 0,
-      totalPage: 0,
-      currentPage: 0,
-      next: undefined,
-      paginateData: undefined,
-      currentCountPerPage: undefined,
-      range: undefined,
-      previous: undefined,
-      last: undefined,
-    };
 
     const where: any = {};
 
@@ -49,18 +27,17 @@ async function getPaginatedProducts(
       };
     }
 
-      if (!isNaN(price)) {
-        where['price'] = {
-          gte: price
-        };
-      }
+    if (!isNaN(price)) {
+      where['price'] = {
+        gte: price,
+      };
+    }
 
-      if(category){
-        where['category'] = {
-          contains: search as string,
-          mode: 'insensitive',
-        };
-      }
+    if (category) {
+      where['category'] = {
+        name: category,
+      };
+    }
 
     // let productsQuery = prisma.product.findMany({
     //   where: {
@@ -71,7 +48,7 @@ async function getPaginatedProducts(
     //           mode: 'insensitive',
     //         },
     //       },
-       
+
     //     ],
     //   },
     //   take: limit,
@@ -81,9 +58,9 @@ async function getPaginatedProducts(
     //   },
     // });
 
-   const totalCount = await prisma.product.count({ where }); // Apply the where condition
-   const totalPage = Math.ceil(totalCount / limit);
-   const currentPage = page || 0;
+    const totalCount = await prisma.product.count({ where }); // Apply the where condition
+    const totalPage = Math.ceil(totalCount / limit);
+    const currentPage = page || 0;
 
     switch (true) {
       case page < 0 || limit < 1:
@@ -132,65 +109,65 @@ async function getPaginatedProducts(
         res.status(200).json(result);
         break;
 
-    //   case page === 1 && !last_page:
-    //     result.totalCount = totalCount;
-    //     result.totalPage = totalPage;
-    //     result.currentPage = currentPage;
-    //     if (totalCount > limit) {
-    //       result.next = {
-    //         page: page + 1,
-    //         limit: limit,
-    //       };
-    //     }
-    //     result.paginateData = await productsQuery;
-    //     res.paginatedResult = result;
-    //     result.currentCountPerPage = Object.keys(result.paginateData).length;
-    //     result.range = currentPage * limit;
-    //     return res.status(200).json(result);
+      //   case page === 1 && !last_page:
+      //     result.totalCount = totalCount;
+      //     result.totalPage = totalPage;
+      //     result.currentPage = currentPage;
+      //     if (totalCount > limit) {
+      //       result.next = {
+      //         page: page + 1,
+      //         limit: limit,
+      //       };
+      //     }
+      //     result.paginateData = await productsQuery;
+      //     res.paginatedResult = result;
+      //     result.currentCountPerPage = Object.keys(result.paginateData).length;
+      //     result.range = currentPage * limit;
+      //     return res.status(200).json(result);
 
-    //   case endIndex < totalCount && !last_page:
-    //     result.totalCount = totalCount;
-    //     result.totalPage = totalPage;
-    //     result.currentPage = currentPage;
-    //     if (endIndex < totalCount - 1) {
-    //       result.next = {
-    //         page: page + 1,
-    //         limit: limit,
-    //       };
-    //     }
-    //     result.paginateData = await productsQuery;
-    //     res.paginatedResult = result;
-    //     result.currentCountPerPage = Object.keys(result.paginateData).length;
-    //     result.range = currentPage * limit;
-    //     return res.status(200).json(result);
+      //   case endIndex < totalCount && !last_page:
+      //     result.totalCount = totalCount;
+      //     result.totalPage = totalPage;
+      //     result.currentPage = currentPage;
+      //     if (endIndex < totalCount - 1) {
+      //       result.next = {
+      //         page: page + 1,
+      //         limit: limit,
+      //       };
+      //     }
+      //     result.paginateData = await productsQuery;
+      //     res.paginatedResult = result;
+      //     result.currentCountPerPage = Object.keys(result.paginateData).length;
+      //     result.range = currentPage * limit;
+      //     return res.status(200).json(result);
 
-    //   case startIndex > 0 && !last_page:
-    //     result.totalCount = totalCount;
-    //     result.totalPage = totalPage;
-    //     result.currentPage = currentPage;
-    //     result.previous = {
-    //       page: page - 1,
-    //       limit: limit,
-    //     };
-    //     result.paginateData = await productsQuery;
-    //     res.paginatedResult = result;
-    //     result.currentCountPerPage = Object.keys(result.paginateData).length;
-    //     result.range = currentPage * limit;
-    //     return res.status(200).json(result);
+      //   case startIndex > 0 && !last_page:
+      //     result.totalCount = totalCount;
+      //     result.totalPage = totalPage;
+      //     result.currentPage = currentPage;
+      //     result.previous = {
+      //       page: page - 1,
+      //       limit: limit,
+      //     };
+      //     result.paginateData = await productsQuery;
+      //     res.paginatedResult = result;
+      //     result.currentCountPerPage = Object.keys(result.paginateData).length;
+      //     result.range = currentPage * limit;
+      //     return res.status(200).json(result);
 
-    //   case last_page === 'true' && page === totalPage:
-        // result.totalCount = totalCount;
-        // result.totalPage = totalPage;
-        // result.currentPage = totalPage;
-        // result.last = {
-        //   page: totalPage,
-        //   limit: limit,
-        // };
-        // result.paginateData = await productsQuery;
-        // res.paginatedResult = result;
-        // result.currentCountPerPage = Object.keys(result.paginateData).length;
-        // result.range = totalCount;
-        // return res.status(200).json(result);
+      //   case last_page === 'true' && page === totalPage:
+      // result.totalCount = totalCount;
+      // result.totalPage = totalPage;
+      // result.currentPage = totalPage;
+      // result.last = {
+      //   page: totalPage,
+      //   limit: limit,
+      // };
+      // result.paginateData = await productsQuery;
+      // res.paginatedResult = result;
+      // result.currentCountPerPage = Object.keys(result.paginateData).length;
+      // result.range = totalCount;
+      // return res.status(200).json(result);
 
       default:
         return res.status(404).json({ error: 'Resource not found' });
