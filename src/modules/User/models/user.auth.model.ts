@@ -13,7 +13,7 @@ export class userQueries {
       data: {
         firstName,
         lastName,
-        email,
+        email: email.toLocaleLowerCase(),
         mobile,
         password: await hashedPassword(password),
       },
@@ -36,7 +36,7 @@ export class userQueries {
   static async findUserMEmail(email: string) {
     const userEmail = await prisma.user.findUnique({
       where: {
-        email,
+        email: email.toLocaleLowerCase(),
       },
     });
 
@@ -56,7 +56,7 @@ export class userQueries {
       data: {
         firstName,
         lastName,
-        email,
+        email: email.toLocaleLowerCase(),
       },
     });
 
