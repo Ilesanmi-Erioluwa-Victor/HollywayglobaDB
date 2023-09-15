@@ -8,6 +8,8 @@ import { TopTenProducts } from '../services/product.service';
 
 const route = express.Router();
 
+route.get("",)
+
 route.get('/top-10-cheap-products', TopTenProducts);
 
 export default route;
