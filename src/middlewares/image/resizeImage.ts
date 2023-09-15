@@ -5,12 +5,17 @@ import path from 'path';
 
 const multerStorage = multer.memoryStorage();
 
-const multerFilter = (req: any, file: any, cb: any) => {
-  if (file.mimetype.startsWith('image')) {
+const multerFilter = (req: Request, file: { mimetype: string; }, cb: any) => {
+  if (
+    file.mimetype.startsWith('image') ||
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
     cb(null, true);
   } else {
     const error = new Error('Unsupported file type or format');
-    cb(error);
+    cb(error, false);
   }
 };
 

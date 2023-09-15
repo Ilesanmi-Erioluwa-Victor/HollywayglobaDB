@@ -18,6 +18,7 @@ import {
 const { catchAsync, ValidateMongoDbId } = Utils;
 
 import { ImageProcessor } from '../../../configurations/cloudinary';
+import { prisma } from '../../../configurations/db';
 
 const uploader = new ImageProcessor();
 
@@ -68,7 +69,11 @@ export const createProduct: RequestHandler = catchAsync(
 );
 
 export const getProductsAdmin: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request,
+    res: { paginatedResult: any } & Response,
+    next: NextFunction
+  ) => {
     const { id } = req?.params;
 
     ValidateMongoDbId(id);
@@ -76,17 +81,143 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     if (!id)
       next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
 
+    // const products = await getProductsM();
+
+    // if (!products)
+    //   next(new AppError('No products record found', StatusCodes.BAD_REQUEST));
+    // const results = await prisma.product.findMany({
+    //   skip: 1,
+    //   take: 10,
+    //   where: {
+    //     title: {
+    //       contains: 'CHIVITA',
+    //     },
+    //   },
+    //   orderBy: {
+    //     title : "asc"
+    //   }
+    // });
+
+    // res.json({
+    //   length: results.length,
+    //   status: 'Success',
+    //   data: results,
+    // });
+
     try {
-      const products = await getProductsM();
+      const query = req.query;
+      const page = parseInt(query.page as string) || 1;
+      const limit = parseInt(query.limit as string) || 2;
+      const last_page = req.query.last_page;
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      const search = req.query.q;
+      const result: {
+        totalCount: number;
+        totalPage: number;
+        currentPage: number;
+        next: any;
+        paginateData: any;
+        currentCountPerPage: any;
+        range: any;
+        previous: any;
+        last: any;
+      } = {
+        totalCount: 0,
+        totalPage: 0,
+        currentPage: 0,
+        next: undefined,
+        paginateData: undefined,
+        currentCountPerPage: undefined,
+        range: undefined,
+        previous: undefined,
+        last: undefined,
+      };
+      const totalCount = await prisma.product.count();
+      const totalPage = Math.ceil(totalCount / limit);
+      const currentPage = page || 0;
 
-      if (!products)
-        next(new AppError('No products record found', StatusCodes.BAD_REQUEST));
-
-      res.json({
-        length: products.length,
-        status: 'Success',
-        data: products,
-      });
+      if (page < 0 || limit < 1) {
+        return res.status(400).json('Page value should not be negative');
+      } else if (page === 1 && !last_page) {
+        result.totalCount = totalCount;
+        result.totalPage = totalPage;
+        result.currentPage = currentPage;
+        result.next = {
+          page: page + 1,
+          limit: limit,
+        };
+        result.paginateData = await prisma.product.findMany({
+          take: limit,
+          skip: startIndex,
+          orderBy: {
+            id: 'desc',
+          },
+        });
+        res.paginatedResult = result;
+        result.currentCountPerPage = Object.keys(result.paginateData).length;
+        result.range = currentPage * limit;
+        return res.status(200).json(result);
+      } else if (endIndex < totalCount && !last_page) {
+        result.totalCount = totalCount;
+        result.totalPage = totalPage;
+        result.currentPage = currentPage;
+        result.next = {
+          page: page + 1,
+          limit: limit,
+        };
+        result.paginateData = await prisma.product.findMany({
+          take: limit,
+          skip: startIndex,
+          orderBy: {
+            id: 'desc',
+          },
+        });
+        res.paginatedResult = result;
+        result.currentCountPerPage = Object.keys(result.paginateData).length;
+        result.range = currentPage * limit;
+        return res.status(200).json(result);
+      } else if (startIndex > 0 && !last_page) {
+        result.totalCount = totalCount;
+        result.totalPage = totalPage;
+        result.currentPage = currentPage;
+        result.previous = {
+          page: page - 1,
+          limit: limit,
+        };
+        result.paginateData = await prisma.product.findMany({
+          take: limit,
+          skip: startIndex,
+          orderBy: {
+            id: 'desc',
+          },
+        });
+        res.paginatedResult = result;
+        result.currentCountPerPage = Object.keys(result.paginateData).length;
+        result.range = currentPage * limit;
+        return res.status(200).json(result);
+      } else if (last_page === 'true' && page === totalPage) {
+        result.totalCount = totalCount;
+        result.totalPage = totalPage;
+        result.currentPage = totalPage;
+        result.last = {
+          page: totalPage,
+          limit: limit,
+        };
+        result.paginateData = await prisma.product.findMany({
+          take: limit,
+          skip: startIndex,
+          orderBy: {
+            id: 'desc',
+          },
+        });
+        res.paginatedResult = result;
+        result.currentCountPerPage = Object.keys(result.paginateData).length;
+        result.range = totalCount;
+        return res.status(200).json(result);
+      } else {
+        return res.status(404).json({ error: 'Resource not found' });
+      }
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
