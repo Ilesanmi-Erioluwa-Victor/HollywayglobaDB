@@ -17,11 +17,11 @@ export const TopTenProducts: RequestHandler = catchAsync(
     try {
       const topTenCheapestProducts = await TopCheapProductM();
 
-        res.status(200).json({
-          status: 'success',
-          message: 'ok',
-          data: topTenCheapestProducts,
-        });
+      res.status(200).json({
+        status: 'success',
+        message: 'ok',
+        data: topTenCheapestProducts,
+      });
     } catch (error: any) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -33,6 +33,11 @@ export const TopTenProducts: RequestHandler = catchAsync(
 
 export const Products: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    ValidateMongoDbId(id);
+    if (!id)
+      return throwError('You must be logged in', StatusCodes.BAD_REQUEST);
     try {
       const userProducts = await ProductsM();
 
