@@ -8,7 +8,14 @@ export class productQueries {
         price: 'asc',
       },
       select: {
-        reviews: { select: { id: true, rating: true, text: true } },
+        reviews: {
+          select: {
+            id: true,
+            rating: true,
+            text: true,
+            user: { select: { id: true, firstName: true, lastName: true } },
+          },
+        },
         id: true,
         images: true,
         title: true,
