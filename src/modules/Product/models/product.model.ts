@@ -8,9 +8,13 @@ export class productQueries {
         price: 'asc',
         },
         select: {
-            reviews: true,
+            reviews: {select:{id: true, rating: true, text: true}},
             id: true,
             images: true,
+            title: true,
+            price: true,
+            stock: true,
+
       }
     });
     return product;
