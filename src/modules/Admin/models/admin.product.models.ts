@@ -55,7 +55,11 @@ export const createProductM = async (
   return product;
 };
 
-export const getProductsM = async (limit, startIndex, where) => {
+export const getProductsM = async (
+  limit: number,
+  startIndex: number,
+  where: any
+) => {
   const product = await prisma.product.findMany({
     take: limit,
     skip: startIndex,
