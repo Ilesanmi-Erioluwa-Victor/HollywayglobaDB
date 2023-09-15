@@ -74,21 +74,26 @@ export const getProductsM = async (limit, startIndex, where) => {
       brand: true,
       stock: true,
       colors: true,
-      reviews: true,
+      reviews: {
+        select: {
+          id: true,
+          text: true,
+          rating: true,
+          user: { select: { firstName: true, lastName: true, id: true } },
+          product: {
+            select: { title: true, id: true, slug: true, description: true },
+          },
+        },
+      },
       category: {
         select: {
           id: true,
           name: true,
           admin: {
             select: {
-              password: false,
               name: true,
-              isAccountVerified: false,
-              accountVerificationToken: false,
-              accountVerificationTokenExpires: false,
-              createdAt: false,
-              updatedAt: false,
-              v: false,
+              email: true,
+              role: true,
             },
           },
         },
