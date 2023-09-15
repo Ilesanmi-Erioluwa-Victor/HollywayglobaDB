@@ -64,6 +64,10 @@ export const getProductsM = async (limit, startIndex, where) => {
     },
     where,
     select: {
+      id: true,
+      slug: true,
+      description: true,
+       price: true,
       title: true,
       CartItem: false,
       OrderItem: false,
