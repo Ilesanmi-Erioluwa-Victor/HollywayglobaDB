@@ -56,7 +56,14 @@ export const createProductM = async (
 };
 
 export const getProductsM = async () => {
-  const product = await prisma.product.findMany();
+  const product = await prisma.product.findMany({
+    select: {
+      title : true,
+      CartItem: false,
+      OrderItem : false,
+      categoryId : false
+    }
+  });
   return product;
 };
 

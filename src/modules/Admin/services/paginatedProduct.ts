@@ -30,7 +30,8 @@ async function getPaginatedProducts(
 
     if (!isNaN(price)) {
       where['price'] = {
-        gte: price,
+          gte: price,
+          lte: price
       };
     }
 
@@ -44,7 +45,7 @@ async function getPaginatedProducts(
       where['brand'] = brand;
     }
 
-    const totalCount = await prisma.product.count({ where }); // Apply the where condition
+    const totalCount = await prisma.product.count({ where });
     const totalPage = Math.ceil(totalCount / limit);
     const currentPage = page || 0;
 
@@ -94,66 +95,6 @@ async function getPaginatedProducts(
 
         res.status(200).json(result);
         break;
-
-      //   case page === 1 && !last_page:
-      //     result.totalCount = totalCount;
-      //     result.totalPage = totalPage;
-      //     result.currentPage = currentPage;
-      //     if (totalCount > limit) {
-      //       result.next = {
-      //         page: page + 1,
-      //         limit: limit,
-      //       };
-      //     }
-      //     result.paginateData = await productsQuery;
-      //     res.paginatedResult = result;
-      //     result.currentCountPerPage = Object.keys(result.paginateData).length;
-      //     result.range = currentPage * limit;
-      //     return res.status(200).json(result);
-
-      //   case endIndex < totalCount && !last_page:
-      //     result.totalCount = totalCount;
-      //     result.totalPage = totalPage;
-      //     result.currentPage = currentPage;
-      //     if (endIndex < totalCount - 1) {
-      //       result.next = {
-      //         page: page + 1,
-      //         limit: limit,
-      //       };
-      //     }
-      //     result.paginateData = await productsQuery;
-      //     res.paginatedResult = result;
-      //     result.currentCountPerPage = Object.keys(result.paginateData).length;
-      //     result.range = currentPage * limit;
-      //     return res.status(200).json(result);
-
-      //   case startIndex > 0 && !last_page:
-      //     result.totalCount = totalCount;
-      //     result.totalPage = totalPage;
-      //     result.currentPage = currentPage;
-      //     result.previous = {
-      //       page: page - 1,
-      //       limit: limit,
-      //     };
-      //     result.paginateData = await productsQuery;
-      //     res.paginatedResult = result;
-      //     result.currentCountPerPage = Object.keys(result.paginateData).length;
-      //     result.range = currentPage * limit;
-      //     return res.status(200).json(result);
-
-      //   case last_page === 'true' && page === totalPage:
-      // result.totalCount = totalCount;
-      // result.totalPage = totalPage;
-      // result.currentPage = totalPage;
-      // result.last = {
-      //   page: totalPage,
-      //   limit: limit,
-      // };
-      // result.paginateData = await productsQuery;
-      // res.paginatedResult = result;
-      // result.currentCountPerPage = Object.keys(result.paginateData).length;
-      // result.range = totalCount;
-      // return res.status(200).json(result);
 
       default:
         return res.status(404).json({ error: 'Resource not found' });
