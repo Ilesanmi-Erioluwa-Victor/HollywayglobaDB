@@ -14,9 +14,10 @@ async function getPaginatedProducts(
     const limit = parseInt(query.limit as string) || 2;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    const search = req.query.q as string;
+    const search = query.q as string;
     const price = parseFloat(query.price as string);
-    const category = req.query.category as string;
+    const category = query.category as string;
+    const brand = query.brand as string;
 
     const where: any = {};
 
@@ -37,6 +38,10 @@ async function getPaginatedProducts(
       where['category'] = {
         name: category,
       };
+    }
+
+    if (brand) {
+      where['brand'] = brand;
     }
 
     // let productsQuery = prisma.product.findMany({
