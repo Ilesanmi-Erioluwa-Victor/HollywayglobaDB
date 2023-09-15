@@ -92,6 +92,7 @@ model Product {
   images      String[]
   brand       Brand      @default(FOOD)
   stock       Int        @default(1)
+  isAvailable Boolean    @default(true)
   colors      String     @default("white")
   reviews     Review[]
   categoryId  String     @db.ObjectId

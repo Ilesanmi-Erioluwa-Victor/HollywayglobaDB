@@ -8,7 +8,7 @@ import adminRoute from './modules/Admin/routes/admin.routes';
 
 import userRoute from './modules/User/routes/user.routes';
 
-import productRoute from './modules/Admin/routes/admin.routes';
+import productRoute from './modules/Product/routes/product.routes';
 
 import reviewRoute from './modules/User/routes/review.routes';
 
@@ -57,6 +57,8 @@ app.use('/api/v1/products', productRoute);
 app.use('/api/v1/reviews', reviewRoute);
 
 app.use('/api/v1/cart', cartRoute);
+
+app.use("/api/v1/order", orderRoute)
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 // TODO Still facing weird bug here

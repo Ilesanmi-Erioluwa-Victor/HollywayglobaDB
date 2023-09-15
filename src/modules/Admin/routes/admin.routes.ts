@@ -28,7 +28,6 @@ import {
   getProductsAdmin,
   editProductAdmin,
   editProductImagesAdmin,
-  TopTenProducts,
 } from '../services/product.service';
 
 const { Token, Admin } = Auth;
@@ -78,6 +77,6 @@ route.post(
   editProductImagesAdmin
 );
 
-route.get('/top-10-cheap-products', TopTenProducts);
+
 
 export default route;
