@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { getPaginatedProducts } from './paginatedProduct';
 
-import AppError from '../../../utils';
+import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 
@@ -12,7 +12,6 @@ import {
   createProductM,
   deleteProductM,
   findProductIdM,
-  getProductsM,
   editProductM,
   editProductImagesM,
 } from '../models/admin.product.models';
@@ -20,7 +19,6 @@ import {
 const { catchAsync, ValidateMongoDbId } = Utils;
 
 import { ImageProcessor } from '../../../configurations/cloudinary';
-import { prisma } from '../../../configurations/db';
 
 const uploader = new ImageProcessor();
 
@@ -28,32 +26,17 @@ export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
-    if (!id)
-      next(new AppError('Your ID is not valid...', StatusCodes.BAD_REQUEST));
+    if (!id) {
+      throwError('Your ID is not valid...', StatusCodes.BAD_REQUEST);
+    }
 
     if (!req.files || req.files.length === 0)
-      next(
-        new AppError(
-          'Sorry, please select an image to be uploaded',
-          StatusCodes.BAD_REQUEST
-        )
+      return throwError(
+        'Sorry, please select an image to be uploaded',
+        StatusCodes.BAD_REQUEST
       );
 
     try {
-      // const {
-      //   title,
-      //   slug,
-      //   description,
-      //   price,
-      //   quantity,
-      //   brand,
-      //   stock,
-      //   colors,
-      //   sold,
-      //   categoryId,
-      //   adminId,
-      // } = req.body;
-
       const imageUrls: any = await uploader.processImages(req?.files as any);
 
       const createProduct = await createProductM(req.body, imageUrls);
@@ -81,7 +64,7 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
 
     if (!id)
-      next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
+      return throwError('No Admin record found', StatusCodes.BAD_REQUEST);
     try {
       await getPaginatedProducts(req, res, next);
     } catch (error: any) {
@@ -101,15 +84,15 @@ export const getProductAdmin: RequestHandler = catchAsync(
     ValidateMongoDbId(productId);
 
     if (!id)
-      next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
+      return throwError('No Admin record found', StatusCodes.BAD_REQUEST);
     if (!productId)
-      next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+      return throwError('No product record found', StatusCodes.BAD_REQUEST);
 
     try {
       const product = await findProductIdM(productId);
 
       if (!product)
-        next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+        throwError('No product record found', StatusCodes.BAD_REQUEST);
 
       res.json({
         status: 'Success',
@@ -131,11 +114,10 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
     ValidateMongoDbId(id);
     ValidateMongoDbId(productId);
 
-    if (!id)
-      next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
+    if (!id) throwError('No Admin record found', StatusCodes.BAD_REQUEST);
 
     if (!productId)
-      next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+      throwError('No product record found', StatusCodes.BAD_REQUEST);
 
     try {
       const product = await deleteProductM(productId);
@@ -160,24 +142,22 @@ export const editProductAdmin: RequestHandler = catchAsync(
     ValidateMongoDbId(productId);
 
     if (!id)
-      next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
+      return throwError('No Admin record found', StatusCodes.BAD_REQUEST);
 
     if (!productId)
-      next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+      return throwError('No product record found', StatusCodes.BAD_REQUEST);
 
     if (!req.files)
-      next(
-        new AppError(
-          'Sorry, please select an image to be uploaded',
-          StatusCodes.BAD_REQUEST
-        )
+      return throwError(
+        'Sorry, please select an image to be uploaded',
+        StatusCodes.BAD_REQUEST
       );
 
     try {
       const product = await editProductM(productId, req.body);
 
       if (!product)
-        next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+        return throwError('No product record found', StatusCodes.BAD_REQUEST);
 
       res.json({
         status: 'Success',
@@ -200,10 +180,10 @@ export const editProductImagesAdmin: RequestHandler = catchAsync(
     ValidateMongoDbId(productId);
 
     if (!id)
-      next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
+      return throwError('No Admin record found', StatusCodes.BAD_REQUEST);
 
     if (!productId)
-      next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+      return throwError('No product record found', StatusCodes.BAD_REQUEST);
 
     try {
       const product = await editProductImagesM(
@@ -212,7 +192,7 @@ export const editProductImagesAdmin: RequestHandler = catchAsync(
       );
 
       if (!product)
-        next(new AppError('No product record found', StatusCodes.BAD_REQUEST));
+        return throwError('No product record found', StatusCodes.BAD_REQUEST);
 
       res.json({
         status: 'Success',
