@@ -39,7 +39,7 @@ export const createProductM = async (
   } = productI;
   const product = await prisma.product.create({
     data: {
-      title,
+      title: title.toLocaleLowerCase(),
       slug,
       description,
       price,

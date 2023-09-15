@@ -11,7 +11,7 @@ async function getPaginatedProducts(
   try {
     const query = req.query;
     const page = parseInt(query.page as string) || 1;
-    const limit = parseInt(query.limit as string) || 2;
+    const limit = parseInt(query.limit as string) || 10;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const search = query.q as string;
