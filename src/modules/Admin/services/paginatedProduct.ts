@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
-
+import { getProductsM } from '../models/admin.product.models';
 const prisma = new PrismaClient();
 
 async function getPaginatedProducts(
@@ -30,8 +30,8 @@ async function getPaginatedProducts(
 
     if (!isNaN(price)) {
       where['price'] = {
-          gte: price,
-          lte: price
+        gte: price,
+        lte: price,
       };
     }
 
@@ -54,14 +54,7 @@ async function getPaginatedProducts(
         return res.status(400).json('Page value should not be negative');
 
       case startIndex < totalCount:
-        const paginateData = await prisma.product.findMany({
-          take: limit,
-          skip: startIndex,
-          orderBy: {
-            id: 'desc',
-          },
-          where,
-        });
+        const paginateData = await getProductsM(limit, startIndex, where);
 
         const result = {
           totalCount: totalCount,

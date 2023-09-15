@@ -55,14 +55,24 @@ export const createProductM = async (
   return product;
 };
 
-export const getProductsM = async () => {
+export const getProductsM = async (limit, startIndex, where) => {
   const product = await prisma.product.findMany({
+    take: limit,
+    skip: startIndex,
+    orderBy: {
+      id: 'desc',
+    },
+    where,
     select: {
-      title : true,
+      title: true,
       CartItem: false,
-      OrderItem : false,
-      categoryId : false
-    }
+      OrderItem: false,
+      updatedAt: false,
+      createdAt: false,
+      adminId: false,
+      admin: { select: { name: true, email: true, role : true } },
+      categoryId: false,
+    },
   });
   return product;
 };
