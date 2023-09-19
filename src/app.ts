@@ -71,9 +71,7 @@ app.use('/api/v1/order', orderRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 
-app.all('*', (req: Request, res: Response, next: NextFunction) => {
-  _404.notFound(req, res, next);
-});
+app.all('*', _404.notFound);
 
 app.use(errorHandlerMiddleware);
 
