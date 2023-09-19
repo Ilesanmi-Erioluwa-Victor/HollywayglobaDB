@@ -16,10 +16,6 @@ const {
   findUserMId,
   updateUserM,
   updateUserPasswordM,
-
-  resetPasswordM,
-  resetPasswordUpdateM,
-  resetPasswordTokenDeleteM,
   userProfilePictureUpdateM,
 } = userQueries;
 
