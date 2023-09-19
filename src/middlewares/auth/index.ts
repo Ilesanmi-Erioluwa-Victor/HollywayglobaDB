@@ -43,15 +43,14 @@ export class Auth {
 
   static VerifiedUser = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      const user = req.user;
+      const user_id = req.user.userId;
 
-      const user_id = req.params.id;
-
-      if (!user.userId) throw new UnauthenticatedError('authentication failed');
+      const user_para_id = req.params.id;
 
       if (!user_id) throw new UnauthenticatedError('authentication failed');
 
-      ValidateMongoDbId(authId as string);
+      if (!user_para_id)
+        throw new UnauthenticatedError('authentication failed');
 
       try {
         const user = await findUserMId(authId as string);
