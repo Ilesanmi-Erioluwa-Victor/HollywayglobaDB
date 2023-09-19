@@ -111,31 +111,26 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
 
 export const accountVerification: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
     if (!req.params.token) throw new NotFoundError('token not valid');
 
-      const user = await accountVerificationM(
-        req.params.id,
-        req.params.token,
-        new Date()
-      );
+    const user = await accountVerificationM(
+      req.params.id,
+      req.params.token,
+      new Date()
+    );
 
-      if (!user) throw new NotFoundError("no user found, try again")
-      const updaterUser = await accountVerificationUpdatedM(
-        user?.id as string,
-        true,
-        '',
-        null
-      );
-      res.json({
-        status: 'Success',
-        message: 'You have successfully, verify your account, log in now',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    if (!user) throw new NotFoundError('no user found, try again');
+
+    const updaterUser = await accountVerificationUpdatedM(
+      user.id as string,
+      true,
+      '',
+      null
+    );
+
+    res.json({
+      status: 'success',
+      message: 'you have successfully verify your account, log in now',
+    });
   }
 );
