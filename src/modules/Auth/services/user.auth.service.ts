@@ -16,7 +16,7 @@ import {
   UnauthenticatedError,
 } from '../../../errors/customError';
 import { createJwt } from '../../../utils';
-import { ENV } from 'configurations/env';
+import { ENV } from '../../../configurations/env';
 
 const { catchAsync, generateToken, comparePassword } = Utils;
 
@@ -45,7 +45,7 @@ export const login: RequestHandler = catchAsync(
           'verify your account in your gmail before you can log in'
         );
       }
-      const token = createJwt({ userId: user?.id, role: user?.role });
+      const token = createJwt({ userId: user?.id, role: user?.role as string});
       const aDay = 1000 * 60 * 60 * 24;
 
       res.cookie('token', token, {

@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { throwError } from '../../middlewares/error';
 
-import { verifyJWT } from '../../utils';
+import { verifyJWT } from '../../utils/index';
 
 import { ENV } from '../../configurations/env';
 
@@ -32,8 +32,9 @@ export class Auth {
       if (!token) throw new UnauthenticatedError('authentication failed');
 
       try {
-        const { userId, role } = verifyJWT(token);
-        req.user = { userId, role };
+        const jwt: { userId: string; role: string } | any = verifyJWT(token);
+        req.user = { userId: jwt?.userId, role:jwt.role };
+        console.log(req.user);
         next();
       } catch (error) {
         throw new UnauthenticatedError('authentication failed');
@@ -42,7 +43,7 @@ export class Auth {
   );
 
   static VerifiedUser = catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: CustomRequest, res: Response, next: NextFunction) => {
       const authId = req?.authId;
 
       const userId = req?.params?.id;

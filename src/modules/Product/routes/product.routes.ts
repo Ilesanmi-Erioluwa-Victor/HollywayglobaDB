@@ -1,8 +1,8 @@
 import express from 'express';
 
-import { Auth } from '../../../middlewares/auth';
+// import { Auth } from '../../../middlewares/auth';
 
-const { Token, VerifiedUser } = Auth;
+// const { Token, VerifiedUser } = Auth;
 
 import { TopTenProducts, Products } from '../services/product.service';
 

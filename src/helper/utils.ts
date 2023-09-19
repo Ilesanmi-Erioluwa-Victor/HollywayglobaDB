@@ -12,11 +12,11 @@ import jwt from 'jsonwebtoken';
 
 import mongoose from 'mongoose';
 
-import AppError from '../utils';
 
 import { prisma } from '../configurations/db';
 
 import { ENV } from '../configurations/env';
+import { BadRequestError } from '../errors/customError';
 
 export class Utils {
   static catchAsync(fn: any): RequestHandler {
@@ -71,9 +71,8 @@ export class Utils {
 
   static async generateToken(id: string): Promise<string> {
     if (!ENV.JWT.SECRET)
-      new AppError(
+     throw new BadRequestError(
         'JWT_KEY is required in environment',
-        StatusCodes.BAD_REQUEST
       );
 
     const token = jwt.sign({ id }, ENV.JWT.SECRET as string, {

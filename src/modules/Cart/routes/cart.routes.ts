@@ -9,11 +9,13 @@ import {
 //   incrementCartItems,
 } from '../services/user.cart.service';
 
-const { Token, VerifiedUser } = Auth;
+// const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
-route.post('/add/:id', Token, VerifiedUser, createCart);
+route.post('/add/:id',
+  // Token, VerifiedUser,
+  createCart);
 
 route.get("/:id", getCart)
 

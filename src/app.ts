@@ -20,12 +20,14 @@ import orderRoute from './modules/User/routes/review.routes';
 
 import cartRoute from './modules/Cart/routes/cart.routes';
 
-import { requestErrorTypings } from './types';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { customTime } from './interfaces/custom';
 import { _404 } from './middlewares/error/_404Page';
 import { ENV } from './configurations/env';
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware';
+import { Auth } from './middlewares/auth';
+
+const { authenticateUser } = Auth;
 
 const app: Application = express();
 
@@ -57,7 +59,7 @@ app.use((req: customTime, res: Response, next: NextFunction) => {
 
 app.use('/api/v1/auth', authRoute);
 
-app.use('/api/v1/user', userRoute);
+app.use('/api/v1/user', authenticateUser, userRoute);
 
 app.use('/api/v1/admin', adminRoute);
 
