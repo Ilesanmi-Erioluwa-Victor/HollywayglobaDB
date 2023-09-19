@@ -45,7 +45,7 @@ export class Auth {
     }
   );
 
-  static VerifiedUser = catchAsync(
+  static verifiedUser = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       const user_para_id = req.params.id;
 
