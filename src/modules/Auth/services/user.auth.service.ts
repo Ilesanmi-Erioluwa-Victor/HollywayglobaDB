@@ -82,22 +82,27 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
 
     if (!user) throw new NotFoundError('no user found');
 
-    const resetToken = generatePasswordResetToken();
+    try {
+      const resetToken = generatePasswordResetToken();
+      const expirationTime = new Date();
+      expirationTime.setHours(expirationTime.getHours() + 1);
 
-    const expirationTime = new Date();
+      const passwordReset = await forgetPasswordTokenM(
+        await resetToken,
+        expirationTime,
+        user.id as string
+      );
 
-    expirationTime.setHours(expirationTime.getHours() + 1);
-
-    const passwordReset = await forgetPasswordTokenM(
-      await resetToken,
-      expirationTime,
-      user?.id as string
-    );
-
-    await sendMailToken('user', passwordReset, req, res, next);
-    res.json({
-      message: `A reset token has been sent to your gmail`,
-      status: 'success',
-    });
+      await sendMailToken('user', passwordReset, req, res, next);
+      res.json({
+        message: `A reset token has been sent to your gmail`,
+        status: 'success',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
 );
