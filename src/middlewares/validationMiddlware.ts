@@ -25,8 +25,6 @@ const withValidationErrors = (validateValues: any) => {
           .array()
           .map((error: any) => `${error.path} : ${error.msg}`);
 
-        // const firstMessage = errorMessages[0];
-        // console.log(Object.getPrototypeOf(firstMessage));
         if (errorMessages[0].startsWith('no job')) {
           throw new NotFoundError(errorMessages);
         }
@@ -66,6 +64,14 @@ export const validateLoginInput = withValidationErrors([
     .isEmail()
     .withMessage('invalid email format'),
   body('password').notEmpty().withMessage('Password is required'),
+]);
+
+export const validateforgottenPasswordInput = withValidationErrors([
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format'),
 ]);
 
 export const validateUserIdParam = withValidationErrors([
