@@ -11,7 +11,7 @@ export class authQuery {
       data: {
         firstName,
         lastName,
-        email: email.toLocaleLowerCase(),
+        email,
         mobile,
         password: await hashedPassword(password),
       },
