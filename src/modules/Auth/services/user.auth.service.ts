@@ -16,7 +16,7 @@ const {
   accountVerificationM,
   resetPasswordM,
   resetPasswordTokenDeleteM,
-  resetPasswordUpdateM
+  resetPasswordUpdateM,
 } = authQuery;
 
 import {
@@ -145,29 +145,22 @@ export const resetPassword: RequestHandler = catchAsync(
     if (!req.params.token) throw new NotFoundError('no token found, try again');
 
     const resetTokenData = await resetPasswordM(req.params.token);
-    
-      if (!resetTokenData || resetTokenData.expirationTime <= new Date()) 
-        throw new BadRequestError('invalid or expired token, try again');
-      
 
-      const user = await resetPasswordUpdateM(
-        resetTokenData?.user?.id as string,
-        password
-      );
+    if (!resetTokenData || resetTokenData.expirationTime <= new Date())
+      throw new BadRequestError('invalid or expired token, try again');
 
-      const deleteUserPasswordResetToken = await resetPasswordTokenDeleteM(
-        resetTokenData?.id as string
-      );
+    const user = await resetPasswordUpdateM(
+      resetTokenData.user.id as string,
+      password
+    );
 
-      res.json({
-        message: 'Password reset successful, login now',
-        status: 'success',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const deleteUserPasswordResetToken = await resetPasswordTokenDeleteM(
+      resetTokenData.id as string
+    );
+
+    res.json({
+      message: 'password reset successful, login now',
+      status: 'success',
+    });
   }
 );
