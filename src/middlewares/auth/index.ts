@@ -33,7 +33,7 @@ export class Auth {
 
       try {
         const jwt: { userId: string; role: string } | any = verifyJWT(token);
-        req.user = { userId: jwt?.userId, role:jwt.role };
+        req.user = { userId: jwt?.userId, role: jwt.role };
         console.log(req.user);
         next();
       } catch (error) {
