@@ -1,10 +1,14 @@
+import 'express-async-errors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
 import adminRoute from './modules/Admin/routes/admin.routes';
+
+import authRoute from './modules/Auth/routes/user.auth.routes';
 
 import userRoute from './modules/User/routes/user.routes';
 
@@ -16,13 +20,18 @@ import orderRoute from './modules/User/routes/review.routes';
 
 import cartRoute from './modules/Cart/routes/cart.routes';
 
-import { requestErrorTypings } from './types';
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { customTime } from './interfaces/custom';
 import { _404 } from './middlewares/error/_404Page';
 import { ENV } from './configurations/env';
+import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware';
+import { Auth } from './middlewares/auth';
+
+const { authenticateUser } = Auth;
 
 const app: Application = express();
+
+app.use(cookieParser());
 
 app.use(cors());
 
@@ -41,14 +50,16 @@ app.use((req, res, next) => {
   next();
 });
 
-ENV.MODE.DEVELOPMENT === 'development' ? app.use(morgan('dev')) : '';
+ENV.MODE.MODE === 'development' ? app.use(morgan('dev')) : '';
 
 app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();
   next();
 });
 
-app.use('/api/v1/user', userRoute);
+app.use('/api/v1/auth', authRoute);
+
+app.use('/api/v1/user', authenticateUser, userRoute);
 
 app.use('/api/v1/admin', adminRoute);
 
@@ -58,27 +69,12 @@ app.use('/api/v1/reviews', reviewRoute);
 
 app.use('/api/v1/cart', cartRoute);
 
-app.use("/api/v1/order", orderRoute)
+app.use('/api/v1/order', orderRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
-// TODO Still facing weird bug here
 
-app.all('*', (req: Request, res: Response, next: NextFunction) => {
-  _404.notFound(req, res, next);
-});
+app.all('*', _404.notFound);
 
-app.use(
-  (
-    error: requestErrorTypings,
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    console.log(error.message);
-    const status = error.statusCode || 500;
-    const message = error.message;
-    res.status(status).json({ message });
-  }
-);
+app.use(errorHandlerMiddleware);
 
 export default app;

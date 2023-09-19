@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+
 import { StatusCodes } from 'http-status-codes';
 
 import { throwError } from '../../middlewares/error';
 
+import { verifyJWT } from '../../utils/index';
+
 import { ENV } from '../../configurations/env';
+
+import { UnauthenticatedError } from '../../errors/customError';
 
 import { CustomRequest } from '../../interfaces/custom';
 
@@ -21,43 +25,19 @@ const { findUserMId } = userQueries;
 const { findAdminIdM } = adminQueries;
 
 export class Auth {
-  static Token = catchAsync(
-    async (req: CustomRequest, res: Response, next: NextFunction) => {
-      let token;
+  static authenticateUser = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { token } = req.cookies;
+
+      if (!token) throw new UnauthenticatedError('authentication failed');
 
       try {
-        if (
-          req.headers.authorization &&
-          req?.headers?.authorization.startsWith('Bearer')
-        ) {
-          token = req?.headers?.authorization.split(' ')[1];
-
-          if (!ENV.JWT.SECRET) {
-            return throwError(
-              'SERVER JWT PASSWORD NOT SET',
-              StatusCodes.NOT_FOUND
-            );
-          }
-
-          if (token) {
-            const decoded = jwt.verify(token, ENV.JWT.SECRET) as {
-              id: string;
-            };
-            req.authId = decoded.id;
-          }
-        } else {
-          throwError(
-            `Sorry, there is no token attached to your Header, try again by attaching Token..`,
-            StatusCodes.NOT_FOUND
-          );
-        }
-
+        const jwt: { userId: string; role: string } | any = verifyJWT(token);
+        req.user = { userId: jwt?.userId, role: jwt.role };
+        console.log(req.user);
         next();
-      } catch (error: any) {
-        if (!error.statusCode) {
-          error.statusCode = 500;
-        }
-        next(error);
+      } catch (error) {
+        throw new UnauthenticatedError('authentication failed');
       }
     }
   );

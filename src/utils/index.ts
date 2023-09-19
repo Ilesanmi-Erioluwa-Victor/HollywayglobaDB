@@ -1,13 +1,15 @@
-class AppError extends Error {
-  statusCode: number;
-  status: string;
-  // isOperational: boolean;
+import { ENV } from '../configurations/env/';
+import jwt from 'jsonwebtoken';
 
-  constructor(message: string, statusCode: number) {
-    super(message);
-    this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
-  }
-}
+export const createJwt = (payload: { userId: string; role: string }) => {
+  const token = jwt.sign(payload, ENV.JWT.SECRET as string, {
+    expiresIn: ENV.JWT.EXPIRES,
+  });
 
-export default AppError;
+  return token;
+};
+
+export const verifyJWT = (token: string) => {
+  const decoded = jwt.verify(token, ENV.JWT.SECRET as string);
+  return decoded;
+};

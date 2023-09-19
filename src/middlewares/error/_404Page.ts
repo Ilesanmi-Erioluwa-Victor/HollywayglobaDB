@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import AppError from '../../utils';
+
+import { NotFoundError } from '../../errors/customError';
 
 export class _404 {
   static notFound(req: Request, res: Response, next: NextFunction) {
-     next(new AppError(`Can't find ${req.originalUrl}, ensure you have the correct URL`, 404));
+    throw new NotFoundError(
+      `Can't find ${req.originalUrl}, ensure you have the correct URL`
+    );
   }
 }

@@ -14,9 +14,7 @@ const {
 const { validate } = customValidator;
 
 import {
-  createUser,
   getUser,
-  loginUser,
   updatePassword,
   updateUser,
   accountVerification,
@@ -39,21 +37,33 @@ import {
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
 
-const { Token, VerifiedUser } = Auth;
+// const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
-route.post('/signup', validate(createUserValidation()), createUser);
+route.post(
+  '/:id/address',
+  // Token, VerifiedUser,
+  createAddress
+);
 
-route.post('/login', validate(loginUserValidation()), loginUser);
+route.put(
+  '/:id/address/:addressId',
+  // Token, VerifiedUser,
+  editAddress
+);
 
-route.post('/:id/address', Token, VerifiedUser, createAddress);
+route.get(
+  '/:id/address',
+  // Token, VerifiedUser,
+  getAddresses
+);
 
-route.put('/:id/address/:addressId', Token, VerifiedUser, editAddress);
-
-route.get('/:id/address', Token, VerifiedUser, getAddresses);
-
-route.delete('/:id/address/:addressId', Token, VerifiedUser, deleteAddresses);
+route.delete(
+  '/:id/address/:addressId',
+  // Token, VerifiedUser,
+  deleteAddresses
+);
 
 route.post(
   '/forgetPassword',
@@ -67,20 +77,32 @@ route.put(
   resetPassword
 );
 
-route.get('/:id', Token, VerifiedUser, getUser);
+route.get(
+  '/:id',
+  // Token, VerifiedUser,
+  getUser
+);
 
-route.put('/updateProfile/:id', Token, VerifiedUser, updateUser);
+route.put(
+  '/updateProfile/:id',
+  // Token, VerifiedUser,
+  updateUser
+);
 
 route.post(
   '/:id/uploadImage',
-  Token,
+  // Token,
   profileImage.single('image'),
   profileImageResize,
-  VerifiedUser,
+  // VerifiedUser,
   uploadProfile
 );
 
-route.put('/password/:id', Token, VerifiedUser, updatePassword);
+route.put(
+  '/password/:id',
+  // Token, VerifiedUser,
+  updatePassword
+);
 
 route.put('/:id/verify_account/:token', accountVerification);
 
