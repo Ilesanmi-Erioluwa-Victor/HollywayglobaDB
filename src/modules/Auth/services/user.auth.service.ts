@@ -16,9 +16,9 @@ import {
   UnauthenticatedError,
 } from '../../../errors/customError';
 import { createJwt } from '../../../utils';
+import { ENV } from 'configurations/env';
 
 const { catchAsync, generateToken, comparePassword } = Utils;
-
 
 const { sendMail, sendMailToken } = Email;
 
@@ -45,10 +45,17 @@ export const login: RequestHandler = catchAsync(
           'verify your account in your gmail before you can log in'
         );
       }
-      const token = createJwt({userId : user?.id, role: user?.role});
+      const token = createJwt({ userId: user?.id, role: user?.role });
+      const aDay = 1000 * 60 * 60 * 24;
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + aDay),
+        secure: ENV.MODE.MODE === 'production',
+      });
       res.json({
         status: 'success',
-        message: 'user logged in',
+        message: 'you are logged in !',
       });
     } else {
       throw new UnauthenticatedError('invalid credentials, try agin');
