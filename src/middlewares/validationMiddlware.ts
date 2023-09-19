@@ -84,3 +84,22 @@ export const validateUserIdParam = withValidationErrors([
       throw new UnauthorizedError('not authorized to access this route');
   }),
 ]);
+
+export const validateAdminIdParam = withValidationErrors([
+  param('adminId').custom(async (value, { req }) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const admin = await prisma.admin.findUnique(value);
+
+    if (!admin) throw new NotFoundError('no user associated with this id ...');
+
+    const isOwner = req.user.userId.toString() === req.params?.id.toString();
+
+     const isAdmin = req.user.role === 'admin';
+
+    if (!isOwner && !isAdmin)
+      throw new UnauthorizedError('not authorized to access this route');
+  }),
+]);
