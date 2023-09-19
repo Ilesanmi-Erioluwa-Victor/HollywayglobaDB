@@ -8,7 +8,8 @@ import { authQuery } from './../models/user.auth.model';
 
 import { Email } from '../../../templates';
 
-const { findUserMEmail, registerM, forgetPasswordTokenM } = authQuery;
+const { findUserMEmail, registerM, forgetPasswordTokenM , accountVerificationUpdatedM,
+  accountVerificationM, } = authQuery;
 
 import {
   BadRequestError,
@@ -100,5 +101,41 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
       message: `A reset token has been sent to your gmail`,
       status: 'success',
     });
+  }
+);
+
+export const accountVerification: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token, id } = req.params;
+    ValidateMongoDbId(id);
+    if (!id) throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST);
+
+    if (!token)
+      throwError(
+        'Sorry, this token is not valid, try again',
+        StatusCodes.BAD_REQUEST
+      );
+    try {
+      const user = await accountVerificationM(id, token, new Date());
+
+      if (!user) {
+        throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST);
+      }
+      const updaterUser = await accountVerificationUpdatedM(
+        user?.id as string,
+        true,
+        '',
+        null
+      );
+      res.json({
+        status: 'Success',
+        message: 'You have successfully, verify your account, log in now',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
   }
 );

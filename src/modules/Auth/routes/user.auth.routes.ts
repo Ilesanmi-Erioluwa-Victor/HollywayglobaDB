@@ -4,7 +4,9 @@ import {
   login,
   logout,
   forgetPasswordToken,
+  accountVerification
 } from '../services/user.auth.service';
+
 import {
   validateRegisterInput,
   validateLoginInput,
@@ -24,4 +26,6 @@ route.post(
   validateforgottenPasswordInput,
   forgetPasswordToken
 );
+
+route.put('/:id/verify_account/:token', accountVerification);
 export default route;

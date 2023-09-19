@@ -105,7 +105,7 @@ export class Email {
         resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
           'host'
-        )}/api/v1/user/reset_password/${
+        )}/api/v1/user/resetPassword/${
           data.token
         }>Click here to reset your password..</a>
        `;
@@ -133,7 +133,7 @@ export class Email {
         resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
           'host'
-        )}/api/v1/admin/reset_password/${
+        )}/api/v1/admin/resetPassword/${
           data?.token
         }>Click here to reset your password..</a>
        `;

@@ -4,7 +4,6 @@ import {
   getUser,
   updatePassword,
   updateUser,
-  accountVerification,
   resetPassword,
   uploadProfile,
 } from '../services/user.auth.service';
@@ -76,6 +75,6 @@ route.put(
   updatePassword
 );
 
-route.put('/:id/verify_account/:token', accountVerification);
+
 
 export default route;
