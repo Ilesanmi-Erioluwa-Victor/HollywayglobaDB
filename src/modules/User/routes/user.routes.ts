@@ -14,9 +14,7 @@ const {
 const { validate } = customValidator;
 
 import {
-  createUser,
   getUser,
-  loginUser,
   updatePassword,
   updateUser,
   accountVerification,
@@ -42,11 +40,6 @@ import {
 const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
-
-route.post('/signup', validate(createUserValidation()), createUser);
-// validate(loginUserValidation()),
-
-route.post('/login',  loginUser);
 
 route.post('/:id/address', Token, VerifiedUser, createAddress);
 

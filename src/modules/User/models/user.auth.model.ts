@@ -2,27 +2,9 @@ import { prisma } from '../../../configurations/db';
 
 import { Utils } from '../../../helper/utils';
 
-import { signupUser } from '../user.interface';
-
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
 export class userQueries {
-  static async createUserM(user: signupUser) {
-    const { firstName, lastName, email, mobile, password } = user;
-    const createUser = await prisma.user.create({
-      data: {
-        firstName,
-        lastName,
-        email: email.toLocaleLowerCase(),
-        mobile,
-        password: await hashedPassword(password),
-      },
-    });
-
-    generateToken(createUser?.id as string);
-    const tokenUser = await accountVerificationToken('user', createUser?.id);
-    return tokenUser;
-  }
 
   static async findUserMId(id: string) {
     const userId = await prisma.user.findUnique({
