@@ -5,7 +5,7 @@ import { Utils } from '../../../helper/utils';
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 // import { signupUser } from '../user.interface';
 export class authQuery {
-  static async createUserM(user: signupUser) {
+  static async createUserM(user) {
     const { firstName, lastName, email, mobile, password } = user;
     const createUser = await prisma.user.create({
       data: {

@@ -4,39 +4,24 @@ import { StatusCodes } from 'http-status-codes';
 
 import { Utils } from '../../../helper/utils';
 
-import { userQueries } from '../user.auth.model';
+import { authQuery } from './../models/user.auth.model';
 
 import { Email } from '../../../templates';
 
-const { findUserMEmail, createUserM } = userQueries;
+const { findUserMEmail, createUserM } = authQuery;
 
 const { catchAsync, generateToken, comparePassword } = Utils;
 
 const { sendMail, sendMailToken } = Email;
 
-export const createUser: RequestHandler = catchAsync(
+export const register: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const existEmail = await findUserMEmail(req.body.email);
-      if (existEmail) {
-        throwError(
-          'You are already a member, kindly login to your account',
-          StatusCodes.CONFLICT
-        );
-      }
-
-      const user: any = await createUserM(req.body);
-      sendMail('user', user, req, res, next);
-      res.json({
-        message: 'You have successfully created your account, log in now',
-        status: 'success',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const user = await createUserM(req.body);
+    sendMail('user', user, req, res, next);
+    res.status(StatusCodes.CREATED).json({
+      status: 'success',
+      message: 'account created',
+    });
   }
 );
 

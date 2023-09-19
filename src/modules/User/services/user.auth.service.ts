@@ -1,6 +1,5 @@
 import fs from 'fs';
 
-
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
@@ -37,13 +36,7 @@ const { sendMailToken } = Email;
 
 const uploader = new CloudinaryUploader();
 
-const {
-  catchAsync,
-  ValidateMongoDbId,
-  generatePasswordResetToken,
-} = Utils;
-
-
+const { catchAsync, ValidateMongoDbId, generatePasswordResetToken } = Utils;
 
 export const getUser: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
