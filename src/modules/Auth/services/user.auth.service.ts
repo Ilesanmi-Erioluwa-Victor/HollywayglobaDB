@@ -8,7 +8,7 @@ import { authQuery } from './../models/user.auth.model';
 
 import { Email } from '../../../templates';
 
-const { findUserMEmail, createUserM } = authQuery;
+const { findUserMEmail, registerM } = authQuery;
 
 const { catchAsync, generateToken, comparePassword } = Utils;
 
@@ -16,7 +16,7 @@ const { sendMail, sendMailToken } = Email;
 
 export const register: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await createUserM(req.body);
+    const user = await registerM(req.body);
     sendMail('user', user, req, res, next);
     res.status(StatusCodes.CREATED).json({
       status: 'success',
