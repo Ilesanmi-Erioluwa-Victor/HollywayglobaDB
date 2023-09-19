@@ -8,7 +8,11 @@ import { verifyJWT } from '../../utils/index';
 
 import { ENV } from '../../configurations/env';
 
-import { NotFoundError, UnauthenticatedError, BadRequestError } from '../../errors/customError';
+import {
+  NotFoundError,
+  UnauthenticatedError,
+  BadRequestError,
+} from '../../errors/customError';
 
 import { CustomRequest } from '../../interfaces/custom';
 
@@ -56,10 +60,9 @@ export class Auth {
         if (user.id.toString() !== req.user.userId.toString())
           throw new BadRequestError('your id does not match, try again');
 
-        if (!user?.isAccountVerified)
-          throwError(
-            'Sorry, your account is not verified, please check your email and verify your email',
-            StatusCodes.BAD_REQUEST
+        if (!user.isAccountVerified)
+          throw new BadRequestError(
+            'please, verify your account, before you can log in'
           );
 
         next();
