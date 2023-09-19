@@ -71,20 +71,10 @@ export const createUser: RequestHandler = catchAsync(
   }
 );
 
-const isValidMongoId = (value: string): boolean => {
-  try {
-    const objectId = new ObjectId(value);
-    return objectId.toHexString() === value;
-  } catch (error) {
-    return false;
-  }
-};
 
 export const loginUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    req.auth = "Hello from me"
-    isValidMongoId("64f91895789072cb8140b4ba")
-    console.log(req.auth as string, isValidMongoId('64f91895789072cb8140b4b'));
+  
     const { email, password } = req.body;
 
     
