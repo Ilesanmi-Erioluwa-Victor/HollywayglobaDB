@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login } from '../services/user.auth.service';
+import { register, login, logout } from '../services/user.auth.service';
 import {
   validateRegisterInput,
   validateLoginInput,

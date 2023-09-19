@@ -24,6 +24,7 @@ const { sendMail, sendMailToken } = Email;
 
 export const register: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    
     const user = await registerM(req.body);
     sendMail('user', user, req, res, next);
     res.status(StatusCodes.CREATED).json({
@@ -64,5 +65,10 @@ export const login: RequestHandler = catchAsync(
 );
 
 export const logout: RequestHandler = catchAsync( async (req: Request, res : Response, next: NextFunction) => {
-  
+    res.cookie('token', 'logout', {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    });
+
+    res.status(StatusCodes.OK).json({ message: 'successfully logged out', status : "success" });
 })
