@@ -16,6 +16,7 @@ import mongoose from 'mongoose';
 import { prisma } from '../configurations/db';
 
 import { ENV } from '../configurations/env';
+
 import { BadRequestError } from '../errors/customError';
 
 export class Utils {
