@@ -4,7 +4,11 @@ import { StatusCodes } from 'http-status-codes';
 
 import { throwError } from '../../middlewares/error';
 
+import { verifyJWT } from '../../utils';
+
 import { ENV } from '../../configurations/env';
+
+import { UnauthenticatedError } from '../../errors/customError';
 
 import { CustomRequest } from '../../interfaces/custom';
 
@@ -13,7 +17,6 @@ import { userQueries } from '../../modules/User/models/user.auth.model';
 import { adminQueries } from '../../modules/Admin/models/admin.models';
 
 import { Utils } from '../../helper/utils';
-import { UnauthenticatedError } from '../../errors/customError';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 

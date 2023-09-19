@@ -15,8 +15,10 @@ import {
   NotFoundError,
   UnauthenticatedError,
 } from '../../../errors/customError';
+import { createJwt } from '../../../utils';
 
 const { catchAsync, generateToken, comparePassword } = Utils;
+
 
 const { sendMail, sendMailToken } = Email;
 
@@ -43,6 +45,7 @@ export const login: RequestHandler = catchAsync(
           'verify your account in your gmail before you can log in'
         );
       }
+      const token = createJwt({userId : user?.id, role: user?.role});
       res.json({
         status: 'success',
         message: 'user logged in',
