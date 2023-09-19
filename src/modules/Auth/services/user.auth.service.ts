@@ -134,3 +134,47 @@ export const accountVerification: RequestHandler = catchAsync(
     });
   }
 );
+
+export const resetPassword: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req?.params;
+    const { password } = req.body;
+
+    if (!token)
+      throwError(
+        'Sorry, invalid token or something went wrong',
+        StatusCodes.BAD_GATEWAY
+      );
+
+    if (!password)
+      throwError(
+        'Please, provide password for reset!!!',
+        StatusCodes.BAD_REQUEST
+      );
+    try {
+      const resetTokenData = await resetPasswordM(token);
+      if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
+        throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
+      }
+
+      const user = await resetPasswordUpdateM(
+        resetTokenData?.user?.id as string,
+        password
+      );
+
+      const deleteUserPasswordResetToken = await resetPasswordTokenDeleteM(
+        resetTokenData?.id as string
+      );
+
+      res.json({
+        message: 'Password reset successful, login now',
+        status: 'success',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);

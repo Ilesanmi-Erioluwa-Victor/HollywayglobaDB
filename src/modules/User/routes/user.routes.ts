@@ -46,7 +46,7 @@ route.delete(
   deleteAddresses
 );
 
-route.put('/resetPassword/:token', resetPassword);
+
 
 route.get(
   '/:id',

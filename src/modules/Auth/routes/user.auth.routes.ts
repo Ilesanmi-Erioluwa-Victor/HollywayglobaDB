@@ -4,13 +4,15 @@ import {
   login,
   logout,
   forgetPasswordToken,
-  accountVerification
+  accountVerification,
+  resetPassword
 } from '../services/user.auth.service';
 
 import {
   validateRegisterInput,
   validateLoginInput,
   validateforgottenPasswordInput,
+  validateresetPasswordInput,
 } from '../../../middlewares/validationMiddlware';
 
 const route = Router();
@@ -28,4 +30,6 @@ route.post(
 );
 
 route.put('/:id/verify_account/:token', accountVerification);
+
+route.put('/resetPassword/:token',validateresetPasswordInput, resetPassword);
 export default route;

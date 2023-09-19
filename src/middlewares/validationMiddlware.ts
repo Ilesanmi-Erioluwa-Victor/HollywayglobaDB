@@ -74,6 +74,10 @@ export const validateforgottenPasswordInput = withValidationErrors([
     .withMessage('invalid email format'),
 ]);
 
+export const validateresetPasswordInput = withValidationErrors([
+  body('password').notEmpty().withMessage('password is required'),
+]);
+
 export const validateUserIdParam = withValidationErrors([
   param('id').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
