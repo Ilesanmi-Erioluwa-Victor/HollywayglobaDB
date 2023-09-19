@@ -52,6 +52,7 @@ export class authQuery {
         expirationTime,
         userId,
       },
+      include: { user: { select: { email: true } } },
     });
 
     return user;

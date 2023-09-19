@@ -106,13 +106,13 @@ export class Email {
         <a href= ${req.protocol}://${req.get(
           'host'
         )}/api/v1/user/reset_password/${
-          data?.token
+          data.token
         }>Click here to reset your password..</a>
        `;
 
         mailOptions = {
           from: 'HollwayGlobalIncLimited@gmail.com',
-          to: `${data?.email}`,
+          to: `${data.user.email}`,
           subject: 'Password Reset Token',
           text: `Your password reset token 😉 `,
           html: resetUrl,
