@@ -17,7 +17,6 @@ const {
   updateUserM,
   updateUserPasswordM,
   accountVerificationUpdatedM,
-  forgetPasswordTokenM,
   accountVerificationM,
   resetPasswordM,
   resetPasswordUpdateM,
