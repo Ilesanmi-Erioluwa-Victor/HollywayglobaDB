@@ -34,7 +34,7 @@ export class authQuery {
   static async findUserMEmail(email: string) {
     const userEmail = await prisma.user.findUnique({
       where: {
-        email: email.toLocaleLowerCase(),
+        email,
       },
     });
 
