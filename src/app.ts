@@ -4,6 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
 import adminRoute from './modules/Admin/routes/admin.routes';
 
@@ -42,7 +43,7 @@ app.use((req, res, next) => {
   next();
 });
 
-ENV.MODE.DEVELOPMENT === 'development' ? app.use(morgan('dev')) : '';
+ENV.MODE.MODE === 'development' ? app.use(morgan('dev')) : '';
 
 app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();
