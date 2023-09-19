@@ -1,5 +1,7 @@
 import { RequestHandler, Request, Response, NextFunction } from 'express';
 
+import { ObjectId } from 'mongodb';
+
 import crypto from 'crypto';
 
 import { StatusCodes } from 'http-status-codes';
@@ -23,11 +25,13 @@ export class Utils {
     };
   }
 
-  static ValidateMongoDbId(id: string): void {
-    const isValidId = mongoose.Types.ObjectId.isValid(id);
-
-    if (!isValidId)
-      new AppError('Invalid Id passed, check your Id', StatusCodes.BAD_REQUEST);
+  static ValidateMongoDbId(value: string): boolean {
+    try {
+      const objectId = new ObjectId(value);
+      return objectId.toHexString() === value;
+    } catch (error) {
+      return false;
+    }
   }
 
   static async accountVerificationToken(accountType: string, id: string) {
