@@ -13,7 +13,6 @@ import { userQueries } from '../models/user.auth.model';
 
 const {
   findUserMEmail,
-  createUserM,
   findUserMId,
   updateUserM,
   updateUserPasswordM,

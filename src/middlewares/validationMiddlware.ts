@@ -8,6 +8,9 @@ import {
   NotFoundError,
   UnauthorizedError,
 } from '../errors/customError';
+import { authQuery } from '../modules/Auth/models/user.auth.model';
+
+const { findUserMEmail } = authQuery;
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -43,11 +46,7 @@ export const validateRegisterInput = withValidationErrors([
     .isEmail()
     .withMessage('invalid email format')
     .custom(async (email) => {
-      const user = await prisma.user.findFirst({
-        where: {
-          email,
-        },
-      });
+      const user = await findUserMEmail(email);
       if (user) {
         throw new BadRequestError('email already exists');
       }
