@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+
 import { StatusCodes } from 'http-status-codes';
 
 import { throwError } from '../../middlewares/error';
@@ -21,8 +22,8 @@ const { findUserMId } = userQueries;
 const { findAdminIdM } = adminQueries;
 
 export class Auth {
-  static Token = catchAsync(
-    async (req: CustomRequest, res: Response, next: NextFunction) => {
+  static authenticateUser = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
       let token;
 
       try {
@@ -63,7 +64,7 @@ export class Auth {
   );
 
   static VerifiedUser = catchAsync(
-    async (req: CustomRequest, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response, next: NextFunction) => {
       const authId = req?.authId;
 
       const userId = req?.params?.id;
