@@ -23,6 +23,7 @@ import { SanitizeInputMiddleware } from './middlewares/sanitize';
 import { customTime } from './interfaces/custom';
 import { _404 } from './middlewares/error/_404Page';
 import { ENV } from './configurations/env';
+import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware';
 
 const app: Application = express();
 
@@ -70,17 +71,6 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
   _404.notFound(req, res, next);
 });
 
-app.use(
-  (
-    error: requestErrorTypings,
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const status = error.statusCode || 500;
-    const message = error.message;
-    res.status(status).json({ message });
-  }
-);
+app.use(errorHandlerMiddleware);
 
 export default app;
