@@ -40,4 +40,86 @@ export class authQuery {
 
     return userEmail;
   }
+
+  static async forgetPasswordTokenM(
+    token: string,
+    expirationTime: Date,
+    userId: string
+  ) {
+    const user = await prisma.passwordResetToken.create({
+      data: {
+        token,
+        expirationTime,
+        userId,
+      },
+      include: { user: { select: { email: true } } },
+    });
+
+    return user;
+  }
+
+  static async accountVerificationM(
+    id: string,
+    accountVerificationToken: string,
+    time: Date
+  ) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+        accountVerificationToken,
+        accountVerificationTokenExpires: {
+          gt: time,
+        },
+      },
+    });
+
+    return user;
+  }
+
+  static async accountVerificationUpdatedM(
+    id: string,
+    isAccountVerified: boolean,
+    accountVerificationToken: string,
+    accountVerificationTokenExpires: any
+  ) {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        isAccountVerified,
+        accountVerificationToken,
+        accountVerificationTokenExpires,
+      },
+    });
+
+    return user;
+  }
+
+  static async resetPasswordM(token: string) {
+    const user = await prisma.passwordResetToken.findUnique({
+      where: { token },
+      include: { user: true },
+    });
+    return user;
+  }
+
+  static async resetPasswordUpdateM(id: string, password: string) {
+    const user = await prisma.user.update({
+      where: { id },
+      data: {
+        password: await hashedPassword(password),
+      },
+    });
+
+    return user;
+  }
+
+  static async resetPasswordTokenDeleteM(id: string) {
+    const user = await prisma.passwordResetToken.delete({
+      where: { id },
+    });
+
+    return user;
+  }
 }

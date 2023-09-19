@@ -16,12 +16,6 @@ const {
   findUserMId,
   updateUserM,
   updateUserPasswordM,
-  accountVerificationUpdatedM,
-  forgetPasswordTokenM,
-  accountVerificationM,
-  resetPasswordM,
-  resetPasswordUpdateM,
-  resetPasswordTokenDeleteM,
   userProfilePictureUpdateM,
 } = userQueries;
 
@@ -124,126 +118,11 @@ export const updatePassword: RequestHandler = catchAsync(
   }
 );
 
-export const accountVerification: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { token, id } = req.params;
-    ValidateMongoDbId(id);
-    if (!id) throwError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST);
 
-    if (!token)
-      throwError(
-        'Sorry, this token is not valid, try again',
-        StatusCodes.BAD_REQUEST
-      );
-    try {
-      const user = await accountVerificationM(id, token, new Date());
 
-      if (!user) {
-        throwError('Sorry, no user found, try again', StatusCodes.BAD_REQUEST);
-      }
-      const updaterUser = await accountVerificationUpdatedM(
-        user?.id as string,
-        true,
-        '',
-        null
-      );
-      res.json({
-        status: 'Success',
-        message: 'You have successfully, verify your account, log in now',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
 
-export const forgetPasswordToken: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { email } = req.body;
 
-    if (!email)
-      throwError(
-        'Please, provide email for you to reset your password',
-        StatusCodes.BAD_REQUEST
-      );
-    const user = await findUserMEmail(email);
-    if (!user)
-      throwError(
-        'No user found with provided email.., try again',
-        StatusCodes.NOT_FOUND
-      );
 
-    try {
-      const resetToken = generatePasswordResetToken();
-      const expirationTime = new Date();
-      expirationTime.setHours(expirationTime.getHours() + 1);
-
-      const passwordReset = await forgetPasswordTokenM(
-        await resetToken,
-        expirationTime,
-        user?.id as string
-      );
-
-      await sendMailToken('user', passwordReset, req, res, next);
-      res.json({
-        message: `A reset token has been sent to your gmail`,
-        status: 'success',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
-
-export const resetPassword: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = req?.params;
-    const { password } = req.body;
-
-    if (!token)
-      throwError(
-        'Sorry, invalid token or something went wrong',
-        StatusCodes.BAD_GATEWAY
-      );
-
-    if (!password)
-      throwError(
-        'Please, provide password for reset!!!',
-        StatusCodes.BAD_REQUEST
-      );
-    try {
-      const resetTokenData = await resetPasswordM(token);
-      if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
-        throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
-      }
-
-      const user = await resetPasswordUpdateM(
-        resetTokenData?.user?.id as string,
-        password
-      );
-
-      const deleteUserPasswordResetToken = await resetPasswordTokenDeleteM(
-        resetTokenData?.id as string
-      );
-
-      res.json({
-        message: 'Password reset successful, login now',
-        status: 'success',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
 
 export const uploadProfile: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

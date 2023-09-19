@@ -1,25 +1,9 @@
 import express from 'express';
 
-import { customValidator } from '../../../middlewares/validators/Validator';
-
-import { userValidator } from '../../../middlewares/validators/user/user.validate';
-
-const {
-  createUserValidation,
-  loginUserValidation,
-  forgetPasswordValidation,
-  resetforgetPasswordValidation,
-} = userValidator;
-
-const { validate } = customValidator;
-
 import {
   getUser,
   updatePassword,
   updateUser,
-  accountVerification,
-  forgetPasswordToken,
-  resetPassword,
   uploadProfile,
 } from '../services/user.auth.service';
 
@@ -30,14 +14,10 @@ import {
   deleteAddresses,
 } from '../services/user.address.service';
 
-import { Auth } from '../../../middlewares/auth';
-
 import {
   profileImage,
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
-
-// const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
@@ -63,18 +43,6 @@ route.delete(
   '/:id/address/:addressId',
   // Token, VerifiedUser,
   deleteAddresses
-);
-
-route.post(
-  '/forgetPassword',
-  validate(forgetPasswordValidation()),
-  forgetPasswordToken
-);
-
-route.put(
-  '/resetPassword/:token',
-  validate(resetforgetPasswordValidation()),
-  resetPassword
 );
 
 route.get(
@@ -103,7 +71,5 @@ route.put(
   // Token, VerifiedUser,
   updatePassword
 );
-
-route.put('/:id/verify_account/:token', accountVerification);
 
 export default route;

@@ -8,7 +8,11 @@ import { verifyJWT } from '../../utils/index';
 
 import { ENV } from '../../configurations/env';
 
-import { UnauthenticatedError } from '../../errors/customError';
+import {
+  NotFoundError,
+  UnauthenticatedError,
+  BadRequestError,
+} from '../../errors/customError';
 
 import { CustomRequest } from '../../interfaces/custom';
 
@@ -34,7 +38,6 @@ export class Auth {
       try {
         const jwt: { userId: string; role: string } | any = verifyJWT(token);
         req.user = { userId: jwt?.userId, role: jwt.role };
-        console.log(req.user);
         next();
       } catch (error) {
         throw new UnauthenticatedError('authentication failed');
@@ -42,31 +45,24 @@ export class Auth {
     }
   );
 
-  static VerifiedUser = catchAsync(
-    async (req: CustomRequest, res: Response, next: NextFunction) => {
-      const authId = req?.authId;
+  static verifiedUser = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const user_para_id = req.params.id;
 
-      const userId = req?.params?.id;
-
-      if (!authId)
-        throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST);
-
-      if (!userId) {
-        throwError('Sorry, invalid ID', StatusCodes.BAD_REQUEST);
-      }
-
-      ValidateMongoDbId(authId as string);
+      if (!user_para_id)
+        throw new UnauthenticatedError('authentication failed');
 
       try {
-        const user = await findUserMId(authId as string);
+        const user = await findUserMId(req.user.userId as string);
 
-        if (user?.id.toString() !== authId?.toString())
-          throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST);
+        if (!user) throw new NotFoundError('no user found');
 
-        if (!user?.isAccountVerified)
-          throwError(
-            'Sorry, your account is not verified, please check your email and verify your email',
-            StatusCodes.BAD_REQUEST
+        if (user.id.toString() !== req.user.userId.toString())
+          throw new BadRequestError('your id does not match, try again');
+
+        if (!user.isAccountVerified)
+          throw new BadRequestError(
+            'please, verify your account, before you can log in'
           );
 
         next();

@@ -105,14 +105,14 @@ export class Email {
         resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
           'host'
-        )}/api/v1/user/reset_password/${
-          data?.token
+        )}/api/v1/auth/resetPassword/${
+          data.token
         }>Click here to reset your password..</a>
        `;
 
         mailOptions = {
           from: 'HollwayGlobalIncLimited@gmail.com',
-          to: `${data?.email}`,
+          to: `${data.user.email}`,
           subject: 'Password Reset Token',
           text: `Your password reset token 😉 `,
           html: resetUrl,
@@ -133,7 +133,7 @@ export class Email {
         resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
           'host'
-        )}/api/v1/admin/reset_password/${
+        )}/api/v1/admin/resetPassword/${
           data?.token
         }>Click here to reset your password..</a>
        `;
@@ -158,8 +158,10 @@ export class Email {
     next: NextFunction
   ) {
     const mail = new Email();
+
     switch (type) {
       case 'user':
+        console.log(data);
         return await mail.sendMailAcc('user', data, req, res, next);
 
       case 'admin':
