@@ -10,6 +10,12 @@ import { Email } from '../../../templates';
 
 const { findUserMEmail, registerM } = authQuery;
 
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthenticatedError,
+} from '../../../errors/customError';
+
 const { catchAsync, generateToken, comparePassword } = Utils;
 
 const { sendMail, sendMailToken } = Email;
@@ -25,44 +31,24 @@ export const register: RequestHandler = catchAsync(
   }
 );
 
-// export const loginUser: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { email, password } = req.body;
+export const login: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await findUserMEmail(req.body.email);
 
-//     try {
-//       const user: loginUserI | any = await findUserMEmail(email);
+    if (!user) throw new NotFoundError('no account found');
 
-//       if (!user) {
-//         throwError('No user found with this email', StatusCodes.BAD_REQUEST);
-//       }
-
-//       if (await comparePassword(password, user?.password)) {
-//         if (!user.isAccountVerified) {
-//           throwError(
-//             'Verify your account in your gmail before you can log in',
-//             StatusCodes.BAD_REQUEST
-//           );
-//         }
-
-//         res.json({
-//           status: 'success',
-//           message: 'login successfully',
-//           data: {
-//             id: user?.id,
-//             token: await generateToken(user?.id),
-//           },
-//         });
-//       } else {
-//         throwError(
-//           'Login Failed, invalid credentials',
-//           StatusCodes.UNAUTHORIZED
-//         );
-//       }
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+    if (await comparePassword(req.body.password, user?.password)) {
+      if (!user.isAccountVerified) {
+        throw new BadRequestError(
+          'verify your account in your gmail before you can log in'
+        );
+      }
+      res.json({
+        status: 'success',
+        message: 'user logged in',
+      });
+    } else {
+      throw new UnauthenticatedError('invalid credentials, try agin');
+    }
+  }
+);
