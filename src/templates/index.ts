@@ -158,10 +158,10 @@ export class Email {
     next: NextFunction
   ) {
     const mail = new Email();
-  
+
     switch (type) {
       case 'user':
-          console.log(data);
+        console.log(data);
         return await mail.sendMailAcc('user', data, req, res, next);
 
       case 'admin':
