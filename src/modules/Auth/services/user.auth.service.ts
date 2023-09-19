@@ -62,3 +62,7 @@ export const login: RequestHandler = catchAsync(
     }
   }
 );
+
+export const logout: RequestHandler = catchAsync( async (req: Request, res : Response, next: NextFunction) => {
+  
+})
