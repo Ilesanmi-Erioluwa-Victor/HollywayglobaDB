@@ -8,7 +8,7 @@ import { verifyJWT } from '../../utils/index';
 
 import { ENV } from '../../configurations/env';
 
-import { UnauthenticatedError } from '../../errors/customError';
+import { NotFoundError, UnauthenticatedError } from '../../errors/customError';
 
 import { CustomRequest } from '../../interfaces/custom';
 
@@ -47,14 +47,12 @@ export class Auth {
 
       const user_para_id = req.params.id;
 
-      if (!user_id) throw new UnauthenticatedError('authentication failed');
-
       if (!user_para_id)
         throw new UnauthenticatedError('authentication failed');
 
       try {
-        const user = await findUserMId(authId as string);
-
+        const user = await findUserMId(user_id as string);
+        if (!user_id) throw new NotFoundError('no user found');
         if (user?.id.toString() !== authId?.toString())
           throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST);
 
