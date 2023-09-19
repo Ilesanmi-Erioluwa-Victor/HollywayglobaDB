@@ -1,11 +1,13 @@
 import { body, param, validationResult } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
+
+import { prisma } from '../configurations/db';
+
 import {
   BadRequestError,
   NotFoundError,
   UnauthorizedError,
 } from '../errors/customError';
-
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -33,10 +35,24 @@ const withValidationErrors = (validateValues: any) => {
   ];
 };
 
-
-export const validateUserInput = withValidationErrors([
-  body('firstName').notEmpty().withMessage('firstName is required'),
-  body('lastName').notEmpty().withMessage('astName is required'),
+export const validateRegisterInput = withValidationErrors([
+  body('firstName').notEmpty().withMessage('first name is required'),
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format')
+    .custom(async (email) => {
+      const user = await prisma.user.findFirst({
+        where: {
+          email,
+        },
+      });
+      if (user) {
+        throw new BadRequestError('email already exists');
+      }
+    }),
   body('password').notEmpty().withMessage('Password is required'),
-  body("mobile").notEmpty().withMessage('Phone number is required')
+  body('mobile').notEmpty().withMessage('Mobile phone is required'),
+  body('lastName').notEmpty().withMessage('last name is required'),
 ]);
