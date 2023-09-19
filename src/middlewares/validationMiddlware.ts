@@ -76,15 +76,11 @@ export const validateUserIdParam = withValidationErrors([
 
     const user = await prisma.user.findUnique(value);
 
-    if (!job) throw new NotFoundError(`no job with id ${value}`);
-    const isAdmin = req.user.role === 'admin';
-    const isUser = req.user.role === 'role';
-    const isOwner = req.user.userId.toString() === job.createdBy.toString();
+    if (!user) throw new NotFoundError('no user associated with this id ...');
 
-    if (!isAdmin && !isOwner)
-      throw new Error('not authorized to access this route');
+    const isOwner = req.user.userId.toString() === req.params?.id.toString();
 
-    if (!isUser && !isOwner)
-      throw new Error('not authorized to access this route');
+    if (!isOwner)
+      throw new UnauthorizedError('not authorized to access this route');
   }),
 ]);
