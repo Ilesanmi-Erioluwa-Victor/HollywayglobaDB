@@ -12,7 +12,7 @@ const withValidationErrors = (validateValues : any) => {
     (req: Request, res : Response, next : NextFunction) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        const errorMessages = errors
+        const errorMessages: any = errors
           .array()
           .map((error : any) => `${error.path} : ${error.msg}`);
 
