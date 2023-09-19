@@ -97,7 +97,7 @@ export const validateAdminIdParam = withValidationErrors([
 
     const isOwner = req.user.userId.toString() === req.params?.id.toString();
 
-     const isAdmin = req.user.role === 'admin';
+    const isAdmin = req.user.role === 'admin';
 
     if (!isOwner && !isAdmin)
       throw new UnauthorizedError('not authorized to access this route');
