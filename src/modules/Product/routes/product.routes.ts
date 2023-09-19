@@ -8,7 +8,7 @@ import { TopTenProducts, Products } from '../services/product.service';
 
 const route = express.Router();
 
-route.get('Products');
+route.get('/', Products);
 
 route.get('/top-10-cheap-products', TopTenProducts);
 

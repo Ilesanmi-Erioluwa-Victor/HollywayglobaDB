@@ -33,11 +33,6 @@ export const TopTenProducts: RequestHandler = catchAsync(
 
 export const Products: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-
-    ValidateMongoDbId(id);
-    if (!id)
-      return throwError('You must be logged in', StatusCodes.BAD_REQUEST);
     try {
       const userProducts = await ProductsM();
 
