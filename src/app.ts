@@ -8,6 +8,8 @@ import cookieParser from 'cookie-parser';
 
 import adminRoute from './modules/Admin/routes/admin.routes';
 
+import authRoute from './modules/Auth/routes/user.auth.routes';
+
 import userRoute from './modules/User/routes/user.routes';
 
 import productRoute from './modules/Product/routes/product.routes';
@@ -52,6 +54,8 @@ app.use((req: customTime, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toLocaleString();
   next();
 });
+
+app.use('/api/v1/auth', authRoute);
 
 app.use('/api/v1/user', userRoute);
 
