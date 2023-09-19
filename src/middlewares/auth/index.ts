@@ -33,7 +33,7 @@ export class Auth {
 
       try {
         const jwt: { userId: string; role: string } | any = verifyJWT(token);
-        req.user = { userId: jwt?.userId, role: jwt.role }
+        req.user = { userId: jwt?.userId, role: jwt.role };
         next();
       } catch (error) {
         throw new UnauthenticatedError('authentication failed');
@@ -43,16 +43,13 @@ export class Auth {
 
   static VerifiedUser = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      const authId = req.user;
+      const user = req.user;
 
-      const userId = req?.params?.id;
+      const user_id = req.params.id;
 
-      if (!authId)
-        throwError('Sorry, you are not authorized', StatusCodes.BAD_REQUEST);
+      if (!user.userId) throw new UnauthenticatedError('authentication failed');
 
-      if (!userId) {
-        throwError('Sorry, invalid ID', StatusCodes.BAD_REQUEST);
-      }
+      if (!user_id) throw new UnauthenticatedError('authentication failed');
 
       ValidateMongoDbId(authId as string);
 
