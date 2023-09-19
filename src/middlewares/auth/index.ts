@@ -8,7 +8,7 @@ import { verifyJWT } from '../../utils/index';
 
 import { ENV } from '../../configurations/env';
 
-import { NotFoundError, UnauthenticatedError } from '../../errors/customError';
+import { NotFoundError, UnauthenticatedError, BadRequestError } from '../../errors/customError';
 
 import { CustomRequest } from '../../interfaces/custom';
 
@@ -43,18 +43,18 @@ export class Auth {
 
   static VerifiedUser = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      const user_id = req.user.userId;
-
       const user_para_id = req.params.id;
 
       if (!user_para_id)
         throw new UnauthenticatedError('authentication failed');
 
       try {
-        const user = await findUserMId(user_id as string);
-        if (!user_id) throw new NotFoundError('no user found');
-        if (user?.id.toString() !== authId?.toString())
-          throwError('Sorry, this ID does not match', StatusCodes.BAD_REQUEST);
+        const user = await findUserMId(req.user.userId as string);
+
+        if (!user) throw new NotFoundError('no user found');
+
+        if (user.id.toString() !== req.user.userId.toString())
+          throw new BadRequestError('your id does not match, try again');
 
         if (!user?.isAccountVerified)
           throwError(
