@@ -1,5 +1,5 @@
+import 'express-async-errors';
 import express, { Application, NextFunction, Request, Response } from 'express';
-
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
@@ -59,7 +59,7 @@ app.use('/api/v1/reviews', reviewRoute);
 
 app.use('/api/v1/cart', cartRoute);
 
-app.use("/api/v1/order", orderRoute)
+app.use('/api/v1/order', orderRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 // TODO Still facing weird bug here

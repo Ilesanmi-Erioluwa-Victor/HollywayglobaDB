@@ -45,7 +45,7 @@ const route = express.Router();
 
 route.post('/signup', validate(createUserValidation()), createUser);
 
-route.post('/login', loginUser);
+route.post('/login', validate(loginUserValidation()), loginUser);
 
 route.post('/:id/address', Token, VerifiedUser, createAddress);
 
