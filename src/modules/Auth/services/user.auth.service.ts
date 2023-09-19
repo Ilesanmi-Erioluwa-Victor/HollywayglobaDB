@@ -15,7 +15,9 @@ import {
   NotFoundError,
   UnauthenticatedError,
 } from '../../../errors/customError';
+
 import { createJwt } from '../../../utils';
+
 import { ENV } from '../../../configurations/env';
 
 const { catchAsync, comparePassword, generatePasswordResetToken } = Utils;
@@ -84,6 +86,7 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
 
     try {
       const resetToken = generatePasswordResetToken();
+
       const expirationTime = new Date();
       expirationTime.setHours(expirationTime.getHours() + 1);
 
@@ -92,6 +95,7 @@ export const forgetPasswordToken: RequestHandler = catchAsync(
         expirationTime,
         user.id as string
       );
+      console.log('<<<<resetTone', resetToken, '>>>>>>>>', passwordReset);
 
       await sendMailToken('user', passwordReset, req, res, next);
       res.json({
