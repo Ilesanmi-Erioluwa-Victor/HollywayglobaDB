@@ -72,6 +72,7 @@ export const createUser: RequestHandler = catchAsync(
 
 export const loginUser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    req.auth = "Hello from me"
     console.log(req.auth as string)
     const { email, password } = req.body;
     try {
