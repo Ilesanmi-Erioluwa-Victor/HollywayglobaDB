@@ -18,9 +18,7 @@ const CLOUDIANRY_API_KEY = process.env.CLOUDIANRY_API_KEY;
 
 const CLOUDIANRY_API_SECRET = process.env.CLOUDIANRY_API_SECRET;
 
-const NODE_ENV_DEV = process.env.NODE_ENV_DEV;
-
-const NODE_ENV_PROD = process.env.NODE_ENV_PROD;
+const NODE_ENV_DEV = process.env.NODE_ENV_MODE;
 
 const MAILCHIMP_API_KEY = process.env.MAILCHIMP_API_KEY
 
@@ -43,8 +41,7 @@ export const ENV = {
     SECRET: CLOUDIANRY_API_SECRET,
   },
   MODE: {
-    DEVELOPMENT: NODE_ENV_DEV,
-    PRODUCTION: NODE_ENV_PROD,
+    MODE: NODE_ENV_DEV
   },
 
   MAILCHIMP: {
