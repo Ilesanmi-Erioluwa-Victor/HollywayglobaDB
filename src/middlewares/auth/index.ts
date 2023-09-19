@@ -14,6 +14,7 @@ import { userQueries } from '../../modules/User/models/user.auth.model';
 import { adminQueries } from '../../modules/Admin/models/admin.models';
 
 import { Utils } from '../../helper/utils';
+import { UnauthenticatedError } from '../../errors/customError';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
@@ -24,41 +25,16 @@ const { findAdminIdM } = adminQueries;
 export class Auth {
   static authenticateUser = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      let token;
+      const { token } = req.cookies;
+
+      if (!token) throw new UnauthenticatedError('authentication failed');
 
       try {
-        if (
-          req.headers.authorization &&
-          req?.headers?.authorization.startsWith('Bearer')
-        ) {
-          token = req?.headers?.authorization.split(' ')[1];
-
-          if (!ENV.JWT.SECRET) {
-            return throwError(
-              'SERVER JWT PASSWORD NOT SET',
-              StatusCodes.NOT_FOUND
-            );
-          }
-
-          if (token) {
-            const decoded = jwt.verify(token, ENV.JWT.SECRET) as {
-              id: string;
-            };
-            req.authId = decoded.id;
-          }
-        } else {
-          throwError(
-            `Sorry, there is no token attached to your Header, try again by attaching Token..`,
-            StatusCodes.NOT_FOUND
-          );
-        }
-
+        const { userId, role } = verifyJWT(token);
+        req.user = { userId, role };
         next();
-      } catch (error: any) {
-        if (!error.statusCode) {
-          error.statusCode = 500;
-        }
-        next(error);
+      } catch (error) {
+        throw new UnauthenticatedError('authentication failed');
       }
     }
   );
