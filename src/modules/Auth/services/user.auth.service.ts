@@ -25,44 +25,44 @@ export const register: RequestHandler = catchAsync(
   }
 );
 
-export const loginUser: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+// export const loginUser: RequestHandler = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { email, password } = req.body;
 
-    try {
-      const user: loginUserI | any = await findUserMEmail(email);
+//     try {
+//       const user: loginUserI | any = await findUserMEmail(email);
 
-      if (!user) {
-        throwError('No user found with this email', StatusCodes.BAD_REQUEST);
-      }
+//       if (!user) {
+//         throwError('No user found with this email', StatusCodes.BAD_REQUEST);
+//       }
 
-      if (await comparePassword(password, user?.password)) {
-        if (!user.isAccountVerified) {
-          throwError(
-            'Verify your account in your gmail before you can log in',
-            StatusCodes.BAD_REQUEST
-          );
-        }
+//       if (await comparePassword(password, user?.password)) {
+//         if (!user.isAccountVerified) {
+//           throwError(
+//             'Verify your account in your gmail before you can log in',
+//             StatusCodes.BAD_REQUEST
+//           );
+//         }
 
-        res.json({
-          status: 'success',
-          message: 'login successfully',
-          data: {
-            id: user?.id,
-            token: await generateToken(user?.id),
-          },
-        });
-      } else {
-        throwError(
-          'Login Failed, invalid credentials',
-          StatusCodes.UNAUTHORIZED
-        );
-      }
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
+//         res.json({
+//           status: 'success',
+//           message: 'login successfully',
+//           data: {
+//             id: user?.id,
+//             token: await generateToken(user?.id),
+//           },
+//         });
+//       } else {
+//         throwError(
+//           'Login Failed, invalid credentials',
+//           StatusCodes.UNAUTHORIZED
+//         );
+//       }
+//     } catch (error: any) {
+//       if (!error.statusCode) {
+//         error.statusCode = 500;
+//       }
+//       next(error);
+//     }
+//   }
+// );
