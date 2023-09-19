@@ -26,6 +26,8 @@ import { ENV } from './configurations/env';
 
 const app: Application = express();
 
+app.use(cookieParser());
+
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -63,7 +65,6 @@ app.use('/api/v1/cart', cartRoute);
 app.use('/api/v1/order', orderRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
-// TODO Still facing weird bug here
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   _404.notFound(req, res, next);
@@ -76,7 +77,6 @@ app.use(
     res: Response,
     next: NextFunction
   ) => {
-    console.log(error.message);
     const status = error.statusCode || 500;
     const message = error.message;
     res.status(status).json({ message });
