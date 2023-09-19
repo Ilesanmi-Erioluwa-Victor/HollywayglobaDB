@@ -1,6 +1,5 @@
 import express from 'express';
 
-
 import {
   getUser,
   updatePassword,
@@ -18,14 +17,11 @@ import {
   deleteAddresses,
 } from '../services/user.address.service';
 
-import { Auth } from '../../../middlewares/auth';
-
 import {
   profileImage,
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
 
-// const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
@@ -53,17 +49,9 @@ route.delete(
   deleteAddresses
 );
 
-route.post(
-  '/forgetPassword',
-  validate(forgetPasswordValidation()),
-  forgetPasswordToken
-);
+route.post('/forgetPassword', forgetPasswordToken);
 
-route.put(
-  '/resetPassword/:token',
-  validate(resetforgetPasswordValidation()),
-  resetPassword
-);
+route.put('/resetPassword/:token', resetPassword);
 
 route.get(
   '/:id',
