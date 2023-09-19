@@ -14,6 +14,9 @@ const {
   forgetPasswordTokenM,
   accountVerificationUpdatedM,
   accountVerificationM,
+  resetPasswordM,
+  resetPasswordTokenDeleteM,
+  resetPasswordUpdateM
 } = authQuery;
 
 import {
@@ -137,25 +140,15 @@ export const accountVerification: RequestHandler = catchAsync(
 
 export const resetPassword: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = req?.params;
     const { password } = req.body;
 
-    if (!token)
-      throwError(
-        'Sorry, invalid token or something went wrong',
-        StatusCodes.BAD_GATEWAY
-      );
+    if (!req.params.token) throw new NotFoundError('no token found, try again');
 
-    if (!password)
-      throwError(
-        'Please, provide password for reset!!!',
-        StatusCodes.BAD_REQUEST
-      );
-    try {
-      const resetTokenData = await resetPasswordM(token);
-      if (!resetTokenData || resetTokenData.expirationTime <= new Date()) {
-        throwError('Invalid or expired token', StatusCodes.NOT_FOUND);
-      }
+    const resetTokenData = await resetPasswordM(req.params.token);
+    
+      if (!resetTokenData || resetTokenData.expirationTime <= new Date()) 
+        throw new BadRequestError('invalid or expired token, try again');
+      
 
       const user = await resetPasswordUpdateM(
         resetTokenData?.user?.id as string,

@@ -95,4 +95,31 @@ export class authQuery {
 
     return user;
   }
+
+  static async resetPasswordM(token: string) {
+    const user = await prisma.passwordResetToken.findUnique({
+      where: { token },
+      include: { user: true },
+    });
+    return user;
+  }
+
+  static async resetPasswordUpdateM(id: string, password: string) {
+    const user = await prisma.user.update({
+      where: { id },
+      data: {
+        password: await hashedPassword(password),
+      },
+    });
+
+    return user;
+  }
+
+  static async resetPasswordTokenDeleteM(id: string) {
+    const user = await prisma.passwordResetToken.delete({
+      where: { id },
+    });
+
+    return user;
+  }
 }

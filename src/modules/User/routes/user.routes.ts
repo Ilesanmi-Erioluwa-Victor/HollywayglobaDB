@@ -4,7 +4,6 @@ import {
   getUser,
   updatePassword,
   updateUser,
-  resetPassword,
   uploadProfile,
 } from '../services/user.auth.service';
 
@@ -46,8 +45,6 @@ route.delete(
   deleteAddresses
 );
 
-
-
 route.get(
   '/:id',
   // Token, VerifiedUser,
@@ -74,7 +71,5 @@ route.put(
   // Token, VerifiedUser,
   updatePassword
 );
-
-
 
 export default route;
