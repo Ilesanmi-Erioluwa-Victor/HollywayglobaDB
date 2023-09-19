@@ -160,46 +160,7 @@ export const accountVerification: RequestHandler = catchAsync(
   }
 );
 
-export const forgetPasswordToken: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { email } = req.body;
 
-    if (!email)
-      throwError(
-        'Please, provide email for you to reset your password',
-        StatusCodes.BAD_REQUEST
-      );
-    const user = await findUserMEmail(email);
-    if (!user)
-      throwError(
-        'No user found with provided email.., try again',
-        StatusCodes.NOT_FOUND
-      );
-
-    try {
-      const resetToken = generatePasswordResetToken();
-      const expirationTime = new Date();
-      expirationTime.setHours(expirationTime.getHours() + 1);
-
-      const passwordReset = await forgetPasswordTokenM(
-        await resetToken,
-        expirationTime,
-        user?.id as string
-      );
-
-      await sendMailToken('user', passwordReset, req, res, next);
-      res.json({
-        message: `A reset token has been sent to your gmail`,
-        status: 'success',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
-);
 
 export const resetPassword: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

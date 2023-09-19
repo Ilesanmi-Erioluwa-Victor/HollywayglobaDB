@@ -8,7 +8,7 @@ import { authQuery } from './../models/user.auth.model';
 
 import { Email } from '../../../templates';
 
-const { findUserMEmail, registerM } = authQuery;
+const { findUserMEmail, registerM, forgetPasswordTokenM } = authQuery;
 
 import {
   BadRequestError,
@@ -24,7 +24,7 @@ const { sendMail, sendMailToken } = Email;
 
 export const register: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    
+
     const user = await registerM(req.body);
     sendMail('user', user, req, res, next);
     res.status(StatusCodes.CREATED).json({
@@ -72,3 +72,44 @@ export const logout: RequestHandler = catchAsync( async (req: Request, res : Res
 
     res.status(StatusCodes.OK).json({ message: 'successfully logged out', status : "success" });
 })
+
+export const forgetPasswordToken: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+
+    if (!email)
+      throwError(
+        'Please, provide email for you to reset your password',
+        StatusCodes.BAD_REQUEST
+      );
+    const user = await findUserMEmail(email);
+    if (!user)
+      throwError(
+        'No user found with provided email.., try again',
+        StatusCodes.NOT_FOUND
+      );
+
+    try {
+      const resetToken = generatePasswordResetToken();
+      const expirationTime = new Date();
+      expirationTime.setHours(expirationTime.getHours() + 1);
+
+      const passwordReset = await forgetPasswordTokenM(
+        await resetToken,
+        expirationTime,
+        user?.id as string
+      );
+
+      await sendMailToken('user', passwordReset, req, res, next);
+      res.json({
+        message: `A reset token has been sent to your gmail`,
+        status: 'success',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);

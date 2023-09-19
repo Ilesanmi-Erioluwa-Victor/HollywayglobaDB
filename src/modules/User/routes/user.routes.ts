@@ -5,7 +5,6 @@ import {
   updatePassword,
   updateUser,
   accountVerification,
-  forgetPasswordToken,
   resetPassword,
   uploadProfile,
 } from '../services/user.auth.service';
@@ -21,7 +20,6 @@ import {
   profileImage,
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
-
 
 const route = express.Router();
 
@@ -48,8 +46,6 @@ route.delete(
   // Token, VerifiedUser,
   deleteAddresses
 );
-
-route.post('/forgetPassword', forgetPasswordToken);
 
 route.put('/resetPassword/:token', resetPassword);
 

@@ -96,21 +96,7 @@ export class userQueries {
     return user;
   }
 
-  static async forgetPasswordTokenM(
-    token: string,
-    expirationTime: Date,
-    userId: string
-  ) {
-    const user = await prisma.passwordResetToken.create({
-      data: {
-        token,
-        expirationTime,
-        userId,
-      },
-    });
 
-    return user;
-  }
 
   static async resetPasswordM(token: string) {
     const user = await prisma.passwordResetToken.findUnique({

@@ -40,4 +40,20 @@ export class authQuery {
 
     return userEmail;
   }
+
+  static async forgetPasswordTokenM(
+    token: string,
+    expirationTime: Date,
+    userId: string
+  ) {
+    const user = await prisma.passwordResetToken.create({
+      data: {
+        token,
+        expirationTime,
+        userId,
+      },
+    });
+
+    return user;
+  }
 }
