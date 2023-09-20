@@ -77,7 +77,7 @@ export const login: RequestHandler = catchAsync(
       } else {
         await prisma.user.update({
           where: { id: user.id },
-          data: { loggedInAfterRequest: true },
+          data: { loggedInAfterRequest: true, deleteRequestDate: null },
         });
         res.json({
           status: 'success',
