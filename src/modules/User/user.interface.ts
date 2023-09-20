@@ -1,4 +1,3 @@
-
 export interface loginUserI {
   id: string;
   firstName: string;
@@ -25,6 +24,7 @@ export interface address {
   city?: string;
   phone?: string;
   additionalPhone?: string;
+  country: string;
 }
 
 export interface review {
