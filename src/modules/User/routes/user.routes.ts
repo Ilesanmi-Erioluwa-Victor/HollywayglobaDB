@@ -2,9 +2,9 @@ import express from 'express';
 
 import {
   user,
-  updatePassword,
-  updateUser,
-  uploadProfile,
+  // updatePassword,
+  // updateUser,
+  // uploadProfile,
 } from '../services/user.service';
 
 import {
@@ -49,25 +49,25 @@ route.delete(
 
 route.get('/:id', validateUserIdParam, user);
 
-route.put(
-  '/updateProfile/:id',
-  // Token, VerifiedUser,
-  updateUser
-);
+// route.put(
+//   '/updateProfile/:id',
+//   // Token, VerifiedUser,
+//   updateUser
+// );
 
-route.post(
-  '/:id/uploadImage',
-  // Token,
-  profileImage.single('image'),
-  profileImageResize,
-  // VerifiedUser,
-  uploadProfile
-);
+// route.post(
+//   '/:id/uploadImage',
+//   // Token,
+//   profileImage.single('image'),
+//   profileImageResize,
+//   // VerifiedUser,
+//   uploadProfile
+// );
 
-route.put(
-  '/password/:id',
-  // Token, VerifiedUser,
-  updatePassword
-);
+// route.put(
+//   '/password/:id',
+//   // Token, VerifiedUser,
+//   updatePassword
+// );
 
 export default route;
