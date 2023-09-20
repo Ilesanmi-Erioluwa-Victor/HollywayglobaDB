@@ -19,6 +19,7 @@ import {
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
 
+
 const route = express.Router();
 
 route.post(
