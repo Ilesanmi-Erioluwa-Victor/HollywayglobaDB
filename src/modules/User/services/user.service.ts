@@ -20,9 +20,10 @@ const {
 
 import { Email } from '../../../templates';
 
-import { loginUserI } from '../user.interface';
 
 import { CloudinaryUploader } from '../../../configurations/cloudinary';
+
+import { NotFoundError } from '../../../errors/customError';
 
 const { sendMailToken } = Email;
 
@@ -32,20 +33,10 @@ const { catchAsync, ValidateMongoDbId, generatePasswordResetToken } = Utils;
 
 export const user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
     const user = await findUserMId(req.params.id);
-    
-      res.json({
-        active: user?.active,
-        email: user?.email,
-        firstName: user?.firstName,
-        id: user?.id,
-        isAccountVerified: user?.isAccountVerified,
-        lastName: user?.lastName,
-        mobile: user?.mobile,
-        profilePhoto: user?.profilePhoto,
-      });
-    } 
+
+    if(!user) throw new NotFoundError
+  }
 );
 
 export const updateUser: RequestHandler = catchAsync(
