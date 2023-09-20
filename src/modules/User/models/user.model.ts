@@ -21,6 +21,8 @@ export class userQuery {
         profilePhoto: true,
         active: true,
         isAccountVerified: true,
+        deleteRequestDate: true,
+        loggedInAfterRequest : true
       },
     });
     return userId;
