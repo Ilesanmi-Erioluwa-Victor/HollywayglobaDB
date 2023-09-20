@@ -10,7 +10,11 @@ import { userQuery } from '../models/user.model';
 
 import { prisma } from '../../../configurations/db';
 
-import { Forbidden, NotFoundError } from '../../../errors/customError';
+import {
+  BadRequestError,
+  Forbidden,
+  NotFoundError,
+} from '../../../errors/customError';
 
 const { findUserMId } = userQuery;
 
@@ -45,32 +49,19 @@ export const editAddress = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id, addressId } = req.params;
 
-      const existingAddress = await findAddressM(req.params.addressId);
+    const existingAddress = await findAddressM(req.params.addressId);
 
-      if (!existingAddress)
-        throw new NotFoundError('no address found');
+    if (!existingAddress) throw new NotFoundError('no address found');
 
-      const updatedAddress = await updateAddressM(
-        addressId as string,
-        req.body
-      );
+    const updatedAddress = await updateAddressM(req.params.addressId, req.body);
 
-      if (!updatedAddress)
-        throwError(
-          'Sorry, something went wrong, try again',
-          StatusCodes.BAD_REQUEST
-        );
+    if (!updatedAddress)
+      throw new BadRequestError('something went wrong, try again');
 
-      res.json({
-        status: 'success',
-        message: 'ok',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      status: 'success',
+      message: 'ok',
+    });
   }
 );
 
