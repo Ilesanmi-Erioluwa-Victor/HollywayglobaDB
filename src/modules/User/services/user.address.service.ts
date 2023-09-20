@@ -47,7 +47,6 @@ export const createAddress: RequestHandler = catchAsync(
 
 export const editAddress = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
     const existingAddress = await findAddressM(req.params.addressId);
 
     if (!existingAddress) throw new NotFoundError('no address found');
@@ -64,30 +63,19 @@ export const editAddress = catchAsync(
   }
 );
 
-// export const getAddresses = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id } = req.params;
-//     ValidateMongoDbId(id);
-//     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
-//     try {
-//       const addresses = await findAddressesByUserId(id);
+export const getAddresses = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const addresses = await findAddressesByUserId(req.params.id);
 
-//       if (!addresses) throwError('No addresses found', StatusCodes.NOT_FOUND);
+    if (!addresses) throw new NotFoundError('no addresses found');
 
-//       res.json({
-//         length: addresses?.length,
-//         status: 'success',
-//         message: 'ok',
-//         data: addresses,
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: addresses,
+    });
+  }
+);
 
 // export const deleteAddresses = catchAsync(
 //   async (req: CustomRequest, res: Response, next: NextFunction) => {
