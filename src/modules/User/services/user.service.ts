@@ -88,9 +88,9 @@ export const user: RequestHandler = catchAsync(
 // );
 
 export const updateuser: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const allowedFields = ['firstName', 'lastName', 'email'];
-    
+
     const unexpectedFields = Object.keys(req.body).filter(
       (field) => !allowedFields.includes(field)
     );
@@ -101,23 +101,16 @@ export const updateuser: RequestHandler = catchAsync(
         )}, sorry it's not part of the parameter`
       );
 
-    try {
-      const user = await updateUserM(
-        id,
-        req.body.firstName,
-        req.body.lastName,
-        req.body.email
-      );
-      res.json({
-        message: 'You have successfully updated your profile',
-        user: user,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const user = await updateUserM(
+      req.params.id,
+      req.body.firstName,
+      req.body.lastName,
+      req.body.email
+    );
+    res.json({
+      message: 'You have successfully updated your profile',
+      user: user,
+    });
   }
 );
 
