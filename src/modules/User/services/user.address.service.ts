@@ -6,17 +6,11 @@ import { addressQuery } from '../models/user.address.model';
 
 const { catchAsync } = Utils;
 
-import { userQuery } from '../models/user.model';
-
-import { prisma } from '../../../configurations/db';
-
 import {
   BadRequestError,
   Forbidden,
   NotFoundError,
 } from '../../../errors/customError';
-
-const { findUserMId } = userQuery;
 
 const {
   createAddressM,
