@@ -12,6 +12,8 @@ export class addressQuery {
         city: address.city,
         phone: address.phone,
         additionalPhone: address.additionalPhone,
+        country: address.country,
+      
         user: { connect: { id: userId } },
       },
     });

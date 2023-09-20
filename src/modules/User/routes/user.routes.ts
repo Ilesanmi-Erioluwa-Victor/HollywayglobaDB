@@ -33,7 +33,6 @@ route.post(
   '/:id/address',
   validateUserIdParam,
   validateNewAddressInput,
-  validateAddressIdParam,
   createAddress
 );
 
