@@ -12,6 +12,7 @@ import {
   createAddress,
   editAddress,
   getAddresses,
+  getAddress,
   // deleteAddresses,
 } from '../services/user.address.service';
 
@@ -47,7 +48,7 @@ route.get(
   '/:id/address/:addressId',
   validateUserIdParam,
   validateAddressIdParam,
-  getAddresses
+  getAddress
 );
 
 route.get('/:id/address', validateUserIdParam, getAddresses);

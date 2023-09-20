@@ -77,6 +77,21 @@ export const getAddresses = catchAsync(
   }
 );
 
+export const getAddress = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const addresses = await findAddressesByUserId(req.params.id);
+
+    if (!addresses) throw new NotFoundError('no addresses found');
+
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: addresses,
+    });
+  }
+);
+
+
 // export const deleteAddresses = catchAsync(
 //   async (req: CustomRequest, res: Response, next: NextFunction) => {
 //     const { id, addressId } = req.params;
