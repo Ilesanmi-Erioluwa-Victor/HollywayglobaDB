@@ -67,18 +67,24 @@ export const login: RequestHandler = catchAsync(
         secure: ENV.MODE.MODE === 'production',
       });
 
-      if (user.deleteRequestDate && !user.loggedInAfterRequest)
-        throw new BadRequestError('user requested deletion');
-
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { loggedInAfterRequest: true },
-      });
-
-      res.json({
-        status: 'success',
-        message: 'you are logged in !',
-      });
+      // if (user.deleteRequestDate && !user.loggedInAfterRequest)
+      //   throw new BadRequestError('user requested deletion');
+      if (user.deleteRequestDate === null) {
+        res.json({
+          status: 'success',
+          message: 'you are logged in !',
+        });
+      } else {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { loggedInAfterRequest: true },
+        });
+        res.json({
+          status: 'success',
+          message:
+            'you are logged in !, your account delete request has being cancel',
+        });
+      }
     } else {
       throw new UnauthenticatedError('invalid credentials, try agin');
     }
