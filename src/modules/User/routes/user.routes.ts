@@ -44,10 +44,13 @@ route.put(
 );
 
 route.get(
-  '/:id/address',
-validateUserIdParam,
+  '/:id/address/:addressId',
+  validateUserIdParam,
+  validateAddressIdParam,
   getAddresses
 );
+
+route.get('/:id/address', validateUserIdParam, getAddresses);
 
 // route.delete(
 //   '/:id/address/:addressId',
