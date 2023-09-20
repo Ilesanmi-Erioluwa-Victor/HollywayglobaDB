@@ -35,7 +35,13 @@ export const user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await findUserMId(req.params.id);
 
-    if(!user) throw new NotFoundError
+    if (!user) throw new NotFoundError("no user found, try again")
+    
+    res.json({
+      status: "success",
+     message : "your profile",
+     data : user
+    })
   }
 );
 
