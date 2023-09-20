@@ -127,6 +127,7 @@ model Address {
   region          String?
   city            String?
   phone           String?
+  isDefault       Boolean?  @default(false)
   additionalPhone String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

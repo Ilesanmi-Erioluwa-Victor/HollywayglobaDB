@@ -80,19 +80,12 @@ export const validatePasswordInput = withValidationErrors([
 ]);
 
 export const validateNewAddressInput = withValidationErrors([
-  body('firstName').notEmpty().withMessage('first name is required'),
-  body('email')
+  body('deliveryAddress')
     .notEmpty()
-    .withMessage('email is required')
-    .isEmail()
-    .withMessage('invalid email format')
-    .custom(async (email) => {
-      const user = await findUserMEmail(email);
-      if (user) {
-        throw new BadRequestError('email already exists');
-      }
-    }),
-  body('password').notEmpty().withMessage('Password is required'),
+    .withMessage('delivery address is required'),
+  body('region').notEmpty().withMessage('state is required'),
+
+  body('city').notEmpty().withMessage('city is required'),
   body('mobile').notEmpty().withMessage('Mobile phone is required'),
   body('lastName').notEmpty().withMessage('last name is required'),
 ]);
