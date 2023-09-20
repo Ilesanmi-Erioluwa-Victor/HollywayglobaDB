@@ -1,7 +1,7 @@
 import express from 'express';
 
 import {
-  getUser,
+  user,
   updatePassword,
   updateUser,
   uploadProfile,
@@ -19,6 +19,7 @@ import {
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
 
+import { validateUserIdParam } from '../../../middlewares/validationMiddlware';
 
 const route = express.Router();
 
@@ -46,11 +47,7 @@ route.delete(
   deleteAddresses
 );
 
-route.get(
-  '/:id',
-  // Token, VerifiedUser,
-  getUser
-);
+route.get('/:id', validateUserIdParam, user);
 
 route.put(
   '/updateProfile/:id',

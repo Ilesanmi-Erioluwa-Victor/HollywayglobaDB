@@ -4,7 +4,7 @@ import { Utils } from '../../../helper/utils';
 
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
-export class userQueries {
+export class userQuery {
 
   static async findUserMId(id: string) {
     const userId = await prisma.user.findUnique({

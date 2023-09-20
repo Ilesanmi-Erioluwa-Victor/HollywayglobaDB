@@ -8,7 +8,7 @@ import { Utils } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
 
-import { userQueries } from '../models/user.model';
+import { userQuery } from '../models/user.model';
 
 const {
   findUserMEmail,
@@ -16,7 +16,7 @@ const {
   updateUserM,
   updateUserPasswordM,
   userProfilePictureUpdateM,
-} = userQueries;
+} = userQuery;
 
 import { Email } from '../../../templates';
 
@@ -30,7 +30,7 @@ const uploader = new CloudinaryUploader();
 
 const { catchAsync, ValidateMongoDbId, generatePasswordResetToken } = Utils;
 
-export const getUser: RequestHandler = catchAsync(
+export const user: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const { id } = req?.params;
     ValidateMongoDbId(id);
