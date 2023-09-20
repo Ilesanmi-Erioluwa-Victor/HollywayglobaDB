@@ -13,7 +13,7 @@ export class addressQuery {
         phone: address.phone,
         additionalPhone: address.additionalPhone,
         country: address.country,
-      
+
         user: { connect: { id: userId } },
       },
     });
@@ -42,6 +42,16 @@ export class addressQuery {
     const address = await prisma.address.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        country: true,
+        city: true,
+        additionalInfo: true,
+        phone: true,
+        deliveryAddress: true,
+        isDefault: true,
+        additionalPhone: true,
       },
     });
     return address;
