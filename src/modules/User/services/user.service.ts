@@ -22,7 +22,7 @@ import { Email } from '../../../templates';
 
 import { CloudinaryUploader } from '../../../configurations/cloudinary';
 
-import { NotFoundError } from '../../../errors/customError';
+import { BadRequestError, NotFoundError } from '../../../errors/customError';
 
 const { sendMailToken } = Email;
 
@@ -87,42 +87,39 @@ export const user: RequestHandler = catchAsync(
 //   }
 // );
 
-// export const updateUser: RequestHandler = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id } = req?.params;
-//     ValidateMongoDbId(id);
+export const updateuser: RequestHandler = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const allowedFields = ['firstName', 'lastName', 'email'];
+    
+    const unexpectedFields = Object.keys(req.body).filter(
+      (field) => !allowedFields.includes(field)
+    );
+    if (unexpectedFields.length > 0)
+      throw new BadRequestError(
+        `unexpected fields: ${unexpectedFields.join(
+          ', '
+        )}, sorry it's not part of the parameter`
+      );
 
-//     const allowedFields = ['firstName', 'lastName', 'email'];
-//     const unexpectedFields = Object.keys(req.body).filter(
-//       (field) => !allowedFields.includes(field)
-//     );
-//     if (unexpectedFields.length > 0) {
-//       throwError(
-//         `Unexpected fields: ${unexpectedFields.join(
-//           ', '
-//         )}, Sorry it's not part of the parameter`,
-//         StatusCodes.BAD_REQUEST
-//       );
-//     }
-//     try {
-//       const user = await updateUserM(
-//         id,
-//         req.body.firstName,
-//         req.body.lastName,
-//         req.body.email
-//       );
-//       res.json({
-//         message: 'You have successfully updated your profile',
-//         user: user,
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+    try {
+      const user = await updateUserM(
+        id,
+        req.body.firstName,
+        req.body.lastName,
+        req.body.email
+      );
+      res.json({
+        message: 'You have successfully updated your profile',
+        user: user,
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
 
 // export const updatePassword: RequestHandler = catchAsync(
 //   async (req: CustomRequest, res: Response, next: NextFunction) => {
