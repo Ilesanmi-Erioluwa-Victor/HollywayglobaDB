@@ -2,33 +2,24 @@ import fs from 'fs';
 
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 
-import { StatusCodes } from 'http-status-codes';
-
 import { Utils } from '../../../helper/utils';
-
-import { CustomRequest } from '../../../interfaces/custom';
 
 import { userQuery } from '../models/user.model';
 
 const {
-  findUserMEmail,
   findUserMId,
   updateUserM,
   updateUserPasswordM,
   userProfilePictureUpdateM,
 } = userQuery;
 
-import { Email } from '../../../templates';
-
 import { CloudinaryUploader } from '../../../configurations/cloudinary';
 
 import { BadRequestError, NotFoundError } from '../../../errors/customError';
 
-const { sendMailToken } = Email;
-
 const uploader = new CloudinaryUploader();
 
-const { catchAsync, ValidateMongoDbId, generatePasswordResetToken } = Utils;
+const { catchAsync } = Utils;
 
 import { prisma } from '../../../configurations/db';
 
