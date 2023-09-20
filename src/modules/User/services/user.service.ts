@@ -23,27 +23,6 @@ const { catchAsync } = Utils;
 
 import { prisma } from '../../../configurations/db';
 
-// const performDelayedDeletion = async (id: string) => {
-//   const waitingPeriodInDays = 4; // Adjust this as needed
-//   const currentDate = new Date();
-
-//   const usersToDelete = await prisma.user.findMany({
-//     where: {
-//       deleteRequestDate: {
-//         lte: new Date(
-//           currentDate.getTime() - waitingPeriodInDays * 24 * 60 * 60 * 1000
-//         ),
-//       },
-//       loggedInAfterRequest: false,
-//     },
-//   });
-
-//   // Delete the user records
-//   for (const user of usersToDelete) {
-//     await prisma.user.delete({ where: { id: id } });
-//   }
-// };
-
 export const user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await findUserMId(req.params.id);
@@ -57,26 +36,6 @@ export const user: RequestHandler = catchAsync(
     });
   }
 );
-
-// export const deleteuser: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const user = await findUserMId(req.params.id);
-
-//     if (!user) throw new NotFoundError('no user found, try again');
-
-//     await prisma.user.update({
-//       where: { id: user.id },
-//       data: { deleteRequestDate: new Date() },
-//     });
-
-//     user.id &&  await performDelayedDeletion(user.id);
-//     res.json({
-//       status: 'success',
-//       message:
-//         'you have successfully requested for account, login before 4 days to reclaim account',
-//     });
-//   }
-// );
 
 export const updateuser: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -141,3 +100,44 @@ export const uploadprofile: RequestHandler = catchAsync(
     });
   }
 );
+
+// const performDelayedDeletion = async (id: string) => {
+//   const waitingPeriodInDays = 4; // Adjust this as needed
+//   const currentDate = new Date();
+
+//   const usersToDelete = await prisma.user.findMany({
+//     where: {
+//       deleteRequestDate: {
+//         lte: new Date(
+//           currentDate.getTime() - waitingPeriodInDays * 24 * 60 * 60 * 1000
+//         ),
+//       },
+//       loggedInAfterRequest: false,
+//     },
+//   });
+
+//   // Delete the user records
+//   for (const user of usersToDelete) {
+//     await prisma.user.delete({ where: { id: id } });
+//   }
+// };
+
+// export const deleteuser: RequestHandler = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const user = await findUserMId(req.params.id);
+
+//     if (!user) throw new NotFoundError('no user found, try again');
+
+//     await prisma.user.update({
+//       where: { id: user.id },
+//       data: { deleteRequestDate: new Date() },
+//     });
+
+//     user.id &&  await performDelayedDeletion(user.id);
+//     res.json({
+//       status: 'success',
+//       message:
+//         'you have successfully requested for account, login before 4 days to reclaim account',
+//     });
+//   }
+// );
