@@ -2,7 +2,7 @@ import { prisma } from '../../../configurations/db';
 
 import { address } from '../user.interface';
 
-export class addressQueries {
+export class addressQuery {
   static async createAddressM(address: address, userId: string) {
     const Address = await prisma.address.create({
       data: {

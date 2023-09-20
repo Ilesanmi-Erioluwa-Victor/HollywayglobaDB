@@ -5,9 +5,7 @@ import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 
-import { CustomRequest } from '../../../interfaces/custom';
-
-import { addressQueries } from '../models/user.address.model';
+import { addressQuery } from '../models/user.address.model';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
@@ -22,7 +20,7 @@ const {
   updateAddressM,
   findUserWithAddressAndDeleteM,
   findAddressM,
-} = addressQueries;
+} = addressQuery;
 
 export const createAddress: RequestHandler = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
