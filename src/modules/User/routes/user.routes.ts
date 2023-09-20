@@ -5,7 +5,7 @@ import {
   // deleteuser,
   updatepassword,
   updateuser,
-  // uploadProfile,
+  uploadprofile,
 } from '../services/user.service';
 
 import {
@@ -62,14 +62,13 @@ route.put(
   updateuser
 );
 
-// route.post(
-//   '/:id/uploadImage',
-//   // Token,
-//   profileImage.single('image'),
-//   profileImageResize,
-//   // VerifiedUser,
-//   uploadProfile
-// );
+route.post(
+  '/:id/uploadImage',
+  validatePasswordInput,
+  profileImage.single('image'),
+  profileImageResize,
+  uploadprofile
+);
 
 route.put(
   '/:id/password',

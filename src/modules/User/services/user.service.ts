@@ -127,35 +127,24 @@ export const updatepassword: RequestHandler = catchAsync(
   }
 );
 
-// export const uploadProfile: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const id = req.params.id;
-//     ValidateMongoDbId(id);
-//     if (!req?.file)
-//       throwError(
-//         'Sorry, please select an image to be uploaded',
-//         StatusCodes.BAD_REQUEST
-//       );
+export const uploadprofile: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (!req?.file)
+      throw new BadRequestError('sorry, please select an image to be uploaded');
 
-//     const image: any = req.file;
-//     try {
-//       const localPath = `src/uploads/${image.filename}`;
+    const localPath = `src/uploads/${req.file.filename}`;
 
-//       const upload: any = await uploader.uploadImage(localPath, 'users');
+    const upload: any = await uploader.uploadImage(localPath, 'users');
 
-//       const user = await userProfilePictureUpdateM(id, upload.url);
+    const user = await userProfilePictureUpdateM(req.params.id, upload?.url);
 
-//       fs.unlinkSync(localPath);
+    if (!user) throw new NotFoundError('no user found, error uploading image');
 
-//       res.json({
-//         status: 'Success',
-//         message: 'You have successfully updated your image',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+    fs.unlinkSync(localPath);
+
+    res.json({
+      status: 'Success',
+      message: 'You have successfully updated your image',
+    });
+  }
+);
