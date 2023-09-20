@@ -47,7 +47,6 @@ export const createAddress: RequestHandler = catchAsync(
 
 export const editAddress = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, addressId } = req.params;
 
     const existingAddress = await findAddressM(req.params.addressId);
 
