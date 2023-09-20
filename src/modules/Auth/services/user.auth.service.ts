@@ -29,6 +29,8 @@ import { createJwt } from '../../../utils';
 
 import { ENV } from '../../../configurations/env';
 
+import { prisma } from '../../../configurations/db';
+
 const { catchAsync, comparePassword, generatePasswordResetToken } = Utils;
 
 const { sendMail, sendMailToken } = Email;
@@ -64,6 +66,7 @@ export const login: RequestHandler = catchAsync(
         expires: new Date(Date.now() + aDay),
         secure: ENV.MODE.MODE === 'production',
       });
+
       res.json({
         status: 'success',
         message: 'you are logged in !',
