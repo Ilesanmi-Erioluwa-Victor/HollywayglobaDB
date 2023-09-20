@@ -64,7 +64,7 @@ route.put(
 
 route.post(
   '/:id/uploadImage',
-  validatePasswordInput,
+  validateUserIdParam,
   profileImage.single('image'),
   profileImageResize,
   uploadprofile

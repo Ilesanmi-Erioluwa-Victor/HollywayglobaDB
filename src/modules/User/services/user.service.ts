@@ -129,14 +129,16 @@ export const updatepassword: RequestHandler = catchAsync(
 
 export const uploadprofile: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    if (!req?.file)
+    const image = req.file;
+
+    if (!image)
       throw new BadRequestError('sorry, please select an image to be uploaded');
 
-    const localPath = `src/uploads/${req.file.filename}`;
+    const localPath = `src/uploads/${image.filename}`;
 
     const upload: any = await uploader.uploadImage(localPath, 'users');
 
-    const user = await userProfilePictureUpdateM(req.params.id, upload?.url);
+    const user = await userProfilePictureUpdateM(req.params.id, upload.url);
 
     if (!user) throw new NotFoundError('no user found, error uploading image');
 
