@@ -10,9 +10,9 @@ import {
 
 import {
   createaddress,
-  editAddress,
-  getAddresses,
-  deleteAddresses,
+  // editAddress,
+  // getAddresses,
+  // deleteAddresses,
 } from '../services/user.address.service';
 
 import {
