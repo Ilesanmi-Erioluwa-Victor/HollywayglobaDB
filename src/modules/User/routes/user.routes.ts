@@ -3,7 +3,7 @@ import express from 'express';
 import {
   user,
   // deleteuser,
-  // updatePassword,
+  updatepassword,
   updateuser,
   // uploadProfile,
 } from '../services/user.service';
@@ -63,10 +63,6 @@ route.put('/:id/updateProfile', validateUserIdParam, updateuser);
 //   uploadProfile
 // );
 
-// route.put(
-//   '/password/:id',
-//   // Token, VerifiedUser,
-//   updatePassword
-// );
+route.put('/:id/password', validateUserIdParam, updatepassword);
 
 export default route;

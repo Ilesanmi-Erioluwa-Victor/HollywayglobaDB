@@ -114,60 +114,60 @@ export const updateuser: RequestHandler = catchAsync(
   }
 );
 
-// export const updatePassword: RequestHandler = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id } = req?.params;
-//     const { password } = req.body;
-//     try {
-//       ValidateMongoDbId(id);
-//       if (!password)
-//         throwError(
-//           'Please, provide password before you can change your current password',
-//           StatusCodes.BAD_REQUEST
-//         );
-//       const user = await updateUserPasswordM(id, password);
+export const updatepassword: RequestHandler = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id } = req?.params;
+    const { password } = req.body;
+    try {
+      ValidateMongoDbId(id);
+      if (!password)
+        throwError(
+          'Please, provide password before you can change your current password',
+          StatusCodes.BAD_REQUEST
+        );
+      const user = await updateUserPasswordM(id, password);
 
-//       res.json({
-//         message: 'You have successfully update your password',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+      res.json({
+        message: 'You have successfully update your password',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
 
-// export const uploadProfile: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const id = req.params.id;
-//     ValidateMongoDbId(id);
-//     if (!req?.file)
-//       throwError(
-//         'Sorry, please select an image to be uploaded',
-//         StatusCodes.BAD_REQUEST
-//       );
+export const uploadProfile: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    ValidateMongoDbId(id);
+    if (!req?.file)
+      throwError(
+        'Sorry, please select an image to be uploaded',
+        StatusCodes.BAD_REQUEST
+      );
 
-//     const image: any = req.file;
-//     try {
-//       const localPath = `src/uploads/${image.filename}`;
+    const image: any = req.file;
+    try {
+      const localPath = `src/uploads/${image.filename}`;
 
-//       const upload: any = await uploader.uploadImage(localPath, 'users');
+      const upload: any = await uploader.uploadImage(localPath, 'users');
 
-//       const user = await userProfilePictureUpdateM(id, upload.url);
+      const user = await userProfilePictureUpdateM(id, upload.url);
 
-//       fs.unlinkSync(localPath);
+      fs.unlinkSync(localPath);
 
-//       res.json({
-//         status: 'Success',
-//         message: 'You have successfully updated your image',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+      res.json({
+        status: 'Success',
+        message: 'You have successfully updated your image',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
