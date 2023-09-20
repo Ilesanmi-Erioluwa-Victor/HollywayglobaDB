@@ -7,6 +7,9 @@ import { addressQuery } from '../models/user.address.model';
 const { catchAsync } = Utils;
 
 import { userQuery } from '../models/user.model';
+
+import { prisma } from '../../../configurations/db';
+
 import { Forbidden } from '../../../errors/customError';
 
 const { findUserMId } = userQuery;
@@ -27,7 +30,8 @@ export const createaddress: RequestHandler = catchAsync(
 
       if (addressCount >= 4) 
       throw new Forbidden( 'Maximum number of addresses reached. 4',
-        );
+      );
+
       
 
       const user = await createAddressM(req.body, id);
