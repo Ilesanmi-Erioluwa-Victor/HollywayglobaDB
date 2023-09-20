@@ -116,7 +116,7 @@ export const updateuser: RequestHandler = catchAsync(
 
 export const updatepassword: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await updateUserPasswordM(req.body.id, req.body.password);
+    const user = await updateUserPasswordM(req.params.id, req.body.password);
 
     if (!user) throw new NotFoundError('no user found');
 

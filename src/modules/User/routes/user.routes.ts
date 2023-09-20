@@ -71,6 +71,11 @@ route.put(
 //   uploadProfile
 // );
 
-route.put('/:id/password', validateUserIdParam, updatepassword);
+route.put(
+  '/:id/password',
+  validateUserIdParam,
+  validatePasswordInput,
+  updatepassword
+);
 
 export default route;
