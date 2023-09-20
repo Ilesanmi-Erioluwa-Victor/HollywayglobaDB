@@ -11,9 +11,7 @@ export class userQuery {
       where: {
         id,
       },
-      select: {
-        password : false,
-      }
+     
     });
     return userId;
   }

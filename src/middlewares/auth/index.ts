@@ -16,7 +16,7 @@ import {
 
 import { CustomRequest } from '../../interfaces/custom';
 
-import { userQueries } from '../../modules/User/models/user.model';
+import { userQuery } from '../../modules/User/models/user.model';
 
 import { adminQueries } from '../../modules/Admin/models/admin.models';
 
@@ -24,7 +24,7 @@ import { Utils } from '../../helper/utils';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
-const { findUserMId } = userQueries;
+const { findUserMId } = userQuery;
 
 const { findAdminIdM } = adminQueries;
 

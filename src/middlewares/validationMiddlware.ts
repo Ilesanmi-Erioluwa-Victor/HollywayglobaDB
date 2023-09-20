@@ -13,7 +13,7 @@ import { Utils } from '../helper/utils';
 
 const { ValidateMongoDbId } = Utils;
 
-const { findUserMEmail } = authQuery;
+const { findUserMEmail, findUserMId } = authQuery;
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -84,7 +84,7 @@ export const validateUserIdParam = withValidationErrors([
 
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
 
-    const user = await prisma.user.findUnique(value);
+    const user = await findUserMId(value);
 
     if (!user) throw new NotFoundError('no user associated with this id ...');
 

@@ -1,9 +1,9 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { userQueries } from '../models/user.model';
+import { userQuery } from '../models/user.model';
 
-const { findUserMId } = userQueries;
+const { findUserMId } = userQuery;
 
 import { throwError } from '../../../middlewares/error';
 
