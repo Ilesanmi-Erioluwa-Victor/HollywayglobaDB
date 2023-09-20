@@ -22,11 +22,9 @@ const {
   findAddressM,
 } = addressQuery;
 
-export const createAddress: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    ValidateMongoDbId(id);
-    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+export const createaddress: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
 
     const {
       deliveryAddress,

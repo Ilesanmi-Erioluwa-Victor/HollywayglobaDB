@@ -79,6 +79,24 @@ export const validatePasswordInput = withValidationErrors([
   body('password').notEmpty().withMessage('password is required'),
 ]);
 
+export const validateNewAddressInput = withValidationErrors([
+  body('firstName').notEmpty().withMessage('first name is required'),
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format')
+    .custom(async (email) => {
+      const user = await findUserMEmail(email);
+      if (user) {
+        throw new BadRequestError('email already exists');
+      }
+    }),
+  body('password').notEmpty().withMessage('Password is required'),
+  body('mobile').notEmpty().withMessage('Mobile phone is required'),
+  body('lastName').notEmpty().withMessage('last name is required'),
+]);
+
 export const validateUserIdParam = withValidationErrors([
   param('id').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
