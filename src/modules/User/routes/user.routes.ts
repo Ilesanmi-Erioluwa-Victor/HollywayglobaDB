@@ -8,12 +8,12 @@ import {
   uploadprofile,
 } from '../services/user.service';
 
-import {
-  createAddress,
-  editAddress,
-  getAddresses,
-  deleteAddresses,
-} from '../services/user.address.service';
+// import {
+//   createAddress,
+//   editAddress,
+//   getAddresses,
+//   deleteAddresses,
+// } from '../services/user.address.service';
 
 import {
   profileImage,
@@ -27,29 +27,29 @@ import {
 
 const route = express.Router();
 
-route.post(
-  '/:id/address',
-  // Token, VerifiedUser,
-  createAddress
-);
+// route.post(
+//   '/:id/address',
+//   // Token, VerifiedUser,
+//   createAddress
+// );
 
-route.put(
-  '/:id/address/:addressId',
-  // Token, VerifiedUser,
-  editAddress
-);
+// route.put(
+//   '/:id/address/:addressId',
+//   // Token, VerifiedUser,
+//   editAddress
+// );
 
-route.get(
-  '/:id/address',
-  // Token, VerifiedUser,
-  getAddresses
-);
+// route.get(
+//   '/:id/address',
+//   // Token, VerifiedUser,
+//   getAddresses
+// );
 
-route.delete(
-  '/:id/address/:addressId',
-  // Token, VerifiedUser,
-  deleteAddresses
-);
+// route.delete(
+//   '/:id/address/:addressId',
+//   // Token, VerifiedUser,
+//   deleteAddresses
+// );
 
 route.get('/:id', validateUserIdParam, user);
 

@@ -74,7 +74,6 @@ export const validateEmailInput = withValidationErrors([
     .withMessage('invalid email format'),
 ]);
 
-
 export const validatePasswordInput = withValidationErrors([
   body('password').notEmpty().withMessage('password is required'),
 ]);
@@ -84,10 +83,8 @@ export const validateNewAddressInput = withValidationErrors([
     .notEmpty()
     .withMessage('delivery address is required'),
   body('region').notEmpty().withMessage('state is required'),
-
   body('city').notEmpty().withMessage('city is required'),
   body('country').notEmpty().withMessage('country is required'),
-  body('lastName').notEmpty().withMessage('last name is required'),
 ]);
 
 export const validateUserIdParam = withValidationErrors([
@@ -106,7 +103,6 @@ export const validateUserIdParam = withValidationErrors([
       throw new UnauthorizedError('not authorized to access this route');
   }),
 ]);
-
 
 export const validateAdminIdParam = withValidationErrors([
   param('adminId').custom(async (value, { req }) => {

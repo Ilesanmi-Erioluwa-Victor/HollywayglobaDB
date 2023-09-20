@@ -69,6 +69,12 @@ export const login: RequestHandler = catchAsync(
 
       // if (user.deleteRequestDate && !user.loggedInAfterRequest)
       //   throw new BadRequestError('user requested deletion');
+      await prisma.address.updateMany({
+        data: {
+          isDefault: false,
+          country: 'Nigeria',
+        },
+      });
       if (user.deleteRequestDate === null) {
         res.json({
           status: 'success',
