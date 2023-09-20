@@ -5,7 +5,7 @@ import {
   updatePassword,
   updateUser,
   uploadProfile,
-} from '../services/user.auth.service';
+} from '../services/user.service';
 
 import {
   createAddress,
