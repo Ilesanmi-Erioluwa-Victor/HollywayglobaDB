@@ -31,11 +31,8 @@ const uploader = new CloudinaryUploader();
 const { catchAsync, ValidateMongoDbId, generatePasswordResetToken } = Utils;
 
 export const user: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id } = req?.params;
-    ValidateMongoDbId(id);
-    try {
-      const user = await findUserMId(id);
+  async (req: Request, res: Response, next: NextFunction) => {
+      const user = await findUserMId(req.params.id);
       res.json({
         active: user?.active,
         email: user?.email,
