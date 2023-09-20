@@ -1,4 +1,5 @@
 import { body, param, validationResult } from 'express-validator';
+
 import { Request, Response, NextFunction } from 'express';
 
 import { prisma } from '../configurations/db';
@@ -8,12 +9,18 @@ import {
   NotFoundError,
   UnauthorizedError,
 } from '../errors/customError';
+
 import { authQuery } from '../modules/Auth/models/user.auth.model';
+
+import { addressQuery } from '../modules/User/models/user.address.model';
+
 import { Utils } from '../helper/utils';
 
 const { ValidateMongoDbId } = Utils;
 
 const { findUserMEmail, findUserMId } = authQuery;
+
+const { findAddressM } = addressQuery
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -94,6 +101,23 @@ export const validateUserIdParam = withValidationErrors([
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
 
     const user = await findUserMId(value);
+
+    if (!user) throw new NotFoundError('no user associated with this id ...');
+
+    const isOwner = req.user.userId.toString() === req.params?.id.toString();
+
+    if (!isOwner)
+      throw new UnauthorizedError('not authorized to access this route');
+  }),
+]);
+
+export const validateAddressIdParam = withValidationErrors([
+  param('addressId').custom(async (value, { req }) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const user = await findAddressM(value);
 
     if (!user) throw new NotFoundError('no user associated with this id ...');
 
