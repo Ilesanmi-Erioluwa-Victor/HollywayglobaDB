@@ -9,8 +9,8 @@ import {
 } from '../services/user.service';
 
 import {
-  createaddress,
-  // editAddress,
+  createAddress,
+  editAddress,
   // getAddresses,
   // deleteAddresses,
 } from '../services/user.address.service';
@@ -32,14 +32,14 @@ route.post(
   '/:id/address',
   validateUserIdParam,
   validateNewAddressInput,
-  createaddress
+  createAddress
 );
 
-// route.put(
-//   '/:id/address/:addressId',
-//   // Token, VerifiedUser,
-//   editAddress
-// );
+route.put(
+  '/:id/address/:addressId',
+  // Token, VerifiedUser,
+  editAddress
+);
 
 // route.get(
 //   '/:id/address',

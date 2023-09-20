@@ -23,7 +23,7 @@ const {
   findAddressM,
 } = addressQuery;
 
-export const createaddress: RequestHandler = catchAsync(
+export const createAddress: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const addressCount = await countUserAddresses(req.params.id);
 
@@ -41,46 +41,46 @@ export const createaddress: RequestHandler = catchAsync(
   }
 );
 
-// export const editAddress = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id, addressId } = req.params;
+export const editAddress = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id, addressId } = req.params;
 
-//     ValidateMongoDbId(id);
-//     ValidateMongoDbId(addressId);
-//     if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+    ValidateMongoDbId(id);
+    ValidateMongoDbId(addressId);
+    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
 
-//     if (!addressId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+    if (!addressId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
 
-//     try {
-//       const existingAddress = await findAddressM(addressId);
-//       addressId;
+    try {
+      const existingAddress = await findAddressM(addressId);
+      addressId;
 
-//       if (!existingAddress)
-//         throwError('No address found', StatusCodes.NOT_FOUND);
+      if (!existingAddress)
+        throwError('No address found', StatusCodes.NOT_FOUND);
 
-//       const updatedAddress = await updateAddressM(
-//         addressId as string,
-//         req.body
-//       );
+      const updatedAddress = await updateAddressM(
+        addressId as string,
+        req.body
+      );
 
-//       if (!updatedAddress)
-//         throwError(
-//           'Sorry, something went wrong, try again',
-//           StatusCodes.BAD_REQUEST
-//         );
+      if (!updatedAddress)
+        throwError(
+          'Sorry, something went wrong, try again',
+          StatusCodes.BAD_REQUEST
+        );
 
-//       res.json({
-//         status: 'success',
-//         message: 'ok',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+      res.json({
+        status: 'success',
+        message: 'ok',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
 
 // export const getAddresses = catchAsync(
 //   async (req: CustomRequest, res: Response, next: NextFunction) => {
