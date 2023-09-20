@@ -64,6 +64,8 @@ model User {
   isAccountVerified               Boolean              @default(false)
   accountVerificationToken        String?              @default("")
   accountVerificationTokenExpires DateTime?            @default(now())
+  deleteRequestDate               DateTime?
+  loggedInAfterRequest            Boolean              @default(false)
   passwordresettoken              PasswordResetToken[]
   payment                         Payment?
   orders                          Order[]
