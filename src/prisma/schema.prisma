@@ -126,6 +126,7 @@ model Address {
   additionalInfo  String?
   region          String?
   city            String?
+  country         String?
   phone           String?
   isDefault       Boolean?  @default(false)
   additionalPhone String?

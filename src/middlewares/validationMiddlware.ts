@@ -86,7 +86,7 @@ export const validateNewAddressInput = withValidationErrors([
   body('region').notEmpty().withMessage('state is required'),
 
   body('city').notEmpty().withMessage('city is required'),
-  body('mobile').notEmpty().withMessage('Mobile phone is required'),
+  body('country').notEmpty().withMessage('country is required'),
   body('lastName').notEmpty().withMessage('last name is required'),
 ]);
 
