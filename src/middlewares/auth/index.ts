@@ -16,7 +16,7 @@ import {
 
 import { CustomRequest } from '../../interfaces/custom';
 
-import { userQueries } from '../../modules/User/models/user.auth.model';
+import { userQueries } from '../../modules/User/models/user.model';
 
 import { adminQueries } from '../../modules/Admin/models/admin.models';
 

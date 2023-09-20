@@ -1,15 +1,14 @@
 import fs from 'fs';
 
 import { RequestHandler, NextFunction, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
 
-import { throwError } from '../../../middlewares/error';
+import { StatusCodes } from 'http-status-codes';
 
 import { Utils } from '../../../helper/utils';
 
 import { CustomRequest } from '../../../interfaces/custom';
 
-import { userQueries } from '../models/user.auth.model';
+import { userQueries } from '../models/user.model';
 
 const {
   findUserMEmail,
@@ -117,12 +116,6 @@ export const updatePassword: RequestHandler = catchAsync(
     }
   }
 );
-
-
-
-
-
-
 
 export const uploadProfile: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

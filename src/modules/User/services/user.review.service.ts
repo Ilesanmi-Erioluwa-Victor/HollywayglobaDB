@@ -1,7 +1,7 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { userQueries } from '../../User/models/user.auth.model';
+import { userQueries } from '../models/user.model';
 
 const { findUserMId } = userQueries;
 

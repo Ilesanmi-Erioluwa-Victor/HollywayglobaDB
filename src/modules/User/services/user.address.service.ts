@@ -11,7 +11,7 @@ import { addressQueries } from '../models/user.address.model';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
-import { userQueries } from '../../User/models/user.auth.model';
+import { userQueries } from '../models/user.model';
 
 const { findUserMId } = userQueries;
 
