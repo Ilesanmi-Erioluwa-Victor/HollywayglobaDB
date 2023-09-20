@@ -92,31 +92,31 @@ export const getAddress = catchAsync(
 );
 
 
-// export const deleteAddresses = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id, addressId } = req.params;
-//     ValidateMongoDbId(id);
-//     ValidateMongoDbId(addressId);
+export const deleteAddress = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const { id, addressId } = req.params;
+    ValidateMongoDbId(id);
+    ValidateMongoDbId(addressId);
 
-//     if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
-//     if (!addressId) throwError('No address found', StatusCodes.NOT_FOUND);
-//     try {
-//       const user = await findUserMId(id);
-//       const address = await findUserWithAddressAndDeleteM(addressId);
+    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
+    if (!addressId) throwError('No address found', StatusCodes.NOT_FOUND);
+    try {
+      const user = await findUserMId(id);
+      const address = await findUserWithAddressAndDeleteM(addressId);
 
-//       if (!user) throwError('No user found', StatusCodes.NOT_FOUND);
+      if (!user) throwError('No user found', StatusCodes.NOT_FOUND);
 
-//       if (!address) throwError('No address found', StatusCodes.NOT_FOUND);
+      if (!address) throwError('No address found', StatusCodes.NOT_FOUND);
 
-//       res.json({
-//         status: 'success',
-//         message: 'address deleted',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+      res.json({
+        status: 'success',
+        message: 'address deleted',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
