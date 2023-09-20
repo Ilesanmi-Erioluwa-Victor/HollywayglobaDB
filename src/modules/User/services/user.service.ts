@@ -45,6 +45,19 @@ export const user: RequestHandler = catchAsync(
   }
 );
 
+export const deleteuser: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await findUserMId(req.params.id);
+
+    if (!user) throw new NotFoundError("no user found, try again")
+
+    res.json({
+      status: "success",
+     message : "your profile",
+     data : user
+    })
+  })
+
 // export const updateUser: RequestHandler = catchAsync(
 //   async (req: CustomRequest, res: Response, next: NextFunction) => {
 //     const { id } = req?.params;

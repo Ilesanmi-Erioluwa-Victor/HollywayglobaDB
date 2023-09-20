@@ -2,6 +2,7 @@ import express from 'express';
 
 import {
   user,
+  deleteuser,
   // updatePassword,
   // updateUser,
   // uploadProfile,
@@ -48,6 +49,8 @@ route.delete(
 );
 
 route.get('/:id', validateUserIdParam, user);
+
+route.delete('/:id', validateUserIdParam, deleteuser);
 
 // route.put(
 //   '/updateProfile/:id',
