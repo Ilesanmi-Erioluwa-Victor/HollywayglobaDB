@@ -10,7 +10,7 @@ import { userQuery } from '../models/user.model';
 
 import { prisma } from '../../../configurations/db';
 
-import { Forbidden } from '../../../errors/customError';
+import { Forbidden, NotFoundError } from '../../../errors/customError';
 
 const { findUserMId } = userQuery;
 
@@ -25,33 +25,19 @@ const {
 
 export const createaddress: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const addressCount = await countUserAddresses(req.params.id);
 
-      const addressCount = await countUserAddresses(req.params.id);
+    if (addressCount >= 4)
+      throw new Forbidden('Maximum number of addresses reached. 4');
 
-      if (addressCount >= 4) 
-      throw new Forbidden( 'Maximum number of addresses reached. 4',
-      );
+    const user = await createAddressM(req.body, req.params.id);
 
-      
+    if (!user) throw new NotFoundError('no user found');
 
-      const user = await createAddressM(req.body, id);
-      res.json({
-        status: 'success',
-        data: {
-          deliveryAddress: user.deliveryAddress,
-          additionalInfo: user.additionalInfo,
-          region: user.region,
-          city: user.city,
-          phone: user.phone,
-          additionalPhone: user.additionalPhone,
-        },
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      status: 'success',
+      message: 'ok',
+    });
   }
 );
 
