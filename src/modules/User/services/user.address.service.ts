@@ -42,21 +42,13 @@ export const createAddress: RequestHandler = catchAsync(
 );
 
 export const editAddress = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id, addressId } = req.params;
 
-    ValidateMongoDbId(id);
-    ValidateMongoDbId(addressId);
-    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
-
-    if (!addressId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
-
-    try {
-      const existingAddress = await findAddressM(addressId);
-      addressId;
+      const existingAddress = await findAddressM(req.params.addressId);
 
       if (!existingAddress)
-        throwError('No address found', StatusCodes.NOT_FOUND);
+        throw new NotFoundError('no address found');
 
       const updatedAddress = await updateAddressM(
         addressId as string,
