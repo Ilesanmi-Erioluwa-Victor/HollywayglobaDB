@@ -91,32 +91,15 @@ export const getAddress = catchAsync(
   }
 );
 
-
 export const deleteAddress = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const { id, addressId } = req.params;
-    ValidateMongoDbId(id);
-    ValidateMongoDbId(addressId);
+  async (req: Request, res: Response, next: NextFunction) => {
+    const address = await findUserWithAddressAndDeleteM(req.params.addressId);
 
-    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
-    if (!addressId) throwError('No address found', StatusCodes.NOT_FOUND);
-    try {
-      const user = await findUserMId(id);
-      const address = await findUserWithAddressAndDeleteM(addressId);
+    if (!address) throw new NotFoundError('no address found');
 
-      if (!user) throwError('No user found', StatusCodes.NOT_FOUND);
-
-      if (!address) throwError('No address found', StatusCodes.NOT_FOUND);
-
-      res.json({
-        status: 'success',
-        message: 'address deleted',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      status: 'success',
+      message: 'address deleted',
+    });
   }
 );
