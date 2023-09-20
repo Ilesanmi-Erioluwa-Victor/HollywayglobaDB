@@ -32,7 +32,9 @@ const { catchAsync, ValidateMongoDbId, generatePasswordResetToken } = Utils;
 
 export const user: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-      const user = await findUserMId(req.params.id);
+
+    const user = await findUserMId(req.params.id);
+    
       res.json({
         active: user?.active,
         email: user?.email,
@@ -43,13 +45,7 @@ export const user: RequestHandler = catchAsync(
         mobile: user?.mobile,
         profilePhoto: user?.profilePhoto,
       });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
-  }
+    } 
 );
 
 export const updateUser: RequestHandler = catchAsync(
