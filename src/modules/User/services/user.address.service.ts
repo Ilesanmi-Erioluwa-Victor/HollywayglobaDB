@@ -1,15 +1,13 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-
-import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 
 import { addressQuery } from '../models/user.address.model';
 
-const { catchAsync, ValidateMongoDbId } = Utils;
+const { catchAsync } = Utils;
 
 import { userQuery } from '../models/user.model';
+import { Forbidden } from '../../../errors/customError';
 
 const { findUserMId } = userQuery;
 
@@ -25,26 +23,12 @@ const {
 export const createaddress: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
 
+      const addressCount = await countUserAddresses(req.params.id);
 
-    const {
-      deliveryAddress,
-      additionalInfo,
-      region,
-      city,
-      phone,
-      additionalPhone,
-    } = req.body;
-
-    TODO, I want to add JOI as validator
-    try {
-      const addressCount = await countUserAddresses(id);
-
-      if (addressCount >= 4) {
-        return res.status(StatusCodes.FORBIDDEN).json({
-          status: 'error',
-          message: 'Maximum number of addresses reached.',
-        });
-      }
+      if (addressCount >= 4) 
+      throw new Forbidden( 'Maximum number of addresses reached. 4',
+        );
+      
 
       const user = await createAddressM(req.body, id);
       res.json({
