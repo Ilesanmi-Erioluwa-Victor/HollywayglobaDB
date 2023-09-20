@@ -24,6 +24,7 @@ import {
   validateUserIdParam,
   validatePasswordInput,
   validateNewAddressInput,
+  validateAddressIdParam,
 } from '../../../middlewares/validationMiddlware';
 
 const route = express.Router();
@@ -32,12 +33,14 @@ route.post(
   '/:id/address',
   validateUserIdParam,
   validateNewAddressInput,
+  validateAddressIdParam,
   createAddress
 );
 
 route.put(
   '/:id/address/:addressId',
-  // Token, VerifiedUser,
+  validateUserIdParam,
+  validateAddressIdParam,
   editAddress
 );
 

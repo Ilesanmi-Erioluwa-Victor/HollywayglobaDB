@@ -20,7 +20,7 @@ const { ValidateMongoDbId } = Utils;
 
 const { findUserMEmail, findUserMId } = authQuery;
 
-const { findAddressM } = addressQuery
+const { findAddressM } = addressQuery;
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -117,14 +117,10 @@ export const validateAddressIdParam = withValidationErrors([
 
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
 
-    const user = await findAddressM(value);
+    const address = await findAddressM(value);
 
-    if (!user) throw new NotFoundError('no user associated with this id ...');
-
-    const isOwner = req.user.userId.toString() === req.params?.id.toString();
-
-    if (!isOwner)
-      throw new UnauthorizedError('not authorized to access this route');
+    if (!address)
+      throw new NotFoundError('no address associated with this id ...');
   }),
 ]);
 
