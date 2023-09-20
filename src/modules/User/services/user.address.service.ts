@@ -22,50 +22,50 @@ const {
   findAddressM,
 } = addressQuery;
 
-// export const createaddress: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
+export const createaddress: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
 
 
-//     const {
-//       deliveryAddress,
-//       additionalInfo,
-//       region,
-//       city,
-//       phone,
-//       additionalPhone,
-//     } = req.body;
+    const {
+      deliveryAddress,
+      additionalInfo,
+      region,
+      city,
+      phone,
+      additionalPhone,
+    } = req.body;
 
-    // TODO, I want to add JOI as validator
-//     try {
-//       const addressCount = await countUserAddresses(id);
+    TODO, I want to add JOI as validator
+    try {
+      const addressCount = await countUserAddresses(id);
 
-//       if (addressCount >= 4) {
-//         return res.status(StatusCodes.FORBIDDEN).json({
-//           status: 'error',
-//           message: 'Maximum number of addresses reached.',
-//         });
-//       }
+      if (addressCount >= 4) {
+        return res.status(StatusCodes.FORBIDDEN).json({
+          status: 'error',
+          message: 'Maximum number of addresses reached.',
+        });
+      }
 
-//       const user = await createAddressM(req.body, id);
-//       res.json({
-//         status: 'success',
-//         data: {
-//           deliveryAddress: user.deliveryAddress,
-//           additionalInfo: user.additionalInfo,
-//           region: user.region,
-//           city: user.city,
-//           phone: user.phone,
-//           additionalPhone: user.additionalPhone,
-//         },
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+      const user = await createAddressM(req.body, id);
+      res.json({
+        status: 'success',
+        data: {
+          deliveryAddress: user.deliveryAddress,
+          additionalInfo: user.additionalInfo,
+          region: user.region,
+          city: user.city,
+          phone: user.phone,
+          additionalPhone: user.additionalPhone,
+        },
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
 
 // export const editAddress = catchAsync(
 //   async (req: CustomRequest, res: Response, next: NextFunction) => {
