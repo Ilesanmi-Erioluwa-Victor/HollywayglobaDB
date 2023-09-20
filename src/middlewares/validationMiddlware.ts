@@ -74,6 +74,7 @@ export const validateEmailInput = withValidationErrors([
     .withMessage('invalid email format'),
 ]);
 
+
 export const validatePasswordInput = withValidationErrors([
   body('password').notEmpty().withMessage('password is required'),
 ]);
@@ -94,6 +95,7 @@ export const validateUserIdParam = withValidationErrors([
       throw new UnauthorizedError('not authorized to access this route');
   }),
 ]);
+
 
 export const validateAdminIdParam = withValidationErrors([
   param('adminId').custom(async (value, { req }) => {
