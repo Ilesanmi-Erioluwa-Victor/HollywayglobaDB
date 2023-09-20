@@ -66,7 +66,7 @@ export const validateLoginInput = withValidationErrors([
   body('password').notEmpty().withMessage('Password is required'),
 ]);
 
-export const validateforgottenPasswordInput = withValidationErrors([
+export const validateEmailInput = withValidationErrors([
   body('email')
     .notEmpty()
     .withMessage('email is required')
@@ -74,7 +74,7 @@ export const validateforgottenPasswordInput = withValidationErrors([
     .withMessage('invalid email format'),
 ]);
 
-export const validateresetPasswordInput = withValidationErrors([
+export const validatePasswordInput = withValidationErrors([
   body('password').notEmpty().withMessage('password is required'),
 ]);
 

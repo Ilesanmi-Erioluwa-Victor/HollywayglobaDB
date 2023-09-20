@@ -11,8 +11,8 @@ import {
 import {
   validateRegisterInput,
   validateLoginInput,
-  validateforgottenPasswordInput,
-  validateresetPasswordInput,
+  validateEmailInput,
+  validatePasswordInput,
 } from '../../../middlewares/validationMiddlware';
 
 import { Auth } from '../../../middlewares/auth';
@@ -27,13 +27,9 @@ route.post('/login', validateLoginInput, login);
 
 route.get('/logout', authenticateUser, logout);
 
-route.post(
-  '/forgetPassword',
-  validateforgottenPasswordInput,
-  forgetPasswordToken
-);
+route.post('/forgetPassword', validateEmailInput, forgetPasswordToken);
 
 route.put('/:id/verify_account/:token', accountVerification);
 
-route.put('/resetPassword/:token', validateresetPasswordInput, resetPassword);
+route.put('/resetPassword/:token', validatePasswordInput, resetPassword);
 export default route;

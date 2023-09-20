@@ -20,7 +20,10 @@ import {
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
 
-import { validateUserIdParam } from '../../../middlewares/validationMiddlware';
+import {
+  validateUserIdParam,
+  validatePasswordInput,
+} from '../../../middlewares/validationMiddlware';
 
 const route = express.Router();
 
@@ -52,7 +55,12 @@ route.get('/:id', validateUserIdParam, user);
 
 // route.delete('/:id', validateUserIdParam, deleteuser);
 
-route.put('/:id/updateProfile', validateUserIdParam, updateuser);
+route.put(
+  '/:id/updateProfile',
+  validateUserIdParam,
+  validatePasswordInput,
+  updateuser
+);
 
 // route.post(
 //   '/:id/uploadImage',
