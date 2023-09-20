@@ -67,12 +67,13 @@ export const login: RequestHandler = catchAsync(
         secure: ENV.MODE.MODE === 'production',
       });
 
-       if (user.deleteRequestDate && !user.loggedInAfterRequest) throw new BadRequestError('user requested deletion' );
-      
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { loggedInAfterRequest: true },
-    });
+      if (user.deleteRequestDate && !user.loggedInAfterRequest)
+        throw new BadRequestError('user requested deletion');
+
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { loggedInAfterRequest: true },
+      });
 
       res.json({
         status: 'success',
