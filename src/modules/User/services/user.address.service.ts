@@ -79,14 +79,14 @@ export const getAddresses = catchAsync(
 
 export const getAddress = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const addresses = await findAddressesByUserId(req.params.id);
+    const address = await findAddressM(req.params.addressId);
 
-    if (!addresses) throw new NotFoundError('no addresses found');
+    if (!address) throw new NotFoundError('no addresses found');
 
     res.json({
       status: 'success',
       message: 'ok',
-      data: addresses,
+      data: address,
     });
   }
 );
