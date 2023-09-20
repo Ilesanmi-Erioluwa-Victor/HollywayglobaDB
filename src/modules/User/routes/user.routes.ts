@@ -11,7 +11,7 @@ import {
 import {
   createAddress,
   editAddress,
-  // getAddresses,
+  getAddresses,
   // deleteAddresses,
 } from '../services/user.address.service';
 
@@ -43,11 +43,11 @@ route.put(
   editAddress
 );
 
-// route.get(
-//   '/:id/address',
-//   // Token, VerifiedUser,
-//   getAddresses
-// );
+route.get(
+  '/:id/address',
+validateUserIdParam,
+  getAddresses
+);
 
 // route.delete(
 //   '/:id/address/:addressId',
