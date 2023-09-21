@@ -33,14 +33,13 @@ const route = express.Router();
 
 route.get('/:adminId/users', validateAdminIdParam, getUsersAdmin);
 
-route.get('/:adminId/products', validateAdminIdParam, getProductsAdmin);
-
 route.post(
   '/:adminId/product',
   validateAdminIdParam,
   upload.array('images', 5),
   createProduct
 );
+
 route.get('/:adminId/products', validateAdminIdParam, getProductsAdmin);
 
 route.get(
@@ -82,11 +81,11 @@ route.put(
   // editCategory
 );
 
-route.get('/:adminId/category',validateAdminIdParam, getCategories);
+route.get('/:adminId/category', validateAdminIdParam, getCategories);
 
 route.delete(
   '/:adminId/category/:categoryId',
-  validateAdminIdParam,
+  validateAdminIdParam
   // deleteCategory
 );
 
