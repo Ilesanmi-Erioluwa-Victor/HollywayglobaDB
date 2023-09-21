@@ -53,8 +53,6 @@ export const getReview: RequestHandler = catchAsync(
 
 export const editReview = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, productId, reviewId } = req.params;
-
     const existingReview = await findReviewIdM(req.params.reviewId);
 
     if (!existingReview) throw new NotFoundError('no review found ...');
@@ -64,7 +62,6 @@ export const editReview = catchAsync(
     res.json({
       status: 'success',
       message: 'ok',
-      data: updatedReview,
     });
   }
 );
