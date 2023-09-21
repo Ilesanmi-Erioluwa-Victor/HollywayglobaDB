@@ -43,7 +43,7 @@ export const adminSignup: RequestHandler = catchAsync(
 
     sendMail('admin', admin, req, res, next);
     res.json({
-      message: 'You have successfully created your account, log in now',
+      message: 'you have successfully created your account, log in now',
       status: 'success',
     });
   }
