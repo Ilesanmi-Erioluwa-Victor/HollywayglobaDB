@@ -7,6 +7,7 @@ import { Auth } from '../../../middlewares/auth';
 import {
   validateEmailInput,
   validatePasswordInput,
+  validateAdminLoginInput,
   validateAdminSignupInput,
 } from '../../../middlewares/validationMiddlware';
 
