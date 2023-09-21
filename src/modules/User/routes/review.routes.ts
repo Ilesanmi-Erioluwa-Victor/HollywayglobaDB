@@ -17,8 +17,8 @@ const route = express.Router();
 
 route.post(
   '/:id/product/:productId/review',
-  // Token,
-  // VerifiedUser,
+  validateUserIdParam,
+validateNewReviewInput,
   createReview
 );
 
