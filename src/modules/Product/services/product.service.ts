@@ -13,6 +13,7 @@ export const TopTenProducts: RequestHandler = catchAsync(
     const topTenCheapestProducts = await TopCheapProductM();
 
     res.json({
+      length: topTenCheapestProducts.length,
       status: 'success',
       message: 'ok',
       data: topTenCheapestProducts,
