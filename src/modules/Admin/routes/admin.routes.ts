@@ -75,29 +75,21 @@ route.post(
   editProductImagesAdmin
 );
 
-route.post(
-  '/:adminId/category',
- validateAdminIdParam,
-  createCategory
-);
+route.post('/:adminId/category', validateAdminIdParam, createCategory);
 
 route.get(
-  '/:adminId/category/:categoryId'
-  // Token, Admin,
+  '/:adminId/category/:categoryId',
+  validateAdminIdParam
   // findCategory
 );
 
 route.put(
-  '/:adminId/category/:categoryId'
-  // Token, Admin,
+  '/:adminId/category/:categoryId',
+  validateAdminIdParam
   // editCategory
 );
 
-route.get(
-  '/category'
-  // Token,
-  // getCategories
-);
+route.get('/category', getCategories);
 
 route.delete(
   '/:adminId/category/:categoryId'
