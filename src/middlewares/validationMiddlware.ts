@@ -14,6 +14,8 @@ import { authQuery } from '../modules/Auth/models/user.auth.model';
 
 import { addressQuery } from '../modules/User/models/user.address.model';
 
+import { reviewQuery } from '../modules/User/models/user.review.model';
+
 import { Utils } from '../helper/utils';
 
 const { ValidateMongoDbId } = Utils;
@@ -21,6 +23,8 @@ const { ValidateMongoDbId } = Utils;
 const { findUserMEmail, findUserMId } = authQuery;
 
 const { findAddressM } = addressQuery;
+
+const { findReviewIdM } = reviewQuery;
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -129,6 +133,18 @@ export const validateProductIdParam = withValidationErrors([
     });
 
     if (!product) throw new NotFoundError('no product found ...');
+  }),
+]);
+
+export const validateReviewIdParam = withValidationErrors([
+  param('reviewId').custom(async (value) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const review = await findReviewIdM(value);
+
+    if (!review) throw new NotFoundError('no review found ...');
   }),
 ]);
 
