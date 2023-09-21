@@ -42,6 +42,7 @@ export const createReview: RequestHandler = catchAsync(
 export const getReview: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const review = await getReviewWithUserDetailsM(req.params.reviewId);
+
     res.json({
       status: 'success',
       message: 'ok',
@@ -54,39 +55,15 @@ export const editReview = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id, productId, reviewId } = req.params;
 
-    ValidateMongoDbId(id);
-    ValidateMongoDbId(productId);
-    ValidateMongoDbId(reviewId);
-    if (!id) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+    const existingReview = await findReviewIdM(req.params.reviewId);
 
-    if (!productId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
+    const updatedReview = await updateReviewM(req.params.reviewId, req.body);
 
-    if (!reviewId) throwError('Invalid ID', StatusCodes.NOT_FOUND);
-
-    try {
-      const existingReview = await findReviewIdM(reviewId);
-
-      if (!existingReview) throwError('No Review found', StatusCodes.NOT_FOUND);
-
-      const updatedReview = await updateReviewM(reviewId as string, req.body);
-
-      if (!updatedReview)
-        throwError(
-          'Sorry, something went wrong, try again',
-          StatusCodes.BAD_REQUEST
-        );
-
-      res.json({
-        status: 'success',
-        message: 'ok',
-        data: updatedReview,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: updatedReview,
+    });
   }
 );
 
