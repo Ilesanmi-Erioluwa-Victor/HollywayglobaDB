@@ -57,6 +57,8 @@ export const editReview = catchAsync(
 
     const existingReview = await findReviewIdM(req.params.reviewId);
 
+    if (!existingReview) throw new NotFoundError('no review found ...');
+
     const updatedReview = await updateReviewM(req.params.reviewId, req.body);
 
     res.json({
