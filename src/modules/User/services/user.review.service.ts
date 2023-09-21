@@ -13,7 +13,7 @@ import { Utils } from '../../../helper/utils';
 
 const { catchAsync, ValidateMongoDbId } = Utils;
 
-import { reviewQueries } from './../models/user.review.model';
+import { reviewQuery } from './../models/user.review.model';
 
 const {
   createReviewM,
@@ -22,10 +22,10 @@ const {
   findReviewIdM,
   getReviewsM,
   deleteReviewIdM,
-} = reviewQueries;
+} = reviewQuery;
 
 export const createReview: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id, productId } = req.params;
 
     ValidateMongoDbId(id);
@@ -52,7 +52,7 @@ export const createReview: RequestHandler = catchAsync(
 );
 
 export const getReview: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id, productId, reviewId } = req.params;
 
     ValidateMongoDbId(id);
@@ -82,7 +82,7 @@ export const getReview: RequestHandler = catchAsync(
 );
 
 export const editReview = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id, productId, reviewId } = req.params;
 
     ValidateMongoDbId(id);
@@ -122,7 +122,7 @@ export const editReview = catchAsync(
 );
 
 export const getReviews = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     ValidateMongoDbId(id);
 
@@ -146,7 +146,7 @@ export const getReviews = catchAsync(
 );
 
 export const deleteReview: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id, reviewId } = req.params;
 
     ValidateMongoDbId(id);
