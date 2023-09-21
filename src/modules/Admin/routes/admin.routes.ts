@@ -85,7 +85,7 @@ route.get('/:adminId/category',validateAdminIdParam, getCategories);
 
 route.delete(
   '/:adminId/category/:categoryId',
-  validateAdminIdParam
+  validateAdminIdParam,
   // deleteCategory
 );
 
