@@ -16,11 +16,6 @@ import { adminQuery } from '../models/admin.models';
 
 // import bcrypt from 'bcryptjs';
 
-
-
-
-// import { Email } from '../../../templates';
-
 // import { loginAdminI } from '../interfaces/admin.interface';
 
 const {
@@ -31,41 +26,18 @@ const {
   getUsersAdminM,
 } = adminQuery;
 
-// const { sendMail, sendMailToken } = Email;
+const { sendMail, sendMailToken } = Email;
 
 const { catchAsync } = Utils;
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { email, password, name } = req.body;
-      if (!email || !password || !name)
-        return next(
-          new AppError(
-            'Missing credentials, please provide all required information',
-            StatusCodes.BAD_REQUEST
-          )
-        );
-      const existAdmin = await findAdminEmailM(email);
-      if (existAdmin)
-        return next(
-          new AppError(
-            'You are already an admin, kindly login to your account',
-            StatusCodes.CONFLICT
-          )
-        );
-      const admin: any = await createAdminM(req.body);
-      sendMail('admin', admin, req, res, next);
-      res.status(StatusCodes.CREATED).json({
-        message: 'You have successfully created your account, log in now',
-        status: 'success',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const admin = await createAdminM(req.body);
+    sendMail('admin', admin, req, res, next);
+    res.json({
+      message: 'You have successfully created your account, log in now',
+      status: 'success',
+    });
   }
 );
 
