@@ -72,7 +72,12 @@ route.post(
   editProductImagesAdmin
 );
 
-route.post('/:adminId/category', validateAdminIdParam, createCategory);
+route.post(
+  '/:adminId/category',
+  validateAdminIdParam,
+  validateCreateCategoryInput,
+  createCategory
+);
 
 route.get('/:adminId/category/:categoryId', validateAdminIdParam, getCategory);
 
