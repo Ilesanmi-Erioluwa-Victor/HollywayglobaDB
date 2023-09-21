@@ -8,6 +8,7 @@ import {
   validateEmailInput,
   validatePasswordInput,
   validateAdminLoginInput,
+  validateAdminIdParam,
   validateAdminSignupInput,
 } from '../../../middlewares/validationMiddlware';
 
@@ -28,7 +29,10 @@ route.post('/logout', authenticateUser, logoutAdmin);
 
 // route.post('/forgetPassword', validateEmailInput, forgetPasswordToken);
 
-route.put('/:adminId/verify_account/:token', accountVerificationAdmin);
+route.put(
+  '/:adminId/verify_account/:token',
+  accountVerificationAdmin
+);
 
 // route.put('/resetPassword/:token', validatePasswordInput, resetPassword);
 
