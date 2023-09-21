@@ -130,11 +130,7 @@ export const validateProductIdParam = withValidationErrors([
 
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
 
-    const product = await prisma.product.findUnique({
-      where: {
-        id: value,
-      },
-    });
+    const product = await findProductId(value);
 
     if (!product) throw new NotFoundError('no product found ...');
   }),
