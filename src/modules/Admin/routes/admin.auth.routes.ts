@@ -22,7 +22,7 @@ import {
 
 route.post('/signup', validateAdminSignupInput, adminSignup);
 
-route.post('/login', loginAdmin);
+route.post('/login', validateAdminLoginInput, loginAdmin);
 
 route.post('/logout', authenticateUser, logoutAdmin);
 
