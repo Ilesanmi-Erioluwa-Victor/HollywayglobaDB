@@ -26,7 +26,8 @@ export const createCategory: RequestHandler = catchAsync(
 
     if (!category)
       throw new BadRequestError('error creating category, try again ...');
-    res.json({
+    
+        res.json({
       status: 'success',
       message: 'you have successfully created category.',
     });
@@ -35,23 +36,13 @@ export const createCategory: RequestHandler = catchAsync(
 
 export const editCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, categoryId } = req.params;
-    ValidateMongoDbId(id);
-    ValidateMongoDbId(categoryId);
-    const { name } = req.body;
-    if (!name)
-      next(
-        new AppError('Enter name of category to edit', StatusCodes.BAD_REQUEST)
-      );
-    try {
-      if (!id)
-        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
-      if (!categoryId)
-        next(new AppError('No Category record found', StatusCodes.BAD_REQUEST));
 
-      const category = await editCategoryM(categoryId, name);
-      res.json({
-        message: 'You have successfully edited this category.',
+        const category = await editCategoryM(req.params.categoryId, req.params.body);
+
+        if(!category) throw new NotFoundError("no category found ...")
+        res.json({
+          status : "success",
+        message: 'you have successfully edited this category.',
       });
     } catch (error: any) {
       if (!error.statusCode) {
