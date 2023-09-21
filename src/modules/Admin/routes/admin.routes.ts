@@ -21,20 +21,16 @@ import {
   getProductsAdmin,
   editProductAdmin,
   editProductImagesAdmin,
-} from '../services/product.service';
+} from '../services/admin.product.service';
 import {
   validateAdminIdParam,
   validateProductIdParam,
 } from '../../../middlewares/validationMiddlware';
+import { getUsersAdmin } from '../services/admin.users.service';
 
 const route = express.Router();
 
-route.get(
-  '/:adminId/users',
-  validateAdminIdParam
-
-  // getUsersAdmin
-);
+route.get('/:adminId/users', validateAdminIdParam, getUsersAdmin);
 
 route.get('/:adminId/products', validateAdminIdParam, getProductsAdmin);
 
