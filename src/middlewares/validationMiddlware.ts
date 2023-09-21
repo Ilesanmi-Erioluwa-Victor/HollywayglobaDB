@@ -203,7 +203,8 @@ export const validateAdminIdParam = withValidationErrors([
     });
     if (!admin) throw new NotFoundError('no user associated with this id ...');
 
-    const isOwner = req.user.userId.toString() === req.params?.adminId.toString();
+    const isOwner =
+      req.user.userId.toString() === req.params?.adminId.toString();
 
     const isAdmin = req.user.role === 'admin';
 
