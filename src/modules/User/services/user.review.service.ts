@@ -41,31 +41,12 @@ export const createReview: RequestHandler = catchAsync(
 
 export const getReview: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, productId, reviewId } = req.params;
-
-    ValidateMongoDbId(id);
-
-    ValidateMongoDbId(productId);
-
-    if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
-
-    if (!productId) throwError('No product found', StatusCodes.NOT_FOUND);
-
-    if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
-
-    try {
-      const review = await getReviewWithUserDetailsM(reviewId);
-      res.json({
-        status: 'success',
-        message: 'ok',
-        data: review,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const review = await getReviewWithUserDetailsM(req.params.reviewId);
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: review,
+    });
   }
 );
 
