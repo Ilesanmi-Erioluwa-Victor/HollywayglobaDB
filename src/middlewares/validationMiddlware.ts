@@ -196,11 +196,14 @@ export const validateAdminIdParam = withValidationErrors([
 
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
 
-    const admin = await prisma.admin.findUnique(value);
-
+    const admin = await prisma.admin.findUnique({
+      where: {
+        id: value,
+      },
+    });
     if (!admin) throw new NotFoundError('no user associated with this id ...');
 
-    const isOwner = req.user.userId.toString() === req.params?.id.toString();
+    const isOwner = req.user.userId.toString() === req.params?.adminId.toString();
 
     const isAdmin = req.user.role === 'admin';
 

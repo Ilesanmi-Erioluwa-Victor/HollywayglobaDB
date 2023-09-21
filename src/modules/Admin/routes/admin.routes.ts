@@ -26,6 +26,7 @@ import {
   validateAdminIdParam,
   validateProductIdParam,
 } from '../../../middlewares/validationMiddlware';
+
 import { getUsersAdmin } from '../services/admin.users.service';
 
 const route = express.Router();
