@@ -41,6 +41,8 @@ export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const admin = await createAdminM(req.body);
 
+    if (!admin) throw new BadRequestError('something went wrong, try again');
+
     sendMail('admin', admin, req, res, next);
     res.json({
       message: 'you have successfully created your account, log in now',
