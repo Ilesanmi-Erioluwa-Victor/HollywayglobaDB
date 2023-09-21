@@ -33,7 +33,7 @@ export const createProduct: RequestHandler = catchAsync(
 
     const imageUrls: any = await uploader.processImages(req?.files as any);
 
-    const createProduct = await createProductM(req.body, imageUrls);
+    const createProduct = await createProductM(req.body,req.user.userId, imageUrls);
 
     res.json({
       status: 'success',

@@ -22,6 +22,7 @@ export const findProductIdM = async (id: string) => {
 
 export const createProductM = async (
   productI: createProductI,
+  adminId: string,
   data: string[]
 ) => {
   const {
@@ -30,16 +31,14 @@ export const createProductM = async (
     description,
     price,
     quantity,
-    images,
     stock,
     colors,
     brand,
     categoryId,
-    adminId,
   } = productI;
   const product = await prisma.product.create({
     data: {
-      title: title.toLocaleLowerCase(),
+      title: title.toLowerCase(),
       slug,
       description,
       price,
