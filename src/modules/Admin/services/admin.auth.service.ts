@@ -14,6 +14,13 @@ import { prisma } from '../../../configurations/db';
 
 import { adminQuery } from '../models/admin.models';
 
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthenticatedError,
+  UnauthorizedError,
+} from '../../../errors/customError';
+
 // import bcrypt from 'bcryptjs';
 
 // import { loginAdminI } from '../interfaces/admin.interface';
@@ -28,7 +35,7 @@ const {
 
 const { sendMail, sendMailToken } = Email;
 
-const { catchAsync } = Utils;
+const { catchAsync, comparePassword } = Utils;
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -41,47 +48,34 @@ export const adminSignup: RequestHandler = catchAsync(
   }
 );
 
-// export const loginAdmin: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { email, password } = req.body;
-//     try {
-//       const admin: loginAdminI | any = await findAdminEmailM(email);
+export const loginAdmin: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const admin = await findAdminEmailM(req.body.email);
 
-//       if (!admin)
-//         next(
-//           new AppError(
-//             'No record found with this email',
-//             StatusCodes.BAD_REQUEST
-//           )
-//         );
-//       if (await comparePassword(password, admin?.password)) {
-//         if (!admin.isAccountVerified) {
-//           new AppError(
-//             'Verify your account in your gmail before you can log in',
-//             StatusCodes.BAD_REQUEST
-//           );
-//         }
+    if (!admin) throw new NotFoundError('no record found ...');
 
-//         res.json({
-//           id: admin?.id,
-//           name: admin?.name,
-//           email: admin?.email,
-//           token: await generateToken(admin?.id),
-//         });
-//       } else {
-//         new AppError(
-//           'Login Failed, invalid credentials',
-//           StatusCodes.UNAUTHORIZED
-//         );
-//       }
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+    if (await comparePassword(req.body.password, admin.password)) {
+      if (!admin.isAccountVerified) {
+        throw new BadRequestError(
+          'verify your account in your gmail before you can log in'
+        );
+      }
+      const token = createJwt({
+        userId: admin?.id,
+        role: admin?.role as string,
+      });
+      const aDay = 1000 * 60 * 60 * 24;
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + aDay),
+        secure: ENV.MODE.MODE === 'production',
+      });
+    } else {
+      throw new UnauthorizedError('login failed, invalid credentials');
+    }
+  }
+);
 
 // export const getUsersAdmin: RequestHandler = catchAsync(
 //   async (req: CustomRequest, res: Response, next: NextFunction) => {

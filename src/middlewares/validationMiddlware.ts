@@ -181,6 +181,15 @@ export const validateAdminSignupInput = withValidationErrors([
   body('password').notEmpty().withMessage('Password is required'),
 ]);
 
+export const validateAdminLoginInput = withValidationErrors([
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format'),
+  body('password').notEmpty().withMessage('Password is required'),
+]);
+
 export const validateAdminIdParam = withValidationErrors([
   param('adminId').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
