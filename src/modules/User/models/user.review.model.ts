@@ -2,7 +2,7 @@ import { prisma } from '../../../configurations/db';
 
 import { review } from '../user.interface';
 
-export class reviewQueries {
+export class reviewQuery {
   static async createReviewM(
     reviewData: review,
     userId: string,
