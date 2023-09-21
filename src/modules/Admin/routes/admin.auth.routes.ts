@@ -2,17 +2,32 @@ import express from 'express';
 
 const route = express.Router();
 
-// import {
-//   accountVerificationAdmin,
-//   adminSignup,
-//   loginAdmin,
-//   getUsersAdmin,
-// } from '../services/admin.auth.service';
+import { Auth } from '../../../middlewares/auth';
 
-// route.post('/sign_up', adminSignup);
+import {
+  validateEmailInput,
+  validatePasswordInput,
+} from '../../../middlewares/validationMiddlware';
 
-// route.post('/login', loginAdmin);
+const { authenticateUser } = Auth;
 
-// route.put('/:id/verify_account/:token', accountVerificationAdmin);
+import {
+  accountVerificationAdmin,
+  adminSignup,
+  loginAdmin,
+  logoutAdmin,
+} from '../services/admin.auth.service';
+
+route.post('/sign_up', adminSignup);
+
+route.post('/login', loginAdmin);
+
+route.post('/logout', authenticateUser, logoutAdmin);
+
+route.post('/forgetPassword', validateEmailInput, forgetPasswordToken);
+
+route.put('/:adminId/verify_account/:token', accountVerificationAdmin);
+
+route.put('/resetPassword/:token', validatePasswordInput, resetPassword);
 
 export default route;
