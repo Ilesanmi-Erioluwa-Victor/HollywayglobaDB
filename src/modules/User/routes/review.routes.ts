@@ -3,6 +3,7 @@ import express from 'express';
 import {
   validateUserIdParam,
   validateNewReviewInput,
+  validateProductIdParam
 } from '../../../middlewares/validationMiddlware';
 
 import {
@@ -18,6 +19,7 @@ const route = express.Router();
 route.post(
   '/:id/product/:productId/review',
   validateUserIdParam,
+  validateProductIdParam,
 validateNewReviewInput,
   createReview
 );
