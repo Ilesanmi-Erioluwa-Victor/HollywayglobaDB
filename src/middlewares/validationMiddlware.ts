@@ -16,11 +16,15 @@ import { addressQuery } from '../modules/User/models/user.address.model';
 
 import { reviewQuery } from '../modules/User/models/user.review.model';
 
+import { productQuery } from '../modules/Product/models/product.model';
+
 import { Utils } from '../helper/utils';
 
 const { ValidateMongoDbId } = Utils;
 
 const { findUserMEmail, findUserMId } = authQuery;
+
+const { findProductId } = productQuery;
 
 const { findAddressM } = addressQuery;
 

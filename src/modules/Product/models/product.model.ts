@@ -1,6 +1,6 @@
 import { prisma } from '../../../configurations/db';
 
-export class productQueries {
+export class productQuery {
   static async TopCheapProductM() {
     const product = await prisma.product.findMany({
       take: 10,
@@ -49,5 +49,15 @@ export class productQueries {
       },
     });
     return products;
+  }
+
+  static async findProductId(id: string) {
+    const product = await prisma.product.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return product;
   }
 }
