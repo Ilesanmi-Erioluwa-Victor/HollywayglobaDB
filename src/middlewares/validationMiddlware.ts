@@ -200,6 +200,9 @@ export const validateCreateCategoryInput = withValidationErrors([
           name: value,
         },
       });
+
+      if (category.length === 0) return;
+
       if (category) {
         throw new BadRequestError('category already exists');
       }
