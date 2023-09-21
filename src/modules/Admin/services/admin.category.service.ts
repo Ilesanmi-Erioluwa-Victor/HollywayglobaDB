@@ -24,6 +24,8 @@ export const createCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const category = await createCategoryM(req.body, req.params.adminId);
 
+    req.categoryId = category.id;
+
     if (!category)
       throw new BadRequestError('error creating category, try again ...');
 
