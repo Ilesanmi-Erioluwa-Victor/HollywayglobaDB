@@ -68,7 +68,6 @@ export const editReview = catchAsync(
 
 export const getReviews = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    
     const reviews = await getReviewsM(req.params.id);
 
     res.json({
@@ -82,27 +81,10 @@ export const getReviews = catchAsync(
 
 export const deleteReview: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, reviewId } = req.params;
-
-    ValidateMongoDbId(id);
-
-    ValidateMongoDbId(reviewId);
-
-    if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
-
-    if (!reviewId) throwError('No review found', StatusCodes.NOT_FOUND);
-
-    try {
-      const review = await deleteReviewIdM(reviewId);
-      res.json({
-        status: 'success',
-        message: 'review deleted',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const review = await deleteReviewIdM(req.params.reviewId);
+    res.json({
+      status: 'success',
+      message: 'review deleted',
+    });
   }
 );

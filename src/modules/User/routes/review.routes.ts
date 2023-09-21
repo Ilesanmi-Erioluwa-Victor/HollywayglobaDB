@@ -45,7 +45,8 @@ route.get('/:id/reviews', validateUserIdParam, getReviews);
 
 route.delete(
   '/:id/review/:reviewId',
-  // Token, VerifiedUser,
+  validateUserIdParam,
+  validateReviewIdParam,
   deleteReview
 );
 
