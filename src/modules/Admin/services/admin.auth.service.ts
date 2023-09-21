@@ -33,7 +33,7 @@ const {
 
 // const { sendMail, sendMailToken } = Email;
 
-// const { catchAsync, generateToken, ValidateMongoDbId, comparePassword } = Utils;
+const { catchAsync } = Utils;
 
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
