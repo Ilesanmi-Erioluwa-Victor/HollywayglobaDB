@@ -40,6 +40,7 @@ const { catchAsync, comparePassword } = Utils;
 export const adminSignup: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const admin = await createAdminM(req.body);
+
     sendMail('admin', admin, req, res, next);
     res.json({
       message: 'You have successfully created your account, log in now',
@@ -52,7 +53,7 @@ export const loginAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const admin = await findAdminEmailM(req.body.email);
 
-    if (!admin) throw new NotFoundError('no record found ...');
+    if (!admin) throw new NotFoundError('no user found ...');
 
     if (await comparePassword(req.body.password, admin.password)) {
       if (!admin.isAccountVerified) {
@@ -71,6 +72,7 @@ export const loginAdmin: RequestHandler = catchAsync(
         expires: new Date(Date.now() + aDay),
         secure: ENV.MODE.MODE === 'production',
       });
+      console.log(token, admin);
     } else {
       throw new UnauthorizedError('login failed, invalid credentials');
     }
@@ -92,33 +94,25 @@ export const logoutAdmin: RequestHandler = catchAsync(
 
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.params.token) throw new NotFoundError('token not valid');
 
-if (!req.params.token) throw new NotFoundError('token not valid');
-    try {
-      const admin = await accountVerificationAdminM(id, token, new Date());
+    const admin = await accountVerificationAdminM(
+      req.params.adminId,
+      req.params.token,
+      new Date()
+    );
 
-      if (!admin)
-        next(
-          new AppError(
-            'Sorry, no user found, try again',
-            StatusCodes.BAD_REQUEST
-          )
-        );
-      const updatedAdmin = await accountVerificationUpdatedAdminM(
-        admin?.id as string,
-        true,
-        '',
-        null
-      );
-      res.json({
-        status: 'Success',
-        message: 'You have successfully, verify your account, log in now',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    if (!admin) throw new BadRequestError('no user found ...');
+
+    const updatedAdmin = await accountVerificationUpdatedAdminM(
+      admin.id as string,
+      true,
+      '',
+      null
+    );
+    res.json({
+      status: 'success',
+      message: 'you have successfully, verify your account, log in now',
+    });
   }
 );
