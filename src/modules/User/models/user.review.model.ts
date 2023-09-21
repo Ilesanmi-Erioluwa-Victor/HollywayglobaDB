@@ -103,8 +103,8 @@ export class reviewQuery {
           select: {
             title: true,
             brand: true,
-            price : true
-          }
+            price: true,
+          },
         },
         id: true,
         text: true,
