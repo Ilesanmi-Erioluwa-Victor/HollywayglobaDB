@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { getPaginatedProducts } from './paginatedProduct';
 
-import { throwError } from '../../../middlewares/error';
+// import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 

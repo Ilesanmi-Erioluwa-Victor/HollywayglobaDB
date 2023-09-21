@@ -6,7 +6,7 @@ import {
   forgetPasswordToken,
   accountVerification,
   resetPassword,
-} from '../services/user.auth.service';
+} from '../services/auth.service';
 
 import {
   validateRegisterInput,
