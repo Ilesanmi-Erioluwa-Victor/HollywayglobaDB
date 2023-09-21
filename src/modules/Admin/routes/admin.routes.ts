@@ -10,7 +10,7 @@ import {
   createCategory,
   editCategory,
   deleteCategory,
-  findCategory,
+  getCategory,
   getCategories,
 } from '../services/admin.category.service';
 
@@ -73,11 +73,7 @@ route.post(
 
 route.post('/:adminId/category', validateAdminIdParam, createCategory);
 
-route.get(
-  '/:adminId/category/:categoryId',
-  validateAdminIdParam
-  // findCategory
-);
+route.get('/:adminId/category/:categoryId', validateAdminIdParam, getCategory);
 
 route.put(
   '/:adminId/category/:categoryId',
@@ -85,7 +81,7 @@ route.put(
   // editCategory
 );
 
-route.get('/category', getCategories);
+route.get('/:adminId/category',validateAdminIdParam, getCategories);
 
 route.delete(
   '/:adminId/category/:categoryId',

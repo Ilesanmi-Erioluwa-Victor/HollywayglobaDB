@@ -26,8 +26,8 @@ export const createCategory: RequestHandler = catchAsync(
 
     if (!category)
       throw new BadRequestError('error creating category, try again ...');
-    
-        res.json({
+
+    res.json({
       status: 'success',
       message: 'you have successfully created category.',
     });
@@ -36,70 +36,38 @@ export const createCategory: RequestHandler = catchAsync(
 
 export const editCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const category = await editCategoryM(
+      req.params.categoryId,
+      req.params.body
+    );
 
-        const category = await editCategoryM(req.params.categoryId, req.params.body);
-
-        if(!category) throw new NotFoundError("no category found ...")
-        res.json({
-          status : "success",
-        message: 'you have successfully edited this category.',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    if (!category) throw new NotFoundError('no category found ...');
+    res.json({
+      status: 'success',
+      message: 'you have successfully edited this category.',
+    });
   }
 );
 
 export const deleteCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, categoryId } = req.params;
-    ValidateMongoDbId(id);
-    ValidateMongoDbId(categoryId);
-
-    try {
-      if (!id)
-        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
-      if (!categoryId)
-        next(new AppError('No Category record found', StatusCodes.BAD_REQUEST));
-
-      const category = await deleteCategoryM(categoryId);
-      res.json({
-        message: 'You have successfully deleted this category.',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const category = await deleteCategoryM(req.params.categoryId);
+    if (!category) throw new NotFoundError('no category found');
+    res.json({
+      status: 'success',
+      message: 'you have successfully deleted this category.',
+    });
   }
 );
 
-export const findCategory: RequestHandler = catchAsync(
+export const getCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, categoryId } = req.params;
-    ValidateMongoDbId(id);
-    ValidateMongoDbId(categoryId);
-
-    try {
-      if (!id)
-        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
-      if (!categoryId)
-        next(new AppError('No Category record found', StatusCodes.BAD_REQUEST));
-
-      const category = await findCategoryIdM(categoryId);
-      res.json({
-        category,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const category = await findCategoryIdM(req.params.categoryId);
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: category,
+    });
   }
 );
 
