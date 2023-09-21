@@ -209,6 +209,23 @@ export const validateCreateCategoryInput = withValidationErrors([
     }),
 ]);
 
+export const validateCategoryIdParam = withValidationErrors([
+  param('categoryId').custom(async (value, { req }) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const category = await prisma.category.findUnique({
+      where: {
+        id : value
+      }
+    });
+
+    if (!category)
+      throw new NotFoundError('no category found ...');
+  }),
+]);
+
 export const validateAdminIdParam = withValidationErrors([
   param('adminId').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
