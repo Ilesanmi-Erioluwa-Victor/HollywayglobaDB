@@ -25,6 +25,7 @@ import {
 import {
   validateAdminIdParam,
   validateProductIdParam,
+  validateCreateCategoryInput,
 } from '../../../middlewares/validationMiddlware';
 
 import { getUsersAdmin } from '../services/admin.users.service';
