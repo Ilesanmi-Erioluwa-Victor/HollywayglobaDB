@@ -116,6 +116,22 @@ export const validateUserIdParam = withValidationErrors([
   }),
 ]);
 
+export const validateProductIdParam = withValidationErrors([
+  param('productId').custom(async (value, { req }) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const product = await prisma.product.findUnique({
+      where: {
+        id: value,
+      },
+    });
+
+    if (!product) throw new NotFoundError('no product found ...');
+  }),
+]);
+
 export const validateAddressIdParam = withValidationErrors([
   param('addressId').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
