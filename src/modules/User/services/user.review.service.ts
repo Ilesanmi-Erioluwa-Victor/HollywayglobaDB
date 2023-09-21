@@ -27,20 +27,16 @@ const {
 
 export const createReview: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { text, rating } = req.body;
-    try {
-      const review = await createReviewM(req.body, id, productId);
-      res.json({
-        status: 'success',
-        message: 'ok',
-        data: review,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const review = await createReviewM(
+      req.body,
+      req.params.id,
+      req.params.productId
+    );
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: review,
+    });
   }
 );
 
