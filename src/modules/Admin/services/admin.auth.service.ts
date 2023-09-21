@@ -77,68 +77,48 @@ export const loginAdmin: RequestHandler = catchAsync(
   }
 );
 
-// export const getUsersAdmin: RequestHandler = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id } = req?.params;
-//     ValidateMongoDbId(id);
-//     try {
-//       if (!id)
-//         next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
-//       const users = await getUsersAdminM();
-//       res.json({
-//         length: users.length,
-//         users,
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
 
-// export const accountVerificationAdmin: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { token, id } = req.params;
-//     ValidateMongoDbId(id);
-//     if (!id)
-//       next(
-//         new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
-//       );
+export const accountVerificationAdmin: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token, id } = req.params;
+    ValidateMongoDbId(id);
+    if (!id)
+      next(
+        new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
+      );
 
-//     if (!token)
-//       next(
-//         new AppError(
-//           'Sorry, this token is not valid, try again',
-//           StatusCodes.BAD_REQUEST
-//         )
-//       );
-//     try {
-//       const admin = await accountVerificationAdminM(id, token, new Date());
+    if (!token)
+      next(
+        new AppError(
+          'Sorry, this token is not valid, try again',
+          StatusCodes.BAD_REQUEST
+        )
+      );
+    try {
+      const admin = await accountVerificationAdminM(id, token, new Date());
 
-//       if (!admin)
-//         next(
-//           new AppError(
-//             'Sorry, no user found, try again',
-//             StatusCodes.BAD_REQUEST
-//           )
-//         );
-//       const updatedAdmin = await accountVerificationUpdatedAdminM(
-//         admin?.id as string,
-//         true,
-//         '',
-//         null
-//       );
-//       res.json({
-//         status: 'Success',
-//         message: 'You have successfully, verify your account, log in now',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+      if (!admin)
+        next(
+          new AppError(
+            'Sorry, no user found, try again',
+            StatusCodes.BAD_REQUEST
+          )
+        );
+      const updatedAdmin = await accountVerificationUpdatedAdminM(
+        admin?.id as string,
+        true,
+        '',
+        null
+      );
+      res.json({
+        status: 'Success',
+        message: 'You have successfully, verify your account, log in now',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
