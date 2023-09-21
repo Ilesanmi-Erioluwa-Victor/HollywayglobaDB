@@ -38,7 +38,7 @@ model AdminPasswordResetToken {
 model Category {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
   products Product[]
-  name     String
+  name     String    @unique
   admin    Admin     @relation(fields: [adminId], references: [id])
   adminId  String    @db.ObjectId
 }
@@ -128,7 +128,7 @@ model Address {
   city            String?
   country         String?
   phone           String?
-  isDefault       Boolean?  @default(false)
+  isDefault       Boolean? @default(false)
   additionalPhone String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
