@@ -1,8 +1,9 @@
 import express from 'express';
 
-// import { Auth } from '../../../middlewares/auth';
-
-// const { Token, VerifiedUser } = Auth;
+import {
+  validateUserIdParam,
+  validateNewReviewInput,
+} from '../../../middlewares/validationMiddlware';
 
 import {
   createReview,
@@ -42,8 +43,10 @@ route.get(
   getReviews
 );
 
-route.delete('/:id/review/:reviewId',
+route.delete(
+  '/:id/review/:reviewId',
   // Token, VerifiedUser,
-  deleteReview);
+  deleteReview
+);
 
 export default route;
