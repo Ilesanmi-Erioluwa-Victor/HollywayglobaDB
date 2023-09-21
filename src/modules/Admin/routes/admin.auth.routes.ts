@@ -24,10 +24,10 @@ route.post('/login', loginAdmin);
 
 route.post('/logout', authenticateUser, logoutAdmin);
 
-route.post('/forgetPassword', validateEmailInput, forgetPasswordToken);
+// route.post('/forgetPassword', validateEmailInput, forgetPasswordToken);
 
 route.put('/:adminId/verify_account/:token', accountVerificationAdmin);
 
-route.put('/resetPassword/:token', validatePasswordInput, resetPassword);
+// route.put('/resetPassword/:token', validatePasswordInput, resetPassword);
 
 export default route;
