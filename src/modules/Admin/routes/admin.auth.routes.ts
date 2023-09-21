@@ -7,6 +7,7 @@ import { Auth } from '../../../middlewares/auth';
 import {
   validateEmailInput,
   validatePasswordInput,
+  validateAdminSignupInput,
 } from '../../../middlewares/validationMiddlware';
 
 const { authenticateUser } = Auth;
@@ -18,7 +19,7 @@ import {
   logoutAdmin,
 } from '../services/admin.auth.service';
 
-route.post('/sign_up', adminSignup);
+route.post('/signup', validateAdminSignupInput, adminSignup);
 
 route.post('/login', loginAdmin);
 
