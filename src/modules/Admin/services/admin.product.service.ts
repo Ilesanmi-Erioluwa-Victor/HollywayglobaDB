@@ -48,7 +48,7 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     res: { paginatedResult: any } & Response,
     next: NextFunction
   ) => {
-    await getPaginatedProducts(req, res, next);
+     await getPaginatedProducts(req, res, next);
   }
 );
 
