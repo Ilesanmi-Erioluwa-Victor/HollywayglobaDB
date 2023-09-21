@@ -20,7 +20,10 @@ import {
   editProductAdmin,
   editProductImagesAdmin,
 } from '../services/product.service';
-import { validateAdminIdParam } from 'middlewares/validationMiddlware';
+import {
+  validateAdminIdParam,
+  validateProductIdParam,
+} from 'middlewares/validationMiddlware';
 
 // const { Token, Admin } = Auth;
 
@@ -41,15 +44,12 @@ route.post(
   upload.array('images', 5),
   createProduct
 );
-route.get(
-  '/:adminId/products',
-  // Token, Admin,
-  getProductsAdmin
-);
+route.get('/:adminId/products', validateAdminIdParam, getProductsAdmin);
 
 route.get(
   '/:adminId/product/:productId',
-  // Token, Admin,
+  validateAdminIdParam,
+  validateProductIdParam,
   getProductAdmin
 );
 
