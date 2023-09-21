@@ -1,7 +1,9 @@
 import express from 'express';
+
 import multer from 'multer';
 
 const storage = multer.memoryStorage();
+
 const upload = multer({ storage });
 
 import {
@@ -23,20 +25,18 @@ import {
 import {
   validateAdminIdParam,
   validateProductIdParam,
-} from 'middlewares/validationMiddlware';
-
-// const { Token, Admin } = Auth;
+} from '../../../middlewares/validationMiddlware';
 
 const route = express.Router();
 
 route.get(
-  '/:adminId/users'
-  // Token, Admin,
+  '/:adminId/users',
+  validateAdminIdParam
 
   // getUsersAdmin
 );
 
-// route.get('/:id/products', Token, Admin, getProductsAdmin);
+route.get('/:adminId/products', validateAdminIdParam, getProductsAdmin);
 
 route.post(
   '/:adminId/product',
@@ -92,8 +92,8 @@ route.put(
 route.get('/category', getCategories);
 
 route.delete(
-  '/:adminId/category/:categoryId'
-  // Token, Admin,
+  '/:adminId/category/:categoryId',
+  validateAdminIdParam
   // deleteCategory
 );
 
