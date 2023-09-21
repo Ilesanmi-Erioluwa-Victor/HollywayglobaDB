@@ -190,6 +190,22 @@ export const validateAdminLoginInput = withValidationErrors([
   body('password').notEmpty().withMessage('Password is required'),
 ]);
 
+export const validateCreateCategoryInput = withValidationErrors([
+  body('name')
+    .notEmpty()
+    .withMessage('name is required to create category')
+    .custom(async (value) => {
+      const category = await prisma.category.findMany({
+        where: {
+          name: value,
+        },
+      });
+      if (category) {
+        throw new BadRequestError('category already exists');
+      }
+    }),
+]);
+
 export const validateAdminIdParam = withValidationErrors([
   param('adminId').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
