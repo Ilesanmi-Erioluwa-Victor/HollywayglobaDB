@@ -10,27 +10,19 @@ import { createJwt } from '../../../utils';
 
 import { ENV } from '../../../configurations/env';
 
-import { prisma } from '../../../configurations/db';
-
 import { adminQuery } from '../models/admin.models';
 
 import {
   BadRequestError,
   NotFoundError,
-  UnauthenticatedError,
   UnauthorizedError,
 } from '../../../errors/customError';
-
-// import bcrypt from 'bcryptjs';
-
-// import { loginAdminI } from '../interfaces/admin.interface';
 
 const {
   accountVerificationAdminM,
   accountVerificationUpdatedAdminM,
   createAdminM,
   findAdminEmailM,
-  getUsersAdminM,
 } = adminQuery;
 
 const { sendMail, sendMailToken } = Email;
@@ -147,7 +139,6 @@ export const accountVerificationAdmin: RequestHandler = catchAsync(
 //     });
 //   }
 // );
-
 
 // export const resetPassword: RequestHandler = catchAsync(
 //   async (req: Request, res: Response, next: NextFunction) => {
