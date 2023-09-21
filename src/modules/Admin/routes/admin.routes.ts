@@ -27,6 +27,7 @@ import {
   validateProductIdParam,
   validateCreateCategoryInput,
   validateCategoryIdParam,
+  validateEditCategoryInput,
 } from '../../../middlewares/validationMiddlware';
 
 import { getUsersAdmin } from '../services/admin.users.service';
@@ -91,6 +92,7 @@ route.put(
   '/:adminId/category/:categoryId',
   validateAdminIdParam,
   validateCategoryIdParam,
+  validateEditCategoryInput,
   editCategory
 );
 
@@ -98,8 +100,9 @@ route.get('/:adminId/category', validateAdminIdParam, getCategories);
 
 route.delete(
   '/:adminId/category/:categoryId',
-  validateAdminIdParam
-  // deleteCategory
+  validateAdminIdParam,
+  validateCategoryIdParam,
+  deleteCategory
 );
 
 export default route;

@@ -190,6 +190,10 @@ export const validateAdminLoginInput = withValidationErrors([
   body('password').notEmpty().withMessage('Password is required'),
 ]);
 
+export const validateEditCategoryInput = withValidationErrors([
+  body('name').notEmpty().withMessage('name is required'),
+]);
+
 export const validateCreateCategoryInput = withValidationErrors([
   body('name')
     .notEmpty()
@@ -217,12 +221,11 @@ export const validateCategoryIdParam = withValidationErrors([
 
     const category = await prisma.category.findUnique({
       where: {
-        id : value
-      }
+        id: value,
+      },
     });
 
-    if (!category)
-      throw new NotFoundError('no category found ...');
+    if (!category) throw new NotFoundError('no category found ...');
   }),
 ]);
 
