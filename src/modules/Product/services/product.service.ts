@@ -23,19 +23,13 @@ export const TopTenProducts: RequestHandler = catchAsync(
 
 export const Products: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const userProducts = await ProductsM();
+    const userProducts = await ProductsM();
 
-      res.status(200).json({
-        status: 'success',
-        message: 'ok',
-        data: userProducts,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      length: userProducts.length,
+      status: 'success',
+      message: 'ok',
+      data: userProducts,
+    });
   }
 );
