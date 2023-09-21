@@ -68,25 +68,15 @@ export const editReview = catchAsync(
 
 export const getReviews = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    ValidateMongoDbId(id);
+    
+    const reviews = await getReviewsM(req.params.id);
 
-    if (!id) throwError('Invalid ID', StatusCodes.BAD_REQUEST);
-    try {
-      const reviews = await getReviewsM(id);
-
-      res.json({
-        length: reviews.length,
-        status: 'success',
-        message: 'ok',
-        data: reviews,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      length: reviews.length,
+      status: 'success',
+      message: 'ok',
+      data: reviews,
+    });
   }
 );
 
