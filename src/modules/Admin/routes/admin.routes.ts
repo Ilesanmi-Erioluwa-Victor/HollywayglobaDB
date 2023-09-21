@@ -26,6 +26,7 @@ import {
   validateAdminIdParam,
   validateProductIdParam,
   validateCreateCategoryInput,
+  validateCategoryIdParam,
 } from '../../../middlewares/validationMiddlware';
 
 import { getUsersAdmin } from '../services/admin.users.service';
@@ -79,12 +80,18 @@ route.post(
   createCategory
 );
 
-route.get('/:adminId/category/:categoryId', validateAdminIdParam, getCategory);
+route.get(
+  '/:adminId/category/:categoryId',
+  validateAdminIdParam,
+  validateCategoryIdParam,
+  getCategory
+);
 
 route.put(
   '/:adminId/category/:categoryId',
-  validateAdminIdParam
-  // editCategory
+  validateAdminIdParam,
+  validateCategoryIdParam,
+  editCategory
 );
 
 route.get('/:adminId/category', validateAdminIdParam, getCategories);
