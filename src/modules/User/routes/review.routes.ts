@@ -3,7 +3,8 @@ import express from 'express';
 import {
   validateUserIdParam,
   validateNewReviewInput,
-  validateProductIdParam
+  validateProductIdParam,
+  validateReviewIdParam,
 } from '../../../middlewares/validationMiddlware';
 
 import {
@@ -20,14 +21,15 @@ route.post(
   '/:id/product/:productId/review',
   validateUserIdParam,
   validateProductIdParam,
-validateNewReviewInput,
+  validateNewReviewInput,
   createReview
 );
 
 route.get(
   '/:id/product/:productId/review/:reviewId',
-  // Token,
-  // VerifiedUser,
+  validateUserIdParam,
+  validateProductIdParam,
+  validateReviewIdParam,
   getReview
 );
 
