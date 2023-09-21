@@ -26,13 +26,7 @@ const {
 
 export const createReview: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, productId } = req.params;
 
-    ValidateMongoDbId(id);
-
-    ValidateMongoDbId(productId);
-
-    if (!id) throwError('No user found', StatusCodes.NOT_FOUND);
 
     const { text, rating } = req.body;
     try {
