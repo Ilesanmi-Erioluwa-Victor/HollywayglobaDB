@@ -18,6 +18,8 @@ import { reviewQuery } from '../modules/User/models/user.review.model';
 
 import { productQuery } from '../modules/Product/models/product.model';
 
+import { adminQuery } from '../modules/Admin/models/admin.models';
+
 import { Utils } from '../helper/utils';
 
 const { ValidateMongoDbId } = Utils;
@@ -29,6 +31,8 @@ const { findProductId } = productQuery;
 const { findAddressM } = addressQuery;
 
 const { findReviewIdM } = reviewQuery;
+
+const { findAdminEmailM } = adminQuery;
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -159,6 +163,22 @@ export const validateAddressIdParam = withValidationErrors([
     if (!address)
       throw new NotFoundError('no address associated with this id ...');
   }),
+]);
+
+export const validateAdminSignupInput = withValidationErrors([
+  body('name').notEmpty().withMessage('name is required'),
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format')
+    .custom(async (email) => {
+      const admin = await findAdminEmailM(email);
+      if (admin) {
+        throw new BadRequestError('email already exists');
+      }
+    }),
+  body('password').notEmpty().withMessage('Password is required'),
 ]);
 
 export const validateAdminIdParam = withValidationErrors([
