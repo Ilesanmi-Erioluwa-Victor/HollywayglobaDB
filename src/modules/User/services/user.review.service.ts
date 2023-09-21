@@ -35,7 +35,6 @@ export const createReview: RequestHandler = catchAsync(
     res.json({
       status: 'success',
       message: 'ok',
-      data: review,
     });
   }
 );
