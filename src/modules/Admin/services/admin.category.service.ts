@@ -72,27 +72,15 @@ export const getCategory: RequestHandler = catchAsync(
 );
 
 export const getCategories: RequestHandler = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const authId = req?.authId;
-    try {
-      if (!authId)
-        next(
-          new AppError(
-            'You are not authorized to perform this action',
-            StatusCodes.FORBIDDEN
-          )
-        );
+  async (req: Request, res: Response, next: NextFunction) => {
+    const category = await findCategoriesM();
+    if (!category) throw new BadRequestError('error fetching categories');
 
-      const category = await findCategoriesM();
-      res.json({
-        length: category.length,
-        category,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      length: category.length,
+      status: 'success',
+      message: 'ok',
+      data: category,
+    });
   }
 );
