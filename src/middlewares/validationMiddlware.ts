@@ -94,6 +94,11 @@ export const validateNewAddressInput = withValidationErrors([
   body('country').notEmpty().withMessage('country is required'),
 ]);
 
+export const validateNewReviewInput = withValidationErrors([
+  body('text').notEmpty().withMessage('text is required'),
+  body('rating').notEmpty().withMessage('rating is required'),
+]);
+
 export const validateUserIdParam = withValidationErrors([
   param('id').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
