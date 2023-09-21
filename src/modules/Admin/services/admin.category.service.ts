@@ -6,6 +6,12 @@ import { categoryQuery } from '../models/admin.category.models';
 
 const { catchAsync } = Utils;
 
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../errors/customError';
+
 const {
   createCategoryM,
   deleteCategoryM,
@@ -16,21 +22,14 @@ const {
 
 export const createCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    ValidateMongoDbId(id);
-    try {
-      if (!id)
-        next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
-      const category = await createCategoryM(req.body, id);
-      res.json({
-        message: 'You have successfully created category.',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    const category = await createCategoryM(req.body, req.params.adminId);
+
+    if (!category)
+      throw new BadRequestError('error creating category, try again ...');
+    res.json({
+      status: 'success',
+      message: 'you have successfully created category.',
+    });
   }
 );
 
