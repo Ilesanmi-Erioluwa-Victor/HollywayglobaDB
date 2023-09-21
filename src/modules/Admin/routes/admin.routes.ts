@@ -26,7 +26,7 @@ import {
 const route = express.Router();
 
 route.get(
-  '/:id/users'
+  '/:adminId/users'
   // Token, Admin,
 
   // getUsersAdmin
@@ -35,38 +35,38 @@ route.get(
 // route.get('/:id/products', Token, Admin, getProductsAdmin);
 
 route.post(
-  '/admin/:id/product',
+  '/:adminId/product',
   // Token,
   upload.array('images', 5),
   // Admin,
   createProduct
 );
 route.get(
-  '/admin/:id/products',
+  '/:adminId/products',
   // Token, Admin,
   getProductsAdmin
 );
 
 route.get(
-  '/admin/:id/product/:productId',
+  '/:adminId/product/:productId',
   // Token, Admin,
   getProductAdmin
 );
 
 route.delete(
-  '/admin/:id/product/:productId',
+  '/:adminId/product/:productId',
   // Token, Admin,
   deleteProductAdmin
 );
 
 route.put(
-  '/admin/:id/product/:productId',
+  '/:adminId/product/:productId',
   // Token, Admin,
   editProductAdmin
 );
 
 route.post(
-  '/admin/:id/product/:productId',
+  '/:adminId/product/:productId',
   // Token,
   upload.array('images', 5),
   // Admin,
@@ -74,31 +74,31 @@ route.post(
 );
 
 route.post(
-  '/:id/category'
+  '/:adminId/category'
   // Token, Admin,
   // createCategory
 );
 
 route.get(
-  '/:id/category/:categoryId'
+  '/:adminId/category/:categoryId'
   // Token, Admin,
   // findCategory
 );
 
 route.put(
-  '/:id/category/:categoryId'
+  '/:adminId/category/:categoryId'
   // Token, Admin,
   // editCategory
 );
 
 route.get(
-  '/categories'
+  '/category'
   // Token,
   // getCategories
 );
 
 route.delete(
-  '/:id/category/:categoryId'
+  '/:adminId/category/:categoryId'
   // Token, Admin,
   // deleteCategory
 );
