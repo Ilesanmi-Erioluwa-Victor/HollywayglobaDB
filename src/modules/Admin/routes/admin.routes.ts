@@ -20,6 +20,7 @@ import {
   editProductAdmin,
   editProductImagesAdmin,
 } from '../services/product.service';
+import { validateAdminIdParam } from 'middlewares/validationMiddlware';
 
 // const { Token, Admin } = Auth;
 
@@ -36,9 +37,8 @@ route.get(
 
 route.post(
   '/:adminId/product',
-  // Token,
+  validateAdminIdParam,
   upload.array('images', 5),
-  // Admin,
   createProduct
 );
 route.get(

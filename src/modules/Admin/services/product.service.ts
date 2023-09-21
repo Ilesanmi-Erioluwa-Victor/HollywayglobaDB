@@ -1,7 +1,5 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
 
-import { StatusCodes } from 'http-status-codes';
-
 import { getPaginatedProducts } from './paginatedProduct';
 
 import { Utils } from '../../../helper/utils';
@@ -18,8 +16,6 @@ import {
   BadRequestError,
   Forbidden,
   NotFoundError,
-  UnauthenticatedError,
-  UnauthorizedError,
 } from '../../../errors/customError';
 
 const { catchAsync } = Utils;
@@ -83,7 +79,7 @@ export const deleteProductAdmin: RequestHandler = catchAsync(
 
 export const editProductAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    if (req.files)
+    if (req.files || req.file)
       throw new Forbidden(
         "sorry, you can't edit product image with this endpoint"
       );
@@ -101,35 +97,20 @@ export const editProductAdmin: RequestHandler = catchAsync(
 
 export const editProductImagesAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id, productId } = req?.params;
+    if (!req.file)
+      throw new BadRequestError('select at least an image to upload');
 
-    ValidateMongoDbId(id);
-    ValidateMongoDbId(productId);
+    const product = await editProductImagesM(
+      req.params.productId,
+      await uploader.processImages(req?.files as any)
+    );
 
-    if (!id)
-      return throwError('No Admin record found', StatusCodes.BAD_REQUEST);
+    if (!product)
+      throw new BadRequestError('something went wrong, try again ...');
 
-    if (!productId)
-      return throwError('No product record found', StatusCodes.BAD_REQUEST);
-
-    try {
-      const product = await editProductImagesM(
-        productId,
-        await uploader.processImages(req?.files as any)
-      );
-
-      if (!product)
-        return throwError('No product record found', StatusCodes.BAD_REQUEST);
-
-      res.json({
-        status: 'Success',
-        message: 'You have successfully updated this product images',
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      status: 'success',
+      message: 'you have successfully updated this product images',
+    });
   }
 );
