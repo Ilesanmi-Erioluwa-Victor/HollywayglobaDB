@@ -1,25 +1,18 @@
 import express from 'express';
+
 import multer from 'multer';
 
-import { Auth } from '../../../middlewares/auth';
-
 const storage = multer.memoryStorage();
+
 const upload = multer({ storage });
 
-// import {
-//   accountVerificationAdmin,
-//   adminSignup,
-//   loginAdmin,
-//   getUsersAdmin,
-// } from '../services/admin.auth.service';
-
-// import {
-//   createCategory,
-//   editCategory,
-//   deleteCategory,
-//   findCategory,
-//   getCategories,
-// } from '../services/admin.category.service';
+import {
+  createCategory,
+  editCategory,
+  deleteCategory,
+  getCategory,
+  getCategories,
+} from '../services/admin.category.service';
 
 import {
   createProduct,
@@ -28,94 +21,72 @@ import {
   getProductsAdmin,
   editProductAdmin,
   editProductImagesAdmin,
-} from '../services/product.service';
+} from '../services/admin.product.service';
+import {
+  validateAdminIdParam,
+  validateProductIdParam,
+} from '../../../middlewares/validationMiddlware';
 
-// const { Token, Admin } = Auth;
+import { getUsersAdmin } from '../services/admin.users.service';
 
 const route = express.Router();
 
-// route.post('/sign_up', adminSignup);
-
-// route.post('/login', loginAdmin);
-
-// route.put('/:id/verify_account/:token', accountVerificationAdmin);
-
-route.get(
-  '/:id/users',
-  // Token, Admin,
-
-  // getUsersAdmin
-);
-
-// route.get('/:id/products', Token, Admin, getProductsAdmin);
+route.get('/:adminId/users', validateAdminIdParam, getUsersAdmin);
 
 route.post(
-  '/:id/category',
-  // Token, Admin,
-  // createCategory
-);
-
-route.get(
-  '/:id/category/:categoryId',
-  // Token, Admin,
-  // findCategory
-);
-
-route.put(
-  '/:id/category/:categoryId',
-  // Token, Admin,
-  // editCategory
-);
-
-route.get(
-  '/categories',
-  // Token,
-  // getCategories
-);
-
-route.delete(
-  '/:id/category/:categoryId',
-  // Token, Admin,
-  // deleteCategory
-);
-
-route.post(
-  '/admin/:id/product',
-  // Token,
+  '/:adminId/product',
+  validateAdminIdParam,
   upload.array('images', 5),
-  // Admin,
   createProduct
 );
-route.get(
-  '/admin/:id/products',
-  // Token, Admin,
-  getProductsAdmin
-);
+
+route.get('/:adminId/products', validateAdminIdParam, getProductsAdmin);
 
 route.get(
-  '/admin/:id/product/:productId',
-  // Token, Admin,
+  '/:adminId/product/:productId',
+  validateAdminIdParam,
+  validateProductIdParam,
   getProductAdmin
 );
 
 route.delete(
-  '/admin/:id/product/:productId',
-  // Token, Admin,
+  '/:adminId/product/:productId',
+  validateAdminIdParam,
+  validateProductIdParam,
   deleteProductAdmin
 );
 
 route.put(
-  '/admin/:id/product/:productId',
-  // Token, Admin,
+  '/:adminId/product/:productId',
+  validateAdminIdParam,
+  validateProductIdParam,
   editProductAdmin
 );
 
 route.post(
-  '/admin/:id/product/:productId',
-  // Token,
+  '/:adminId/product/:productId',
+  validateAdminIdParam,
   upload.array('images', 5),
-  // Admin,
+  validateProductIdParam,
   editProductImagesAdmin
+);
+
+route.post('/:adminId/category', validateAdminIdParam, createCategory);
+
+route.get('/:adminId/category/:categoryId', validateAdminIdParam, getCategory);
+
+route.put(
+  '/:adminId/category/:categoryId',
+  validateAdminIdParam
+  // editCategory
+);
+
+route.get('/:adminId/category', validateAdminIdParam, getCategories);
+
+route.delete(
+  '/:adminId/category/:categoryId',
+  validateAdminIdParam
+  // deleteCategory
 );
 
 export default route;

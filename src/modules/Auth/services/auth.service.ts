@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { Utils } from '../../../helper/utils';
 
-import { authQuery } from './../models/user.auth.model';
+import { authQuery } from '../models/user.auth.model';
 
 import { Email } from '../../../templates';
 

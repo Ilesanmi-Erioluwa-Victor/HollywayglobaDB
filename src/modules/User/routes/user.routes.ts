@@ -26,6 +26,7 @@ import {
   validatePasswordInput,
   validateNewAddressInput,
   validateAddressIdParam,
+  validateNewReviewInput
 } from '../../../middlewares/validationMiddlware';
 
 const route = express.Router();

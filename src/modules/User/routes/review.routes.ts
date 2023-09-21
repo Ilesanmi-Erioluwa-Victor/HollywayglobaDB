@@ -1,8 +1,11 @@
 import express from 'express';
 
-// import { Auth } from '../../../middlewares/auth';
-
-// const { Token, VerifiedUser } = Auth;
+import {
+  validateUserIdParam,
+  validateNewReviewInput,
+  validateProductIdParam,
+  validateReviewIdParam,
+} from '../../../middlewares/validationMiddlware';
 
 import {
   createReview,
@@ -16,34 +19,35 @@ const route = express.Router();
 
 route.post(
   '/:id/product/:productId/review',
-  // Token,
-  // VerifiedUser,
+  validateUserIdParam,
+  validateProductIdParam,
+  validateNewReviewInput,
   createReview
 );
 
 route.get(
   '/:id/product/:productId/review/:reviewId',
-  // Token,
-  // VerifiedUser,
+  validateUserIdParam,
+  validateProductIdParam,
+  validateReviewIdParam,
   getReview
 );
 
 route.put(
   '/:id/product/:productId/review/:reviewId',
-  // Token,
-  // VerifiedUser,
+  validateUserIdParam,
+  validateProductIdParam,
+  validateNewReviewInput,
   editReview
 );
 
-route.get(
-  '/:id/reviews',
-  // Token,
-  // VerifiedUser,
-  getReviews
-);
+route.get('/:id/reviews', validateUserIdParam, getReviews);
 
-route.delete('/:id/review/:reviewId',
-  // Token, VerifiedUser,
-  deleteReview);
+route.delete(
+  '/:id/review/:reviewId',
+  validateUserIdParam,
+  validateReviewIdParam,
+  deleteReview
+);
 
 export default route;

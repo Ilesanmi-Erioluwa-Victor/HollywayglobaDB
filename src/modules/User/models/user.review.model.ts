@@ -2,7 +2,7 @@ import { prisma } from '../../../configurations/db';
 
 import { review } from '../user.interface';
 
-export class reviewQueries {
+export class reviewQuery {
   static async createReviewM(
     reviewData: review,
     userId: string,
@@ -64,10 +64,10 @@ export class reviewQueries {
             id: false,
             title: true,
             brand: true,
-            description: false,
-            price: false,
+            description: true,
+            price: true,
             quantity: false,
-            images: false,
+            images: true,
             stock: false,
             adminId: false,
             colors: false,
@@ -99,6 +99,13 @@ export class reviewQueries {
         createdAt: 'asc',
       },
       select: {
+        product: {
+          select: {
+            title: true,
+            brand: true,
+            price: true,
+          },
+        },
         id: true,
         text: true,
         rating: true,

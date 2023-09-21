@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { NotFoundError } from '../../errors/customError';
+import { NotFoundError } from './customError';
 
 export class _404 {
   static notFound(req: Request, res: Response, next: NextFunction) {

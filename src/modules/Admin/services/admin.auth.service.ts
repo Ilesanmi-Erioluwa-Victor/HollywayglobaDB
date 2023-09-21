@@ -1,167 +1,168 @@
-// import bcrypt from 'bcryptjs';
-// import { RequestHandler, NextFunction, Request, Response } from 'express';
-// import { StatusCodes } from 'http-status-codes';
+import { RequestHandler, NextFunction, Request, Response } from 'express';
 
-// import { Utils } from '../../../helper/utils';
+import { StatusCodes } from 'http-status-codes';
 
-// import { CustomRequest } from '../../../interfaces/custom';
+import { Utils } from '../../../helper/utils';
 
-// import { adminQueries } from '../models/admin.models';
+import { Email } from '../../../templates';
 
-// import { Email } from '../../../templates';
+import { createJwt } from '../../../utils';
 
-// import { loginAdminI } from '../interfaces/admin.interface';
+import { ENV } from '../../../configurations/env';
 
-// const {
-//   accountVerificationAdminM,
-//   accountVerificationUpdatedAdminM,
-//   createAdminM,
-//   findAdminEmailM,
-//   getUsersAdminM,
-// } = adminQueries;
+import { adminQuery } from '../models/admin.models';
 
-// const { sendMail, sendMailToken } = Email;
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../errors/customError';
 
-// const { catchAsync, generateToken, ValidateMongoDbId, comparePassword } = Utils;
+const {
+  accountVerificationAdminM,
+  accountVerificationUpdatedAdminM,
+  createAdminM,
+  findAdminEmailM,
+} = adminQuery;
 
-// export const adminSignup: RequestHandler = catchAsync(
+const { sendMail, sendMailToken } = Email;
+
+const { catchAsync, comparePassword } = Utils;
+
+export const adminSignup: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const admin = await createAdminM(req.body);
+
+    if (!admin) throw new BadRequestError('something went wrong, try again');
+
+    sendMail('admin', admin, req, res, next);
+    res.json({
+      message: 'you have successfully created your account, log in now',
+      status: 'success',
+    });
+  }
+);
+
+export const loginAdmin: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const admin = await findAdminEmailM(req.body.email);
+
+    if (!admin) throw new NotFoundError('no user found ...');
+
+    if (await comparePassword(req.body.password, admin.password)) {
+      if (!admin.isAccountVerified) {
+        throw new BadRequestError(
+          'verify your account in your gmail before you can log in'
+        );
+      }
+      const token = createJwt({
+        userId: admin?.id,
+        role: admin?.role as string,
+      });
+      const aDay = 1000 * 60 * 60 * 24;
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + aDay),
+        secure: ENV.MODE.MODE === 'production',
+      });
+
+      res.json({
+        status: 'success',
+        message: 'you are logged in !',
+      });
+    } else {
+      throw new UnauthorizedError('login failed, invalid credentials');
+    }
+  }
+);
+
+export const logoutAdmin: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.cookie('token', 'logout', {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    });
+
+    res
+      .status(StatusCodes.OK)
+      .json({ message: 'successfully logged out', status: 'success' });
+  }
+);
+
+export const accountVerificationAdmin: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.params.token) throw new NotFoundError('token not valid');
+
+    const admin = await accountVerificationAdminM(
+      req.params.adminId,
+      req.params.token,
+      new Date()
+    );
+
+    if (!admin) throw new BadRequestError('no user found ...');
+
+    const updatedAdmin = await accountVerificationUpdatedAdminM(
+      admin.id as string,
+      true,
+      '',
+      null
+    );
+    res.json({
+      status: 'success',
+      message: 'you have successfully, verify your account, log in now',
+    });
+  }
+);
+
+// export const forgetPasswordToken: RequestHandler = catchAsync(
 //   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const { email, password, name } = req.body;
-//       if (!email || !password || !name)
-//         return next(
-//           new AppError(
-//             'Missing credentials, please provide all required information',
-//             StatusCodes.BAD_REQUEST
-//           )
-//         );
-//       const existAdmin = await findAdminEmailM(email);
-//       if (existAdmin)
-//         return next(
-//           new AppError(
-//             'You are already an admin, kindly login to your account',
-//             StatusCodes.CONFLICT
-//           )
-//         );
-//       const admin: any = await createAdminM(req.body);
-//       sendMail('admin', admin, req, res, next);
-//       res.status(StatusCodes.CREATED).json({
-//         message: 'You have successfully created your account, log in now',
-//         status: 'success',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
+//     const user = await findUserMEmail(req.body.email);
+
+//     if (!user) throw new NotFoundError('no user found');
+
+//     const resetToken = generatePasswordResetToken();
+
+//     const expirationTime = new Date();
+//     expirationTime.setHours(expirationTime.getHours() + 1);
+
+//     const passwordReset = await forgetPasswordTokenM(
+//       await resetToken,
+//       expirationTime,
+//       user.id as string
+//     );
+
+//     await sendMailToken('user', passwordReset, req, res, next);
+//     res.json({
+//       message: `A reset token has been sent to your gmail`,
+//       status: 'success',
+//     });
 //   }
 // );
 
-// export const loginAdmin: RequestHandler = catchAsync(
+// export const resetPassword: RequestHandler = catchAsync(
 //   async (req: Request, res: Response, next: NextFunction) => {
-//     const { email, password } = req.body;
-//     try {
-//       const admin: loginAdminI | any = await findAdminEmailM(email);
+//     const { password } = req.body;
 
-//       if (!admin)
-//         next(
-//           new AppError(
-//             'No record found with this email',
-//             StatusCodes.BAD_REQUEST
-//           )
-//         );
-//       if (await comparePassword(password, admin?.password)) {
-//         if (!admin.isAccountVerified) {
-//           new AppError(
-//             'Verify your account in your gmail before you can log in',
-//             StatusCodes.BAD_REQUEST
-//           );
-//         }
+//     if (!req.params.token) throw new NotFoundError('no token found, try again');
 
-//         res.json({
-//           id: admin?.id,
-//           name: admin?.name,
-//           email: admin?.email,
-//           token: await generateToken(admin?.id),
-//         });
-//       } else {
-//         new AppError(
-//           'Login Failed, invalid credentials',
-//           StatusCodes.UNAUTHORIZED
-//         );
-//       }
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+//     const resetTokenData = await resetPasswordM(req.params.token);
 
-// export const getUsersAdmin: RequestHandler = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const { id } = req?.params;
-//     ValidateMongoDbId(id);
-//     try {
-//       if (!id)
-//         next(new AppError('No Admin record found', StatusCodes.BAD_REQUEST));
-//       const users = await getUsersAdminM();
-//       res.json({
-//         length: users.length,
-//         users,
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+//     if (!resetTokenData || resetTokenData.expirationTime <= new Date())
+//       throw new BadRequestError('invalid or expired token, try again');
 
-// export const accountVerificationAdmin: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { token, id } = req.params;
-//     ValidateMongoDbId(id);
-//     if (!id)
-//       next(
-//         new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
-//       );
+//     const user = await resetPasswordUpdateM(
+//       resetTokenData.user.id as string,
+//       password
+//     );
 
-//     if (!token)
-//       next(
-//         new AppError(
-//           'Sorry, this token is not valid, try again',
-//           StatusCodes.BAD_REQUEST
-//         )
-//       );
-//     try {
-//       const admin = await accountVerificationAdminM(id, token, new Date());
+//     const deleteUserPasswordResetToken = await resetPasswordTokenDeleteM(
+//       resetTokenData.id as string
+//     );
 
-//       if (!admin)
-//         next(
-//           new AppError(
-//             'Sorry, no user found, try again',
-//             StatusCodes.BAD_REQUEST
-//           )
-//         );
-//       const updatedAdmin = await accountVerificationUpdatedAdminM(
-//         admin?.id as string,
-//         true,
-//         '',
-//         null
-//       );
-//       res.json({
-//         status: 'Success',
-//         message: 'You have successfully, verify your account, log in now',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
+//     res.json({
+//       message: 'password reset successful, login now',
+//       status: 'success',
+//     });
 //   }
 // );

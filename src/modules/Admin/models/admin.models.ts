@@ -6,7 +6,7 @@ import { Utils } from '../../../helper/utils';
 
 const { accountVerificationToken, generateToken, hashedPassword } = Utils;
 
-export class adminQueries {
+export class adminQuery {
   static async findAdminIdM(id: string) {
     const adminId = await prisma.admin.findUnique({
       where: {
@@ -39,11 +39,6 @@ export class adminQueries {
     generateToken(createAdmin?.id as string);
     const tokenAdmin = await accountVerificationToken('admin', createAdmin?.id);
     return tokenAdmin;
-  }
-
-  static async getUsersAdminM() {
-    const users = await prisma.user.findMany();
-    return users;
   }
 
   static async accountVerificationAdminM(

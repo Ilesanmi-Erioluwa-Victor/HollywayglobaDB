@@ -14,13 +14,25 @@ import { authQuery } from '../modules/Auth/models/user.auth.model';
 
 import { addressQuery } from '../modules/User/models/user.address.model';
 
+import { reviewQuery } from '../modules/User/models/user.review.model';
+
+import { productQuery } from '../modules/Product/models/product.model';
+
+import { adminQuery } from '../modules/Admin/models/admin.models';
+
 import { Utils } from '../helper/utils';
 
 const { ValidateMongoDbId } = Utils;
 
 const { findUserMEmail, findUserMId } = authQuery;
 
+const { findProductId } = productQuery;
+
 const { findAddressM } = addressQuery;
+
+const { findReviewIdM } = reviewQuery;
+
+const { findAdminEmailM } = adminQuery;
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -94,6 +106,11 @@ export const validateNewAddressInput = withValidationErrors([
   body('country').notEmpty().withMessage('country is required'),
 ]);
 
+export const validateNewReviewInput = withValidationErrors([
+  body('text').notEmpty().withMessage('text is required'),
+  body('rating').notEmpty().withMessage('rating is required'),
+]);
+
 export const validateUserIdParam = withValidationErrors([
   param('id').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
@@ -111,6 +128,30 @@ export const validateUserIdParam = withValidationErrors([
   }),
 ]);
 
+export const validateProductIdParam = withValidationErrors([
+  param('productId').custom(async (value) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const product = await findProductId(value);
+
+    if (!product) throw new NotFoundError('no product found ...');
+  }),
+]);
+
+export const validateReviewIdParam = withValidationErrors([
+  param('reviewId').custom(async (value) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const review = await findReviewIdM(value);
+
+    if (!review) throw new NotFoundError('no review found ...');
+  }),
+]);
+
 export const validateAddressIdParam = withValidationErrors([
   param('addressId').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
@@ -124,17 +165,46 @@ export const validateAddressIdParam = withValidationErrors([
   }),
 ]);
 
+export const validateAdminSignupInput = withValidationErrors([
+  body('name').notEmpty().withMessage('name is required'),
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format')
+    .custom(async (email) => {
+      const admin = await findAdminEmailM(email);
+      if (admin) {
+        throw new BadRequestError('email already exists');
+      }
+    }),
+  body('password').notEmpty().withMessage('Password is required'),
+]);
+
+export const validateAdminLoginInput = withValidationErrors([
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format'),
+  body('password').notEmpty().withMessage('Password is required'),
+]);
+
 export const validateAdminIdParam = withValidationErrors([
   param('adminId').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
 
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
 
-    const admin = await prisma.admin.findUnique(value);
-
+    const admin = await prisma.admin.findUnique({
+      where: {
+        id: value,
+      },
+    });
     if (!admin) throw new NotFoundError('no user associated with this id ...');
 
-    const isOwner = req.user.userId.toString() === req.params?.id.toString();
+    const isOwner =
+      req.user.userId.toString() === req.params?.adminId.toString();
 
     const isAdmin = req.user.role === 'admin';
 
