@@ -6,7 +6,7 @@ export class categoryQuery {
   static async createCategoryM(body: categoryI, adminId: string) {
     const category = await prisma.category.create({
       data: {
-        name: body.name,
+        name: body.name.toLocaleLowerCase(),
         adminId,
       },
     });
