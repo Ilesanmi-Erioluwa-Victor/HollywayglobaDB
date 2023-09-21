@@ -40,6 +40,16 @@ export class categoryQuery {
       where: {
         id,
       },
+      select: {
+        name: true,
+        id: true,
+        admin: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
     return category;
   }
