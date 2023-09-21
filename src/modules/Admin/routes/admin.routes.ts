@@ -6,12 +6,7 @@ import { Auth } from '../../../middlewares/auth';
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// import {
-//   accountVerificationAdmin,
-//   adminSignup,
-//   loginAdmin,
-//   getUsersAdmin,
-// } from '../services/admin.auth.service';
+
 
 // import {
 //   createCategory,
@@ -33,12 +28,6 @@ import {
 // const { Token, Admin } = Auth;
 
 const route = express.Router();
-
-// route.post('/sign_up', adminSignup);
-
-// route.post('/login', loginAdmin);
-
-// route.put('/:id/verify_account/:token', accountVerificationAdmin);
 
 route.get(
   '/:id/users',

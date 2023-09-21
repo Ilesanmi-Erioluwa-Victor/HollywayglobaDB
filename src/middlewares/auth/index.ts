@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 
 import { StatusCodes } from 'http-status-codes';
 
-import { throwError } from '../../middlewares/error';
-
 import { verifyJWT } from '../../utils/index';
 
 import { ENV } from '../../configurations/env';
@@ -18,7 +16,7 @@ import { CustomRequest } from '../../interfaces/custom';
 
 import { userQuery } from '../../modules/User/models/user.model';
 
-import { adminQueries } from '../../modules/Admin/models/admin.models';
+import { adminQuery } from '../../modules/Admin/models/admin.models';
 
 import { Utils } from '../../helper/utils';
 
@@ -26,7 +24,7 @@ const { catchAsync, ValidateMongoDbId } = Utils;
 
 const { findUserMId } = userQuery;
 
-const { findAdminIdM } = adminQueries;
+const { findAdminIdM } = adminQuery;
 
 export class Auth {
   static authenticateUser = catchAsync(

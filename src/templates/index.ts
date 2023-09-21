@@ -8,11 +8,11 @@ import { ENV } from '../configurations/env';
 
 import { userQuery } from '../modules/User/models/user.model';
 
-import { adminQueries } from '../modules/Admin/models/admin.models';
+import { adminQuery } from '../modules/Admin/models/admin.models';
 
 const { findUserMId } = userQuery;
 
-const { findAdminIdM } = adminQueries;
+const { findAdminIdM } = adminQuery;
 
 export class Email {
   private async sendMailAcc(

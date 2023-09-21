@@ -68,7 +68,7 @@ app.use('/api/v1/auth', authRoute);
 
 app.use('/api/v1/user', authenticateUser, userRoute);
 
-app.use("/api/v1/adminAuth", )
+app.use('/api/v1/adminAuth', adminAuth);
 
 app.use('/api/v1/admin', authenticateUser, adminRoute);
 
