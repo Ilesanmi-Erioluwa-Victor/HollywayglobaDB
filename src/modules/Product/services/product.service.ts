@@ -1,8 +1,5 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
 
-import { StatusCodes } from 'http-status-codes';
-
-import { throwError } from '../../../middlewares/error';
 
 import { Utils } from '../../../helper/utils';
 
@@ -10,7 +7,7 @@ import { productQuery } from '../models/product.model';
 
 const { TopCheapProductM, ProductsM } = productQuery;
 
-const { catchAsync, ValidateMongoDbId } = Utils;
+const { catchAsync } = Utils;
 
 export const TopTenProducts: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
