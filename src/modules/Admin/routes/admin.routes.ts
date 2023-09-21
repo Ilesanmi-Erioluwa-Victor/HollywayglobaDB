@@ -55,28 +55,30 @@ route.get(
 
 route.delete(
   '/:adminId/product/:productId',
-  // Token, Admin,
+  validateAdminIdParam,
+  validateProductIdParam,
   deleteProductAdmin
 );
 
 route.put(
   '/:adminId/product/:productId',
-  // Token, Admin,
+  validateAdminIdParam,
+  validateProductIdParam,
   editProductAdmin
 );
 
 route.post(
   '/:adminId/product/:productId',
-  // Token,
+  validateAdminIdParam,
   upload.array('images', 5),
-  // Admin,
+  validateProductIdParam,
   editProductImagesAdmin
 );
 
 route.post(
-  '/:adminId/category'
-  // Token, Admin,
-  // createCategory
+  '/:adminId/category',
+ validateAdminIdParam,
+  createCategory
 );
 
 route.get(
