@@ -99,6 +99,13 @@ export class reviewQuery {
         createdAt: 'asc',
       },
       select: {
+        product: {
+          select: {
+            title: true,
+            brand: true,
+            price : true
+          }
+        },
         id: true,
         text: true,
         rating: true,
