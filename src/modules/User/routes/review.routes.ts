@@ -41,12 +41,7 @@ route.put(
   editReview
 );
 
-route.get(
-  '/:id/reviews',
-  // Token,
-  // VerifiedUser,
-  getReviews
-);
+route.get('/:id/reviews', validateUserIdParam, getReviews);
 
 route.delete(
   '/:id/review/:reviewId',
