@@ -117,7 +117,7 @@ export const validateUserIdParam = withValidationErrors([
 ]);
 
 export const validateProductIdParam = withValidationErrors([
-  param('productId').custom(async (value, { req }) => {
+  param('productId').custom(async (value) => {
     const isValidMongoId = ValidateMongoDbId(value);
 
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
