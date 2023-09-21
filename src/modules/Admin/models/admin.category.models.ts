@@ -8,7 +8,7 @@ export class categoryQuery {
       data: {
         name: body.name,
         adminId,
-      },
+      }
     });
 
     return category;
