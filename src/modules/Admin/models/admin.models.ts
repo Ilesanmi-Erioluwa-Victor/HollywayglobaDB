@@ -41,11 +41,6 @@ export class adminQuery {
     return tokenAdmin;
   }
 
-  static async getUsersAdminM() {
-    const users = await prisma.user.findMany();
-    return users;
-  }
-
   static async accountVerificationAdminM(
     id: string,
     accountVerificationToken: string,

@@ -2,8 +2,6 @@ import { RequestHandler, NextFunction, Request, Response } from 'express';
 
 import { Utils } from '../../../helper/utils';
 
-import { CustomRequest } from '../../../interfaces/custom';
-
 import { categoryQuery } from '../models/admin.category.models';
 
 const { catchAsync } = Utils;
