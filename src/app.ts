@@ -20,6 +20,8 @@ import reviewRoute from './modules/User/routes/review.routes';
 
 import cartRoute from './modules/Cart/routes/cart.routes';
 
+import adminAuth from "./modules/Admin/routes/admin.auth.routes"
+
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
 
 import { customTime } from './interfaces/custom';
