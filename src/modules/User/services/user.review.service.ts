@@ -1,18 +1,10 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
 
-import { StatusCodes } from 'http-status-codes';
-
-import { userQuery } from '../models/user.model';
-
-const { findUserMId } = userQuery;
-
-import { throwError } from '../../../middlewares/error';
-
 import { Utils } from '../../../helper/utils';
 
-import { BadRequestError, NotFoundError } from '../../../errors/customError';
+import { NotFoundError } from '../../../errors/customError';
 
-const { catchAsync, ValidateMongoDbId } = Utils;
+const { catchAsync } = Utils;
 
 import { reviewQuery } from './../models/user.review.model';
 
