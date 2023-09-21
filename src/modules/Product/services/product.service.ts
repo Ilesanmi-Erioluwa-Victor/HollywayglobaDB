@@ -1,6 +1,5 @@
 import { RequestHandler, NextFunction, Response, Request } from 'express';
 
-
 import { Utils } from '../../../helper/utils';
 
 import { productQuery } from '../models/product.model';
@@ -11,20 +10,13 @@ const { catchAsync } = Utils;
 
 export const TopTenProducts: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const topTenCheapestProducts = await TopCheapProductM();
+    const topTenCheapestProducts = await TopCheapProductM();
 
-      res.status(200).json({
-        status: 'success',
-        message: 'ok',
-        data: topTenCheapestProducts,
-      });
-    } catch (error: any) {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    }
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: topTenCheapestProducts,
+    });
   }
 );
 
