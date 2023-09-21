@@ -74,7 +74,11 @@ export const loginAdmin: RequestHandler = catchAsync(
         expires: new Date(Date.now() + aDay),
         secure: ENV.MODE.MODE === 'production',
       });
-      console.log(token, admin);
+
+      res.json({
+        status: 'success',
+        message: 'you are logged in !',
+      });
     } else {
       throw new UnauthorizedError('login failed, invalid credentials');
     }
