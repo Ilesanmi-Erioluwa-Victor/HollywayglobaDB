@@ -1,10 +1,20 @@
+import { RequestHandler, NextFunction, Request, Response } from 'express';
+
+import { StatusCodes } from 'http-status-codes';
+
+import { Utils } from '../../../helper/utils';
+
+import { Email } from '../../../templates';
+
+import { createJwt } from '../../../utils';
+
+import { ENV } from '../../../configurations/env';
+
+import { prisma } from '../../../configurations/db';
+
 // import bcrypt from 'bcryptjs';
-// import { RequestHandler, NextFunction, Request, Response } from 'express';
-// import { StatusCodes } from 'http-status-codes';
 
-// import { Utils } from '../../../helper/utils';
 
-// import { CustomRequest } from '../../../interfaces/custom';
 
 // import { adminQueries } from '../models/admin.models';
 

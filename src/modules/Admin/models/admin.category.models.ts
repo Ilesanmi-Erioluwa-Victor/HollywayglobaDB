@@ -2,7 +2,7 @@ import { categoryI } from '../interfaces/admin.interface';
 
 import { prisma } from '../../../configurations/db';
 
-export class categoryQueries {
+export class categoryQuery {
   static async createCategoryM(body: categoryI, adminId: string) {
     const category = await prisma.category.create({
       data: {
