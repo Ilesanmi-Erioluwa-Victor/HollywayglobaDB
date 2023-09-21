@@ -6,7 +6,7 @@ import { Utils } from '../../../helper/utils';
 
 const { accountVerificationToken, generateToken, hashedPassword } = Utils;
 
-export class adminQueries {
+export class adminQuery {
   static async findAdminIdM(id: string) {
     const adminId = await prisma.admin.findUnique({
       where: {

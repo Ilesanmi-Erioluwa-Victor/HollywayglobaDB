@@ -12,61 +12,62 @@ import { ENV } from '../../../configurations/env';
 
 import { prisma } from '../../../configurations/db';
 
+import { adminQuery } from '../models/admin.models';
+
 // import bcrypt from 'bcryptjs';
 
 
 
-// import { adminQueries } from '../models/admin.models';
 
 // import { Email } from '../../../templates';
 
 // import { loginAdminI } from '../interfaces/admin.interface';
 
-// const {
-//   accountVerificationAdminM,
-//   accountVerificationUpdatedAdminM,
-//   createAdminM,
-//   findAdminEmailM,
-//   getUsersAdminM,
-// } = adminQueries;
+const {
+  accountVerificationAdminM,
+  accountVerificationUpdatedAdminM,
+  createAdminM,
+  findAdminEmailM,
+  getUsersAdminM,
+} = adminQuery;
 
 // const { sendMail, sendMailToken } = Email;
 
 // const { catchAsync, generateToken, ValidateMongoDbId, comparePassword } = Utils;
 
-// export const adminSignup: RequestHandler = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const { email, password, name } = req.body;
-//       if (!email || !password || !name)
-//         return next(
-//           new AppError(
-//             'Missing credentials, please provide all required information',
-//             StatusCodes.BAD_REQUEST
-//           )
-//         );
-//       const existAdmin = await findAdminEmailM(email);
-//       if (existAdmin)
-//         return next(
-//           new AppError(
-//             'You are already an admin, kindly login to your account',
-//             StatusCodes.CONFLICT
-//           )
-//         );
-//       const admin: any = await createAdminM(req.body);
-//       sendMail('admin', admin, req, res, next);
-//       res.status(StatusCodes.CREATED).json({
-//         message: 'You have successfully created your account, log in now',
-//         status: 'success',
-//       });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+export const adminSignup: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password, name } = req.body;
+      if (!email || !password || !name)
+        return next(
+          new AppError(
+            'Missing credentials, please provide all required information',
+            StatusCodes.BAD_REQUEST
+          )
+        );
+      const existAdmin = await findAdminEmailM(email);
+      if (existAdmin)
+        return next(
+          new AppError(
+            'You are already an admin, kindly login to your account',
+            StatusCodes.CONFLICT
+          )
+        );
+      const admin: any = await createAdminM(req.body);
+      sendMail('admin', admin, req, res, next);
+      res.status(StatusCodes.CREATED).json({
+        message: 'You have successfully created your account, log in now',
+        status: 'success',
+      });
+    } catch (error: any) {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    }
+  }
+);
 
 // export const loginAdmin: RequestHandler = catchAsync(
 //   async (req: Request, res: Response, next: NextFunction) => {
