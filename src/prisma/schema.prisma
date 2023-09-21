@@ -64,6 +64,8 @@ model User {
   isAccountVerified               Boolean              @default(false)
   accountVerificationToken        String?              @default("")
   accountVerificationTokenExpires DateTime?            @default(now())
+  deleteRequestDate               DateTime?
+  loggedInAfterRequest            Boolean              @default(false)
   passwordresettoken              PasswordResetToken[]
   payment                         Payment?
   orders                          Order[]
@@ -124,7 +126,9 @@ model Address {
   additionalInfo  String?
   region          String?
   city            String?
+  country         String?
   phone           String?
+  isDefault       Boolean?  @default(false)
   additionalPhone String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

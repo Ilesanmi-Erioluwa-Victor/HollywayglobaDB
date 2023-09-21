@@ -4,12 +4,25 @@ import { Utils } from '../../../helper/utils';
 
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
-export class userQueries {
-
+export class userQuery {
   static async findUserMId(id: string) {
     const userId = await prisma.user.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        lastName: true,
+        firstName: true,
+        email: true,
+        mobile: true,
+        isBlocked: true,
+        role: true,
+        profilePhoto: true,
+        active: true,
+        isAccountVerified: true,
+        deleteRequestDate: true,
+        loggedInAfterRequest : true
       },
     });
     return userId;
@@ -57,10 +70,6 @@ export class userQueries {
 
     return user;
   }
-
-
-
-
 
   static async userProfilePictureUpdateM(id: string, profilePhoto: string) {
     const user = await prisma.user.update({

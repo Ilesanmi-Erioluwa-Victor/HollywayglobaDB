@@ -1,17 +1,19 @@
 import express from 'express';
 
 import {
-  getUser,
-  updatePassword,
-  updateUser,
-  uploadProfile,
-} from '../services/user.auth.service';
+  user,
+  // deleteuser,
+  updatepassword,
+  updateuser,
+  uploadprofile,
+} from '../services/user.service';
 
 import {
   createAddress,
   editAddress,
   getAddresses,
-  deleteAddresses,
+  getAddress,
+  deleteAddress,
 } from '../services/user.address.service';
 
 import {
@@ -19,57 +21,69 @@ import {
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
 
+import {
+  validateUserIdParam,
+  validatePasswordInput,
+  validateNewAddressInput,
+  validateAddressIdParam,
+} from '../../../middlewares/validationMiddlware';
+
 const route = express.Router();
 
 route.post(
   '/:id/address',
-  // Token, VerifiedUser,
+  validateUserIdParam,
+  validateNewAddressInput,
   createAddress
 );
 
 route.put(
   '/:id/address/:addressId',
-  // Token, VerifiedUser,
+  validateUserIdParam,
+  validateAddressIdParam,
   editAddress
 );
 
 route.get(
-  '/:id/address',
-  // Token, VerifiedUser,
-  getAddresses
+  '/:id/address/:addressId',
+  validateUserIdParam,
+  validateAddressIdParam,
+  getAddress
 );
+
+route.get('/:id/address', validateUserIdParam, getAddresses);
 
 route.delete(
   '/:id/address/:addressId',
-  // Token, VerifiedUser,
-  deleteAddresses
+  validateUserIdParam,
+  validateAddressIdParam,
+  deleteAddress
 );
 
-route.get(
-  '/:id',
-  // Token, VerifiedUser,
-  getUser
-);
+route.get('/:id', validateUserIdParam, user);
+
+// route.delete('/:id', validateUserIdParam, deleteuser);
 
 route.put(
-  '/updateProfile/:id',
-  // Token, VerifiedUser,
-  updateUser
+  '/:id/updateProfile',
+  validateUserIdParam,
+  validatePasswordInput,
+  updateuser
 );
 
 route.post(
   '/:id/uploadImage',
-  // Token,
+  validateUserIdParam,
   profileImage.single('image'),
   profileImageResize,
-  // VerifiedUser,
-  uploadProfile
+  uploadprofile
 );
 
 route.put(
-  '/password/:id',
-  // Token, VerifiedUser,
-  updatePassword
+  '/:id/password',
+  validateUserIdParam,
+  validatePasswordInput,
+  updatepassword
 );
 
 export default route;

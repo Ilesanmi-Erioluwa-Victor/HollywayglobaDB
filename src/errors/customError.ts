@@ -32,6 +32,15 @@ export class UnauthorizedError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'UnauthorizedError';
+    this.statusCode = StatusCodes.UNAUTHORIZED;
+  }
+}
+
+export class Forbidden extends Error {
+  statusCode: number;
+  constructor(message: string) {
+    super(message);
+    this.name = 'UnauthorizedError';
     this.statusCode = StatusCodes.FORBIDDEN;
   }
 }

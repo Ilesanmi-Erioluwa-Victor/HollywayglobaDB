@@ -2,7 +2,7 @@ import { prisma } from '../../../configurations/db';
 
 import { address } from '../user.interface';
 
-export class addressQueries {
+export class addressQuery {
   static async createAddressM(address: address, userId: string) {
     const Address = await prisma.address.create({
       data: {
@@ -12,6 +12,8 @@ export class addressQueries {
         city: address.city,
         phone: address.phone,
         additionalPhone: address.additionalPhone,
+        country: address.country,
+
         user: { connect: { id: userId } },
       },
     });
@@ -40,6 +42,16 @@ export class addressQueries {
     const address = await prisma.address.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        country: true,
+        city: true,
+        additionalInfo: true,
+        phone: true,
+        deliveryAddress: true,
+        isDefault: true,
+        additionalPhone: true,
       },
     });
     return address;

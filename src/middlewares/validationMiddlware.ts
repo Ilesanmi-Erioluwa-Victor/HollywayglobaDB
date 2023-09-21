@@ -1,4 +1,5 @@
 import { body, param, validationResult } from 'express-validator';
+
 import { Request, Response, NextFunction } from 'express';
 
 import { prisma } from '../configurations/db';
@@ -8,12 +9,18 @@ import {
   NotFoundError,
   UnauthorizedError,
 } from '../errors/customError';
+
 import { authQuery } from '../modules/Auth/models/user.auth.model';
+
+import { addressQuery } from '../modules/User/models/user.address.model';
+
 import { Utils } from '../helper/utils';
 
 const { ValidateMongoDbId } = Utils;
 
-const { findUserMEmail } = authQuery;
+const { findUserMEmail, findUserMId } = authQuery;
+
+const { findAddressM } = addressQuery;
 
 const withValidationErrors = (validateValues: any) => {
   return [
@@ -66,7 +73,7 @@ export const validateLoginInput = withValidationErrors([
   body('password').notEmpty().withMessage('Password is required'),
 ]);
 
-export const validateforgottenPasswordInput = withValidationErrors([
+export const validateEmailInput = withValidationErrors([
   body('email')
     .notEmpty()
     .withMessage('email is required')
@@ -74,8 +81,17 @@ export const validateforgottenPasswordInput = withValidationErrors([
     .withMessage('invalid email format'),
 ]);
 
-export const validateresetPasswordInput = withValidationErrors([
+export const validatePasswordInput = withValidationErrors([
   body('password').notEmpty().withMessage('password is required'),
+]);
+
+export const validateNewAddressInput = withValidationErrors([
+  body('deliveryAddress')
+    .notEmpty()
+    .withMessage('delivery address is required'),
+  body('region').notEmpty().withMessage('state is required'),
+  body('city').notEmpty().withMessage('city is required'),
+  body('country').notEmpty().withMessage('country is required'),
 ]);
 
 export const validateUserIdParam = withValidationErrors([
@@ -84,7 +100,7 @@ export const validateUserIdParam = withValidationErrors([
 
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
 
-    const user = await prisma.user.findUnique(value);
+    const user = await findUserMId(value);
 
     if (!user) throw new NotFoundError('no user associated with this id ...');
 
@@ -92,6 +108,19 @@ export const validateUserIdParam = withValidationErrors([
 
     if (!isOwner)
       throw new UnauthorizedError('not authorized to access this route');
+  }),
+]);
+
+export const validateAddressIdParam = withValidationErrors([
+  param('addressId').custom(async (value, { req }) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const address = await findAddressM(value);
+
+    if (!address)
+      throw new NotFoundError('no address associated with this id ...');
   }),
 ]);
 

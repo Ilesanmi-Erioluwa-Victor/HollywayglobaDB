@@ -29,6 +29,8 @@ import { createJwt } from '../../../utils';
 
 import { ENV } from '../../../configurations/env';
 
+import { prisma } from '../../../configurations/db';
+
 const { catchAsync, comparePassword, generatePasswordResetToken } = Utils;
 
 const { sendMail, sendMailToken } = Email;
@@ -64,10 +66,26 @@ export const login: RequestHandler = catchAsync(
         expires: new Date(Date.now() + aDay),
         secure: ENV.MODE.MODE === 'production',
       });
-      res.json({
-        status: 'success',
-        message: 'you are logged in !',
-      });
+
+      // if (user.deleteRequestDate && !user.loggedInAfterRequest)
+      //   throw new BadRequestError('user requested deletion');
+
+      if (user.deleteRequestDate === null) {
+        res.json({
+          status: 'success',
+          message: 'you are logged in !',
+        });
+      } else {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { loggedInAfterRequest: true, deleteRequestDate: null },
+        });
+        res.json({
+          status: 'success',
+          message:
+            'you are logged in !, your account delete request has being cancel',
+        });
+      }
     } else {
       throw new UnauthenticatedError('invalid credentials, try agin');
     }
