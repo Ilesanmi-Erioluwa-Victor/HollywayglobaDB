@@ -77,23 +77,23 @@ export const loginAdmin: RequestHandler = catchAsync(
   }
 );
 
+export const logoutAdmin: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.cookie('token', 'logout', {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    });
+
+    res
+      .status(StatusCodes.OK)
+      .json({ message: 'successfully logged out', status: 'success' });
+  }
+);
 
 export const accountVerificationAdmin: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { token, id } = req.params;
-    ValidateMongoDbId(id);
-    if (!id)
-      next(
-        new AppError('Sorry, your id is not valid', StatusCodes.BAD_REQUEST)
-      );
 
-    if (!token)
-      next(
-        new AppError(
-          'Sorry, this token is not valid, try again',
-          StatusCodes.BAD_REQUEST
-        )
-      );
+if (!req.params.token) throw new NotFoundError('token not valid');
     try {
       const admin = await accountVerificationAdminM(id, token, new Date());
 
