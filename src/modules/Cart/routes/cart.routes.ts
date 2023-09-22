@@ -13,11 +13,7 @@ import {
 
 const route = express.Router();
 
-route.post(
-  '/add/:id',
-  // Token, VerifiedUser,
-  createCart
-);
+route.post('/add/:id', validateUserIdParam, createCart);
 
 route.get('/:id', validateUserIdParam, getCart);
 
