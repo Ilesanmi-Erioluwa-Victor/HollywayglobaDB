@@ -4,18 +4,16 @@ import { prisma } from '../../../configurations/db';
 
 import { Utils } from '../../../helper/utils';
 
-import {
-  // updateCartItemM,
+import { cartQuery } from '../../User/models/user.cart.model';
+
+const {
+  existCartM,
+  existCartItemM,
+  updateCartItemM,
   createCartItemM,
-  // getCartM,
-  cartQuery,
-
-  // updateExistItemCartQuantityM,
-  // decreaseCartItemM,
-  // increaseCartItemM,
-} from '../../User/models/user.cart.model';
-
-const { existCartM, existCartItemM, updateCartItemM } = cartQuery;
+  createCartM,
+  getCartM,
+} = cartQuery;
 
 import {
   validateProductIdParam,
@@ -50,15 +48,7 @@ export const createCart = async (
         cart: existingCart,
       });
     } else {
-      // Create a new cart item if the product is not in the cart
-      await prisma.cartItem.create({
-        data: {
-          productId,
-          cartId: existingCart.id,
-          quantity,
-        },
-        include: { product: true },
-      });
+      await createCartItemM(existingCart.id, productId, quantity);
 
       res.json({
         status: 'success',
@@ -67,33 +57,7 @@ export const createCart = async (
       });
     }
   } else {
-    // Create a new cart if none exists
-    const newCart = await prisma.cart.create({
-      data: {
-        userId: req.params.id,
-        items: {
-          create: [
-            {
-              productId,
-              quantity,
-            },
-          ],
-        },
-      },
-      include: {
-        items: {
-          select: {
-            product: {
-              select: {
-                title: true, // Select the product title
-                price: true, // Select the product price
-              },
-            },
-            quantity: true, // Select the cart item quantity
-          },
-        },
-      },
-    });
+    const newCart = await createCartM(req.user.role, productId, quantity);
     res.json({
       status: 'success',
       message: 'cart created successfully',

@@ -1,12 +1,36 @@
 import { prisma } from '../../../configurations/db';
 
 export class cartQuery {
-  static async createCartM(userId: string) {
+  static async createCartM(
+    userId: string,
+    productId: string,
+    quantity: number
+  ) {
     const cart = await prisma.cart.create({
       data: {
         userId,
+        items: {
+          create: [
+            {
+              productId,
+              quantity,
+            },
+          ],
+        },
       },
-      include: { items: { include: { product: true } } },
+      include: {
+        items: {
+          select: {
+            product: {
+              select: {
+                title: true,
+                price: true,
+              },
+            },
+            quantity: true,
+          },
+        },
+      },
     });
 
     return cart;
@@ -78,19 +102,19 @@ export class cartQuery {
     });
     return cartItem;
   }
-}
 
-export const createCartItemM = async (
-  cart: { id: string },
-  productId: string,
-  quantity: number
-) => {
-  const cartItem = await prisma.cartItem.create({
-    data: {
-      cartId: cart.id,
-      productId,
-      quantity: quantity,
-    },
-  });
-  return cartItem;
-};
+  static async createCartItemM(
+    cartId: string,
+    productId: string,
+    quantity: number
+  ) {
+    const cartItem = await prisma.cartItem.create({
+      data: {
+        cartId,
+        productId,
+        quantity,
+      },
+    });
+    return cartItem;
+  }
+}
