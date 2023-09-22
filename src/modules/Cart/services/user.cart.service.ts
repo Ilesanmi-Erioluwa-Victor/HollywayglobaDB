@@ -1,9 +1,8 @@
 import { NextFunction, Response, Request } from 'express';
+
 import { StatusCodes } from 'http-status-codes';
 
 import { Utils } from '../../../helper/utils';
-
-import { CustomRequest } from '../../../interfaces/custom';
 
 import {
   updateCartItemM,
@@ -16,55 +15,37 @@ import {
   // increaseCartItemM,
 } from '../../User/models/user.cart.model';
 
-const { catchAsync, ValidateMongoDbId } = Utils;
+import { BadRequestError, NotFoundError } from '../../../errors/customError';
 
-import { throwError } from '../../../middlewares/error';
-
-import { findProductIdM } from '../../Admin/models/admin.product.models';
+const { catchAsync } = Utils;
 
 export const createCart = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const id = req.params.id;
-
-  ValidateMongoDbId(id as string);
-
   const { productId, quantity } = req.body;
 
-  try {
-    if (!id || !productId || !quantity) {
-      throwError('Missing required information', StatusCodes.BAD_REQUEST);
-      return;
-    }
+  let cart = await existCartM(req.params.id);
 
-    let cart = await existCartM(id);
-
-    if (!cart) {
-      cart = await createCartM(id);
-    }
-
-    const existingCartItem = cart.items.find(
-      (item) => item.productId === productId
-    );
-    if (existingCartItem) {
-      await updateCartItemM(existingCartItem, quantity);
-    } else {
-      await createCartItemM(cart, productId, quantity);
-    }
-
-    res.json({
-      status: 'success',
-      message: 'You have successfully added item to Cart',
-      data: cart,
-    });
-  } catch (error: any) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
-    }
-    next(error);
+  if (!cart) {
+    cart = await createCartM(req.params.id);
   }
+
+  const existingCartItem = cart.items.find(
+    (item) => item.productId === productId
+  );
+  if (existingCartItem) {
+    await updateCartItemM(existingCartItem, quantity);
+  } else {
+    await createCartItemM(cart, productId, quantity);
+  }
+
+  res.json({
+    status: 'success',
+    message: 'You have successfully added item to Cart',
+    data: cart,
+  });
 };
 
 export const getCart = async (
@@ -72,14 +53,9 @@ export const getCart = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  const cart = await getCartM(req.params.id);
 
-  const cart = await getCartM(id);
-
-  if (!cart) {
-    throwError('No cart found', StatusCodes.NOT_FOUND);
-    return;
-  }
+  if (!cart) throw new NotFoundError('no cart found ...');
 
   res.json({ status: 'success', message: 'ok', data: cart });
 };
