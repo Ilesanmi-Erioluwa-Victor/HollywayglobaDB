@@ -5,7 +5,7 @@ import { prisma } from '../../../configurations/db';
 import { Utils } from '../../../helper/utils';
 
 import {
-  updateCartItemM,
+  // updateCartItemM,
   createCartItemM,
   // getCartM,
   cartQuery,
@@ -15,7 +15,7 @@ import {
   // increaseCartItemM,
 } from '../../User/models/user.cart.model';
 
-const { existCartM, existCartItemM } = cartQuery;
+const { existCartM, existCartItemM, updateCartItemM } = cartQuery;
 
 import {
   validateProductIdParam,
@@ -42,11 +42,7 @@ export const createCart = async (
     const existingCartItem = await existCartItemM(existingCart.id, productId);
 
     if (existingCartItem) {
-    
-      await prisma.cartItem.update({
-        where: { id: existingCartItem.id },
-        data: { quantity: existingCartItem.quantity + quantity },
-      });
+      await updateCartItemM(existingCartItem, quantity);
 
       res.json({
         status: 'success',
