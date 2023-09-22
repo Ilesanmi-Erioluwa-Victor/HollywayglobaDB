@@ -36,18 +36,19 @@ export const createCart = async (
 ) => {
   const { productId, quantity } = req.body;
 
+  // Check if a cart already exists for the user
   const existingCart = await prisma.cart.findFirst({
     where: { userId: req.params.id },
     include: {
       items: {
-        include: {
+        select: {
           product: {
             select: {
-              id: true,
-              title: true,
-              price: true,
+              title: true, // Select the product title
+              price: true, // Select the product price
             },
           },
+          quantity: true, // Select the cart item quantity
         },
       },
     },
@@ -68,6 +69,12 @@ export const createCart = async (
         where: { id: existingCartItem.id },
         data: { quantity: existingCartItem.quantity + quantity },
       });
+
+      res.json({
+        status: 'success',
+        message: 'cart item updated successfully',
+        cart: existingCart,
+      });
     } else {
       // Create a new cart item if the product is not in the cart
       await prisma.cartItem.create({
@@ -76,6 +83,13 @@ export const createCart = async (
           cartId: existingCart.id,
           quantity,
         },
+        include: { product: true },
+      });
+
+      res.json({
+        status: 'success',
+        message: 'cart item added successfully',
+        cart: existingCart,
       });
     }
   } else {
@@ -93,21 +107,25 @@ export const createCart = async (
         },
       },
       include: {
-        items: true,
+        items: {
+          select: {
+            product: {
+              select: {
+                title: true, // Select the product title
+                price: true, // Select the product price
+              },
+            },
+            quantity: true, // Select the cart item quantity
+          },
+        },
       },
     });
     res.json({
       status: 'success',
-      message: 'you have successfully added item to Cart',
+      message: 'cart created successfully',
       data: newCart,
     });
   }
-
-  res.json({
-    status: 'success',
-    message: 'you have successfully updated your Cart',
-    data: existingCart,
-  });
 };
 
 export const getCart = async (
@@ -169,55 +187,47 @@ export const getCart = async (
 //   }
 // };
 
-// export const decreaseCartItems = catchAsync(
-//   async (req: CustomRequest, res: Response, next: NextFunction) => {
-//     const userId = req.authId;
-//     ValidateMongoDbId(userId as string);
+export const decreaseCartItems = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { productId } = req.params;
+      const { userId } = req.user; // Assuming you have user information in the request
 
-//     const { productId } = req.body;
+      // Find the user's cart
+      const userCart = await prisma.cart.findFirst({
+        where: { userId },
+      });
 
-//     try {
-//       if (!productId || !userId)
-//         throwError('Invalid params or query', StatusCodes.NOT_FOUND);
+      if (!userCart) {
+        return res.status(404).json({ message: 'Cart not found' });
+      }
 
-//       const existingCartItem = await existItemCartM(
-//         userId as string,
-//         productId
-//       );
+      // Find the cart item for the specified product
+      const cartItem = await prisma.cartItem.findFirst({
+        where: { cartId: userCart.id, productId },
+      });
 
-//       if (!existingCartItem)
-//         throwError('cartItem not found', StatusCodes.NOT_FOUND);
+      if (!cartItem) {
+        return res.status(404).json({ message: 'Product not found in cart' });
+      }
 
-//       const product = await findProductIdM(productId);
+      // Decrease the quantity of the cart item
+      if (cartItem.quantity > 1) {
+        await prisma.cartItem.update({
+          where: { id: cartItem.id },
+          data: { quantity: cartItem.quantity - 1 },
+        });
+      } else {
+        // If the quantity is 1 or less, remove the cart item
+        await prisma.cartItem.delete({
+          where: { id: cartItem.id },
+        });
+      }
 
-//       if (!product) throwError('Product not found', StatusCodes.NOT_FOUND);
-
-//       const price = product?.price || 0;
-//       const totalAmount: number | any = existingCartItem?.totalAmount;
-
-//       const newAmount = totalAmount - price;
-
-//       if (price <= 0 || totalAmount <= 0) {
-//         return throwError(
-//           "You can't have negative cart figure, increase your cart items",
-//           StatusCodes.FORBIDDEN
-//         );
-//       }
-
-//       const decreaseItem = await decreaseCartItemM(
-//         existingCartItem?.id as string,
-//         userId as string,
-//         productId,
-//         existingCartItem?.quantity as number,
-//         newAmount
-//       );
-
-//       res.json({ message: 'decrease successfully by 1', decreaseItem });
-//     } catch (error: any) {
-//       if (!error.statusCode) {
-//         error.statusCode = 500;
-//       }
-//       next(error);
-//     }
-//   }
-// );
+      return res.status(200).json({ message: 'Product quantity decreased' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+);

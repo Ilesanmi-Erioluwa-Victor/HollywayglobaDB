@@ -1,10 +1,13 @@
 import express from 'express';
 
-import { validateUserIdParam } from '../../../middlewares/validationMiddlware';
+import {
+  validateUserIdParam,
+  validateProductIdParam,
+} from '../../../middlewares/validationMiddlware';
 
 import {
   createCart,
-  //   decreaseCartItems,
+  decreaseCartItems,
   getCart,
   //   incrementCartItems,
 } from '../services/user.cart.service';
@@ -19,5 +22,9 @@ route.get('/:id', validateUserIdParam, getCart);
 
 // route.put('/increaseCart/:id', Token, VerifiedUser, incrementCartItems);
 
-// route.put('/decreaseCart/:id', Token, VerifiedUser, decreaseCartItems);
+route.put(
+  '/decreaseCart/:productId',
+  validateProductIdParam,
+  decreaseCartItems
+);
 export default route;
