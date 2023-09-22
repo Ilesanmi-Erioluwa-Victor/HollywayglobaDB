@@ -1,7 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
 
-import { prisma } from '../../../configurations/db';
-
 import { Utils } from '../../../helper/utils';
 
 import { cartQuery } from '../../User/models/user.cart.model';
@@ -17,15 +15,7 @@ const {
   DeleteCartItem,
 } = cartQuery;
 
-import {
-  validateProductIdParam,
-  validateCreateCategoryInput,
-  validateCategoryIdParam,
-  validateEditCategoryInput,
-  validateUserIdParam,
-} from '../../../middlewares/validationMiddlware';
-
-import { BadRequestError, NotFoundError } from '../../../errors/customError';
+import { NotFoundError } from '../../../errors/customError';
 
 const { catchAsync } = Utils;
 
