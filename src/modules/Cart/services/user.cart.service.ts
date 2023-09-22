@@ -42,7 +42,7 @@ export const createCart = async (
     const existingCartItem = await existCartItemM(existingCart.id, productId);
 
     if (existingCartItem) {
-      // Update the quantity of the existing cart item
+    
       await prisma.cartItem.update({
         where: { id: existingCartItem.id },
         data: { quantity: existingCartItem.quantity + quantity },

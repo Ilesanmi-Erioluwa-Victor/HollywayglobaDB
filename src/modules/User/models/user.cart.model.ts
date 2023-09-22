@@ -67,18 +67,18 @@ export class cartQuery {
 
     return cartItem;
   }
-}
 
-export const updateCartItemM = async (
-  existingCartItem: { id: string; quantity: number },
-  quantity: number
-) => {
-  const cartItem = await prisma.cartItem.update({
-    where: { id: existingCartItem.id },
-    data: { quantity: existingCartItem.quantity + quantity },
-  });
-  return cartItem;
-};
+  static async updateCartItemM(
+    existingCartItem: { id: string; quantity: number },
+    quantity: number
+  ) {
+    const cartItem = await prisma.cartItem.update({
+      where: { id: existingCartItem.id },
+      data: { quantity: existingCartItem.quantity + quantity },
+    });
+    return cartItem;
+  }
+}
 
 export const createCartItemM = async (
   cart: { id: string },
