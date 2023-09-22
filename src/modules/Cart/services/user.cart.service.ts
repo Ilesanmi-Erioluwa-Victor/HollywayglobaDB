@@ -86,18 +86,10 @@ export const decreaseCartItems = catchAsync(
       const { productId } = req.params;
 
       const userCart = await existCartM(req.user.userId);
-      if (!userCart) {
-        return res.status(404).json({ message: 'Cart not found' });
-      }
-
-      // Find the cart item for the specified product
-      const cartItem = await prisma.cartItem.findFirst({
-        where: { cartId: userCart.id, productId },
-      });
-
-      if (!cartItem) {
-        return res.status(404).json({ message: 'Product not found in cart' });
-      }
+      if (!userCart)throw new NotFoundError("no cart found ...")
+     
+      const cartItem = await existCartItemM(userCart.id, productId);
+      if (!cartItem)  throw new NotFoundError("no product found in cart ...")
 
       // Decrease the quantity of the cart item
       if (cartItem.quantity > 1) {
