@@ -12,7 +12,6 @@ import {
   //   incrementCartItems,
 } from '../services/user.cart.service';
 
-// const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
