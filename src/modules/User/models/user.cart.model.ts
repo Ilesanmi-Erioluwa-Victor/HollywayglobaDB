@@ -117,4 +117,16 @@ export class cartQuery {
     });
     return cartItem;
   }
+
+  static async updateDecreaseCartItem(cartItem: {
+    id: string;
+    quantity: number;
+  }) {
+    const Item = await prisma.cartItem.update({
+      where: { id: cartItem.id },
+      data: { quantity: cartItem.quantity - 1 },
+    });
+
+    return Item;
+  }
 }

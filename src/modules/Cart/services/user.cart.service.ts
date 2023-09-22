@@ -13,6 +13,7 @@ const {
   createCartItemM,
   createCartM,
   getCartM,
+  updateDecreaseCartItem,
 } = cartQuery;
 
 import {
@@ -86,17 +87,13 @@ export const decreaseCartItems = catchAsync(
       const { productId } = req.params;
 
       const userCart = await existCartM(req.user.userId);
-      if (!userCart)throw new NotFoundError("no cart found ...")
-     
-      const cartItem = await existCartItemM(userCart.id, productId);
-      if (!cartItem)  throw new NotFoundError("no product found in cart ...")
+      if (!userCart) throw new NotFoundError('no cart found ...');
 
-      // Decrease the quantity of the cart item
+      const cartItem = await existCartItemM(userCart.id, productId);
+      if (!cartItem) throw new NotFoundError('no product found in cart ...');
+
       if (cartItem.quantity > 1) {
-        await prisma.cartItem.update({
-          where: { id: cartItem.id },
-          data: { quantity: cartItem.quantity - 1 },
-        });
+        await updateDecreaseCartItem(cartItem);
       } else {
         // If the quantity is 1 or less, remove the cart item
         await prisma.cartItem.delete({
