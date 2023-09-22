@@ -22,9 +22,13 @@ import {
   editProductAdmin,
   editProductImagesAdmin,
 } from '../services/admin.product.service';
+
 import {
   validateAdminIdParam,
   validateProductIdParam,
+  validateCreateCategoryInput,
+  validateCategoryIdParam,
+  validateEditCategoryInput,
 } from '../../../middlewares/validationMiddlware';
 
 import { getUsersAdmin } from '../services/admin.users.service';
@@ -71,22 +75,35 @@ route.post(
   editProductImagesAdmin
 );
 
-route.post('/:adminId/category', validateAdminIdParam, createCategory);
+route.post(
+  '/:adminId/category',
+  validateAdminIdParam,
+  validateCreateCategoryInput,
+  createCategory
+);
 
-route.get('/:adminId/category/:categoryId', validateAdminIdParam, getCategory);
+route.get(
+  '/:adminId/category/:categoryId',
+  validateAdminIdParam,
+  validateCategoryIdParam,
+  getCategory
+);
 
 route.put(
   '/:adminId/category/:categoryId',
-  validateAdminIdParam
-  // editCategory
+  validateAdminIdParam,
+  validateCategoryIdParam,
+  validateEditCategoryInput,
+  editCategory
 );
 
 route.get('/:adminId/category', validateAdminIdParam, getCategories);
 
 route.delete(
   '/:adminId/category/:categoryId',
-  validateAdminIdParam
-  // deleteCategory
+  validateAdminIdParam,
+  validateCategoryIdParam,
+  deleteCategory
 );
 
 export default route;

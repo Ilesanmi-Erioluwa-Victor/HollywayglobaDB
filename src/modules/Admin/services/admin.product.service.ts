@@ -26,6 +26,10 @@ const uploader = new ImageProcessor();
 
 export const createProduct: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const category = req?.categoryId;
+
+    console.log(category, req.categoryId);
+    
     if (!req.files || req.files.length === 0)
       throw new BadRequestError(
         'please select at least an image to be uploaded'
@@ -33,7 +37,12 @@ export const createProduct: RequestHandler = catchAsync(
 
     const imageUrls: any = await uploader.processImages(req?.files as any);
 
-    const createProduct = await createProductM(req.body, imageUrls);
+    const createProduct = await createProductM(
+      req.body,
+      req.user.userId,
+      req.categoryId,
+      imageUrls
+    );
 
     res.json({
       status: 'success',
@@ -48,7 +57,7 @@ export const getProductsAdmin: RequestHandler = catchAsync(
     res: { paginatedResult: any } & Response,
     next: NextFunction
   ) => {
-     await getPaginatedProducts(req, res, next);
+    await getPaginatedProducts(req, res, next);
   }
 );
 

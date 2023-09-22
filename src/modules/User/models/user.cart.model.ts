@@ -1,173 +1,140 @@
 import { prisma } from '../../../configurations/db';
 
-export const createCartM = async (userId: string) => {
-  const cart = await prisma.cart.create({
-    data: {
-      userId,
-    },
-    include: { items: { include: { product: true } } },
-  });
+export class cartQuery {
+  static async createCartM(
+    userId: string,
+    productId: string,
+    quantity: number
+  ) {
+    const cart = await prisma.cart.create({
+      data: {
+        userId,
+        items: {
+          create: [
+            {
+              productId,
+              quantity,
+            },
+          ],
+        },
+      },
+      include: {
+        items: {
+          select: {
+            product: {
+              select: {
+                title: true,
+                price: true,
+              },
+            },
+            quantity: true,
+          },
+        },
+      },
+    });
 
-  return cart;
-};
+    return cart;
+  }
 
-export const existCartM = async (userId: string) => {
-  const cart = await prisma.cart.findFirst({
-    where: {
-      userId: userId,
-    },
-    include: { items: { include: { product: true } } },
-  });
+  static async existCartM(userId: string) {
+    const cart = await prisma.cart.findFirst({
+      where: { userId: userId },
+      select: {
+        id: true,
+        items: {
+          select: {
+            product: {
+              select: {
+                title: true,
+                price: true,
+              },
+            },
+            quantity: true,
+          },
+        },
+      },
+    });
 
-  return cart;
-};
+    return cart;
+  }
 
-export const getCartM = async (userId: string) => {
-  const cart = await prisma.cart.findUnique({
-    where: {
-      id: userId,
-    },
-    include: { items: { include: { product: true } } },
-  });
+  static async getCartM(userId: string) {
+    const cart = await prisma.cart.findFirst({
+      where: {
+        userId: userId,
+      },
+      include: {
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                title: true,
+                price: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-  return cart;
-};
+    return cart;
+  }
 
-export const updateCartItemM = async (
-  existingCartItem: { id: string; quantity: number },
-  quantity: number
-) => {
-  const cartItem = await prisma.cartItem.update({
-    where: { id: existingCartItem.id },
-    data: { quantity: existingCartItem.quantity + quantity },
-  });
-  return cartItem;
-};
+  static async existCartItemM(cartId: string, productId: string) {
+    const cartItem = await prisma.cartItem.findFirst({
+      where: {
+        cartId,
+        productId,
+      },
+    });
 
-export const createCartItemM = async (
-  cart: { id: string },
-  productId: string,
-  quantity: number
-) => {
-  const cartItem = await prisma.cartItem.create({
-    data: {
-      cartId: cart.id,
-      productId,
-      quantity,
-    },
-  });
+    return cartItem;
+  }
 
-  return cartItem;
-};
+  static async updateCartItemM(
+    existingCartItem: { id: string; quantity: number },
+    quantity: number
+  ) {
+    const cartItem = await prisma.cartItem.update({
+      where: { id: existingCartItem.id },
+      data: { quantity: existingCartItem.quantity + quantity },
+    });
+    return cartItem;
+  }
 
-// TODO a bug to fix in Promise<ProductWishListResult | any> ought to be null
-// export const updateExistItemCartQuantityM = async (
-//   id: string,
-//   userId: string,
-//   productId: string,
-//   totalAmount: number,
-//   price: number
-// ): Promise<ProductWishListResult | any> => {
-//   const item = await prisma.cart.update({
-//     where: {
-//       id,
-//       userId: userId,
-//       productId: productId,
-//     },
-//     data: {
-//       quantity: {
-//         increment: 1,
-//       },
-//       totalAmount: totalAmount + price,
-//     },
-//     select: {
-//       id: true,
-//       quantity: true,
-//       totalAmount: true,
-//       user: {
-//         select: {
-//           id: true,
-//           firstName: true,
-//           lastName: true,
-//           email: true,
-//           address: true,
-//         },
-//       },
-//       product: {
-//         select: {
-//           title: true,
-//           price: true,
-//           colors: true,
-//           description: true,
-//           brand: true,
-//           slug: true,
-//           images: true,
-//         },
-//       },
-//     },
-//   });
+  static async createCartItemM(
+    cartId: string,
+    productId: string,
+    quantity: number
+  ) {
+    const cartItem = await prisma.cartItem.create({
+      data: {
+        cartId,
+        productId,
+        quantity,
+      },
+    });
+    return cartItem;
+  }
 
-//   return item;
-// };
+  static async updateDecreaseCartItem(cartItem: {
+    id: string;
+    quantity: number;
+  }) {
+    const Item = await prisma.cartItem.update({
+      where: { id: cartItem.id },
+      data: { quantity: cartItem.quantity - 1 },
+    });
 
-// export const increaseCartItemM = async (
-//   id: string,
-//   userId: string,
-//   productId: string,
-//   quantity: number,
-//   newAmount: number
-// ): Promise<ProductWishListIncrease | null> => {
-//   const increaseItem = await prisma.cart.update({
-//     where: {
-//       id,
-//       userId,
-//       productId,
-//     },
-//     data: {
-//       quantity: quantity + 1,
-//       totalAmount: newAmount,
-//     },
-//     select: {
-//       createdAt: false,
-//       updatedAt: false,
-//       productId: false,
-//       userId: false,
-//       id: true,
-//       quantity: true,
-//       totalAmount: true,
-//     },
-//   });
+    return Item;
+  }
 
-//   return increaseItem;
-// };
+  static async DeleteCartItem(id: string) {
+    const cartItem = await prisma.cartItem.delete({
+      where: { id: id },
+    });
 
-// export const decreaseCartItemM = async (
-//   id: string,
-//   userId: string,
-//   productId: string,
-//   quantity: number,
-//   newAmount: number
-// ): Promise<ProductWishListIncrease | null> => {
-//   const decreaseItem = await prisma.cart.update({
-//     where: {
-//       id,
-//       userId,
-//       productId,
-//     },
-//     data: {
-//       quantity: quantity - 1,
-//       totalAmount: newAmount,
-//     },
-//     select: {
-//       createdAt: false,
-//       updatedAt: false,
-//       productId: false,
-//       userId: false,
-//       id: true,
-//       quantity: true,
-//       totalAmount: true,
-//     },
-//   });
-
-//   return decreaseItem;
-// };
+    return cartItem;
+  }
+}

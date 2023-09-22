@@ -8,7 +8,7 @@ export class categoryQuery {
       data: {
         name: body.name,
         adminId,
-      },
+      }
     });
 
     return category;
@@ -39,6 +39,16 @@ export class categoryQuery {
     const category = await prisma.category.findUnique({
       where: {
         id,
+      },
+      select: {
+        name: true,
+        id: true,
+        admin: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
       },
     });
     return category;

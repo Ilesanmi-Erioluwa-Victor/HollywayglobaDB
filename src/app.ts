@@ -1,10 +1,11 @@
 import 'express-async-errors';
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 
 import adminRoute from './modules/Admin/routes/admin.routes';
 
@@ -20,11 +21,9 @@ import reviewRoute from './modules/User/routes/review.routes';
 
 import cartRoute from './modules/Cart/routes/cart.routes';
 
-import adminAuth from "./modules/Admin/routes/admin.auth.routes"
+import adminAuth from './modules/Admin/routes/admin.auth.routes';
 
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
-
-import { customTime } from './interfaces/custom';
 
 import { _404 } from './errors/_404Page';
 
@@ -33,6 +32,8 @@ import { ENV } from './configurations/env';
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware';
 
 import { Auth } from './middlewares/auth';
+
+import { header } from './middlewares/header';
 
 const { authenticateUser } = Auth;
 
@@ -48,21 +49,11 @@ app.use(express.json({ limit: '10kb' }));
 
 app.use(helmet());
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.set('Methods', 'GET, POST, PUT, DELETE , PATCH');
-  res.set('Access-Control-Allow-Credentials', 'true');
-  res.set('content-type', 'application/json');
-  next();
-});
+app.use(compression());
+
+app.use(header);
 
 ENV.MODE.MODE === 'development' ? app.use(morgan('dev')) : '';
-
-app.use((req: customTime, res: Response, next: NextFunction) => {
-  req.requestTime = new Date().toLocaleString();
-  next();
-});
 
 app.use('/api/v1/auth', authRoute);
 

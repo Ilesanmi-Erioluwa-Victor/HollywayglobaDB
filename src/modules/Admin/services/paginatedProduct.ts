@@ -30,13 +30,12 @@ async function getPaginatedProducts(
   if (!isNaN(price)) {
     where['price'] = {
       gte: price,
-      lte: price,
     };
   }
 
   if (category) {
     where['category'] = {
-      name: category,
+      name: category
     };
   }
 

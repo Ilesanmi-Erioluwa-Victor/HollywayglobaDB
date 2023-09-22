@@ -1,25 +1,27 @@
 import express from 'express';
 
-import { Auth } from '../../../middlewares/auth';
+import {
+  validateUserIdParam,
+  validateProductIdParam,
+} from '../../../middlewares/validationMiddlware';
 
 import {
   createCart,
-//   decreaseCartItems,
+  decreaseCartItems,
   getCart,
-//   incrementCartItems,
 } from '../services/user.cart.service';
-
-// const { Token, VerifiedUser } = Auth;
 
 const route = express.Router();
 
-route.post('/add/:id',
-  // Token, VerifiedUser,
-  createCart);
+route.post('/add/:id', validateUserIdParam, createCart);
 
-route.get("/:id", getCart)
+route.get('/:id', validateUserIdParam, getCart);
 
 // route.put('/increaseCart/:id', Token, VerifiedUser, incrementCartItems);
 
-// route.put('/decreaseCart/:id', Token, VerifiedUser, decreaseCartItems);
-export default route
+route.put(
+  '/decreaseCart/:productId',
+  validateProductIdParam,
+  decreaseCartItems
+);
+export default route;

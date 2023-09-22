@@ -190,6 +190,45 @@ export const validateAdminLoginInput = withValidationErrors([
   body('password').notEmpty().withMessage('Password is required'),
 ]);
 
+export const validateEditCategoryInput = withValidationErrors([
+  body('name').notEmpty().withMessage('name is required'),
+]);
+
+export const validateCreateCategoryInput = withValidationErrors([
+  body('name')
+    .notEmpty()
+    .withMessage('name is required to create category')
+    .custom(async (value) => {
+      const category = await prisma.category.findMany({
+        where: {
+          name: value,
+        },
+      });
+
+      if (category.length === 0) return;
+
+      if (category) {
+        throw new BadRequestError('category already exists');
+      }
+    }),
+]);
+
+export const validateCategoryIdParam = withValidationErrors([
+  param('categoryId').custom(async (value, { req }) => {
+    const isValidMongoId = ValidateMongoDbId(value);
+
+    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+
+    const category = await prisma.category.findUnique({
+      where: {
+        id: value,
+      },
+    });
+
+    if (!category) throw new NotFoundError('no category found ...');
+  }),
+]);
+
 export const validateAdminIdParam = withValidationErrors([
   param('adminId').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
