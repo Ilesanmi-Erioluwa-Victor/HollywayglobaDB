@@ -84,13 +84,8 @@ export const decreaseCartItems = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { productId } = req.params;
-      const { userId } = req.user; // Assuming you have user information in the request
 
-      // Find the user's cart
-      const userCart = await prisma.cart.findFirst({
-        where: { userId },
-      });
-
+      const userCart = await existCartM(req.user.userId);
       if (!userCart) {
         return res.status(404).json({ message: 'Cart not found' });
       }
@@ -124,7 +119,6 @@ export const decreaseCartItems = catchAsync(
     }
   }
 );
-
 
 // export const incrementCartItems = async (
 //   req: CustomRequest,
@@ -170,4 +164,3 @@ export const decreaseCartItems = catchAsync(
 //     next(error);
 //   }
 // };
-
