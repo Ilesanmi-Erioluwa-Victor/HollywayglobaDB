@@ -39,7 +39,6 @@ export const createCart = async (
   const existingCart = await existCartM(req.user.userId);
 
   if (existingCart) {
-    // Check if the product is already in the cart
     const existingCartItem = await existCartItemM(existingCart.id, productId);
 
     if (existingCartItem) {
