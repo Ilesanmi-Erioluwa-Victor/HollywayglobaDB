@@ -2,6 +2,8 @@ import { NextFunction, Response, Request } from 'express';
 
 import { StatusCodes } from 'http-status-codes';
 
+import { prisma } from '../../../configurations/db';
+
 import { Utils } from '../../../helper/utils';
 
 import {
@@ -34,7 +36,12 @@ export const createCart = async (
 ) => {
   const { productId, quantity } = req.body;
 
-  let cart = await existCartM(req.params.id);
+  let cart = await prisma.cart.findFirst({
+    where: {
+      userId: req.params.id,
+    },
+    include: { items: { include: { product: true } } },
+  });
 
   if (!cart) {
     cart = await createCartM(req.params.id);
