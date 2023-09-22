@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import compression from "compression"
+
 
 import adminRoute from './modules/Admin/routes/admin.routes';
 
@@ -47,6 +49,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ limit: '10kb' }));
 
 app.use(helmet());
+
+app.use(compression())
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
