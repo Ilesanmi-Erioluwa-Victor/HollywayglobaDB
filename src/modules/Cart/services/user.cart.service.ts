@@ -15,6 +15,14 @@ import {
   // increaseCartItemM,
 } from '../../User/models/user.cart.model';
 
+import {
+  validateProductIdParam,
+  validateCreateCategoryInput,
+  validateCategoryIdParam,
+  validateEditCategoryInput,
+  validateUserIdParam,
+} from '../../../middlewares/validationMiddlware';
+
 import { BadRequestError, NotFoundError } from '../../../errors/customError';
 
 const { catchAsync } = Utils;
