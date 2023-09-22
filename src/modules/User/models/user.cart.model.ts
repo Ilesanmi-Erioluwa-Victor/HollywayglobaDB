@@ -23,11 +23,23 @@ export const existCartM = async (userId: string) => {
 };
 
 export const getCartM = async (userId: string) => {
-  const cart = await prisma.cart.findUnique({
+  const cart = await prisma.cart.findFirst({
     where: {
-      id: userId,
+      userId: userId,
     },
-    include: { items: { include: { product: true } } },
+    include: {
+      items: {
+        include: {
+          product: {
+            select: {
+              id: true,
+              title: true,
+              price: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   return cart;
@@ -53,10 +65,9 @@ export const createCartItemM = async (
     data: {
       cartId: cart.id,
       productId,
-      quantity,
+      quantity: quantity,
     },
   });
-
   return cartItem;
 };
 

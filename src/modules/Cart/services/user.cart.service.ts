@@ -36,42 +36,77 @@ export const createCart = async (
 ) => {
   const { productId, quantity } = req.body;
 
-  const product = await prisma.product.findUnique({ where: { id: productId } })
-  
-  if(!product) throw new NotFoundError("product not found ...")
-
-  let cart = await prisma.cart.findFirst({
-    where: {
-      userId: req.params.id,
+  const existingCart = await prisma.cart.findFirst({
+    where: { userId: req.params.id },
+    include: {
+      items: {
+        include: {
+          product: {
+            select: {
+              id: true,
+              title: true,
+              price: true,
+            },
+          },
+        },
+      },
     },
-    include: { items: { include: { product: true } } },
   });
 
-  if (!cart) {
-    cart = await prisma.cart.create({
+  if (existingCart) {
+    // Check if the product is already in the cart
+    const existingCartItem = await prisma.cartItem.findFirst({
+      where: {
+        cartId: existingCart.id,
+        productId,
+      },
+    });
+
+    if (existingCartItem) {
+      // Update the quantity of the existing cart item
+      await prisma.cartItem.update({
+        where: { id: existingCartItem.id },
+        data: { quantity: existingCartItem.quantity + quantity },
+      });
+    } else {
+      // Create a new cart item if the product is not in the cart
+      await prisma.cartItem.create({
+        data: {
+          productId,
+          cartId: existingCart.id,
+          quantity,
+        },
+      });
+    }
+  } else {
+    // Create a new cart if none exists
+    const newCart = await prisma.cart.create({
       data: {
         userId: req.params.id,
+        items: {
+          create: [
+            {
+              productId,
+              quantity,
+            },
+          ],
+        },
       },
-      include: { items: { include: { product: true}, } },
-    });;
-  }
-
-  const existingCartItem = cart.items.find(
-    (item) => item.productId === productId
-  );
-  if (existingCartItem) {
-    await prisma.cartItem.update({
-      where: { id: existingCartItem.id },
-      data: { quantity: existingCartItem.quantity + quantity },
-    });;
-  } else {
-    await createCartItemM(cart, productId, quantity);
+      include: {
+        items: true,
+      },
+    });
+    res.json({
+      status: 'success',
+      message: 'you have successfully added item to Cart',
+      data: newCart,
+    });
   }
 
   res.json({
     status: 'success',
-    message: 'you have successfully added item to Cart',
-    data: cart,
+    message: 'you have successfully updated your Cart',
+    data: existingCart,
   });
 };
 
