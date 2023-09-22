@@ -37,7 +37,7 @@ export const createCart = async (
   const { productId, quantity } = req.body;
 
   // Check if a cart already exists for the user
-  const existingCart = 
+  const existingCart = existCartM(req.user.userId);
 
   if (existingCart) {
     // Check if the product is already in the cart
