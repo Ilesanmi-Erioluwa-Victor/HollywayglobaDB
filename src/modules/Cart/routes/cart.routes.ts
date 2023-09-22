@@ -9,9 +9,7 @@ import {
   createCart,
   decreaseCartItems,
   getCart,
-  //   incrementCartItems,
 } from '../services/user.cart.service';
-
 
 const route = express.Router();
 
