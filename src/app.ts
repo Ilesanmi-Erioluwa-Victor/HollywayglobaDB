@@ -32,6 +32,7 @@ import { ENV } from './configurations/env';
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware';
 
 import { Auth } from './middlewares/auth';
+
 import { header } from './middlewares/header';
 
 const { authenticateUser } = Auth;
