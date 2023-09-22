@@ -13,10 +13,20 @@ export const createCartM = async (userId: string) => {
 
 export const existCartM = async (userId: string) => {
   const cart = await prisma.cart.findFirst({
-    where: {
-      userId: userId,
+    where: { userId: userId },
+    include: {
+      items: {
+        select: {
+          product: {
+            select: {
+              title: true,
+              price: true,
+            },
+          },
+          quantity: true,
+        },
+      },
     },
-    include: { items: { include: { product: true } } },
   });
 
   return cart;

@@ -37,22 +37,7 @@ export const createCart = async (
   const { productId, quantity } = req.body;
 
   // Check if a cart already exists for the user
-  const existingCart = await prisma.cart.findFirst({
-    where: { userId: req.params.id },
-    include: {
-      items: {
-        select: {
-          product: {
-            select: {
-              title: true, // Select the product title
-              price: true, // Select the product price
-            },
-          },
-          quantity: true, // Select the cart item quantity
-        },
-      },
-    },
-  });
+  const existingCart = 
 
   if (existingCart) {
     // Check if the product is already in the cart
