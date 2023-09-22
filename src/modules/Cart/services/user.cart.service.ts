@@ -1,21 +1,19 @@
 import { NextFunction, Response, Request } from 'express';
 
-import { StatusCodes } from 'http-status-codes';
-
 import { prisma } from '../../../configurations/db';
 
 import { Utils } from '../../../helper/utils';
 
 import {
   updateCartItemM,
-  createCartM,
   createCartItemM,
-  getCartM,
+  // getCartM,
   existCartM,
   // updateExistItemCartQuantityM,
   // decreaseCartItemM,
   // increaseCartItemM,
 } from '../../User/models/user.cart.model';
+
 
 import {
   validateProductIdParam,
@@ -36,8 +34,7 @@ export const createCart = async (
 ) => {
   const { productId, quantity } = req.body;
 
-  // Check if a cart already exists for the user
-  const existingCart = existCartM(req.user.userId);
+  const existingCart = await existCartM(req.user.userId);
 
   if (existingCart) {
     // Check if the product is already in the cart
