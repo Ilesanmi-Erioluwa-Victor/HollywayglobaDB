@@ -19,7 +19,7 @@ import { NotFoundError } from '../../../errors/customError';
 
 const { catchAsync } = Utils;
 
-export const createCart = async (
+export const createCart = catchAsync(async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -56,9 +56,9 @@ export const createCart = async (
       data: newCart,
     });
   }
-};
+});
 
-export const getCart = async (
+export const getCart = catchAsync(async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -70,7 +70,7 @@ export const getCart = async (
   } else {
     throw new NotFoundError('no cart found ...add product to your cart');
   }
-};
+});
 
 export const decreaseCartItems = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
