@@ -20,6 +20,7 @@ const {
   findCategoriesM,
 } = categoryQuery;
 
+// TODO a little bug here to fix
 export const createCategory: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const category = await createCategoryM(req.body, req.params.adminId);
@@ -27,7 +28,7 @@ export const createCategory: RequestHandler = catchAsync(
     if (!category)
       throw new BadRequestError('error creating category, try again ...');
 
-    req.categoryId = category?.id ;
+    req.categoryId = category?.id;
 
     res.json({
       status: 'success',
