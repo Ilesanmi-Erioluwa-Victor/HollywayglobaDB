@@ -1,13 +1,11 @@
 import 'express-async-errors';
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
-import fs from 'fs';
-import path from 'path';
 
 import adminRoute from './modules/Admin/routes/admin.routes';
 
