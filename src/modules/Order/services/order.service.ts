@@ -6,4 +6,4 @@ import { NotFoundError } from '../../../errors/customError';
 
 const { catchAsync } = Utils;
 
-export const getOrder = () => {};
+export const getOrder = () => catchAsync({});
