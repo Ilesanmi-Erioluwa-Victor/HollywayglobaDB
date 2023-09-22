@@ -63,9 +63,11 @@ export const getCart = async (
 ) => {
   const cart = await getCartM(req.params.id);
 
-  if (!cart) throw new NotFoundError('no cart found ...add product to your cart');
-
-  res.json({ status: 'success', message: 'ok', data: cart });
+  if (cart && cart.items.length > 0) {
+    res.json({ status: 'success', message: 'ok', data: cart });
+  } else {
+    throw new NotFoundError('no cart found ...add product to your cart');
+  }
 };
 
 // export const incrementCartItems = async (
