@@ -129,4 +129,12 @@ export class cartQuery {
 
     return Item;
   }
+
+  static async DeleteCartItem(id: string) {
+    const cartItem = await prisma.cartItem.delete({
+      where: { id: id },
+    });
+
+    return cartItem;
+  }
 }

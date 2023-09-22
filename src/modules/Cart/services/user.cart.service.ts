@@ -14,6 +14,7 @@ const {
   createCartM,
   getCartM,
   updateDecreaseCartItem,
+  DeleteCartItem,
 } = cartQuery;
 
 import {
@@ -83,29 +84,24 @@ export const getCart = async (
 
 export const decreaseCartItems = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { productId } = req.params;
+    const { productId } = req.params;
 
-      const userCart = await existCartM(req.user.userId);
-      if (!userCart) throw new NotFoundError('no cart found ...');
+    const userCart = await existCartM(req.user.userId);
+    if (!userCart) throw new NotFoundError('no cart found ...');
 
-      const cartItem = await existCartItemM(userCart.id, productId);
-      if (!cartItem) throw new NotFoundError('no product found in cart ...');
+    const cartItem = await existCartItemM(userCart.id, productId);
+    if (!cartItem) throw new NotFoundError('no product found in cart ...');
 
-      if (cartItem.quantity > 1) {
-        await updateDecreaseCartItem(cartItem);
-      } else {
-        // If the quantity is 1 or less, remove the cart item
-        await prisma.cartItem.delete({
-          where: { id: cartItem.id },
-        });
-      }
-
-      return res.status(200).json({ message: 'Product quantity decreased' });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal server error' });
+    if (cartItem.quantity > 1) {
+      await updateDecreaseCartItem(cartItem);
+    } else {
+      await DeleteCartItem(cartItem.id);
     }
+
+    return res.json({
+      status: 'success',
+      message: 'product quantity decreased',
+    });
   }
 );
 
