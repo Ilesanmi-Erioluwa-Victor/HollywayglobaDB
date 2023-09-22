@@ -80,6 +80,52 @@ export const getCart = async (
   }
 };
 
+export const decreaseCartItems = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { productId } = req.params;
+      const { userId } = req.user; // Assuming you have user information in the request
+
+      // Find the user's cart
+      const userCart = await prisma.cart.findFirst({
+        where: { userId },
+      });
+
+      if (!userCart) {
+        return res.status(404).json({ message: 'Cart not found' });
+      }
+
+      // Find the cart item for the specified product
+      const cartItem = await prisma.cartItem.findFirst({
+        where: { cartId: userCart.id, productId },
+      });
+
+      if (!cartItem) {
+        return res.status(404).json({ message: 'Product not found in cart' });
+      }
+
+      // Decrease the quantity of the cart item
+      if (cartItem.quantity > 1) {
+        await prisma.cartItem.update({
+          where: { id: cartItem.id },
+          data: { quantity: cartItem.quantity - 1 },
+        });
+      } else {
+        // If the quantity is 1 or less, remove the cart item
+        await prisma.cartItem.delete({
+          where: { id: cartItem.id },
+        });
+      }
+
+      return res.status(200).json({ message: 'Product quantity decreased' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+);
+
+
 // export const incrementCartItems = async (
 //   req: CustomRequest,
 //   res: Response,
@@ -125,47 +171,3 @@ export const getCart = async (
 //   }
 // };
 
-export const decreaseCartItems = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { productId } = req.params;
-      const { userId } = req.user; // Assuming you have user information in the request
-
-      // Find the user's cart
-      const userCart = await prisma.cart.findFirst({
-        where: { userId },
-      });
-
-      if (!userCart) {
-        return res.status(404).json({ message: 'Cart not found' });
-      }
-
-      // Find the cart item for the specified product
-      const cartItem = await prisma.cartItem.findFirst({
-        where: { cartId: userCart.id, productId },
-      });
-
-      if (!cartItem) {
-        return res.status(404).json({ message: 'Product not found in cart' });
-      }
-
-      // Decrease the quantity of the cart item
-      if (cartItem.quantity > 1) {
-        await prisma.cartItem.update({
-          where: { id: cartItem.id },
-          data: { quantity: cartItem.quantity - 1 },
-        });
-      } else {
-        // If the quantity is 1 or less, remove the cart item
-        await prisma.cartItem.delete({
-          where: { id: cartItem.id },
-        });
-      }
-
-      return res.status(200).json({ message: 'Product quantity decreased' });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-  }
-);
