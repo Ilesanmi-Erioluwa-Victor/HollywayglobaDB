@@ -8,12 +8,14 @@ import {
   updateCartItemM,
   createCartItemM,
   // getCartM,
-  existCartM,
+  cartQuery,
+
   // updateExistItemCartQuantityM,
   // decreaseCartItemM,
   // increaseCartItemM,
 } from '../../User/models/user.cart.model';
 
+const { existCartM, existCartItemM } = cartQuery;
 
 import {
   validateProductIdParam,
@@ -38,12 +40,7 @@ export const createCart = async (
 
   if (existingCart) {
     // Check if the product is already in the cart
-    const existingCartItem = await prisma.cartItem.findFirst({
-      where: {
-        cartId: existingCart.id,
-        productId,
-      },
-    });
+    const existingCartItem = await existCartItemM(existingCart.id, productId);
 
     if (existingCartItem) {
       // Update the quantity of the existing cart item

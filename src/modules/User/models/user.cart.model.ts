@@ -11,53 +11,63 @@ export class cartQuery {
 
     return cart;
   }
+
+  static async existCartM(userId: string) {
+    const cart = await prisma.cart.findFirst({
+      where: { userId: userId },
+      select: {
+        id: true,
+        items: {
+          select: {
+            product: {
+              select: {
+                title: true,
+                price: true,
+              },
+            },
+            quantity: true,
+          },
+        },
+      },
+    });
+
+    return cart;
+  }
+
+  static async getCartM(userId: string) {
+    const cart = await prisma.cart.findFirst({
+      where: {
+        userId: userId,
+      },
+      include: {
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                title: true,
+                price: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return cart;
+  }
+
+  static async existCartItemM(cartId: string, productId: string) {
+    const cartItem = await prisma.cartItem.findFirst({
+      where: {
+        cartId,
+        productId,
+      },
+    });
+
+    return cartItem;
+  }
 }
-
-
-export const existCartM = async (userId: string) => {
-  const cart = await prisma.cart.findFirst({
-    where: { userId: userId },
-    select: {
-      id: true,
-      items: {
-        select: {
-          product: {
-            select: {
-              title: true,
-              price: true,
-            },
-          },
-          quantity: true,
-        },
-      },
-    },
-  });
-
-  return cart;
-};
-
-export const getCartM = async (userId: string) => {
-  const cart = await prisma.cart.findFirst({
-    where: {
-      userId: userId,
-    },
-    include: {
-      items: {
-        include: {
-          product: {
-            select: {
-              id: true,
-              title: true,
-              price: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  return cart;
-};
 
 export const updateCartItemM = async (
   existingCartItem: { id: string; quantity: number },
