@@ -14,5 +14,5 @@ route.get('', getOrders);
 
 route.get('/:orderId', getOrder);
 
-route.put('/:orderId', cancelOrder);
+route.put('/cancel/:orderId', cancelOrder);
 export default route;
