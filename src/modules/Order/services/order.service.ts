@@ -92,7 +92,7 @@ const calculateTotalAmount = (cartItems: any[]) => {
   );
 };
 
-export const deleteOrder = async (
+export const cancelOrder = async (
   req: Request,
   res: Response,
   next: NextFunction
