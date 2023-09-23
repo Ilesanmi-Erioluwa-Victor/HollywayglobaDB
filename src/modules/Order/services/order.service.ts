@@ -1,8 +1,11 @@
 import { NextFunction, Response, Request } from 'express';
 
+import { ORDER_STATUS } from '@prisma/client';
+
 import { Utils } from '../../../helper/utils';
 
 import { NotFoundError } from '../../../errors/customError';
+
 import { prisma } from '../../../configurations/db';
 
 const { catchAsync } = Utils;
@@ -102,7 +105,6 @@ export const deleteOrder = async (
       where: {
         id: orderId,
       },
-
     });
 
     if (!order) {
