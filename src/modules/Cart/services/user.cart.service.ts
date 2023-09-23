@@ -2,7 +2,7 @@ import { NextFunction, Response, Request } from 'express';
 
 import { Utils } from '../../../helper/utils';
 
-import { cartQuery } from '../../User/models/user.cart.model';
+import { cartQuery } from '../models/cart.model';
 
 const {
   existCartM,
