@@ -47,6 +47,7 @@
     "express-async-errors": "^3.1.1",
     "express-async-handler": "^1.2.0",
     "express-validator": "^7.0.1",
+    "flutterwave-node": "^1.2.2",
     "flutterwave-node-v3": "^1.1.6",
     "helmet": "^7.0.0",
     "hpp": "^0.2.3",

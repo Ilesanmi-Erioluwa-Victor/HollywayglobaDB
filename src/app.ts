@@ -21,6 +21,8 @@ import orderRoute from './modules/Order/routes/order.routes';
 
 import cartRoute from './modules/Cart/routes/cart.routes';
 
+import checkoutRoute from './modules/Checkout/routes/checkout.routes';
+
 import adminAuth from './modules/Admin/routes/admin.auth.routes';
 
 import { SanitizeInputMiddleware } from './middlewares/sanitize';
@@ -70,6 +72,8 @@ app.use('/api/v1/reviews', authenticateUser, reviewRoute);
 app.use('/api/v1/cart', authenticateUser, cartRoute);
 
 app.use('/api/v1/order', authenticateUser, orderRoute);
+
+app.use('/api/v1/checkout', authenticateUser, checkoutRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 
