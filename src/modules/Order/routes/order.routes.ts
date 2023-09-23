@@ -1,9 +1,11 @@
 import { Router } from 'express';
-import { cancelOrder, createOrder } from '../services/order.service';
+import { cancelOrder, createOrder, getOrders } from '../services/order.service';
 
 const route = Router();
 
 route.post('/place-order', createOrder);
+
+route.get("",getOrders)
 
 route.put('/:orderId', cancelOrder);
 export default route;

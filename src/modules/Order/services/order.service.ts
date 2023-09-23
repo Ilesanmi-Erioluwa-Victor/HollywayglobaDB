@@ -136,3 +136,24 @@ export const cancelOrder = async (
     next(error);
   }
 };
+
+export const getOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const order = await prisma.order.findMany({
+      where: { userId: req.user.userId },
+      orderBy: {
+        order_date: 'asc',
+      },
+    });
+    if (order) {
+      return res.status(200).send(order);
+    }
+    res.status(404).send('No orders found');
+  } catch (error) {
+    res.status(500).send();
+  }
+};
