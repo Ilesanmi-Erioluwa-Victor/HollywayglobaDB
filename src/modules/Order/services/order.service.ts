@@ -10,13 +10,13 @@ const { catchAsync } = Utils;
 export const createOrder = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {  cartId } = req.body;
+      const { cartId } = req.body;
 
       // Fetch the user's cart with cart items from the database
       const userCart = await prisma.cart.findUnique({
         where: {
           id: cartId,
-          userId : req.user.userId,
+          userId: req.user.userId,
         },
         include: {
           items: {
@@ -41,7 +41,7 @@ export const createOrder = catchAsync(
       const order = await prisma.order.create({
         data: {
           userId: req.user.userId,
-          shipping_addressId: '650dba5323eaac8a1e9c1a17', // Replace with the actual shipping address ID
+          shipping_addressId: '64ff37f2c615227f749d7adf', // Replace with the actual shipping address ID
           shipping_methodId: '650dba5323eaac8a1e9c1a17', // Replace with the actual shipping method ID
           total_amount,
           payment_methodId: '650dba5323eaac8a1e9c1a17', // Replace with the actual payment method ID
@@ -82,8 +82,55 @@ export const createOrder = catchAsync(
 const calculateTotalAmount = (cartItems: any[]) => {
   return cartItems.reduce(
     (total: number, item: { product: { price: number }; quantity: number }) => {
+      console.log(total + item.product.price * item.quantity);
       return total + item.product.price * item.quantity;
     },
     0
   );
+};
+
+export const deleteOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId = req.params.orderId;
+
+    // Find the order by orderId
+    const order = await prisma.order.findUnique({
+      where: {
+        id: orderId,
+      },
+
+    });
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Check if the order is cancelable (e.g., not already canceled or delivered)
+    if (
+      order.order_status === ORDER_STATUS.CANCELED ||
+      order.order_status === ORDER_STATUS.DELIVERED
+    ) {
+      return res.status(400).json({ message: 'Order cannot be canceled' });
+    }
+
+    // Update the order status to CANCELED
+    const updatedOrder = await prisma.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        order_status: ORDER_STATUS.CANCELED,
+      },
+    });
+
+    res
+      .status(200)
+      .json({ message: 'Order canceled successfully', order: updatedOrder });
+  } catch (error) {
+    next(error);
+  }
 };

@@ -49,7 +49,7 @@ export const createCart = catchAsync(async (
       });
     }
   } else {
-    const newCart = await createCartM(req.user.role, productId, quantity);
+    const newCart = await createCartM(req.user.userId, productId, quantity);
     res.json({
       status: 'success',
       message: 'cart created successfully',
