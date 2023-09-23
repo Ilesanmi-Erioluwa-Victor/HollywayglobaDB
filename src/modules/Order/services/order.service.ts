@@ -157,3 +157,21 @@ export const getOrders = async (
     res.status(500).send();
   }
 };
+
+export const getOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const order = await prisma.order.findUnique({
+      where: { id: req.params.orderId },
+    });
+    if (order) {
+      return res.status(200).send(order);
+    }
+    res.status(404).send('No orders found');
+  } catch (error) {
+    res.status(500).send();
+  }
+};

@@ -5,7 +5,9 @@ const route = Router();
 
 route.post('/place-order', createOrder);
 
-route.get("",getOrders)
+route.get('', getOrders);
+
+route.get('/:orderId');
 
 route.put('/:orderId', cancelOrder);
 export default route;
