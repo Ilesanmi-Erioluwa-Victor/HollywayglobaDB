@@ -132,6 +132,7 @@ model Address {
   additionalPhone String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  Order           Order[]
 }
 
 enum Brand {
@@ -166,13 +167,24 @@ model CartItem {
 }
 
 model Order {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String      @db.ObjectId
-  user        User        @relation(fields: [userId], references: [id])
-  totalAmount Float
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id                 String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String       @db.ObjectId
+  user               User         @relation(fields: [userId], references: [id])
+  shipping_address   Address      @relation(fields: [shipping_addressId], references: [id])
+  shipping_addressId String       @db.ObjectId
+  total_amount       Float
+  orderItems         OrderItem[]
+  order_status       ORDER_STATUS @default(PENDING)
+  orderDate          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+enum ORDER_STATUS {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
 }
 
 model OrderItem {
