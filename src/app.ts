@@ -17,7 +17,7 @@ import productRoute from './modules/Product/routes/product.routes';
 
 import reviewRoute from './modules/User/routes/review.routes';
 
-// import orderRoute from './modules/User/routes/order.routes';
+import orderRoute from './modules/Order/routes/order.routes';
 
 import cartRoute from './modules/Cart/routes/cart.routes';
 
@@ -69,7 +69,7 @@ app.use('/api/v1/reviews', authenticateUser, reviewRoute);
 
 app.use('/api/v1/cart', authenticateUser, cartRoute);
 
-// app.use('/api/v1/order', authenticateUser, orderRoute);
+app.use('/api/v1/order', authenticateUser, orderRoute);
 
 app.use(SanitizeInputMiddleware.sanitizeInput);
 
