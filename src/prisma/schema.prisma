@@ -67,7 +67,7 @@ model User {
   deleteRequestDate               DateTime?
   loggedInAfterRequest            Boolean              @default(false)
   passwordresettoken              PasswordResetToken[]
-  payment                         Payment?
+  payment                         paymentMethod?
   orders                          Order[]
   createdAt                       DateTime             @default(now())
   updatedAt                       DateTime             @updatedAt
@@ -175,9 +175,11 @@ model Order {
   shipping_method    ShippingMethod @relation(fields: [shipping_methodId], references: [id])
   shipping_methodId  String         @db.ObjectId
   total_amount       Float
-  orderItems         OrderItem[]
+  order_items        OrderItem[]
   order_status       ORDER_STATUS   @default(PENDING)
-  orderDate          DateTime       @default(now())
+  payment_methodId   String         @db.ObjectId
+  payment_method     paymentMethod  @relation(fields: [payment_methodId], references: [id])
+  order_date         DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 }
 
@@ -210,15 +212,14 @@ model OrderItem {
   updatedAt DateTime @updatedAt
 }
 
-model Payment {
-  userId         String   @unique @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id])
-  paymenType     String
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  cardNnumber    Int
-  cardExpiryDate DateTime
-  cardCvv        Int
-  cardHolderName String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+model paymentMethod {
+ id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String     @db.ObjectId @unique
+  user             User       @relation(fields: [userId], references: [id])
+  cardholderName   String     
+  cardNumber       String     
+  expirationDate   String     
+  cvv              String      
+  totalAmount      Float      
+  orders           Order[]
 }
