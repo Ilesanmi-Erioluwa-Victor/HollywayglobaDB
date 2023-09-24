@@ -2,7 +2,7 @@ import { NextFunction, Response, Request } from 'express';
 
 import { Utils } from '../../../helper/utils';
 
-import { cartQuery } from '../../User/models/user.cart.model';
+import { cartQuery } from '../models/cart.model';
 
 const {
   existCartM,
@@ -19,7 +19,7 @@ import { NotFoundError } from '../../../errors/customError';
 
 const { catchAsync } = Utils;
 
-export const createCart = async (
+export const createCart = catchAsync(async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -49,16 +49,16 @@ export const createCart = async (
       });
     }
   } else {
-    const newCart = await createCartM(req.user.role, productId, quantity);
+    const newCart = await createCartM(req.user.userId, productId, quantity);
     res.json({
       status: 'success',
       message: 'cart created successfully',
       data: newCart,
     });
   }
-};
+});
 
-export const getCart = async (
+export const getCart = catchAsync(async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -70,7 +70,7 @@ export const getCart = async (
   } else {
     throw new NotFoundError('no cart found ...add product to your cart');
   }
-};
+});
 
 export const decreaseCartItems = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

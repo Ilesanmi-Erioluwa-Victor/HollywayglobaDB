@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 
 import {
   validateUserIdParam,
@@ -11,7 +11,7 @@ import {
   getCart,
 } from '../services/user.cart.service';
 
-const route = express.Router();
+const route = Router();
 
 route.post('/add/:id', validateUserIdParam, createCart);
 
