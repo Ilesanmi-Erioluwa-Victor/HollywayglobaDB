@@ -1,7 +1,7 @@
 import { prisma } from '../../../configurations/db';
 
 export class orderQuery {
-  static async existCart(cartId: string, userId: string) {
+  static async existCartM(cartId: string, userId: string) {
     const userCart = await prisma.cart.findUnique({
       where: {
         id: cartId,

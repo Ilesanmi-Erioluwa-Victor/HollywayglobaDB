@@ -10,7 +10,7 @@ import { prisma } from '../../../configurations/db';
 
 import { orderQuery } from '../models/order.model';
 
-const { existCart } = orderQuery;
+const { existCartM } = orderQuery;
 
 const { catchAsync } = Utils;
 
@@ -19,7 +19,7 @@ export const createOrder = catchAsync(
     try {
       const { cartId } = req.body;
 
-      const userCart = await existCart(cartId, req.user.userId);
+      const userCart = await existCartM(cartId, req.user.userId);
 
       if (!userCart) throw new NotFoundError('no cart fround');
 
@@ -30,16 +30,16 @@ export const createOrder = catchAsync(
       const order = await prisma.order.create({
         data: {
           userId: req.user.userId,
-          shipping_addressId: '64ff37f2c615227f749d7adf', // Replace with the actual shipping address ID
-          shipping_methodId: '650dba5323eaac8a1e9c1a17', // Replace with the actual shipping method ID
+          shipping_addressId: '64ff37f2c615227f749d7adf',
+          shipping_methodId: '650dba5323eaac8a1e9c1a17',
           total_amount,
-          payment_methodId: '650dba5323eaac8a1e9c1a17', // Replace with the actual payment method ID
+          payment_methodId: '650dba5323eaac8a1e9c1a17',
           order_items: {
             createMany: {
               data: userCart.items.map((item) => ({
                 productId: item.productId,
                 quantity: item.quantity,
-                price: item.product.price, // Use the product's price
+                price: item.product.price,
               })),
             },
           },
