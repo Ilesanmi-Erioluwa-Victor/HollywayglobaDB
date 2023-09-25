@@ -86,7 +86,6 @@ export const cancelOrder = async (
   try {
     const orderId = req.params.orderId;
 
-    // Find the order by orderId
     const order = await prisma.order.findUnique({
       where: {
         id: orderId,

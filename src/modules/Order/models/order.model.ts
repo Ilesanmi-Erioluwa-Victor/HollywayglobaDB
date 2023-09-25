@@ -18,4 +18,14 @@ export class orderQuery {
 
     return userCart;
   }
+
+  static async cancelOrderM(orderId: string) {
+    const order = await prisma.order.findUnique({
+      where: {
+        id: orderId,
+      },
+    });
+
+    return order;
+  }
 }
