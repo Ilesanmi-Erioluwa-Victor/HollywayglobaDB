@@ -10,7 +10,8 @@ import { prisma } from '../../../configurations/db';
 
 import { orderQuery } from '../models/order.model';
 
-const { existCartM, cancelOrderM, updateOrderStatusM, getOrdersM } = orderQuery;
+const { existCartM, cancelOrderM, updateOrderStatusM, getOrdersM, getOrderM } =
+  orderQuery;
 
 const { catchAsync } = Utils;
 
@@ -103,16 +104,15 @@ export const getOrders = async (
   res: Response,
   next: NextFunction
 ) => {
-    const orders = await getOrdersM(req.user.userId);
+  const orders = await getOrdersM(req.user.userId);
 
   if (!orders) throw new NotFoundError('orders not found');
-  
-    res.json({
-      status: "success",
-      message : "ok",
-      data  : orders
-    })
 
+  res.json({
+    status: 'success',
+    message: 'ok',
+    data: orders,
+  });
 };
 
 export const getOrder = async (
@@ -120,15 +120,13 @@ export const getOrder = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const order = await prisma.order.findUnique({
-      where: { id: req.params.orderId },
-    });
-    if (order) {
-      return res.status(200).send(order);
-    }
-    res.status(404).send('No orders found');
-  } catch (error) {
-    res.status(500).send();
-  }
+  const order = await getOrderM(req.params.orderId);
+
+  if (!order) throw new NotFoundError('no order found');
+
+  res.json({
+    status: 'success',
+    message: 'ok',
+    data: order,
+  });
 };

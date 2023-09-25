@@ -53,4 +53,11 @@ export class orderQuery {
     });
     return orders;
   }
+
+  static async getOrderM(orderId: string) {
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+    });
+    return order
+  }
 }
