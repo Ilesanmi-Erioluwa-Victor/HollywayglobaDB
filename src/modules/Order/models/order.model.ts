@@ -1,5 +1,7 @@
 import { prisma } from '../../../configurations/db';
 
+import { ORDER_STATUS } from '@prisma/client';
+
 export class orderQuery {
   static async existCartM(cartId: string, userId: string) {
     const userCart = await prisma.cart.findUnique({
@@ -23,6 +25,19 @@ export class orderQuery {
     const order = await prisma.order.findUnique({
       where: {
         id: orderId,
+      },
+    });
+
+    return order;
+  }
+
+  static async updateOrderStatusM(orderId: string) {
+    const order = prisma.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        order_status: ORDER_STATUS.CANCELED,
       },
     });
 

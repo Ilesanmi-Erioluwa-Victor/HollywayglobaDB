@@ -4,13 +4,13 @@ import { ORDER_STATUS } from '@prisma/client';
 
 import { Utils } from '../../../helper/utils';
 
-import { NotFoundError } from '../../../errors/customError';
+import { BadRequestError, NotFoundError } from '../../../errors/customError';
 
 import { prisma } from '../../../configurations/db';
 
 import { orderQuery } from '../models/order.model';
 
-const { existCartM } = orderQuery;
+const { existCartM, cancelOrderM, updateOrderStatusM } = orderQuery;
 
 const { catchAsync } = Utils;
 
@@ -83,43 +83,19 @@ export const cancelOrder = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const orderId = req.params.orderId;
+  const order = await cancelOrderM(req.params.orderId);
 
-    const order = await prisma.order.findUnique({
-      where: {
-        id: orderId,
-      },
-    });
+  if (!order) throw new NotFoundError('order not found');
 
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
+  if (
+    order.order_status === ORDER_STATUS.CANCELED ||
+    order.order_status === ORDER_STATUS.DELIVERED
+  )
+    throw new BadRequestError("order can't be cancelled again");
 
-    // Check if the order is cancelable (e.g., not already canceled or delivered)
-    if (
-      order.order_status === ORDER_STATUS.CANCELED ||
-      order.order_status === ORDER_STATUS.DELIVERED
-    ) {
-      return res.status(400).json({ message: 'Order cannot be canceled' });
-    }
+  const updatedOrder = await updateOrderStatusM(req.params.orderId);
 
-    // Update the order status to CANCELED
-    const updatedOrder = await prisma.order.update({
-      where: {
-        id: orderId,
-      },
-      data: {
-        order_status: ORDER_STATUS.CANCELED,
-      },
-    });
-
-    res
-      .status(200)
-      .json({ message: 'Order canceled successfully', order: updatedOrder });
-  } catch (error) {
-    next(error);
-  }
+  res.json({ message: 'order canceled successfully', order: updatedOrder });
 };
 
 export const getOrders = async (
