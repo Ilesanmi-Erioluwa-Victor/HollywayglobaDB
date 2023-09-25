@@ -15,7 +15,6 @@ export const createOrder = catchAsync(
     try {
       const { cartId } = req.body;
 
-      // Fetch the user's cart with cart items from the database
       const userCart = await prisma.cart.findUnique({
         where: {
           id: cartId,
