@@ -17,6 +17,7 @@ const {
   resetPasswordM,
   resetPasswordTokenDeleteM,
   resetPasswordUpdateM,
+  isLoggedInM,
 } = authQuery;
 
 import {
@@ -74,14 +75,7 @@ export const login: RequestHandler = catchAsync(
         throw new BadRequestError('you are already logged in');
 
       if (user.deleteRequestDate === null) {
-        await prisma.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            isLoggedIn: true,
-          },
-        });
+        await isLoggedInM(user.id, true);
         res.json({
           status: 'success',
           message: 'you are logged in !',
@@ -110,14 +104,7 @@ export const logout: RequestHandler = catchAsync(
       expires: new Date(Date.now()),
     });
 
-    await prisma.user.update({
-      where: {
-        id: req.user.userId,
-      },
-      data: {
-        isLoggedIn: false,
-      },
-    });
+    await isLoggedInM(req.user.userId, false);
 
     res.json({ message: 'successfully logged out', status: 'success' });
   }
