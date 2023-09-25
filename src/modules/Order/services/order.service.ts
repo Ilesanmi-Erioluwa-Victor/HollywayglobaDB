@@ -15,6 +15,16 @@ const { existCartM, cancelOrderM, updateOrderStatusM, getOrdersM, getOrderM } =
 
 const { catchAsync } = Utils;
 
+const calculateTotalAmount = (cartItems: any[]) => {
+  return cartItems.reduce(
+    (total: number, item: { product: { price: number }; quantity: number }) => {
+      console.log(total + item.product.price * item.quantity);
+      return total + item.product.price * item.quantity;
+    },
+    0
+  );
+};
+
 export const createOrder = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -68,16 +78,6 @@ export const createOrder = catchAsync(
     }
   }
 );
-
-const calculateTotalAmount = (cartItems: any[]) => {
-  return cartItems.reduce(
-    (total: number, item: { product: { price: number }; quantity: number }) => {
-      console.log(total + item.product.price * item.quantity);
-      return total + item.product.price * item.quantity;
-    },
-    0
-  );
-};
 
 export const cancelOrder = async (
   req: Request,
