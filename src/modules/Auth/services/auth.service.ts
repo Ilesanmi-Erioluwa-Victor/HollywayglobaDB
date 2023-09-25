@@ -70,7 +70,18 @@ export const login: RequestHandler = catchAsync(
       // if (user.deleteRequestDate && !user.loggedInAfterRequest)
       //   throw new BadRequestError('user requested deletion');
 
+      if (user.isLoggedIn)
+        throw new BadRequestError('you are already logged in');
+
       if (user.deleteRequestDate === null) {
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            isLoggedIn: true,
+          },
+        });
         res.json({
           status: 'success',
           message: 'you are logged in !',
@@ -99,9 +110,16 @@ export const logout: RequestHandler = catchAsync(
       expires: new Date(Date.now()),
     });
 
-    res
-      .status(StatusCodes.OK)
-      .json({ message: 'successfully logged out', status: 'success' });
+    await prisma.user.update({
+      where: {
+        id: req.user.userId,
+      },
+      data: {
+        isLoggedIn: false,
+      },
+    });
+
+    res.json({ message: 'successfully logged out', status: 'success' });
   }
 );
 
