@@ -8,6 +8,10 @@ import { NotFoundError } from '../../../errors/customError';
 
 import { prisma } from '../../../configurations/db';
 
+import { orderQuery } from '../models/order.model';
+
+const { existCart } = orderQuery;
+
 const { catchAsync } = Utils;
 
 export const createOrder = catchAsync(
@@ -15,26 +19,9 @@ export const createOrder = catchAsync(
     try {
       const { cartId } = req.body;
 
-      const userCart = await prisma.cart.findUnique({
-        where: {
-          id: cartId,
-          userId: req.user.userId,
-        },
-        include: {
-          items: {
-            include: {
-              product: true,
-            },
-          },
-        },
-      });
+      const userCart = await existCart(cartId, req.user.userId);
 
-      if (!userCart) {
-        return res.status(404).json({
-          status: 'error',
-          message: 'User cart not found',
-        });
-      }
+      if (!userCart) throw new NotFoundError('no cart fround');
 
       // Calculate the total amount based on the cart items
       const total_amount = calculateTotalAmount(userCart.items);
