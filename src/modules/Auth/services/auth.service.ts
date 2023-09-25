@@ -17,6 +17,7 @@ const {
   resetPasswordM,
   resetPasswordTokenDeleteM,
   resetPasswordUpdateM,
+  isLoggedInM,
 } = authQuery;
 
 import {
@@ -70,7 +71,11 @@ export const login: RequestHandler = catchAsync(
       // if (user.deleteRequestDate && !user.loggedInAfterRequest)
       //   throw new BadRequestError('user requested deletion');
 
+      if (user.isLoggedIn)
+        throw new BadRequestError('you are already logged in');
+
       if (user.deleteRequestDate === null) {
+        await isLoggedInM(user.id, true);
         res.json({
           status: 'success',
           message: 'you are logged in !',
@@ -99,9 +104,9 @@ export const logout: RequestHandler = catchAsync(
       expires: new Date(Date.now()),
     });
 
-    res
-      .status(StatusCodes.OK)
-      .json({ message: 'successfully logged out', status: 'success' });
+    await isLoggedInM(req.user.userId, false);
+
+    res.json({ message: 'successfully logged out', status: 'success' });
   }
 );
 

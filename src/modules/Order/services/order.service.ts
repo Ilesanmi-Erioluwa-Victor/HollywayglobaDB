@@ -4,38 +4,35 @@ import { ORDER_STATUS } from '@prisma/client';
 
 import { Utils } from '../../../helper/utils';
 
-import { NotFoundError } from '../../../errors/customError';
+import { BadRequestError, NotFoundError } from '../../../errors/customError';
 
 import { prisma } from '../../../configurations/db';
 
+import { orderQuery } from '../models/order.model';
+
+const { existCartM, cancelOrderM, updateOrderStatusM, getOrdersM, getOrderM } =
+  orderQuery;
+
 const { catchAsync } = Utils;
+
+const calculateTotalAmount = (cartItems: any[]) => {
+  return cartItems.reduce(
+    (total: number, item: { product: { price: number }; quantity: number }) => {
+      console.log(total + item.product.price * item.quantity);
+      return total + item.product.price * item.quantity;
+    },
+    0
+  );
+};
 
 export const createOrder = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { cartId } = req.body;
 
-      // Fetch the user's cart with cart items from the database
-      const userCart = await prisma.cart.findUnique({
-        where: {
-          id: cartId,
-          userId: req.user.userId,
-        },
-        include: {
-          items: {
-            include: {
-              product: true,
-            },
-          },
-        },
-      });
+      const userCart = await existCartM(cartId, req.user.userId);
 
-      if (!userCart) {
-        return res.status(404).json({
-          status: 'error',
-          message: 'User cart not found',
-        });
-      }
+      if (!userCart) throw new NotFoundError('no cart fround');
 
       // Calculate the total amount based on the cart items
       const total_amount = calculateTotalAmount(userCart.items);
@@ -44,16 +41,16 @@ export const createOrder = catchAsync(
       const order = await prisma.order.create({
         data: {
           userId: req.user.userId,
-          shipping_addressId: '64ff37f2c615227f749d7adf', // Replace with the actual shipping address ID
-          shipping_methodId: '650dba5323eaac8a1e9c1a17', // Replace with the actual shipping method ID
+          shipping_addressId: '64ff37f2c615227f749d7adf',
+          shipping_methodId: '650dba5323eaac8a1e9c1a17',
           total_amount,
-          payment_methodId: '650dba5323eaac8a1e9c1a17', // Replace with the actual payment method ID
+          payment_methodId: '650dba5323eaac8a1e9c1a17',
           order_items: {
             createMany: {
               data: userCart.items.map((item) => ({
                 productId: item.productId,
                 quantity: item.quantity,
-                price: item.product.price, // Use the product's price
+                price: item.product.price,
               })),
             },
           },
@@ -82,59 +79,24 @@ export const createOrder = catchAsync(
   }
 );
 
-const calculateTotalAmount = (cartItems: any[]) => {
-  return cartItems.reduce(
-    (total: number, item: { product: { price: number }; quantity: number }) => {
-      console.log(total + item.product.price * item.quantity);
-      return total + item.product.price * item.quantity;
-    },
-    0
-  );
-};
-
 export const cancelOrder = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const orderId = req.params.orderId;
+  const order = await cancelOrderM(req.params.orderId);
 
-    // Find the order by orderId
-    const order = await prisma.order.findUnique({
-      where: {
-        id: orderId,
-      },
-    });
+  if (!order) throw new NotFoundError('order not found');
 
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
+  if (
+    order.order_status === ORDER_STATUS.CANCELED ||
+    order.order_status === ORDER_STATUS.DELIVERED
+  )
+    throw new BadRequestError("order can't be cancelled again");
 
-    // Check if the order is cancelable (e.g., not already canceled or delivered)
-    if (
-      order.order_status === ORDER_STATUS.CANCELED ||
-      order.order_status === ORDER_STATUS.DELIVERED
-    ) {
-      return res.status(400).json({ message: 'Order cannot be canceled' });
-    }
+  const updatedOrder = await updateOrderStatusM(req.params.orderId);
 
-    // Update the order status to CANCELED
-    const updatedOrder = await prisma.order.update({
-      where: {
-        id: orderId,
-      },
-      data: {
-        order_status: ORDER_STATUS.CANCELED,
-      },
-    });
-
-    res
-      .status(200)
-      .json({ message: 'Order canceled successfully', order: updatedOrder });
-  } catch (error) {
-    next(error);
-  }
+  res.json({ message: 'order canceled successfully', data: updatedOrder });
 };
 
 export const getOrders = async (
@@ -142,20 +104,15 @@ export const getOrders = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const order = await prisma.order.findMany({
-      where: { userId: req.user.userId },
-      orderBy: {
-        order_date: 'asc',
-      },
-    });
-    if (order) {
-      return res.status(200).send(order);
-    }
-    res.status(404).send('No orders found');
-  } catch (error) {
-    res.status(500).send();
-  }
+  const orders = await getOrdersM(req.user.userId);
+
+  if (!orders) throw new NotFoundError('orders not found');
+
+  res.json({
+    status: 'success',
+    message: 'ok',
+    data: orders,
+  });
 };
 
 export const getOrder = async (
@@ -163,15 +120,13 @@ export const getOrder = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const order = await prisma.order.findUnique({
-      where: { id: req.params.orderId },
-    });
-    if (order) {
-      return res.status(200).send(order);
-    }
-    res.status(404).send('No orders found');
-  } catch (error) {
-    res.status(500).send();
-  }
+  const order = await getOrderM(req.params.orderId);
+
+  if (!order) throw new NotFoundError('no order found');
+
+  res.json({
+    status: 'success',
+    message: 'ok',
+    data: order,
+  });
 };

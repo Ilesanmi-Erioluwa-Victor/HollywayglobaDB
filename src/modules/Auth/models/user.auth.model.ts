@@ -122,4 +122,17 @@ export class authQuery {
 
     return user;
   }
+
+  static async isLoggedInM(id: string, type: boolean) {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        isLoggedIn: type,
+      },
+    });
+
+    return user;
+  }
 }
