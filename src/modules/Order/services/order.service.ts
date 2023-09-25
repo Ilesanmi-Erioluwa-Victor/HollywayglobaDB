@@ -10,7 +10,7 @@ import { prisma } from '../../../configurations/db';
 
 import { orderQuery } from '../models/order.model';
 
-const { existCartM, cancelOrderM, updateOrderStatusM } = orderQuery;
+const { existCartM, cancelOrderM, updateOrderStatusM, getOrdersM } = orderQuery;
 
 const { catchAsync } = Utils;
 
@@ -95,7 +95,7 @@ export const cancelOrder = async (
 
   const updatedOrder = await updateOrderStatusM(req.params.orderId);
 
-  res.json({ message: 'order canceled successfully', order: updatedOrder });
+  res.json({ message: 'order canceled successfully', data: updatedOrder });
 };
 
 export const getOrders = async (
@@ -103,20 +103,16 @@ export const getOrders = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const order = await prisma.order.findMany({
-      where: { userId: req.user.userId },
-      orderBy: {
-        order_date: 'asc',
-      },
-    });
-    if (order) {
-      return res.status(200).send(order);
-    }
-    res.status(404).send('No orders found');
-  } catch (error) {
-    res.status(500).send();
-  }
+    const orders = await getOrdersM(req.user.userId);
+
+  if (!orders) throw new NotFoundError('orders not found');
+  
+    res.json({
+      status: "success",
+      message : "ok",
+      data  : orders
+    })
+
 };
 
 export const getOrder = async (

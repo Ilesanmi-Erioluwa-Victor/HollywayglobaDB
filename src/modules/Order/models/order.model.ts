@@ -44,12 +44,13 @@ export class orderQuery {
     return order;
   }
 
-  static async getOrders(userId: string) {
+  static async getOrdersM(userId: string) {
     const orders = await prisma.order.findMany({
       where: { userId },
       orderBy: {
         order_date: 'asc',
       },
     });
+    return orders;
   }
 }
