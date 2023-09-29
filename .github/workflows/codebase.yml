@@ -6,6 +6,10 @@ on:
 jobs:
   test:
     runs-on: windows-2022
+
+    env:
+      DATABASE_URL_DEV: ${{ github.env.DATABASE_URL_DEV }}
+
     steps:
       - name: Get code
         uses: actions/checkout@v3
