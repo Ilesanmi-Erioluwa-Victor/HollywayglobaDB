@@ -52,6 +52,7 @@ export class addressQuery {
         deliveryAddress: true,
         isDefault: true,
         additionalPhone: true,
+        userId: true,
       },
     });
     return address;

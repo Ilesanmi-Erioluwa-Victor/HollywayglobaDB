@@ -1,4 +1,4 @@
-import { Request } from 'express';
+export {};
 
 declare global {
   namespace Express {
@@ -7,6 +7,7 @@ declare global {
         userId: string;
         role: string;
       };
+
       categoryId: string;
     }
   }

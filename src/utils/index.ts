@@ -14,10 +14,4 @@ export const verifyJWT = (token: string) => {
   return decoded;
 };
 
-export const ORDER_STATUS = {
-  PENDING: 'PENDING',
-  PROCESSING: 'PROCESSING',
-  SHIPPED: 'SHIPPED',
-  DELIVERED: 'DELIVERED',
-  CANCELED: 'CANCELED',
-};
+

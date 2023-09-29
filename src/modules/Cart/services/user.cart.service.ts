@@ -19,58 +19,54 @@ import { NotFoundError } from '../../../errors/customError';
 
 const { catchAsync } = Utils;
 
-export const createCart = catchAsync(async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { productId, quantity } = req.body;
+export const createCart = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { productId, quantity } = req.body;
 
-  const existingCart = await existCartM(req.user.userId);
+    const existingCart = await existCartM(req.user.userId);
 
-  if (existingCart) {
-    const existingCartItem = await existCartItemM(existingCart.id, productId);
+    if (existingCart) {
+      const existingCartItem = await existCartItemM(existingCart.id, productId);
 
-    if (existingCartItem) {
-      await updateCartItemM(existingCartItem, quantity);
+      if (existingCartItem) {
+        await updateCartItemM(existingCartItem, quantity);
 
-      res.json({
-        status: 'success',
-        message: 'cart item updated successfully',
-        cart: existingCart,
-      });
+        res.json({
+          status: 'success',
+          message: 'cart item updated successfully',
+          cart: existingCart,
+        });
+      } else {
+        await createCartItemM(existingCart.id, productId, quantity);
+
+        res.json({
+          status: 'success',
+          message: 'cart item added successfully',
+          cart: existingCart,
+        });
+      }
     } else {
-      await createCartItemM(existingCart.id, productId, quantity);
-
+      const newCart = await createCartM(req.user.userId, productId, quantity);
       res.json({
         status: 'success',
-        message: 'cart item added successfully',
-        cart: existingCart,
+        message: 'cart created successfully',
+        data: newCart,
       });
     }
-  } else {
-    const newCart = await createCartM(req.user.userId, productId, quantity);
-    res.json({
-      status: 'success',
-      message: 'cart created successfully',
-      data: newCart,
-    });
   }
-});
+);
 
-export const getCart = catchAsync(async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const cart = await getCartM(req.params.id);
+export const getCart = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const cart = await getCartM(req.params.id);
 
-  if (cart && cart.items.length > 0) {
-    res.json({ status: 'success', message: 'ok', data: cart });
-  } else {
-    throw new NotFoundError('no cart found ...add product to your cart');
+    if (cart && cart.items.length > 0) {
+      res.json({ status: 'success', message: 'ok', data: cart });
+    } else {
+      throw new NotFoundError('no cart found ...add product to your cart');
+    }
   }
-});
+);
 
 export const decreaseCartItems = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

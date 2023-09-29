@@ -60,13 +60,6 @@ export const login: RequestHandler = catchAsync(
         );
       }
       const token = createJwt({ userId: user?.id, role: user?.role as string });
-      const aDay = 1000 * 60 * 60 * 24;
-
-      res.cookie('token', token, {
-        httpOnly: true,
-        expires: new Date(Date.now() + aDay),
-        secure: ENV.MODE.MODE === 'production',
-      });
 
       // if (user.deleteRequestDate && !user.loggedInAfterRequest)
       //   throw new BadRequestError('user requested deletion');
@@ -79,6 +72,8 @@ export const login: RequestHandler = catchAsync(
         res.json({
           status: 'success',
           message: 'you are logged in !',
+          id: user?.id,
+          token: token,
         });
       } else {
         await prisma.user.update({
@@ -89,24 +84,13 @@ export const login: RequestHandler = catchAsync(
           status: 'success',
           message:
             'you are logged in !, your account delete request has being cancel',
+          id: user.id,
+          token,
         });
       }
     } else {
       throw new UnauthenticatedError('invalid credentials, try agin');
     }
-  }
-);
-
-export const logout: RequestHandler = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    res.cookie('token', 'logout', {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    });
-
-    await isLoggedInM(req.user.userId, false);
-
-    res.json({ message: 'successfully logged out', status: 'success' });
   }
 );
 

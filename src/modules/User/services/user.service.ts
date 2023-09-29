@@ -58,8 +58,8 @@ export const updateuser: RequestHandler = catchAsync(
       req.body.email
     );
     res.json({
-      message: 'You have successfully updated your profile',
-      user: user,
+      status: 'success',
+      message: 'you have successfully updated your profile',
     });
   }
 );
@@ -72,7 +72,7 @@ export const updatepassword: RequestHandler = catchAsync(
 
     res.json({
       status: 'success',
-      message: 'You have successfully update your password',
+      message: 'you have successfully update your password',
     });
   }
 );
@@ -95,8 +95,8 @@ export const uploadprofile: RequestHandler = catchAsync(
     fs.unlinkSync(localPath);
 
     res.json({
-      status: 'Success',
-      message: 'You have successfully updated your image',
+      status: 'success',
+      message: 'you have successfully updated your image',
     });
   }
 );

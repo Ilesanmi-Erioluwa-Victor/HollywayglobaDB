@@ -26,7 +26,7 @@ export const createReview: RequestHandler = catchAsync(
     );
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'ok, review created',
     });
   }
 );
@@ -53,7 +53,7 @@ export const editReview = catchAsync(
 
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'ok, review updated',
     });
   }
 );

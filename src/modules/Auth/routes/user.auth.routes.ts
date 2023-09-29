@@ -3,7 +3,6 @@ import { Router } from 'express';
 import {
   register,
   login,
-  logout,
   forgetPasswordToken,
   accountVerification,
   resetPassword,
@@ -16,17 +15,11 @@ import {
   validatePasswordInput,
 } from '../../../middlewares/validationMiddlware';
 
-import { Auth } from '../../../middlewares/auth';
-
-const { authenticateUser } = Auth;
-
 const route = Router();
 
 route.post('/register', validateRegisterInput, register);
 
 route.post('/login', validateLoginInput, login);
-
-route.get('/logout', authenticateUser, logout);
 
 route.post('/forgetPassword', validateEmailInput, forgetPasswordToken);
 
