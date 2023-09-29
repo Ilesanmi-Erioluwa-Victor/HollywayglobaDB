@@ -23,16 +23,16 @@ export class authQuery {
   }
 
   static async findUserMId(id: string) {
-    const userId = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         id,
       },
     });
-    return userId;
+    return user;
   }
 
   static async findUserMEmail(email: string) {
-    const userEmail = await prisma.user.findUnique({
+    const userEmail = await prisma.user.findFirst({
       where: {
         email,
       },
@@ -63,7 +63,7 @@ export class authQuery {
     accountVerificationToken: string,
     time: Date
   ) {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         id,
         accountVerificationToken,

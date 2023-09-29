@@ -52,7 +52,7 @@ export class productQuery {
   }
 
   static async findProductId(id: string) {
-    const product = await prisma.product.findUnique({
+    const product = await prisma.product.findFirst({
       where: {
         id,
       },

@@ -6,7 +6,7 @@ const { generateToken, hashedPassword, accountVerificationToken } = Utils;
 
 export class userQuery {
   static async findUserMId(id: string) {
-    const userId = await prisma.user.findUnique({
+    const userId = await prisma.user.findFirst({
       where: {
         id,
       },
@@ -22,7 +22,7 @@ export class userQuery {
         active: true,
         isAccountVerified: true,
         deleteRequestDate: true,
-        loggedInAfterRequest : true
+        loggedInAfterRequest: true,
       },
     });
     return userId;
@@ -51,7 +51,7 @@ export class userQuery {
       data: {
         firstName,
         lastName,
-        email: email.toLocaleLowerCase(),
+        email,
       },
     });
 

@@ -34,7 +34,7 @@ export const createAddress: RequestHandler = catchAsync(
 
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'ok, address created',
     });
   }
 );
@@ -52,7 +52,7 @@ export const editAddress = catchAsync(
 
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'ok, address updated',
     });
   }
 );

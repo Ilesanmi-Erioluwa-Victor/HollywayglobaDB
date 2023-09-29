@@ -26,7 +26,7 @@ import {
   validatePasswordInput,
   validateNewAddressInput,
   validateAddressIdParam,
-  validateNewReviewInput
+  validateNewReviewInput,
 } from '../../../middlewares/validationMiddlware';
 
 const route = express.Router();
@@ -65,12 +65,7 @@ route.get('/:id', validateUserIdParam, user);
 
 // route.delete('/:id', validateUserIdParam, deleteuser);
 
-route.put(
-  '/:id/updateProfile',
-  validateUserIdParam,
-  validatePasswordInput,
-  updateuser
-);
+route.put('/:id/updateProfile', validateUserIdParam, updateuser);
 
 route.post(
   '/:id/uploadImage',

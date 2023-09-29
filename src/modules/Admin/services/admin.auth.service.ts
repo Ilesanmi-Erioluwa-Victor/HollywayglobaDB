@@ -59,17 +59,12 @@ export const loginAdmin: RequestHandler = catchAsync(
         userId: admin?.id,
         role: admin?.role as string,
       });
-      const aDay = 1000 * 60 * 60 * 24;
-
-      res.cookie('token', token, {
-        httpOnly: true,
-        expires: new Date(Date.now() + aDay),
-        secure: ENV.MODE.MODE === 'production',
-      });
 
       res.json({
         status: 'success',
         message: 'you are logged in !',
+        id: admin.id,
+        token,
       });
     } else {
       throw new UnauthorizedError('login failed, invalid credentials');

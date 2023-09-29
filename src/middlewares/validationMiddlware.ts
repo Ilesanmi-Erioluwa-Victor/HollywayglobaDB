@@ -141,7 +141,7 @@ export const validateProductIdParam = withValidationErrors([
 ]);
 
 export const validateReviewIdParam = withValidationErrors([
-  param('reviewId').custom(async (value) => {
+  param('reviewId').custom(async (value, { req }) => {
     const isValidMongoId = ValidateMongoDbId(value);
 
     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
@@ -149,6 +149,10 @@ export const validateReviewIdParam = withValidationErrors([
     const review = await findReviewIdM(value);
 
     if (!review) throw new NotFoundError('no review found ...');
+
+    const isOwner = req.user.userId.toString() === review.userId.toString();
+
+    if (!isOwner) throw new Error('not authorized to access this route');
   }),
 ]);
 
@@ -162,6 +166,10 @@ export const validateAddressIdParam = withValidationErrors([
 
     if (!address)
       throw new NotFoundError('no address associated with this id ...');
+
+    const isOwner = req.user.userId.toString() === address.userId.toString();
+
+    if (!isOwner) throw new Error('not authorized to access this route');
   }),
 ]);
 

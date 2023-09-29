@@ -26,17 +26,16 @@ route.post(
 );
 
 route.get(
-  '/:id/product/:productId/review/:reviewId',
+  '/:id/review/:reviewId',
   validateUserIdParam,
-  validateProductIdParam,
   validateReviewIdParam,
   getReview
 );
 
 route.put(
-  '/:id/product/:productId/review/:reviewId',
+  '/:id/review/:reviewId',
   validateUserIdParam,
-  validateProductIdParam,
+  validateReviewIdParam,
   validateNewReviewInput,
   editReview
 );
