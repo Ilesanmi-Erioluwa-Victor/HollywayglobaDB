@@ -64,11 +64,11 @@ export const login: RequestHandler = catchAsync(
       // if (user.deleteRequestDate && !user.loggedInAfterRequest)
       //   throw new BadRequestError('user requested deletion');
 
-      if (user.isLoggedIn)
-        throw new BadRequestError('you are already logged in');
+      // if (user.isLoggedIn)
+      //   throw new BadRequestError('you are already logged in');
 
       if (user.deleteRequestDate === null) {
-        await isLoggedInM(user.id, true);
+        // await isLoggedInM(user.id, true);
         res.json({
           status: 'success',
           message: 'you are logged in !',
