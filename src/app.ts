@@ -59,7 +59,7 @@ ENV.MODE.MODE === 'development' ? app.use(morgan('dev')) : '';
 
 app.use('/api/v1/auth', authRoute);
 
-app.use('/api/v1/user',authenticateUser, userRoute);
+app.use('/api/v1/user', authenticateUser, userRoute);
 
 app.use('/api/v1/adminAuth', adminAuth);
 
@@ -75,6 +75,9 @@ app.use('/api/v1/order', authenticateUser, orderRoute);
 
 app.use('/api/v1/checkout', authenticateUser, checkoutRoute);
 
+app.get('/api', (req, res, next) => {
+  res.send('welcome to hollywayglobal api endpoint');
+});
 app.use(SanitizeInputMiddleware.sanitizeInput);
 
 app.all('*', _404.notFound);
