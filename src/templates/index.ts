@@ -38,7 +38,7 @@ export class Email {
         });
 
         resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/user/${
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/auth/${
           data?.id
         }/verify_account/${data?.accountVerificationToken}>Click to verify..</a>
        `;
@@ -63,7 +63,7 @@ export class Email {
         });
 
         resetUrl = `Kindly use this link to verify your account...
-        <a href= ${req.protocol}://${req.get('host')}/api/v1/admin/${
+        <a href= ${req.protocol}://${req.get('host')}/api/v1/adminAuth/${
           data?.id
         }/verify_account/${data?.accountVerificationToken}>Click to verify..</a>
        `;
@@ -133,7 +133,7 @@ export class Email {
         resetUrl = `Kindly use this link to verify your account...
         <a href= ${req.protocol}://${req.get(
           'host'
-        )}/api/v1/admin/resetPassword/${
+        )}/api/v1/adminAuth/resetPassword/${
           data?.token
         }>Click here to reset your password..</a>
        `;
