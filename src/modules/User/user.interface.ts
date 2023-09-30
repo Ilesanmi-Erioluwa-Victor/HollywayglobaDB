@@ -1,13 +1,3 @@
-export interface signupUser {
-  id?: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobile: string;
-  password: string;
-  profilePhoto?: string;
-}
-
 export interface loginUserI {
   id: string;
   firstName: string;
@@ -34,6 +24,12 @@ export interface address {
   city?: string;
   phone?: string;
   additionalPhone?: string;
+  country: string;
+}
+
+export interface review {
+  text: string;
+  rating: number;
 }
 
 export interface ProductWishListResult {

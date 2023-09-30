@@ -1,68 +1,85 @@
 import express from 'express';
-import {
-  createUser,
-  getUser,
-  loginUser,
-  updatePassword,
-  updateUser,
-  accountVerification,
-  forgetPasswordToken,
-  resetPassword,
-  uploadProfile,
-} from '../services/user.auth.service';
 
 import {
-  addToWishlist,
-  decreaseCartItems,
-  incrementCartItems,
-} from '../services/user.cart.service';
+  user,
+  // deleteuser,
+  updatepassword,
+  updateuser,
+  uploadprofile,
+} from '../services/user.service';
 
-import { createAddress, editAddress } from '../services/user.address.service';
-
-import { Auth } from '../../../middlewares/auth';
+import {
+  createAddress,
+  editAddress,
+  getAddresses,
+  getAddress,
+  deleteAddress,
+} from '../services/user.address.service';
 
 import {
   profileImage,
   profileImageResize,
 } from '../../../middlewares/image/resizeImage';
 
-const { Token, VerifiedUser } = Auth;
+import {
+  validateUserIdParam,
+  validatePasswordInput,
+  validateNewAddressInput,
+  validateAddressIdParam,
+  validateNewReviewInput,
+} from '../../../middlewares/validationMiddlware';
 
 const route = express.Router();
 
-route.post('/signup', createUser);
+route.post(
+  '/:id/address',
+  validateUserIdParam,
+  validateNewAddressInput,
+  createAddress
+);
 
-route.post('/login', loginUser);
+route.put(
+  '/:id/address/:addressId',
+  validateUserIdParam,
+  validateAddressIdParam,
+  editAddress
+);
 
-route.post('/:id/address/create', Token, VerifiedUser, createAddress);
+route.get(
+  '/:id/address/:addressId',
+  validateUserIdParam,
+  validateAddressIdParam,
+  getAddress
+);
 
-route.post('/:id/product/add-to-wishlist', Token, VerifiedUser, addToWishlist);
+route.get('/:id/address', validateUserIdParam, getAddresses);
 
-route.put('/:id/product/increaseCart', Token, VerifiedUser, incrementCartItems);
+route.delete(
+  '/:id/address/:addressId',
+  validateUserIdParam,
+  validateAddressIdParam,
+  deleteAddress
+);
 
-route.put('/:id/product/decreaseCart', Token, VerifiedUser, decreaseCartItems);
+route.get('/:id', validateUserIdParam, user);
 
-route.put('/:id/address/edit', Token, VerifiedUser, editAddress);
+// route.delete('/:id', validateUserIdParam, deleteuser);
 
-route.post('/forgetPassword', forgetPasswordToken);
-
-route.put('/resetPassword/:token', resetPassword);
-
-route.get('/:id', Token, VerifiedUser, getUser);
-
-route.put('/updateProfile/:id', Token, VerifiedUser, updateUser);
+route.put('/:id/updateProfile', validateUserIdParam, updateuser);
 
 route.post(
   '/:id/uploadImage',
-  Token,
+  validateUserIdParam,
   profileImage.single('image'),
   profileImageResize,
-  VerifiedUser,
-  uploadProfile
+  uploadprofile
 );
 
-route.put('/password/:id', Token, VerifiedUser, updatePassword);
-
-route.put('/:id/verify_account/:token', accountVerification);
+route.put(
+  '/:id/password',
+  validateUserIdParam,
+  validatePasswordInput,
+  updatepassword
+);
 
 export default route;

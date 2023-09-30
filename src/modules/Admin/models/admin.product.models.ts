@@ -22,24 +22,15 @@ export const findProductIdM = async (id: string) => {
 
 export const createProductM = async (
   productI: createProductI,
+  adminId: string,
+  categoryId: string,
   data: string[]
 ) => {
-  const {
-    title,
-    slug,
-    description,
-    price,
-    quantity,
-    images,
-    stock,
-    colors,
-    brand,
-    categoryId,
-    adminId,
-  } = productI;
+  const { title, slug, description, price, quantity, stock, colors, brand } =
+    productI;
   const product = await prisma.product.create({
     data: {
-      title,
+      title: title.toLowerCase(),
       slug,
       description,
       price,
@@ -48,15 +39,69 @@ export const createProductM = async (
       images: data,
       stock,
       colors,
-      categoryId,
-      adminId,
+      categoryId: '650ca8e29b1a75ef4bcc3667',
+      adminId: adminId,
     },
   });
   return product;
 };
 
-export const getProductsM = async () => {
-  const product = await prisma.product.findMany();
+export const getProductsM = async (
+  limit: number,
+  startIndex: number,
+  where: any
+) => {
+  const product = await prisma.product.findMany({
+    take: limit,
+    skip: startIndex,
+    orderBy: {
+      id: 'desc',
+    },
+    where,
+    select: {
+      id: true,
+      slug: true,
+      description: true,
+      price: true,
+      title: true,
+      quantity: true,
+      images: true,
+      brand: true,
+      stock: true,
+      colors: true,
+      reviews: {
+        select: {
+          id: true,
+          text: true,
+          rating: true,
+          user: { select: { firstName: true, lastName: true, id: true } },
+          product: {
+            select: { title: true, id: true, slug: true, description: true },
+          },
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          admin: {
+            select: {
+              name: true,
+              email: true,
+              role: true,
+            },
+          },
+        },
+      },
+      CartItem: false,
+      OrderItem: false,
+      updatedAt: false,
+      createdAt: false,
+      adminId: false,
+      admin: { select: { name: true, email: true, role: true } },
+      categoryId: false,
+    },
+  });
   return product;
 };
 

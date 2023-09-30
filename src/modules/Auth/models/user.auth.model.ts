@@ -2,12 +2,10 @@ import { prisma } from '../../../configurations/db';
 
 import { Utils } from '../../../helper/utils';
 
-import { signupUser } from '../user.interface';
-
 const { generateToken, hashedPassword, accountVerificationToken } = Utils;
-
-export class userQueries {
-  static async createUserM(user: signupUser) {
+import { signupUser } from '../user.auth.interface';
+export class authQuery {
+  static async registerM(user: signupUser) {
     const { firstName, lastName, email, mobile, password } = user;
     const createUser = await prisma.user.create({
       data: {
@@ -25,16 +23,16 @@ export class userQueries {
   }
 
   static async findUserMId(id: string) {
-    const userId = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         id,
       },
     });
-    return userId;
+    return user;
   }
 
   static async findUserMEmail(email: string) {
-    const userEmail = await prisma.user.findUnique({
+    const userEmail = await prisma.user.findFirst({
       where: {
         email,
       },
@@ -43,34 +41,18 @@ export class userQueries {
     return userEmail;
   }
 
-  static async updateUserM(
-    id: string,
-    firstName: string,
-    lastName: string,
-    email: string
+  static async forgetPasswordTokenM(
+    token: string,
+    expirationTime: Date,
+    userId: string
   ) {
-    const user = await prisma.user.update({
-      where: {
-        id,
-      },
+    const user = await prisma.passwordResetToken.create({
       data: {
-        firstName,
-        lastName,
-        email,
+        token,
+        expirationTime,
+        userId,
       },
-    });
-
-    return user;
-  }
-
-  static async updateUserPasswordM(id: string, password: string) {
-    const user = await prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        password: await hashedPassword(password),
-      },
+      include: { user: { select: { email: true } } },
     });
 
     return user;
@@ -81,7 +63,7 @@ export class userQueries {
     accountVerificationToken: string,
     time: Date
   ) {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         id,
         accountVerificationToken,
@@ -108,22 +90,6 @@ export class userQueries {
         isAccountVerified,
         accountVerificationToken,
         accountVerificationTokenExpires,
-      },
-    });
-
-    return user;
-  }
-
-  static async forgetPasswordTokenM(
-    token: string,
-    expirationTime: Date,
-    userId: string
-  ) {
-    const user = await prisma.passwordResetToken.create({
-      data: {
-        token,
-        expirationTime,
-        userId,
       },
     });
 
@@ -157,11 +123,13 @@ export class userQueries {
     return user;
   }
 
-  static async userProfilePictureUpdateM(id: string, profilePhoto: string) {
+  static async isLoggedInM(id: string, type: boolean) {
     const user = await prisma.user.update({
-      where: { id },
+      where: {
+        id,
+      },
       data: {
-        profilePhoto: profilePhoto,
+        isLoggedIn: type,
       },
     });
 

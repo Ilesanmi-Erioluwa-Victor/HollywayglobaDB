@@ -2,13 +2,13 @@ import { categoryI } from '../interfaces/admin.interface';
 
 import { prisma } from '../../../configurations/db';
 
-export class categoryQueries {
+export class categoryQuery {
   static async createCategoryM(body: categoryI, adminId: string) {
     const category = await prisma.category.create({
       data: {
         name: body.name,
         adminId,
-      },
+      }
     });
 
     return category;
@@ -39,6 +39,16 @@ export class categoryQueries {
     const category = await prisma.category.findUnique({
       where: {
         id,
+      },
+      select: {
+        name: true,
+        id: true,
+        admin: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
       },
     });
     return category;
