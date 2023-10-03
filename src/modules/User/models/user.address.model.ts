@@ -73,6 +73,7 @@ export class addressQuery {
         region: true,
         city: true,
         phone: true,
+        country : true,
         additionalPhone: true,
         userId: false,
       },
