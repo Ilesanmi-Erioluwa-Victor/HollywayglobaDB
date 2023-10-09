@@ -17,7 +17,8 @@
     "npm": ">=6.0.0"
   },
   "prisma": {
-    "schema": "src/prisma/schema.prisma"
+    "schema": "src/prisma/schema.prisma",
+    "seed" : "ts-node src/seed.ts"
   },
   "repository": {
     "type": "git",
