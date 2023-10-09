@@ -4,74 +4,125 @@ const prisma = new PrismaClient();
 
 async function seedData() {
   try {
-    // Seed Admin
-    const admin = await prisma.admin.create({
-      data: {
-        name: 'Admin Name',
-        email: 'admin@example.com',
-        password: 'adminpassword',
-        role: 'MODERATOR',
-        isAccountVerified: true,
-      },
-    });
+    const category = await prisma.category.findMany();
 
-    // Seed Categories
-    const category1 = await prisma.category.create({
-      data: {
-        name: 'Category 1',
-        adminId: admin.id,
+    const products = [
+      {
+        title: 'Tomatoes',
+        description:
+          'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
+        slug: ['fruit', 'vegetables', 'fresh product'],
+        price: 549,
+        quantity: 94,
+        // category: 'Fruits/Vegetables',
+        categoryId: '65242655e3be35788e97c8fb',
+        adminId: '652424a9e3be35788e97c8f3',
+        isOrganic: true,
+        images: [
+          'https://foodies.ng/images/product/ZariaTomatoCrate.png',
+          'https://foodies.ng/images/product/TomatoesGhanaBigBasket.png',
+          'https://foodies.ng/images/product/TomatoesGhanaCrates.png',
+          'https://foodies.ng/images/product/TomatoesGhanaCrates.png',
+        ],
       },
-    });
 
-    const category2 = await prisma.category.create({
-      data: {
-        name: 'Category 2',
-        adminId: admin.id,
+      {
+        title: 'Pepper',
+        description:
+          'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
+        slug: ['fruit', 'vegetables', 'fresh product'],
+        price: 5000,
+        quantity: 94,
+        // category: 'Fruits/Vegetables',
+        categoryId: '652425f3e3be35788e97c8f6',
+        adminId: '652424a9e3be35788e97c8f3',
+        isOrganic: true,
+        images: [
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperHalfBag.png',
+          'https://foodies.ng/images/product/PepperQuarterBag.png',
+        ],
       },
-    });
-
-    // Seed Products
-    const product1 = await prisma.product.create({
-      data: {
-        title: 'Product 1',
-        description: 'Description for Product 1',
-        price: 2000,
-        quantity: 50,
-        images: ['image1.jpg', 'image2.jpg'],
-        stock: 2,
-        isAvailable: true,
-        colors: 'white',
-        categoryId: category1.id,
-        adminId: admin.id,
+      {
+        title: 'Pepper',
+        description:
+          'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
+        slug: ['fruit', 'vegetables', 'fresh product'],
+        price: 5000,
+        quantity: 94,
+        // category: 'Fruits/Vegetables',
+        categoryId: '652425f3e3be35788e97c8f6',
+        adminId: '652424a9e3be35788e97c8f3',
+        isOrganic: true,
+        images: [
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperHalfBag.png',
+          'https://foodies.ng/images/product/PepperQuarterBag.png',
+        ],
       },
-    });
 
-    const product2 = await prisma.product.create({
-      data: {
-        title: 'Product 2',
-        description: 'Description for Product 2',
-        price: 1800,
-        quantity: 75,
-        images: ['image3.jpg', 'image4.jpg'],
-        stock: 3,
-        isAvailable: true,
-        colors: 'black',
-        categoryId: category2.id,
-        adminId: admin.id,
+      {
+        title: 'Pepper',
+        description:
+          'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
+        slug: ['fruit', 'vegetables', 'fresh product'],
+        price: 5000,
+        quantity: 94,
+        // category: 'Fruits/Vegetables',
+        categoryId: '652425f3e3be35788e97c8f6',
+        adminId: '652424a9e3be35788e97c8f3',
+        isOrganic: true,
+        images: [
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperHalfBag.png',
+          'https://foodies.ng/images/product/PepperQuarterBag.png',
+        ],
       },
-    });
 
-    // Seed Reviews
-    const review1 = await prisma.review.create({
-      data: {
-        text: 'Great product!',
-        rating: 5,
-        productId: product1.id,
-        userId: admin.id, // Assuming admin is the user for the review
+      {
+        title: 'Pepper',
+        description:
+          'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
+        slug: ['fruit', 'vegetables', 'fresh product'],
+        price: 5000,
+        quantity: 94,
+        // category: 'Fruits/Vegetables',
+        categoryId: '65242616e3be35788e97c8f8',
+        adminId: '652424a9e3be35788e97c8f3',
+        isOrganic: true,
+        images: [
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperHalfBag.png',
+          'https://foodies.ng/images/product/PepperQuarterBag.png',
+        ],
       },
-    });
 
-    console.log('Data seeded successfully.');
+      {
+        title: 'Pepper',
+        description:
+          'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
+        slug: ['fruit', 'vegetables', 'fresh product'],
+        price: 5000,
+        quantity: 94,
+        // category: 'Fruits/Vegetables',
+        categoryId: '65242604e3be35788e97c8f7',
+        adminId: '652424a9e3be35788e97c8f3',
+        isOrganic: true,
+        images: [
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperBigBag.png',
+          'https://foodies.ng/images/product/PepperHalfBag.png',
+          'https://foodies.ng/images/product/PepperQuarterBag.png',
+        ],
+      },
+    ];
+    await prisma.product.createMany({
+      data : products
+    })
   } catch (error) {
     console.error('Error seeding data:', error);
   } finally {
@@ -79,5 +130,4 @@ async function seedData() {
   }
 }
 
-// Call the seedData function to initiate the seeding
 seedData();
