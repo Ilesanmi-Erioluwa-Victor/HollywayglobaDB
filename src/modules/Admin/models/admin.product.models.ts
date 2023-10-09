@@ -13,7 +13,6 @@ export const findProductIdM = async (id: string) => {
       images: true,
       title: true,
       slug: true,
-      colors: true,
       quantity: true,
     },
   });
@@ -26,7 +25,7 @@ export const createProductM = async (
   categoryId: string,
   data: string[]
 ) => {
-  const { title, slug, description, price, quantity, stock, colors, brand } =
+  const { title, slug, description, price, quantity, stock,  } =
     productI;
   const product = await prisma.product.create({
     data: {
@@ -35,10 +34,7 @@ export const createProductM = async (
       description,
       price,
       quantity,
-      brand,
       images: data,
-      stock,
-      colors,
       categoryId: '650ca8e29b1a75ef4bcc3667',
       adminId: adminId,
     },
@@ -66,9 +62,6 @@ export const getProductsM = async (
       title: true,
       quantity: true,
       images: true,
-      brand: true,
-      stock: true,
-      colors: true,
       reviews: {
         select: {
           id: true,
@@ -125,10 +118,6 @@ export const editProductM = async (id: string, data: editProductI) => {
       description: data.description,
       price: data.price,
       quantity: data.quantity,
-      // images: string[];
-      stock: data.stock,
-      brand: data.brand,
-      colors: data.colors,
     },
   });
   return product;

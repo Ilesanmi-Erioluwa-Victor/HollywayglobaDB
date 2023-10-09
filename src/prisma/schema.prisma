@@ -106,12 +106,6 @@ model Product {
   updatedAt   DateTime   @updatedAt
 }
 
-// model Slug {
-//   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-//   name      String
-//   productId String  @db.ObjectId
-//   product   Product @relation(fields: [productId], references: [id])
-// }
 
 model Review {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
