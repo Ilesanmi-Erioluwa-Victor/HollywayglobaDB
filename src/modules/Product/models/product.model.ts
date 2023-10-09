@@ -20,6 +20,7 @@ export class productQuery {
         images: true,
         title: true,
         price: true,
+        slug: true
       },
     });
     return product;
@@ -41,6 +42,11 @@ export class productQuery {
         title: true,
         price: true,
         description: true,
+        isPurchased: true,
+        slug: true,
+        quantity: true,
+        isOrganic: true,
+        
         category: {
           select: {
             name: true,
