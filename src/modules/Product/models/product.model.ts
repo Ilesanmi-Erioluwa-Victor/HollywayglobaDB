@@ -47,7 +47,11 @@ export class productQuery {
         colors: true,
         brand: true,
         description: true,
-        category : true
+        category : {
+          select: {
+            name : true
+          }
+        }
       },
     });
     return products;
