@@ -48,7 +48,7 @@ async function seedData() {
         title: 'Pepper',
         description:
           'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
-        slug: ['fruit', 'vegetables', 'fresh product'],
+        slug: ['fruit'],
         price: 5000,
         quantity: 94,
         // category: 'Fruits/Vegetables',
@@ -67,7 +67,7 @@ async function seedData() {
         title: 'Pepper',
         description:
           'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
-        slug: ['fruit', 'vegetables', 'fresh product'],
+        slug: [ 'fresh product'],
         price: 5000,
         quantity: 94,
         // category: 'Fruits/Vegetables',
@@ -86,7 +86,7 @@ async function seedData() {
         title: 'Pepper',
         description:
           'Tomato plants are generally much branched, spreading 60–180 cm (24–72 inches) and somewhat trailing when fruiting, but a few forms are compact and upright',
-        slug: ['fruit', 'vegetables', 'fresh product'],
+        slug: [ 'vegetables'],
         price: 5000,
         quantity: 94,
         // category: 'Fruits/Vegetables',
