@@ -46,6 +46,8 @@ export class productQuery {
         stock: true,
         colors: true,
         brand: true,
+        description: true,
+        category : true
       },
     });
     return products;
