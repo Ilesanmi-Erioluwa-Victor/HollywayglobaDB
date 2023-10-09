@@ -49,7 +49,7 @@ enum Role {
 }
 
 model User {
-  id                              String               @id  @default(auto()) @map("_id") @db.ObjectId
+  id                              String               @id @default(auto()) @map("_id") @db.ObjectId
   firstName                       String
   lastName                        String
   email                           String               @unique
@@ -87,24 +87,30 @@ model PasswordResetToken {
 model Product {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  slug        String?
+  slug        Slug[]
   description String
+  isPurchased Boolean?   @default(false)
   price       Int        @default(1500)
   category    Category   @relation(fields: [categoryId], references: [id])
   quantity    Int        @default(100)
   images      String[]
-  brand       Brand      @default(FOOD)
-  stock       Int        @default(1)
   isAvailable Boolean    @default(true)
-  colors      String     @default("white")
+  isOrganic   Boolean    @default(false)
   reviews     Review[]
   categoryId  String     @db.ObjectId
   admin       Admin      @relation(fields: [adminId], references: [id])
   adminId     String     @db.ObjectId
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
   CartItem    CartItem[]
   OrderItem   OrderItem?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Slug {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
 }
 
 model Review {
@@ -134,21 +140,6 @@ model Address {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   Order           Order[]
-}
-
-enum Brand {
-  FOOD
-  NIKE
-  APPLE
-  COCACOLA
-  PUMA
-  SAMSUNG
-  PHILIPS
-  LENOVO
-  NOKIA
-  TECNO
-  INFINIX
-  REDMI
 }
 
 model Cart {
