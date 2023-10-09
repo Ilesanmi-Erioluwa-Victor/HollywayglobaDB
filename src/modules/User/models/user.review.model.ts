@@ -63,14 +63,11 @@ export class reviewQuery {
           select: {
             id: false,
             title: true,
-            brand: true,
             description: true,
             price: true,
             quantity: false,
             images: true,
-            stock: false,
             adminId: false,
-            colors: false,
             categoryId: false,
             createdAt: false,
             updatedAt: false,
@@ -102,7 +99,6 @@ export class reviewQuery {
         product: {
           select: {
             title: true,
-            brand: true,
             price: true,
           },
         },

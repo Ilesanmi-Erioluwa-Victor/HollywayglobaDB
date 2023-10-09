@@ -20,9 +20,6 @@ export class productQuery {
         images: true,
         title: true,
         price: true,
-        stock: true,
-        colors: true,
-        brand: true,
       },
     });
     return product;
@@ -43,15 +40,12 @@ export class productQuery {
         images: true,
         title: true,
         price: true,
-        stock: true,
-        colors: true,
-        brand: true,
         description: true,
-        category : {
+        category: {
           select: {
-            name : true
-          }
-        }
+            name: true,
+          },
+        },
       },
     });
     return products;
