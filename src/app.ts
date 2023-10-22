@@ -15,6 +15,8 @@ import userRoute from './modules/User/routes/user.routes';
 
 import productRoute from './modules/Product/routes/product.routes';
 
+import categoryRoute from './modules/Category/routes/category.routes';
+
 import reviewRoute from './modules/User/routes/review.routes';
 
 import orderRoute from './modules/Order/routes/order.routes';
@@ -66,6 +68,8 @@ app.use('/api/v1/adminAuth', adminAuth);
 app.use('/api/v1/admin', authenticateUser, adminRoute);
 
 app.use('/api/v1/products', productRoute);
+
+app.use('/api/v1/categories', categoryRoute);
 
 app.use('/api/v1/reviews', authenticateUser, reviewRoute);
 
