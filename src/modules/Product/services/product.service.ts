@@ -37,14 +37,14 @@ export const Products: RequestHandler = catchAsync(
 
 export const Product: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    // const product = await findProductId(req.params.productId);
+    const product = await findProductId(req.params.productId);
 
-    // if (!product) throw new NotFoundError('No product found, try again');
+    if (!product) throw new NotFoundError('No product found, try again');
 
     res.json({
       status: 'success',
       message: 'ok',
-      // data: product,
+      data: product,
     });
   }
 );

@@ -10,7 +10,7 @@ const route = express.Router();
 
 route.get('/', Products);
 
-route.get('/product', Product);
+route.get('/:productId', Product);
 
 
 route.get('/top-10-cheap-products', TopTenProducts);
