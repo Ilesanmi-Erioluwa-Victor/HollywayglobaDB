@@ -3,7 +3,7 @@ import { RequestHandler, NextFunction, Response, Request } from 'express';
 import { Utils } from '../../../helper/utils';
 
 import { productQuery } from '../models/product.model';
-import { NotFoundError } from 'errors/customError';
+import { NotFoundError } from '../../../errors/customError';
 
 const { TopCheapProductM, ProductsM, findProductId } = productQuery;
 
