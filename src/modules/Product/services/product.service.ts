@@ -3,8 +3,9 @@ import { RequestHandler, NextFunction, Response, Request } from 'express';
 import { Utils } from '../../../helper/utils';
 
 import { productQuery } from '../models/product.model';
+import { NotFoundError } from 'errors/customError';
 
-const { TopCheapProductM, ProductsM } = productQuery;
+const { TopCheapProductM, ProductsM, findProductId } = productQuery;
 
 const { catchAsync } = Utils;
 
@@ -30,6 +31,20 @@ export const Products: RequestHandler = catchAsync(
       status: 'success',
       message: 'ok',
       data: userProducts,
+    });
+  }
+);
+
+export const Product: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const product = await findProductId(req.params.id);
+
+    if (!product) throw new NotFoundError('No product found, try again');
+
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: product,
     });
   }
 );
